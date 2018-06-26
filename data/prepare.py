@@ -179,7 +179,7 @@ def prepare_trecvid17_gen_val():
   print len(vid2captions)
 
   with open(gt_file) as f:
-    data = json.load(gt_file)
+    data = json.load(f)
   for d in data:
     vid = int(d['image_id'])-1
     vid += base
