@@ -7,7 +7,7 @@ import numpy as np
 
 '''func
 '''
-def caption2id_mask(caption, max_words_in_caption):
+def caption2id_mask(caption, max_words_in_caption, word2int):
   words = caption.split(' ')
   captionid = np.ones((max_words_in_caption,), dtype=np.int32)
   mask = np.zeros((max_words_in_caption,), dtype=np.int32)
@@ -152,7 +152,7 @@ def prepare_trecvid17_gen_val():
   for vid in range(1, num+1):
     captions = data[str(vid)]
     for caption in captions:
-      captionid, caption_mask = caption2id_mask(caption, max_words_in_caption)
+      captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
 
       idxs.append(vid-1)
       captionids.append(captionid)
