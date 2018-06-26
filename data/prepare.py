@@ -119,7 +119,7 @@ def prepare_trecvid17_gen_val():
     word2int[word] = i
 
   with open(gt_file) as f:
-    data = json.load(gt_file)
+    data = json.load(f)
   num = len(data)
   idxs = []
   captionids = []
