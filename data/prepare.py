@@ -11,9 +11,9 @@ import numpy as np
 '''expr
 '''
 def merge_tgif_trecvid16_rank_trn():
-  trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
+  trecvid_root_dir = '/data1/jiac/trecvid2017/rank' # mercurial
   tgif_root_dir = '/data1/jiac/tgif'
-  out_root_dir = '/data1/jiac/trecvid2018'
+  out_root_dir = '/data1/jiac/trecvid2018/rank'
 
   tgif_ft_files = [
     'trn_ft.npy',
@@ -30,6 +30,10 @@ def merge_tgif_trecvid16_rank_trn():
       file = os.path.join(tgif_root_dir, 'mp_feature', ft_name, tgif_ft_file)
       ft = np.load(file)
       fts.append(ft)
+    for trecivd_ft_file in trecvid_ft_files:
+      file = os.path.join(trecvid_root_dir, 'mp_feature', ft_name, trecivd_ft_file)
+      ft = np.load(file)
+      fts.append(ft)
     fts = np.concatenate(fts, 0)
     out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
     np.save(out_file, fts)
@@ -43,6 +47,12 @@ def merge_tgif_trecvid16_rank_trn():
   #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.A.pkl'),
   #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.B.pkl'),
   # ]
+  # idxs = []
+  # caption_ids = []
+  # caption_masks = []
+  # for file in tgif_caption_mask_files:
+  #   caption_file = os.path.join(tgif_root_dir, file, )
+  #   data = cPickle.load()
 
 
 
