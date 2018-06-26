@@ -180,12 +180,10 @@ def prepare_trecvid17_gen_val():
 
   with open(gt_file) as f:
     data = json.load(f)
-  for d in data:
-    vid = int(d['image_id'])-1
-    vid += base
-    if vid not in vid2captions:
-      vid2captions[vid] = []
-    vid2captions[vid].append(caption)
+  for vid in data:
+    captions = data[vid]
+    vid = int(vid) - 1 + base
+    vid2captions[vid] = captions
   print len(vid2captions)
   # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
   # with open(out_file, 'w') as fout:
