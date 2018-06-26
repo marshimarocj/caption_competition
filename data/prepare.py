@@ -1,5 +1,6 @@
 import os
 import cPickle
+import json
 
 import numpy as np
 
@@ -103,9 +104,82 @@ def merge_tgif_trecvid16_rank_trn():
     cPickle.dump(vid2captions, fout)
 
 
-def prepare_trecvid17_rank_val():
-  root_dir = '' #
+def prepare_trecvid17_gen_val():
+  trecvid_root_dir = '/data1/trecvid17' # mercurial
+  out_root_dir = '/data1/jiac/trecvid2018/rank'
+  word_file = os.path.join(trecvid_root_dir, 'annotation', 'int2word.pkl')
+  gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
+
+  max_words_in_caption = 30
+
+  word2int = {}
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  for i, word in enumerate(words):
+    word2int[word] = i
+
+  with open(gt_file) as f:
+    data = json.load(gt_file)
+  num = len(data)
+  idxs = []
+  captionids = []
+  caption_masks = []
+  for vid in range(1, num+1):
+    captions = data[str(vid)]
+    for caption in captions:
+      words = caption.split(' ')
+      captionid = np.ones((max_words_in_caption,), dtype=np.int32)
+      mask = np.zeros((max_words_in_caption,), dtype=np.int32)
+      captionid[0] = 0
+      mask[0] = 1
+      for i, word in enumerate(words):
+        if word in word2int:
+          wid = word2int[word]
+        else:
+          wid = 2
+        captionid[i+1] = wid
+        mask[i+1] = 1
+
+        if i == max_words_in_caption-1:
+          break
+      i += 1
+      if i < max_words_in_caption:
+        captionid[i] = 1
+        mask[i] = 1
+      idxs.append(vid-1)
+      captionids.append(captionid)
+      caption_masks.append(mask)
+  idxs = np.array(idxs, dtype=np.int32)
+  captionids = np.array(captionids, dtype=np.int32)
+  caption_masks = np.array(caption_masks, dtype=np.int32)
+
+  out_file = os.path.join(out_root_dir, 'split', 'val_id_caption_mask.pkl')
+  with open(out_file, 'w') as fout:
+    cPickle.dump([idxs, captionids, caption_masks], fout)
+
+  # vid2captions = {}
+  # caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pk')
+  # with open(caption_file) as f:
+  #   vid2captions = cPickle.load(f)
+  # base = 0
+  # for vid in vid2captions:
+  #   if vid > base:
+  #     base = vid
+  # base += 1
+
+  # with open(gt_file) as f:
+  #   data = json.load(gt_file)
+  # for d in data:
+  #   vid = int(d['image_id'])-1
+  #   vid += base
+  #   if vid not in vid2captions:
+  #     vid2captions[vid] = []
+  #   vid2captions[vid].append(caption)
+  # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump(vid2captions, fout)
 
 
 if __name__ == '__main__':
-  merge_tgif_trecvid16_rank_trn()
+  # merge_tgif_trecvid16_rank_trn()
+  prepare_trecvid17_gen_val()
