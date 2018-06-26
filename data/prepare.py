@@ -148,7 +148,7 @@ def merge_tgif_trecvid16_rank_trn():
 def prepare_trecvid17_rank_val():
   root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
-  word_file = os.path.join(out_root_dir, 'rank', 'annotation', 'int2word.pkl')
+  word_file = os.path.join(out_root_dir, 'annotation', 'int2word.pkl')
   caption_files = [
     os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.descriptions.A'),
     os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.descriptions.B'),
