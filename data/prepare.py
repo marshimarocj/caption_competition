@@ -156,7 +156,7 @@ def prepare_trecvid17_gen_val():
 
       idxs.append(vid-1)
       captionids.append(captionid)
-      caption_masks.append(mask)
+      caption_masks.append(caption_mask)
   idxs = np.array(idxs, dtype=np.int32)
   captionids = np.array(captionids, dtype=np.int32)
   caption_masks = np.array(caption_masks, dtype=np.int32)
