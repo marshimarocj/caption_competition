@@ -38,49 +38,53 @@ def merge_tgif_trecvid16_rank_trn():
   #   out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
   #   np.save(out_file, fts)
 
-  tgif_caption_mask_files = [
-    os.path.join(tgif_root_dir, 'split', 'trn_id_caption_mask.pkl'),
-    os.path.join(tgif_root_dir, 'split', 'val_id_caption_mask.pkl'),
-    os.path.join(tgif_root_dir, 'split', 'tst_id_caption_mask.pkl'),
-  ]
-  trecvid_caption_mask_files = [
-    os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.A.pkl'),
-    os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.B.pkl'),
-  ]
-  idxs = []
-  caption_ids = []
-  caption_masks = []
-  base = 0
-  for file in tgif_caption_mask_files:
-    with open(file) as f:
-      data = cPickle.load(f)
-    idxs.append(data[0] + base)
-    caption_ids.append(data[1])
-    caption_masks.append(data[2])
-    base = np.max(data[0] + base) + 1
-  for file in trecvid_caption_mask_files:
-    with open(file) as f:
-      data = cPickle.load(f)
-    idxs.append(data[0] + base)
-    caption_ids.append(data[1])
-    caption_masks.append(data[2])
-  idxs = np.concatenate(idxs, 0)
-  caption_ids = np.concatenate(caption_ids, 0)
-  caption_masks = np.concatenate(caption_masks, 0)
-  out_file = os.path.join(out_root_dir, 'split', 'trn_id_caption_mask.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump([idxs, caption_ids, caption_masks], fout)
-
-  # tgif_vid_files = [
-  #   os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
-  #   os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
-  #   os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+  # tgif_caption_mask_files = [
+  #   os.path.join(tgif_root_dir, 'split', 'trn_id_caption_mask.pkl'),
+  #   os.path.join(tgif_root_dir, 'split', 'val_id_caption_mask.pkl'),
+  #   os.path.join(tgif_root_dir, 'split', 'tst_id_caption_mask.pkl'),
   # ]
-  # vids = []
-  # for file in tgif_vid_files:
-  #   vids.append(np.load(file))
-  # vids = np.concatenate(vids, 0)
-  # base = np.max(vids) + 1
+  # trecvid_caption_mask_files = [
+  #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.A.pkl'),
+  #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.B.pkl'),
+  # ]
+  # idxs = []
+  # caption_ids = []
+  # caption_masks = []
+  # base = 0
+  # for file in tgif_caption_mask_files:
+  #   with open(file) as f:
+  #     data = cPickle.load(f)
+  #   idxs.append(data[0] + base)
+  #   caption_ids.append(data[1])
+  #   caption_masks.append(data[2])
+  #   base = np.max(data[0] + base) + 1
+  # for file in trecvid_caption_mask_files:
+  #   with open(file) as f:
+  #     data = cPickle.load(f)
+  #   idxs.append(data[0] + base)
+  #   caption_ids.append(data[1])
+  #   caption_masks.append(data[2])
+  # idxs = np.concatenate(idxs, 0)
+  # caption_ids = np.concatenate(caption_ids, 0)
+  # caption_masks = np.concatenate(caption_masks, 0)
+  # out_file = os.path.join(out_root_dir, 'split', 'trn_id_caption_mask.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
+
+  tgif_vid_files = [
+    os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
+    os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
+    os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+  ]
+  vids = []
+  for file in tgif_vid_files:
+    vids.append(np.load(file))
+  vids = np.concatenate(vids, 0)
+  base = np.max(vids) + 1
+  vids = [vids, range(base, base + 1915)]
+  vids = np.concatenate(vids)
+  out_file = os.path.join(out_root_dir, 'split', 'trn_videoids.npy')
+  np.save(vids, out_file)
 
 
 def prepare_trecvid17_rank_val():
