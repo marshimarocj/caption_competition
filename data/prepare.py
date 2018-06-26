@@ -7,6 +7,27 @@ import numpy as np
 
 '''func
 '''
+def caption2id_mask(caption, max_words_in_caption):
+  words = caption.split(' ')
+  captionid = np.ones((max_words_in_caption,), dtype=np.int32)
+  mask = np.zeros((max_words_in_caption,), dtype=np.int32)
+  captionid[0] = 0
+  mask[0] = 1
+  for i, word in enumerate(words):
+    if word in word2int:
+      wid = word2int[word]
+    else:
+      wid = 2
+    captionid[i+1] = wid
+    mask[i+1] = 1
+
+    if i+1 == max_words_in_caption-1:
+      break
+  i += 1
+  if i+1 < max_words_in_caption:
+    captionid[i+1] = 1
+    mask[i+1] = 1
+  return captionid, mask
 
 
 '''expr
@@ -16,6 +37,7 @@ def merge_tgif_trecvid16_rank_trn():
   tgif_root_dir = '/data1/jiac/tgif'
   out_root_dir = '/data1/jiac/trecvid2018/rank'
 
+  ##########ft#########
   # tgif_ft_files = [
   #   'trn_ft.npy',
   #   'val_ft.npy',
@@ -39,6 +61,7 @@ def merge_tgif_trecvid16_rank_trn():
   #   out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
   #   np.save(out_file, fts)
 
+  #########caption mask ##########
   # tgif_caption_mask_files = [
   #   os.path.join(tgif_root_dir, 'split', 'trn_id_caption_mask.pkl'),
   #   os.path.join(tgif_root_dir, 'split', 'val_id_caption_mask.pkl'),
@@ -72,6 +95,7 @@ def merge_tgif_trecvid16_rank_trn():
   # with open(out_file, 'w') as fout:
   #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
 
+  ##########vid##########
   # tgif_vid_files = [
   #   os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
   #   os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
@@ -87,6 +111,7 @@ def merge_tgif_trecvid16_rank_trn():
   # out_file = os.path.join(out_root_dir, 'split', 'trn_videoids.npy')
   # np.save(out_file, vids)
 
+  ##########caption_dict##########
   tgif_caption_file = os.path.join(tgif_root_dir, 'annotation', 'human_caption_dict.pkl')
   trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_caption_dict.pkl')
   vid2captions = {}
@@ -127,25 +152,8 @@ def prepare_trecvid17_gen_val():
   for vid in range(1, num+1):
     captions = data[str(vid)]
     for caption in captions:
-      words = caption.split(' ')
-      captionid = np.ones((max_words_in_caption,), dtype=np.int32)
-      mask = np.zeros((max_words_in_caption,), dtype=np.int32)
-      captionid[0] = 0
-      mask[0] = 1
-      for i, word in enumerate(words):
-        if word in word2int:
-          wid = word2int[word]
-        else:
-          wid = 2
-        captionid[i+1] = wid
-        mask[i+1] = 1
+      captionid, caption_mask = caption2id_mask(caption, max_words_in_caption)
 
-        if i == max_words_in_caption-1:
-          break
-      i += 1
-      if i < max_words_in_caption:
-        captionid[i] = 1
-        mask[i] = 1
       idxs.append(vid-1)
       captionids.append(captionid)
       caption_masks.append(mask)
