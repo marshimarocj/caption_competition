@@ -105,9 +105,9 @@ def merge_tgif_trecvid16_rank_trn():
 
 
 def prepare_trecvid17_gen_val():
-  trecvid_root_dir = '/data1/jiac/trecvid2017/rank' # mercurial
+  trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
-  word_file = os.path.join(trecvid_root_dir, 'annotation', 'int2word.pkl')
+  word_file = os.path.join(trecvid_root_dir, 'rank', 'annotation', 'int2word.pkl')
   gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
 
   max_words_in_caption = 30
