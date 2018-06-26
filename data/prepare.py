@@ -84,7 +84,7 @@ def merge_tgif_trecvid16_rank_trn():
   vids = [vids, range(base, base + 1915)]
   vids = np.concatenate(vids)
   out_file = os.path.join(out_root_dir, 'split', 'trn_videoids.npy')
-  np.save(vids, out_file)
+  np.save(out_file, vids)
 
 
 def prepare_trecvid17_rank_val():
