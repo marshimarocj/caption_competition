@@ -168,7 +168,7 @@ def prepare_trecvid17_gen_val():
 
   #############caption_dict###########
   vid2captions = {}
-  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pk')
+  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
   with open(caption_file) as f:
     vid2captions = cPickle.load(f)
   base = 0
