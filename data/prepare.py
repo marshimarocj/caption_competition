@@ -1,6 +1,7 @@
 import os
 import cPickle
 import json
+import re
 
 import numpy as np
 
@@ -28,6 +29,21 @@ def caption2id_mask(caption, max_words_in_caption, word2int):
     captionid[i+1] = 1
     mask[i+1] = 1
   return captionid, mask
+
+
+def process_sent(sentence, allow_digits=True):
+  sentence = sentence.replace(';', ',')
+  sentence = sentence.lower()
+  segments = sentence.split(',')
+  output = []
+  for segment in segments:
+    if allow_digits:
+      words = re.findall(r"['\-\w]+", segment)
+    else:
+      words = re.findall(r"['\-A-Za-z]+", segment)
+    output.append(' '.join(words))
+  output = ' , '.join(output)
+  return output
 
 
 '''expr
@@ -129,6 +145,47 @@ def merge_tgif_trecvid16_rank_trn():
     cPickle.dump(vid2captions, fout)
 
 
+def prepare_trecvid17_rank_val():
+  root_dir = '/data1/jiac/trecvid2017' # mercurial
+  out_root_dir = '/data1/jiac/trecvid2018/rank'
+  word_file = os.path.join(out_root_dir, 'rank', 'annotation', 'int2word.pkl')
+  caption_files = [
+    os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.descriptions.A'),
+    os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.descriptions.B'),
+  ]
+
+  max_words_in_caption = 30
+
+  word2int = {}
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  for i, word in enumerate(words):
+    word2int[word] = i
+
+  out_names = [
+    'val_id_caption_mask.A.pkl',
+    'val_id_caption_mask.B.pkl',
+  ]
+  for caption_file, out_name in zip(caption_files, out_names):
+    idxs = []
+    captionids = []
+    caption_masks = []
+    with open(caption_file) as f:
+      for i, line in enumerate(f):
+        line = line.strip()
+        caption = process_sent(line)
+        captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
+        idxs.append(i)
+        captionids.append(captionid)
+        caption_masks.append(caption_mask)
+    idxs = np.array(idxs, dtype=np.int32)
+    captionids = np.array(captionids, dtype=np.int32)
+    caption_masks = np.array(caption_masks, dtype=np.int32)
+    out_file = os.path.join(out_root_dir, 'split', out_name)
+    with open(out_file, 'w') as fout:
+      cPickle.dump([idxs, captionids, caption_masks], fout)
+
+
 def prepare_trecvid17_gen_val():
   trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
@@ -193,4 +250,5 @@ def prepare_trecvid17_gen_val():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  prepare_trecvid17_gen_val()
+  prepare_trecvid17_rank_val()
+  # prepare_trecvid17_gen_val()
