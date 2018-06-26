@@ -87,7 +87,7 @@ def merge_tgif_trecvid16_rank_trn():
   # np.save(out_file, vids)
 
   tgif_caption_file = os.path.join(tgif_root_dir, 'annotation', 'human_caption_dict.pkl')
-  trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_capiton_dict.pkl')
+  trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_caption_dict.pkl')
   vid2captions = {}
   with open(tgif_caption_file) as f:
     data = cPickle.load(f)
