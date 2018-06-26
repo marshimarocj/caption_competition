@@ -135,54 +135,58 @@ def prepare_trecvid17_gen_val():
   word_file = os.path.join(trecvid_root_dir, 'rank', 'annotation', 'int2word.pkl')
   gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
 
-  max_words_in_caption = 30
+  ############caption_mask###########
+  # max_words_in_caption = 30
 
-  word2int = {}
-  with open(word_file) as f:
-    words = cPickle.load(f)
-  for i, word in enumerate(words):
-    word2int[word] = i
-
-  with open(gt_file) as f:
-    data = json.load(f)
-  num = len(data)
-  idxs = []
-  captionids = []
-  caption_masks = []
-  for vid in range(1, num+1):
-    captions = data[str(vid)]
-    for caption in captions:
-      captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
-
-      idxs.append(vid-1)
-      captionids.append(captionid)
-      caption_masks.append(caption_mask)
-  idxs = np.array(idxs, dtype=np.int32)
-  captionids = np.array(captionids, dtype=np.int32)
-  caption_masks = np.array(caption_masks, dtype=np.int32)
-
-  out_file = os.path.join(out_root_dir, 'split', 'val_id_caption_mask.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump([idxs, captionids, caption_masks], fout)
-
-  # vid2captions = {}
-  # caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pk')
-  # with open(caption_file) as f:
-  #   vid2captions = cPickle.load(f)
-  # base = 0
-  # for vid in vid2captions:
-  #   if vid > base:
-  #     base = vid
-  # base += 1
+  # word2int = {}
+  # with open(word_file) as f:
+  #   words = cPickle.load(f)
+  # for i, word in enumerate(words):
+  #   word2int[word] = i
 
   # with open(gt_file) as f:
-  #   data = json.load(gt_file)
-  # for d in data:
-  #   vid = int(d['image_id'])-1
-  #   vid += base
-  #   if vid not in vid2captions:
-  #     vid2captions[vid] = []
-  #   vid2captions[vid].append(caption)
+  #   data = json.load(f)
+  # num = len(data)
+  # idxs = []
+  # captionids = []
+  # caption_masks = []
+  # for vid in range(1, num+1):
+  #   captions = data[str(vid)]
+  #   for caption in captions:
+  #     captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
+
+  #     idxs.append(vid-1)
+  #     captionids.append(captionid)
+  #     caption_masks.append(caption_mask)
+  # idxs = np.array(idxs, dtype=np.int32)
+  # captionids = np.array(captionids, dtype=np.int32)
+  # caption_masks = np.array(caption_masks, dtype=np.int32)
+
+  # out_file = os.path.join(out_root_dir, 'split', 'val_id_caption_mask.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump([idxs, captionids, caption_masks], fout)
+
+  #############caption_dict###########
+  vid2captions = {}
+  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pk')
+  with open(caption_file) as f:
+    vid2captions = cPickle.load(f)
+  base = 0
+  for vid in vid2captions:
+    if vid > base:
+      base = vid
+  base += 1
+  print len(vid2captions)
+
+  with open(gt_file) as f:
+    data = json.load(gt_file)
+  for d in data:
+    vid = int(d['image_id'])-1
+    vid += base
+    if vid not in vid2captions:
+      vid2captions[vid] = []
+    vid2captions[vid].append(caption)
+  print len(vid2captions)
   # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
   # with open(out_file, 'w') as fout:
   #   cPickle.dump(vid2captions, fout)
