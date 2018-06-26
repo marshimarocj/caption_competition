@@ -57,7 +57,7 @@ def merge_tgif_trecvid16_rank_trn():
     idxs.append(data[0] + base)
     caption_ids.append(data[1])
     caption_masks.append(data[2])
-    base = np.max(data[0] + base)
+    base = np.max(data[0] + base) + 1
   for file in trecvid_caption_mask_files:
     with open(file) as f:
       data = cPickle.load(f)
@@ -70,6 +70,17 @@ def merge_tgif_trecvid16_rank_trn():
   out_file = os.path.join(out_root_dir, 'split', 'trn_id_caption_mask.pkl')
   with open(out_file, 'w') as fout:
     cPickle.dump([idxs, caption_ids, caption_masks], fout)
+
+  # tgif_vid_files = [
+  #   os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
+  #   os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
+  #   os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+  # ]
+  # vids = []
+  # for file in tgif_vid_files:
+  #   vids.append(np.load(file))
+  # vids = np.concatenate(vids, 0)
+  # base = np.max(vids) + 1
 
 
 def prepare_trecvid17_rank_val():
