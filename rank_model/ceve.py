@@ -3,6 +3,7 @@ import sys
 import json
 import cPickle
 import random
+import enum
 sys.path.append('../')
 
 import tensorflow as tf
