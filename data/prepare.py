@@ -154,36 +154,55 @@ def prepare_trecvid17_rank_val():
     os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.descriptions.B'),
   ]
 
-  max_words_in_caption = 30
+  #######caption_mask#########
+  # max_words_in_caption = 30
 
-  word2int = {}
-  with open(word_file) as f:
-    words = cPickle.load(f)
-  for i, word in enumerate(words):
-    word2int[word] = i
+  # word2int = {}
+  # with open(word_file) as f:
+  #   words = cPickle.load(f)
+  # for i, word in enumerate(words):
+  #   word2int[word] = i
 
-  out_names = [
-    'val_id_caption_mask.A.pkl',
-    'val_id_caption_mask.B.pkl',
-  ]
-  for caption_file, out_name in zip(caption_files, out_names):
-    idxs = []
-    captionids = []
-    caption_masks = []
-    with open(caption_file) as f:
-      for i, line in enumerate(f):
-        line = line.strip()
-        caption = process_sent(line)
-        captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
-        idxs.append(i)
-        captionids.append(captionid)
-        caption_masks.append(caption_mask)
-    idxs = np.array(idxs, dtype=np.int32)
-    captionids = np.array(captionids, dtype=np.int32)
-    caption_masks = np.array(caption_masks, dtype=np.int32)
-    out_file = os.path.join(out_root_dir, 'split', out_name)
-    with open(out_file, 'w') as fout:
-      cPickle.dump([idxs, captionids, caption_masks], fout)
+  # out_names = [
+  #   'val_id_caption_mask.A.pkl',
+  #   'val_id_caption_mask.B.pkl',
+  # ]
+  # for caption_file, out_name in zip(caption_files, out_names):
+  #   idxs = []
+  #   captionids = []
+  #   caption_masks = []
+  #   with open(caption_file) as f:
+  #     for i, line in enumerate(f):
+  #       line = line.strip()
+  #       caption = process_sent(line)
+  #       captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
+  #       idxs.append(i)
+  #       captionids.append(captionid)
+  #       caption_masks.append(caption_mask)
+  #   idxs = np.array(idxs, dtype=np.int32)
+  #   captionids = np.array(captionids, dtype=np.int32)
+  #   caption_masks = np.array(caption_masks, dtype=np.int32)
+  #   out_file = os.path.join(out_root_dir, 'split', out_name)
+  #   with open(out_file, 'w') as fout:
+  #     cPickle.dump([idxs, captionids, caption_masks], fout)
+
+  ########label#########
+  label_file = os.path.join(root_dir, 'label', 'vtt.matching.ranking.set.2.gt')
+  vid_file = os.path.join(root_dir, 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.url.list')
+  out_file = os.path.join(out_root_dir, 'label', '17.set.2.gt')
+
+  vid2idx = {}
+  with open(vid_file) as f:
+    for i, line in enumerate(f):
+      pos = line.find(' ')
+      vid = int(line[:pos])
+      vid2idx[vid] = i
+  with open(label_file) as f, open(out_file, 'w') as fout:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      idx = vid2idx[int(data[0])]
+      fout.write('%d %d %d\n'%(idx, int(data[1])-1, int(data[2])-1))
 
 
 def prepare_trecvid17_gen_val():
