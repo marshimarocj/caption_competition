@@ -25,7 +25,7 @@ def graph_match_rerank():
       task.appendcons(num_video + num_caption)
       task.appendvars(num_video * num_caption)
 
-      for i, predict in predicts:
+      for i, predict in enumerate(predicts):
         idxs = np.argsort(-predict)
         for idx in idxs[:topk]:
           idx_var = i*num_caption + idx
