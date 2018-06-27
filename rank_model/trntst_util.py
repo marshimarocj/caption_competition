@@ -31,7 +31,7 @@ class TrnTst(framework.model.trntst.TrnTst):
     }
 
   def predict_and_eval_in_val(self, sess, tst_reader, metrics):
-    batch_size = trntst.model_cfg.tst_batch_size
+    batch_size = self.model_cfg.tst_batch_size
     op_dict = self.model.op_in_val()
     mir = 0.
     num = 0
@@ -51,7 +51,7 @@ class TrnTst(framework.model.trntst.TrnTst):
     metrics['mir'] = mir
 
   def predict_in_tst(self, sess, tst_reader, predict_file):
-    batch_size = trntst.model_cfg.tst_batch_size
+    batch_size = self.model_cfg.tst_batch_size
     op_dict = self.model.op_in_val()
     sims = []
     for data in tst_reader.yield_tst_batch(batch_size):

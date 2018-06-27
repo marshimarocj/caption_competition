@@ -131,7 +131,6 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.pca_B)
 
   def encode_caption(self, wvec, mask):
-    print wvec.get_shape()
     batch_size = tf.shape(wvec)[0]
     mask = tf.to_float(tf.expand_dims(mask, 2))
     pools = []
@@ -146,7 +145,6 @@ class Model(framework.model.module.AbstractModel):
       conv_out = tf.nn.bias_add(conv_out, conv_B)
       conv_out = tf.nn.tanh(conv_out)
       conv_out = conv_out * mask
-      print conv_out.get_shape()
       if self._config.pool == 'mean':
         pool = tf.reduce_sum(conv_out, 1) / tf.reduce_sum(mask, 1)
       else:
@@ -156,7 +154,6 @@ class Model(framework.model.module.AbstractModel):
         pool = tf.reduce_max(conv_out, 1)
       pools.append(pool) # (None, num_filter)
     caption_embed = tf.concat(pools, 1)
-    print caption_embed.get_shape()
     return caption_embed
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
