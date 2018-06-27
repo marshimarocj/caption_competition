@@ -49,8 +49,7 @@ def prepare_ceve():
   model_cfg = rank_model.ceve.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
-  with open(model_cfg_file, 'w') as fout:
-    json.dump(model_cfg, fout, indent=2)
+  model_cfg.save(model_cfg_file)
 
   output_dir = outprefix
   path_cfg = {

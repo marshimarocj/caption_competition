@@ -62,7 +62,6 @@ def gen_cfg(**kwargs):
   # we_cfg.dim_embed = kwargs['dim_embed']
   # we_cfg.num_words = kwargs['num_words']
   we_cfg.lr_mult = 1e-2
-  we_cfg.E = None
 
   # print we_cfg
 
