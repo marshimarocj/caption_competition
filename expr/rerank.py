@@ -18,7 +18,7 @@ def graph_match_rerank():
   topk = 20
 
   predicts = np.load(pred_file)
-  num_video, num_caption = predicts.shape[0]
+  num_video, num_caption = predicts.shape
 
   with mosek.Env() as env:
     with env.Task(0, 0) as task:
