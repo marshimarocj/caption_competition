@@ -72,7 +72,7 @@ if __name__ == '__main__':
     path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred', '%s.npy'%opts.out_name)
     path_cfg.log_file = None
 
-    trntst = rank_model.ceve.TrnTst(model_cfg, path_cfg, _model)
+    trntst = rank_model.ceve.TrnTst(model_cfg, path_cfg, m)
 
     tst_reader = rank_model.ceve.TstReader(opts.ft_files.split(','), opts.annotation_file)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
