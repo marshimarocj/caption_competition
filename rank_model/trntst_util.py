@@ -37,9 +37,9 @@ class TrnTst(framework.model.trntst.TrnTst):
     num = 0
     for data in tst_reader.yield_val_batch(batch_size):
       feed_dict= {
-        self.model.InKey.FT: data['fts'],
-        self.model.InKey.CAPTIONID: data['captionids'],
-        self.model.InKey.CAPTION_MASK: data['caption_masks'],
+        self.model.inputs[self.model.InKey.FT]: data['fts'],
+        self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+        self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
       }
       sims = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
       idxs = np.argsort(-sims[0])
