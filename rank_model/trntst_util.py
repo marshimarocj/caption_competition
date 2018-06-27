@@ -27,9 +27,9 @@ class PathCfg(framework.model.trntst.PathCfg):
 class TrnTst(framework.model.trntst.TrnTst):
   def _construct_feed_dict_in_trn(self, data):
     return {
-      self.model.inputs[self.InKey.FT]: data['fts'],
-      self.model.inputs[self.InKey.CAPTIONID]: data['captionids'],
-      self.model.inputs[self.InKey.CAPTION_MASK]: data['caption_masks'],
+      self.model.inputs[self.model.InKey.FT]: data['fts'],
+      self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+      self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
     }
 
   def predict_and_eval_in_val(self, sess, tst_reader, metrics):
