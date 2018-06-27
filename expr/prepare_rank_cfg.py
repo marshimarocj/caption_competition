@@ -13,7 +13,8 @@ import rank_model.ceve
 '''expr
 '''
 def prepare_ceve():
-  root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
+  # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
