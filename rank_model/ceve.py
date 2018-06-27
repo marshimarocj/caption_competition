@@ -275,7 +275,7 @@ class TrnReader(framework.model.data.Reader):
 
   def yield_trn_batch(self, batch_size):
     for i in range(0, self.num_caption, batch_size):
-      pos_idxs = self.idxs[i:i+batch]
+      pos_idxs = self.idxs[i:i+batch_size]
       pos_ft_idxs = set(self.ft_idxs[pos_idxs].tolist())
 
       pos_fts = self.fts[pos_idxs]
