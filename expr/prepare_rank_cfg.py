@@ -35,6 +35,7 @@ def prepare_ceve():
     'dim_ft': 1024 + 2048,
     'dim_joint_embed': 300,
 
+    'max_words_in_caption': 30,
     'window_sizes': [1, 2, 3],
     'num_filters': [100, 100, 100],
     'pool': 'mean',

@@ -59,8 +59,8 @@ def gen_cfg(**kwargs):
   cfg.pool = kwargs['pool']
 
   we_cfg = cfg.subcfgs[WE]
-  we_cfg.dim_embed = kwargs['dim_embed']
-  we_cfg.num_words = kwargs['num_words']
+  # we_cfg.dim_embed = kwargs['dim_embed']
+  # we_cfg.num_words = kwargs['num_words']
   we_cfg.lr_mult = 1e-2
 
   return cfg
