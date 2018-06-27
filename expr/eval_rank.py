@@ -76,7 +76,7 @@ def predict_eval_trecvid17_B():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[1])
+      gid = int(data[2])
       vid2gid[vid] = gid
   for vid in range(len(vid2gid)):
     gts.append(vid2gid[vid])
