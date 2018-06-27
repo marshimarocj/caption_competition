@@ -26,7 +26,7 @@ def build_parser():
 
 
 def gen_dir_struct_info(path_cfg_file):
-  path_cfg = model.ceve.PathCfg()
+  path_cfg = rank_model.ceve.PathCfg()
   return common.gen_dir_struct_info(path_cfg, path_cfg_file)
 
 
@@ -40,8 +40,6 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
     model_cfg.subcfgs[WE].E = E
     model_cfg.subcfgs[WE].num_words = E.shape[0]
     model_cfg.subcfgs[WE].dim_embed = E.shape[1]
-  else:
-    model_cfg.subcfgs[WE].E = np.empty(0)
 
   return model_cfg
 
