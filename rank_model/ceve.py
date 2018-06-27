@@ -244,7 +244,7 @@ TrnTst = trntst_util.TrnTst
 
 
 class TrnReader(framework.model.data.Reader):
-  def __init__(self, num_neg, ft_files, caption_file):
+  def __init__(self, num_neg, ft_files, annotation_file):
     self.num_neg = num_neg
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
@@ -312,7 +312,7 @@ class TrnReader(framework.model.data.Reader):
 
 
 class ValReader(framework.model.data.Reader):
-  def __init__(self, ft_files, caption_file, label_file):
+  def __init__(self, ft_files, annotation_file, label_file):
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
     self.captionids = np.empty(0)
@@ -354,7 +354,7 @@ class ValReader(framework.model.data.Reader):
 
 
 class TstReader(framework.model.data.Reader):
-  def __init__(self, ft_files, caption_file):
+  def __init__(self, ft_files, annotation_file):
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
     self.captionids = np.empty(0)
