@@ -21,7 +21,7 @@ def build_parser():
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
   # only in tst
   parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
-  parser.add_argument('--annotaiton_file', dest='annotation_file')
+  parser.add_argument('--annotation_file', dest='annotation_file')
   parser.add_argument('--out_name', dest='out_name')
   parser.add_argument('--ft_files', dest='ft_files')
 
