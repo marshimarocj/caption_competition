@@ -96,11 +96,14 @@ def eval_rerank():
 
   predicts = np.load(pred_files[0])
   rerank_predicts = np.load(pred_files[1])
-  combined_predicts = 0.5 * predicts + 0.5 * rerank_predicts
-
   mir = eval_rank.calc_mir(predicts, vid2gt)
-  combined_mir = eval_rank.calc_mir(combined_predicts, vid2gt)
-  print mir, combined_mir
+  print mir
+
+  alphas = [.5, .7, .9]
+  for alpha in alphas:
+    combined_predicts = (1 - alpha) * predicts + alpha * rerank_predicts
+    combined_mir = eval_rank.calc_mir(combined_predicts, vid2gt)
+    print alpha, combined_mir
 
 
 if __name__ == '__main__':
