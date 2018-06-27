@@ -278,7 +278,7 @@ class TrnReader(framework.model.data.Reader):
       pos_idxs = self.idxs[i:i+batch_size]
       pos_ft_idxs = set(self.ft_idxs[pos_idxs].tolist())
 
-      pos_fts = self.fts[pos_ft_idxs]
+      pos_fts = self.fts[self.ft_idxs[pos_idxs]]
       pos_captionids = self.captionids[pos_idxs]
       pos_caption_masks = self.caption_masks[pos_idxs]
 
