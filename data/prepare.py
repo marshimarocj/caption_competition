@@ -187,7 +187,7 @@ def prepare_trecvid17_rank_val():
   #     cPickle.dump([idxs, captionids, caption_masks], fout)
 
   ########label#########
-  label_file = os.path.join(root_dir, 'label', 'vtt.matching.ranking.set.2.gt')
+  label_file = os.path.join(root_dir, 'label', 'ranking', 'vtt.matching.ranking.set.2.gt')
   vid_file = os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.url.list')
   out_file = os.path.join(out_root_dir, 'label', '17.set.2.gt')
 
