@@ -40,10 +40,10 @@ def prepare_ceve():
     'pool': 'mean',
   }
 
-  outprefix = '%s.%d.%s.%s.%.1f.%d'%(
+  outprefix = '%s.%d.%s.%s.%.1f'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
-    params['dim_joint_embed'], '_'.join([str(d) for d in params['window_sizes']]), pool,
-    alpha, neg2pos)
+    params['dim_joint_embed'], '_'.join([str(d) for d in params['window_sizes']]), 
+    params['pool'], params['alpha'])
 
   model_cfg = rank_model.ceve.gen_cfg(*params)
 
