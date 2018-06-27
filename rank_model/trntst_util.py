@@ -3,7 +3,7 @@ import framework.model.trntst
 
 class PathCfg(framework.model.trntst.PathCfg):
   def __init__(self):
-    framework.model.trntst.PathCfg.__init__(self)
+    super(PathCfg, self).__init__()
     # manually provided in the cfg file
     self.output_dir = ''
     self.trn_ftfiles = []

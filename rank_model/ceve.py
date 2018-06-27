@@ -19,7 +19,7 @@ WE = 'word'
 
 class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
-    framework.model.module.ModelConfig.__init__(self)
+    super(ModelConfig, self).__init__()
 
     self.subcfgs[WE] = encoder.word.Config()
 

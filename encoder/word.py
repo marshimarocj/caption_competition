@@ -8,6 +8,8 @@ import framework.model.module
 
 class Config(framework.model.module.ModuleConfig):
   def __init__(self):
+    super(Config, self).__init__()
+
     self.dim_embed = 300 # word2vector
     self.num_words = 10870
     self.E = np.empty(0)
