@@ -23,7 +23,7 @@ def select_best_epoch(log_dir):
 
 def gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid, **kwargs):
   cmd = [
-    'python', os.path.join('../driver', python_file),
+    'python', python_file,
     model_cfg_file, path_cfg_file, 
     '--is_train', '0',
     '--best_epoch', str(best_epoch),
@@ -56,7 +56,7 @@ def predict_eval_trecvid17_B():
   expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
-  python_file = 'ceve.py'
+  python_file = '../rank_driver/ceve.py'
   gpuid = 1
 
   best_epoch, mir_A = select_best_epoch(log_dir)
