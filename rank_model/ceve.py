@@ -346,8 +346,8 @@ class ValReader(framework.model.data.Reader):
       fts = np.expand_dims(ft, 0)
       yield {
         'fts': fts,
-        'captionids': captionids,
-        'caption_masks': caption_masks,
+        'captionids': self.captionids,
+        'caption_masks': self.caption_masks,
         'gt': gt,
       }
 
@@ -376,6 +376,6 @@ class TstReader(framework.model.data.Reader):
       fts = np.expand_dims(ft, 0)
       yield {
         'fts': fts,
-        'captionids': captionids,
-        'caption_masks': caption_masks,
+        'captionids': self.captionids,
+        'caption_masks': self.caption_masks,
       }
