@@ -34,11 +34,14 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
   model_cfg = rank_model.ceve.ModelConfig()
   model_cfg.load(model_cfg_file)
 
-  E = np.load(path_cfg.embed_file)
-  E = E.astype(np.float32)
-  model_cfg.subcfgs[WE].E = E
-  model_cfg.subcfgs[WE].num_words = E.shape[0]
-  model_cfg.subcfgs[WE].dim_embed = E.shape[1]
+  if path_cfg.embed_file != '':
+    E = np.load(path_cfg.embed_file)
+    E = E.astype(np.float32)
+    model_cfg.subcfgs[WE].E = E
+    model_cfg.subcfgs[WE].num_words = E.shape[0]
+    model_cfg.subcfgs[WE].dim_embed = E.shape[1]
+  else:
+    model_cfg.subcfgs[WE].E = np.empty(0)
 
   return model_cfg
 
