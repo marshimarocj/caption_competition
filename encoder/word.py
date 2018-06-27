@@ -32,7 +32,7 @@ class Encoder(framework.model.module.AbstractModule):
       if self._config.E.size > 0:
         self.word_embedding_W = tf.contrib.framework.model_variable('word_embedding_W',
           shape=(self._config.num_words, self._config.dim_embed), dtype=tf.float32, 
-          initializer=tf.constant_initializer(init_val))
+          initializer=tf.constant_initializer(self._config.E))
       else:
         self.word_embedding_W = tf.contrib.framework.model_variable('word_embedding_W',
           shape=(self._config.num_words, self._config.dim_embed), dtype=tf.flaot32,
