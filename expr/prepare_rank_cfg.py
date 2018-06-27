@@ -73,4 +73,4 @@ def prepare_ceve():
 
 
 if __name__ == '__main__':
-  pass
+  prepare_ceve()
