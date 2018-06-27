@@ -83,8 +83,8 @@ def eval_rerank():
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   root_dir = '/data1/jiac/trecvid2018/rank' # gpu9
   pred_files = [
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.A.rerank.20.npy'),
   ]
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
@@ -94,7 +94,7 @@ def eval_rerank():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gt = int(data[2])
+      gt = int(data[1])
       vid2gt[vid] = gt
 
   predicts = np.load(pred_files[0])
