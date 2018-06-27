@@ -81,7 +81,7 @@ def predict_eval_trecvid17_B():
   for vid in range(len(vid2gid)):
     gts.append(vid2gid[vid])
 
-  predict_file = '%s/pred/%s'%(expr_name, out_name)
+  predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
   predicts = np.load(predict_file)
   mir_B = 0.
   for i, predict in enumerate(predicts):
