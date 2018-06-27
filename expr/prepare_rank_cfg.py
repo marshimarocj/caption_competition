@@ -45,7 +45,7 @@ def prepare_ceve():
     params['dim_joint_embed'], '_'.join([str(d) for d in params['window_sizes']]), 
     params['pool'], params['alpha'])
 
-  model_cfg = rank_model.ceve.gen_cfg(*params)
+  model_cfg = rank_model.ceve.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   with open(model_cfg_file, 'w') as fout:
