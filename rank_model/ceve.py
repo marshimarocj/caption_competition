@@ -84,7 +84,7 @@ class Model(framework.model.module.AbstractModel):
 
   def _set_submods(self):
     return {
-      'WE': encoder.word.Encoder(self._config.subcfgs[WE]),
+      WE: encoder.word.Encoder(self._config.subcfgs[WE]),
     }
 
   def _add_input_in_mode(self, mode):
