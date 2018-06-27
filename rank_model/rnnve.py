@@ -129,6 +129,8 @@ class Model(framework.model.module.AbstractModel):
       self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.caption_pca_W)
+      self._weights.append(self.caption_pca_B)
 
       self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
         shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
@@ -136,8 +138,8 @@ class Model(framework.model.module.AbstractModel):
       self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-0.1, 0.1))
-      self._weights.append(self.pca_W)
-      self._weights.append(self.pca_B)
+      self._weights.append(self.ft_pca_W)
+      self._weights.append(self.ft_pca_B)
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     encoder = self.submods[WE]
