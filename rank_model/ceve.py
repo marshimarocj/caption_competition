@@ -278,7 +278,7 @@ class TrnReader(framework.model.data.Reader):
       pos_idxs = self.idxs[i:i+batch_size]
       pos_ft_idxs = set(self.ft_idxs[pos_idxs].tolist())
 
-      pos_fts = self.fts[pos_idxs]
+      pos_fts = self.fts[pos_ft_idxs]
       pos_captionids = self.captionids[pos_idxs]
       pos_caption_masks = self.caption_masks[pos_idxs]
 
@@ -289,8 +289,9 @@ class TrnReader(framework.model.data.Reader):
       neg_captionids= []
       neg_caption_masks = []
       for idx in idxs:
-        if self.ft_idxs[i] not in pos_ft_idxs:
-          neg_fts.append(self.fts[idx])
+        ft_idx = self.ft_idxs[idx]
+        if ft_idx not in pos_ft_idxs:
+          neg_fts.append(self.fts[ft_idx])
           neg_captionids.append(self.captionids[idx])
           neg_caption_masks.append(self.caption_masks[idx])
           if len(neg_fts) == self.num_neg:
