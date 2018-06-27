@@ -40,7 +40,7 @@ def prepare_ceve():
   }
 
   outprefix = '%s.%d.%s.%s.%.1f.%d'%(
-    os.path.join(out_dir, '_'.join(modal_ft_names)), 
+    os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], '_'.join([str(d) for d in window_sizes]), pool,
     alpha, neg2pos)
 
