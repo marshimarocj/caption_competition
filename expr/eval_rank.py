@@ -54,6 +54,7 @@ def predict_eval_trecvid17_B():
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
+  log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/ceve.py'
