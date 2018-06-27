@@ -165,7 +165,7 @@ class Model(framework.model.module.AbstractModel):
     wvecs = out_ops[encoder.OutKey.EMBED] # (None, max_words_in_caption, dim_embed)
 
     with tf.variable_scope(self.name_scope):
-      caption_embed = encode_caption(wvecs, in_ops[self.InKey.CAPTION_MASK])
+      caption_embed = self.encode_caption(wvecs, in_ops[self.InKey.CAPTION_MASK])
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
 
