@@ -159,7 +159,7 @@ class Model(framework.model.module.AbstractModel):
       rnn.InKey.MASK: in_ops[self.InKey.CAPTION_MASK],
       rnn.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
       rnn.InKey.INIT_STATE: init_state,
-    })
+    }, mode)
 
     with tf.variable_scope(self.name_scope):
       caption_embed = out_ops[rnn.OutKey.OUTPUT]
