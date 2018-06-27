@@ -148,7 +148,7 @@ class Model(framework.model.module.AbstractModel):
       conv_out = conv_out * mask
       print conv_out.get_shape()
       if self._config.pool == 'mean':
-        pool = tf.reduce_sum(conv_out, 1) / tf.reduce_sum(mask, 1, True)
+        pool = tf.reduce_sum(conv_out, 1) / tf.reduce_sum(mask, 1)
       else:
         _mask = tf.cast(mask, tf.bool)
         _mask = tf.tile(_mask, [1, 1, num_filter])
