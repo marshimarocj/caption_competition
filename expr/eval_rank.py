@@ -76,9 +76,9 @@ def predict_eval_trecvid17_B():
 
   best_epoch, mir_A = select_best_epoch(log_dir)
 
-  # p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
-  #   ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
-  # p.wait()
+  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+    ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+  p.wait()
 
   vid2gid = {}
   with open(label_file) as f:
@@ -91,13 +91,6 @@ def predict_eval_trecvid17_B():
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
   predicts = np.load(predict_file)
-  # mir_B = 0.
-  # for i, predict in enumerate(predicts):
-  #   idxs = np.argsort(-predict)
-  #   rank = np.where(idxs == vid2gt[i])[0][0]
-  #   rank += 1
-  #   mir_B += 1. / rank
-  # mir_B /= predicts.shape[0]
   mir_B = calc_mir(predicts, vid2gt)
 
   print best_epoch, mir_A, mir_B
