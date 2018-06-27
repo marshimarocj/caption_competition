@@ -154,6 +154,7 @@ class Model(framework.model.module.AbstractModel):
         pool = tf.reduce_max(conv_out, 1)
       pools.append(pool) # (None, num_filter)
     caption_embed = tf.concat(pools, 1)
+    print caption_embed.get_shape()
     return caption_embed
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
