@@ -132,7 +132,6 @@ class Model(framework.model.module.AbstractModel):
 
   def encode_caption(self, wvec, mask):
     batch_size = tf.shape(wvec)[0]
-    mask = in_ops[self.InKey.CAPTION_MASK]
     mask = tf.to_float(tf.expand_dims(mask, 2))
     pools = []
     for i in range(len(self.config.window_sizes)):
