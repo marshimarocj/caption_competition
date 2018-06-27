@@ -3,6 +3,8 @@ import os
 import numpy as np
 import mosek
 
+import eval_rank
+
 
 '''func
 '''
@@ -75,5 +77,32 @@ def graph_match_rerank():
         print("Other solution status")
 
 
+def eval_rerank():
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
+  pred_files = [
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.rerank.20.npy'),
+  ]
+  label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+
+  vid2gt = {}
+  with open(label_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      vid = int(data[0])
+      gt = int(data[1])
+      vid2gt[vid] = gt
+
+  predicts = np.load(pred_files[0])
+  rerank_predicts = np.load(pred_files[1])
+  combined_predicts = 0.5 * predicts + 0.5 * rerank_predicts
+
+  mir = eval_rank.calc_mir(predicts, vid2gt)
+  combined_mir = eval_rank.calc_mir(combined_predicts, vid2gt)
+  print mir, combined_mir
+
+
 if __name__ == '__main__':
-  graph_match_rerank()
+  # graph_match_rerank()
+  eval_rerank()

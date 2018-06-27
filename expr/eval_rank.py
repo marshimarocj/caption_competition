@@ -39,6 +39,17 @@ def gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, g
   return p
 
 
+def calc_mir(predicts, vid2gt):
+  mir = 0.
+  for i, predict in enumerate(predicts):
+    idxs = np.argsort(-predict)
+    rank = np.where(idxs == vid2gt[i])[0][0]
+    rank += 1
+    mir += 1. / rank
+  mir /= predicts.shape[0]
+  return mir
+
+
 '''expr
 '''
 def report_best_epoch():
@@ -69,7 +80,6 @@ def predict_eval_trecvid17_B():
   #   ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
   # p.wait()
 
-  gts = []
   vid2gid = {}
   with open(label_file) as f:
     for line in f:
@@ -77,19 +87,18 @@ def predict_eval_trecvid17_B():
       data = line.split(' ')
       vid = int(data[0])
       gid = int(data[2])
-      vid2gid[vid] = gid
-  for vid in range(len(vid2gid)):
-    gts.append(vid2gid[vid])
+      vid2gt[vid] = gid
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
   predicts = np.load(predict_file)
-  mir_B = 0.
-  for i, predict in enumerate(predicts):
-    idxs = np.argsort(-predict)
-    rank = np.where(idxs == gts[i])[0][0]
-    rank += 1
-    mir_B += 1. / rank
-  mir_B /= predicts.shape[0]
+  # mir_B = 0.
+  # for i, predict in enumerate(predicts):
+  #   idxs = np.argsort(-predict)
+  #   rank = np.where(idxs == vid2gt[i])[0][0]
+  #   rank += 1
+  #   mir_B += 1. / rank
+  # mir_B /= predicts.shape[0]
+  mir_B = calc_mir(predicts, vid2gt)
 
   print best_epoch, mir_A, mir_B
 
