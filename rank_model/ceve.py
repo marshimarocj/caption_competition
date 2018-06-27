@@ -131,6 +131,7 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.pca_B)
 
   def encode_caption(self, wvec, mask):
+    print wvec.get_shape()
     batch_size = tf.shape(wvec)[0]
     mask = tf.to_float(tf.expand_dims(mask, 2))
     pools = []
@@ -152,6 +153,7 @@ class Model(framework.model.module.AbstractModel):
         _mask = tf.tile(_mask, [1, 1, num_filter])
         conv_out = tf.where(_mask, conv_out, -10*tf.ones_like(conv_out, dtype=tf.float32))
         pool = tf.reduce_max(conv_out, 1)
+      print pool.get_shape()
       pools.append(pool) # (None, num_filter)
     caption_embed = tf.concat(pools, 1)
     print caption_embed.get_shape()
