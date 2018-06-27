@@ -15,8 +15,10 @@ import eval_rank
 def graph_match_rerank():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
-  pred_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.npy')
-  out_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.rerank.20.npy')
+  # pred_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.npy')
+  # out_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.rerank.20.npy')
+  pred_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.A.npy')
+  out_file = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.A.rerank.20.npy')
 
   topk = 20
 
