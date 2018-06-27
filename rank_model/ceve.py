@@ -146,6 +146,7 @@ class Model(framework.model.module.AbstractModel):
       conv_out = tf.nn.bias_add(conv_out, conv_B)
       conv_out = tf.nn.tanh(conv_out)
       conv_out = conv_out * mask
+      print conv_out.get_shape()
       if self._config.pool == 'mean':
         pool = tf.reduce_sum(conv_out, 1) / tf.reduce_sum(mask, 1, True)
       else:
@@ -153,7 +154,6 @@ class Model(framework.model.module.AbstractModel):
         _mask = tf.tile(_mask, [1, 1, num_filter])
         conv_out = tf.where(_mask, conv_out, -10*tf.ones_like(conv_out, dtype=tf.float32))
         pool = tf.reduce_max(conv_out, 1)
-      print pool.get_shape()
       pools.append(pool) # (None, num_filter)
     caption_embed = tf.concat(pools, 1)
     print caption_embed.get_shape()
