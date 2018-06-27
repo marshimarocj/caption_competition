@@ -54,11 +54,11 @@ if __name__ == '__main__':
   m = rank_model.ceve.Model(model_cfg)
 
   if opts.is_train:
-    trntst = model.rank_ceve.TrnTst(model_cfg, path_cfg, m)
+    trntst = rank_model.ceve.TrnTst(model_cfg, path_cfg, m)
 
-    trn_reader = model.rank_ceve.TrnReader(
+    trn_reader = rank_model.ceve.TrnReader(
       model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
-    val_reader = model.rank_ceve.ValReader(
+    val_reader = rank_model.ceve.ValReader(
       path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file)
     if path_cfg.model_file != '':
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction, resume=True)
