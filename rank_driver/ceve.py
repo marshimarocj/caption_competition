@@ -21,6 +21,9 @@ def build_parser():
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
   # only in tst
   parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
+  parser.add_argument('--annotaiton_file', dest='annotation_file')
+  parser.add_argument('--out_name', dest='out_name')
+  parser.add_argument('--ft_files', dest='ft_files')
 
   return parser
 
@@ -66,10 +69,10 @@ if __name__ == '__main__':
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction)
   else:
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
-    path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred', 'tst.npy'%opts.best_epoch)
+    path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred', '%s.npy'%opts.out_name)
     path_cfg.log_file = None
 
     trntst = rank_model.ceve.TrnTst(model_cfg, path_cfg, _model)
 
-    tst_reader = rank_model.ceve.TstReader(path_cfg.tst_ftfiles, path_cfg.tst_annotation_file)
+    tst_reader = rank_model.ceve.TstReader(opts.ft_files.split(','), opts.annotation_file)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
