@@ -64,6 +64,8 @@ def gen_cfg(**kwargs):
   we_cfg.lr_mult = 1e-2
   del we_cfg.E
 
+  print we_cfg
+
   return cfg
 
 
