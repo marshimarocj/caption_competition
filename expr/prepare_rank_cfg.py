@@ -15,7 +15,7 @@ import rank_model.ceve
 def prepare_ceve():
   root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   split_dir = os.path.join(root_dir, 'split')
-  label_dir = '/data1/jiac/trecvid2017/label'
+  label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
   out_dir = os.path.join(root_dir, 'ceve_expr')
@@ -56,7 +56,7 @@ def prepare_ceve():
     'trn_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names],
     'val_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names],
     'tst_ftfiles': [],
-    'val_label_file': os.path.join(label_dir, 'ranking', 'vtt.matching.ranking.set.2.gt'),
+    'val_label_file': os.path.join(label_dir, 'ranking', '17.set.2.gt'),
     'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
     'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
     'tst_annotation_file': '',

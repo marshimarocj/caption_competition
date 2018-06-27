@@ -336,8 +336,8 @@ class ValReader(framework.model.data.Reader):
       for line in f:
         line = line.strip()
         data = line.split(' ')
-        vid = int(data[0])-1
-        gid = int(data[1])-1
+        vid = int(data[0])
+        gid = int(data[1])
         vid2gid[vid] = gid
     for vid in range(len(vid2gid)):
       self.gts.append(vid2gid[vid])
