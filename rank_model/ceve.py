@@ -126,7 +126,7 @@ class Model(framework.model.module.AbstractModel):
         initializer=tf.contrib.layers.xavier_initializer())
       self.pca_B = tf.contrib.framework.model_variable('pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-        initialzier=tf.random_uniform_initializer(-0.1, 0.1))
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
       self._weights.append(self.pca_W)
       self._weights.append(self.pca_B)
 
