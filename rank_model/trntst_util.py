@@ -58,9 +58,9 @@ class TrnTst(framework.model.trntst.TrnTst):
     sims = []
     for data in tst_reader.yield_tst_batch(batch_size):
       feed_dict = {
-        self.model.InKey.FT: data['fts'],
-        self.model.InKey.CAPTIONID: data['captionids'],
-        self.model.InKey.CAPTION_MASK: data['caption_masks'],
+        self.model.inputs[self.model.InKey.FT]: data['fts'],
+        self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+        self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
       }
       sim = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
       sims.append(sim)
