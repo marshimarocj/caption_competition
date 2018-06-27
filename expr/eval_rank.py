@@ -48,7 +48,7 @@ def report_best_epoch():
 def predict_eval_trecvid17_B():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   ft_names = ['i3d', 'resnet200']
-  ft_files = [os.path.join(ft_root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
   out_name = 'val.B.npy'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
