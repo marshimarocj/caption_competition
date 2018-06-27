@@ -28,7 +28,7 @@ def prepare_ceve():
   ]
 
   params = {
-    'num_epoch': 20,
+    'num_epoch': 50,
 
     'alpha': 0.5,
     'num_neg': 32,
