@@ -1,3 +1,6 @@
+import cPickle
+import random
+
 import numpy as np
 
 import framework.model.trntst
