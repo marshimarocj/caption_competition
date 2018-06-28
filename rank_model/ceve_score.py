@@ -180,7 +180,7 @@ class Model(framework.model.module.AbstractModel):
         pos_caption_embed = caption_embed[:-self._config.num_neg]
         neg_caption_embed = caption_embed[-self._config.num_neg:]
 
-        pos_sim = f.reduce_sum(pos_ft_embed * pos_caption_embed, 1) # (trn_batch_size,)
+        pos_sim = tf.reduce_sum(pos_ft_embed * pos_caption_embed, 1) # (trn_batch_size,)
         neg_sim = tf.matmul(pos_ft_embed, neg_caption_embed, transpose_b=True) # (trn_batch_size, neg)
       return pos_sim, neg_sim
 
