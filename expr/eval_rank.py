@@ -76,13 +76,14 @@ def predict_eval_trecvid17_B():
 
   # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
   # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
-  expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0')
+  # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0')
+  expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/ceve.py'
-  # gpuid = 1
-  gpuid = 0
+  gpuid = 1
+  # gpuid = 0
 
   best_epoch, mir_A = select_best_epoch(log_dir)
 
@@ -107,5 +108,5 @@ def predict_eval_trecvid17_B():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
