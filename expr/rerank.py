@@ -92,8 +92,8 @@ def eval_rerank():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   pred_files = [
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'pred', 'val.B.rerank.20.npy'),
   ]
@@ -105,7 +105,7 @@ def eval_rerank():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gt = int(data[1])
+      gt = int(data[2])
       vid2gt[vid] = gt
 
   predicts = np.load(pred_files[0])
