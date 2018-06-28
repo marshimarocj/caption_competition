@@ -212,7 +212,7 @@ class Model(framework.model.module.AbstractModel):
       deltas = self._inputs[self.InKey.DELTA]
       max_margin = self._config.margin * tf.ones_like(deltas, dtype=tf.float32)
       margin = tf.minimum(deltas, max_margin)
-      loss = tf.reduce_logsumexp(100*(margin + neg_log_prob), 1) / 100.
+      loss = tf.reduce_logsumexp(100*(margin + neg_sim), 1) / 100.
       loss -= pos_sim
       loss = tf.maximum(tf.zeros_like(loss), loss)
       loss = tf.reduce_sum(loss)
