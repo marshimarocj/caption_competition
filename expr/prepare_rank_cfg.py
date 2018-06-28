@@ -5,6 +5,7 @@ sys.path.append('../')
 
 import rank_model.ceve
 import rank_model.rnnve
+import rank_model.ceve_score
 
 
 '''func
