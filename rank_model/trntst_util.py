@@ -347,7 +347,7 @@ def get_scores(neg_captions, pos_vids):
   deltas = np.zeros((num_pos, num_neg), dtype=np.float32)
   for t in range(num_pos):
     data = q.get()
-    print data['service']
+    # print data['service']
     data = data['data']
     for d in data:
       score = d['score']
@@ -356,7 +356,7 @@ def get_scores(neg_captions, pos_vids):
       vid = int(fields[0])
       j = int(fields[1])
       deltas[vid2idx[vid], j] = score
-  print deltas.shape
+  # print deltas.shape
 
   deltas = 1.0 - deltas
   deltas = np.maximum(deltas, np.zeros(deltas.shape))
