@@ -167,19 +167,15 @@ class Model(framework.model.module.AbstractModel):
       mask = tf.expand_dims(tf.to_float(mask), 2)
       caption_embed = tf.nn.conv1d(caption_embed, tf.expand_dims(self.caption_pca_W, 0), 1, 'VALID')
       caption_embed = tf.nn.tanh(caption_embed)
-      print caption_embed.get_shape()
       if self._config.pool == 'mean':
-        caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1, True)
-        print caption_embed.get_shape()
+        caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
       else:
         _mask = tf.cast(mask, tf.bool)
         _mask = tf.tile(_mask, [1, 1, tf.shape(outputs)[-1]])
         caption_embed = tf.where(_mask, caption_embed, -10*tf.ones_like(caption_embed, dtype=tf.float32))
         caption_embed = tf.reduce_max(caption_embed, 1)
-        print caption_embed.get_shape()
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
-      print caption_embed.get_shape()
 
       ft_embed = tf.nn.xw_plus_b(in_ops[self.InKey.FT], self.ft_pca_W, self.ft_pca_B)
       ft_embed = tf.nn.tanh(ft_embed)
