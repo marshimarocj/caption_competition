@@ -31,7 +31,8 @@ def prepare_ceve():
   params = {
     'num_epoch': 50,
 
-    'alpha': 0.5,
+    # 'alpha': 0.5,
+    'alpha': 1.,
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
