@@ -41,7 +41,7 @@ class ModelConfig(framework.model.module.ModelConfig):
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
-    assert self.dim_ft == self.subcfgs[RNN].subcfgs[CELL].dim_input
+    assert self.subcfgs[WE].dim_embed == self.subcfgs[RNN].subcfgs[CELL].dim_input
 
 
 def gen_cfg(**kwargs):
