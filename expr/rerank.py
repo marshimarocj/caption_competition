@@ -16,16 +16,16 @@ def graph_match_rerank():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   pred_files = [
-    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0', 'pred', 'val.A.npy'),
-    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.A.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.npy'),
   ]
   out_files = [
-    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0', 'pred', 'val.A.rerank.20.npy'),
-    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.A.rerank.20.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
+    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.rerank.20.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.A.rerank.20.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.rerank.20.npy'),
   ]
 
   topk = 20
