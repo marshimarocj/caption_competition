@@ -22,12 +22,12 @@ def tst_post():
   data = json.loads(r.text)
   print 'cider:', data
 
-  data = [{'pred': 'a man is playing', 'gt': ['a man tries to juggle with three water bottles'], 'id': 0}]
-  r = requests.post('http://' + url + '/bleu', json=data)
-  print 'bleu:', json.loads(r.text)
+  # data = [{'pred': 'a man is playing', 'gt': ['a man tries to juggle with three water bottles'], 'id': 0}]
+  # r = requests.post('http://' + url + '/bleu', json=data)
+  # print 'bleu:', json.loads(r.text)
 
-  r = requests.post('http://' + url + '/rouge', json=data)
-  print 'rouge:', json.loads(r.text)
+  # r = requests.post('http://' + url + '/rouge', json=data)
+  # print 'rouge:', json.loads(r.text)
 
 
 if __name__ == '__main__':
