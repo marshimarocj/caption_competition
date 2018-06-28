@@ -100,7 +100,7 @@ def prepare_rnnve():
     'max_words_in_caption': 30,
     'pool': 'mean',
 
-    'cell': 'lstm',
+    'cell': 'gru',
     'cell_dim_hidden': 150,
   }
 
