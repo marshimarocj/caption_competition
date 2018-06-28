@@ -340,9 +340,9 @@ def get_scores(neg_captions, pos_vids):
         'id': '%d_%d'%(vid, i),
         'vid': vid,
       })
-  worker = threading.Thread(
-    target=cider_scorer, args=(eval_data, q))
-  worker.start()
+    worker = threading.Thread(
+      target=cider_scorer, args=(eval_data, q))
+    worker.start()
 
   deltas = np.zeros((num_pos, num_neg), dtype=np.float32)
   for t in range(num_pos):
