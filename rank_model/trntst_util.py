@@ -347,6 +347,7 @@ def get_scores(neg_captions, pos_vids):
   deltas = np.zeros((num_pos, num_neg), dtype=np.float32)
   for t in range(num_pos):
     data = q.get()
+    print data['service']
     data = data['data']
     for d in data:
       score = d['score']
