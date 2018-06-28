@@ -33,6 +33,7 @@ class TrnTst(framework.model.trntst.TrnTst):
       self.model.inputs[self.model.InKey.FT]: data['fts'],
       self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
       self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+      self.model.inputs[self.model.InKey.IS_TRN]: True,
     }
 
   def predict_and_eval_in_val(self, sess, tst_reader, metrics):
@@ -45,6 +46,7 @@ class TrnTst(framework.model.trntst.TrnTst):
         self.model.inputs[self.model.InKey.FT]: data['fts'],
         self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
         self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+        self.model.inputs[self.model.InKey.IS_TRN]: False,
       }
       sims = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
       idxs = np.argsort(-sims[0])
@@ -64,6 +66,7 @@ class TrnTst(framework.model.trntst.TrnTst):
         self.model.inputs[self.model.InKey.FT]: data['fts'],
         self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
         self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+        self.model.inputs[self.model.InKey.IS_TRN]: False,
       }
       sim = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
       sims.append(sim)

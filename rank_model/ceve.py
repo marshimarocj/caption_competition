@@ -75,6 +75,7 @@ class Model(framework.model.module.AbstractModel):
     FT = 'ft'
     CAPTIONID = 'captionid'
     CAPTION_MASK = 'caption_mask'
+    IS_TRN = 'is_trn'
 
   class OutKey(enum.Enum):
     SIM = 'sim'
@@ -95,11 +96,13 @@ class Model(framework.model.module.AbstractModel):
         tf.int32, shape=(None, self._config.max_words_in_caption), name='captionids')
       caption_masks = tf.placeholder(
         tf.int32, shape=(None, self._config.max_words_in_caption), name='caption_masks')
+      is_trn = tf.placeholder(tf.bool, shape=(), name='is_trn')
 
     return {
       self.InKey.FT: fts,
       self.InKey.CAPTIONID: captionids,
       self.InKey.CAPTION_MASK: caption_masks,
+      self.InKey.IS_TRN: is_trn,
     }
 
   def _build_parameter_graph(self):
