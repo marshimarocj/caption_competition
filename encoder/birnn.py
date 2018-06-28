@@ -106,7 +106,7 @@ class Encoder(framework.model.module.AbstractModule):
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     with tf.variable_scope(self.name_scope):
-      tst_outputs = self._steps(
+      outputs = self._steps(
         in_ops[self.InKey.FT], in_ops[self.InKey.MASK], in_ops[self.InKey.INIT_STATE], in_ops[self.InKey.IS_TRN])
       if mode == framework.model.module.Mode.TRN_VAL:
         return {
