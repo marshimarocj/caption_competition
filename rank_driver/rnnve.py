@@ -11,6 +11,7 @@ import rank_model.rnnve
 import common
 
 WE = rank_model.rnnve.WE
+RNN = rank_model.rnnve.RNN
 CELL = rank_model.rnnve.CELL
 RCELL = rank_model.rnnve.RCELL
 
