@@ -223,7 +223,7 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['contrast_caption_loss'] = tf.reduce_sum(contrast_caption_loss)
 
       contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
-      contrast_ft_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_ft_loss))
+      contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
       self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
