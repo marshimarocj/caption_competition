@@ -164,7 +164,7 @@ class Model(framework.model.module.AbstractModel):
     with tf.variable_scope(self.name_scope):
       caption_embed = out_ops[rnn.OutKey.OUTPUT]
       mask = in_ops[self.InKey.CAPTION_MASK]
-      mask = tf.expand_dims(tf.to_float(mask), 1)
+      mask = tf.expand_dims(tf.to_float(mask), 2)
       caption_embed = tf.nn.conv1d(caption_embed, tf.expand_dims(self.caption_pca_W, 0), 1, 'VALID')
       caption_embed = tf.nn.tanh(caption_embed)
       if self._config.pool == 'mean':
