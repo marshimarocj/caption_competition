@@ -74,7 +74,7 @@ def gen_cfg(**kwargs):
   for cell in [CELL, RCELL]:
     cell_cfg = rnn_cfg.subcfgs[cell]
     cell_cfg.dim_hidden = kwargs['cell_dim_hidden']
-    cell_cfg.dim_input = kwargs['dim_ft']
+    cell_cfg.dim_input = 300
     cell_cfg.keepout_prob = 0.5
     cell_cfg.keepin_prob = 0.5
 
