@@ -14,7 +14,8 @@ import rank_model.rnnve
 '''expr
 '''
 def prepare_ceve():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -39,7 +40,8 @@ def prepare_ceve():
     'max_words_in_caption': 30,
     'window_sizes': [1, 2, 3],
     'num_filters': [100, 100, 100],
-    'pool': 'mean',
+    # 'pool': 'mean',
+    'pool': 'max',
   }
 
   outprefix = '%s.%d.%s.%s.%.1f'%(
@@ -137,5 +139,5 @@ def prepare_rnnve():
 
 
 if __name__ == '__main__':
-  # prepare_ceve()
-  prepare_rnnve()
+  prepare_ceve()
+  # prepare_rnnve()
