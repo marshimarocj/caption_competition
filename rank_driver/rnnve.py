@@ -11,6 +11,8 @@ import rank_model.rnnve
 import common
 
 WE = rank_model.rnnve.WE
+CELL = rank_model.rnnve.CELL
+RCELL = rank_model.rnnve.RCELL
 
 def build_parser():
   parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
@@ -43,6 +45,8 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
     model_cfg.subcfgs[WE].E = E
     model_cfg.subcfgs[WE].num_words = E.shape[0]
     model_cfg.subcfgs[WE].dim_embed = E.shape[1]
+    model_cfg.subcfgs[RNN].subcfgs[CELL] = E.shape[1]
+    model_cfg.subcfgs[RNN].subcfgs[RCELL] = E.shape[1]
 
   return model_cfg
 
