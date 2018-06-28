@@ -92,7 +92,7 @@ class Model(framework.model.module.AbstractModel):
       caption_masks = tf.placeholder(
         tf.int32, shape=(None, self._config.max_words_in_caption), name='caption_masks')
       deltas = tf.placeholder(
-        tf.float32, shape=(none, self._config.num_neg), name='deltas')
+        tf.float32, shape=(None, self._config.num_neg), name='deltas')
       is_trn = tf.placeholder(tf.bool, shape=(), name='is_trn')
 
     return {
