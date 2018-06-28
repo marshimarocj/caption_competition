@@ -125,7 +125,7 @@ def prepare_ceve_score():
     'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
     'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
     'tst_annotation_file': '',
-    'vid_file': os.path.join(split_dir, 'trn_videoids.npy'),
+    'trn_vid_file': os.path.join(split_dir, 'trn_videoids.npy'),
     'word_file': word_file,
     'embed_file': embed_file,
     'output_dir': output_dir,
