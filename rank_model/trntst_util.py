@@ -314,7 +314,8 @@ class ScoreTrnReader(framework.model.data.Reader):
 
 
 def cider_scorer(data, q):
-  server_url = 'http://127.0.0.1:8888/cider'
+  # server_url = 'http://127.0.0.1:8888/cider'
+  server_url = 'http://172.17.0.1:8888/cider'
 
   r = requests.post(server_url, json=data)
   data = json.loads(r.text)
