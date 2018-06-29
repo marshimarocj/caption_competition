@@ -141,7 +141,8 @@ def prepare_ceve_score():
 
 
 def prepare_rnnve():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -164,10 +165,11 @@ def prepare_rnnve():
     'dim_joint_embed': 300,
 
     'max_words_in_caption': 30,
-    # 'pool': 'mean',
-    'pool': 'max',
+    'pool': 'mean',
+    # 'pool': 'max',
 
-    'cell': 'gru',
+    # 'cell': 'gru',
+    'cell': 'lstm',
     'cell_dim_hidden': 150,
   }
 
@@ -205,5 +207,5 @@ def prepare_rnnve():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
-  prepare_ceve_score()
+  prepare_rnnve()
+  # prepare_ceve_score()
