@@ -205,7 +205,7 @@ def prepare_trecvid17_rank_val():
       fout.write('%d %d %d\n'%(idx, int(data[1])-1, int(data[2])-1))
 
 
-def prepare_trecvid17_gen_val():
+def prepare_trecvid17_rank_gen_val():
   trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
   word_file = os.path.join(trecvid_root_dir, 'rank', 'annotation', 'int2word.pkl')
@@ -277,7 +277,72 @@ def prepare_trecvid17_gen_val():
   np.save(out_file, vids)
 
 
+def merge_tgif_trecvid17_gen_trn():
+  trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
+  word_file = os.path.join(trecvid_root_dir, 'rank', 'annotation', 'int2word.pkl')
+  gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
+  tgif_root_dir = '/data1/jiac/tgif'
+  out_root_dir = '/data1/jiac/trecvid2018/generation'
+
+  #############caption mask#########
+  max_words_in_caption = 30
+
+  tgif_caption_mask_files = [
+    os.path.join(tgif_root_dir, 'split', 'trn_id_caption_mask.pkl'),
+    os.path.join(tgif_root_dir, 'split', 'val_id_caption_mask.pkl'),
+    os.path.join(tgif_root_dir, 'split', 'tst_id_caption_mask.pkl'),
+  ]
+  idxs = []
+  caption_ids = []
+  caption_masks = []
+  base = 0
+  for file in tgif_caption_mask_files:
+    with open(file) as f:
+      data = cPickle.load(f)
+    idxs.append(data[0] + base)
+    caption_ids.append(data[1])
+    caption_masks.append(data[2])
+    base = np.max(data[0] + base) + 1
+
+  word2int = {}
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  for i, word in enumerate(words):
+    word2int[word] = i
+
+  with open(gt_file) as f:
+    data = json.load(f)
+  num = len(data)
+  trecvid_idxs = []
+  trecvid_captionids = []
+  trecvid_caption_masks = []
+  for vid in range(1, num+1):
+    captions = data[str(vid)]
+    for caption in captions:
+      captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
+
+      trecvid_idxs.append(vid-1 + base)
+      trecvid_captionids.append(captionid)
+      trecvid_caption_masks.append(caption_mask)
+  trecvid_idxs = np.array(idxs, dtype=np.int32)
+  trecvid_captionids = np.array(captionids, dtype=np.int32)
+  trecvid_caption_masks = np.array(caption_masks, dtype=np.int32)
+
+  idxs.append(trecvid_idxs)
+  caption_ids.append(trecvid_captionids)
+  caption_masks.append(trecvid_caption_masks)
+
+  idxs = np.concatenate(idxs, 0)
+  caption_ids = np.concatenate(caption_ids, 0)
+  caption_masks = np.concatenate(caption_masks, 0)
+  out_file = os.path.join(out_root_dir, 'split', 'trn_id_caption_mask.pkl')
+  with open(out_file, 'w') as fout:
+    cPickle.dump([idxs, caption_ids, caption_masks], fout)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
-  prepare_trecvid17_gen_val()
+  # prepare_trecvid17_rank_gen_val()
+
+  merge_tgif_trecvid17_gen_trn()
