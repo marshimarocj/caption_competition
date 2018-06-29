@@ -9,9 +9,6 @@ sys.path.append('../')
 import numpy as np
 import tensorflow as tf
 
-from bleu import bleu
-from cider import cider
-
 import framework.model.module
 import framework.model.trntst
 import framework.model.data
@@ -210,27 +207,18 @@ class Model(framework.model.module.AbstractModel):
       }
 
 
-class PathCfg(framework.model.trntst.PathCfg):
-  def __init__(self):
-    framework.model.trntst.PathCfg.__init__(self)
-    # manually provided in the cfg file
-    self.split_dir = ''
-    self.annotation_dir = ''
-    self.output_dir = ''
-    self.trn_ftfiles = []
-    self.val_ftfiles = []
-    self.tst_ftfiles = []
-
-    # automatically generated paths
-    self.trn_videoid_file = ''
-    self.val_videoid_file = ''
-    self.trn_annotation_file = ''
-    self.val_annotation_file = ''
-    self.groundtruth_file = ''
-    self.word_file = ''
+PathCfg = trntst_util.PathCfg
 
 
-class TrnTst(trntst_util.TrnTst):
+class TrnTst(framework.model.trntst.TrnTst):
+  def __init__(self, model_cfg, path_cfg, model, gen_sent_mode=1):
+    framework.model.trntst.TrnTst.__init__(self, model_cfg, path_cfg, model)
+
+    # caption int to string
+    self.int2str = framework.util.caption.utility.CaptionInt2str(path_cfg.word_file)
+
+    self.gen_sent_mode = gen_sent_mode
+
   def _construct_feed_dict_in_trn(self, data):
     fts = data['fts']
     captionids = data['captionids']
@@ -242,6 +230,13 @@ class TrnTst(trntst_util.TrnTst):
       self.model.inputs[self.model.InKey.CAPTION_MASK]: caption_masks,
       self.model.inputs[self.model.InKey.IS_TRN]: True,
     }
+
+  def predict_and_eval_in_val(self, sess, tst_reader, metrics):
+    trntst_util.predict_eval_in_val(self, sess, tst_reader, metrics)
+
+  def predict_in_tst(self, sess, tst_reader, predict_file):
+    trntst_util.predict_in_tst(self, sess, tst_reader, predict_file, 
+      self.model_cfg.search_strategy)
 
 
 class Reader(framework.model.data.Reader):
