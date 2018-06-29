@@ -269,9 +269,8 @@ class ScoreTrnReader(framework.model.data.Reader):
 
     with open(gt_file) as f:
       vid2captions = cPickle.load(f)
-    self.cider_scorer = service.fast_cider.CiderScore()
+    self.cider_scorer = service.fast_cider.CiderScorer()
     self.cider_scorer.init_refs(vid2captions)
-
 
   def num_record(self):
     return self.num_caption
