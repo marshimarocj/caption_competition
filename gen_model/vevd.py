@@ -29,7 +29,7 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     framework.model.module.ModelConfig.__init__(self)
 
-    self.subcfgs[VE] = encoder.dnn.Config()
+    self.subcfgs[VE] = framework.impl.encoder.dnn.Config()
     self.subcfgs[VD] = decoder.rnn.Config()
 
     self.search_strategy = 'beam'
