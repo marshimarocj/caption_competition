@@ -418,24 +418,34 @@ def prepare_trecvid16_gen_val():
   #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
 
   #############caption_dict###########
-  vid2captions = {}
-  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # vid2captions = {}
+  # caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(caption_file) as f:
+  #   vid2captions = cPickle.load(f)
+  # base = len(vid2captions)
+  # print len(vid2captions)
+
+  # trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # base = len(vid2captions)
+  # with open(trecvid_caption_file) as f:
+  #   data = cPickle.load(f)
+  # start = len(data) - 1915
+  # for vid in range(start, start + 1915):
+  #   vid2captions[vid - start + base] = data[vid]
+  # print len(vid2captions)
+  # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump(vid2captions, fout)
+
+  ###########vid###########
+  caption_file = os.path.join(out_root_dir, 'annotation', 'human_capiton_dict.pkl')
+  out_file = os.path.join(out_root_dir, 'split', 'val_videoids.npy')
+
   with open(caption_file) as f:
     vid2captions = cPickle.load(f)
-  base = len(vid2captions)
-  print len(vid2captions)
-
-  trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_caption_dict.pkl')
-  base = len(vid2captions)
-  with open(trecvid_caption_file) as f:
-    data = cPickle.load(f)
-  start = len(data) - 1915
-  for vid in range(start, start + 1915):
-    vid2captions[vid - start + base] = data[vid]
-  print len(vid2captions)
-  out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump(vid2captions, fout)
+  total = len(vid2captions)
+  vids = range(total - 1915, total)
+  np.save(out_file, vids)
 
 
 if __name__ == '__main__':
