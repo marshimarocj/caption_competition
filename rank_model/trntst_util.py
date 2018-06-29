@@ -322,7 +322,7 @@ class ScoreTrnReader(framework.model.data.Reader):
 
 
 def get_scores(neg_captions, pos_vids, cider_scorer):
-  num_neg = neg_captions.shape[0]
+  num_neg = len(neg_captions)
   deltas = []
   for pos_vid in pos_vids:
     score, scores = cider_scorer.compute_cider(neg_captions, [pos_vid]*num_neg)
