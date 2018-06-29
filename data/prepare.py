@@ -433,9 +433,9 @@ def prepare_trecvid16_gen_val():
   for vid in range(start, start + 1915):
     vid2captions[vid - start + base] = data[vid]
   print len(vid2captions)
-  # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
-  # with open(out_file, 'w') as fout:
-  #   cPickle.dump(vid2captions, fout)
+  out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  with open(out_file, 'w') as fout:
+    cPickle.dump(vid2captions, fout)
 
 
 if __name__ == '__main__':
