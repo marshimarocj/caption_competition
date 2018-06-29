@@ -29,7 +29,7 @@ def build_parser():
 
 def gen_dir_struct_info(path_cfg_file):
   path_cfg = rank_model.vevd_score.PathCfg()
-  return base.gen_dir_struct_info(path_cfg, path_cfg_file)
+  return common.gen_dir_struct_info(path_cfg, path_cfg_file)
 
 
 def load_and_fill_model_cfg(model_cfg_file, path_cfg):
