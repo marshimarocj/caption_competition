@@ -27,6 +27,7 @@ def build_parser():
 2: top_k perplexity+sentence {vid: [(perplexity, sent), ...]}, useful for simple ensemble
       '''
   )
+  parser.add_argument('--val', dest='val', type=int, default=True)
 
   return parser
 
@@ -76,6 +77,9 @@ if __name__ == '__main__':
   else:
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
     path_cfg.log_file = None
+    if opts.val:
+      path_cfg.tst_ftfiles = path_cfg.val_ftfiles
+      path_cfg.tst_videoid_file = path_cfg.val_videoid_file
 
     m = gen_model.vevd.Model(model_cfg)
 
