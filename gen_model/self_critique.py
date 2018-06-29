@@ -221,6 +221,7 @@ class Model(framework.model.module.AbstractPGModel):
       out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
         search_strategy='sample', topk=-1, num_sample=self._config.num_sample)
       roll_out_wid = out_ops[decoder.OutKey.OUT_WID]
+      print roll_out_wid.get_shape
 
       return {
         self.OutKey.BASELINE_OUT_WID: baseline_out_wid,
