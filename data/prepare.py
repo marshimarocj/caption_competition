@@ -369,7 +369,7 @@ def merge_tgif_trecvid17_gen_trn():
       file = os.path.join(tgif_root_dir, 'mp_feature', ft_name, tgif_ft_file)
       ft = np.load(file)
       fts.append(ft)
-    file = os.path.join('/data1/jiac/trecvid2018/rank/mp_feature', 'mp_feature', ft_name, trecivd_ft_file)
+    file = os.path.join('/data1/jiac/trecvid2018/rank/mp_feature', 'mp_feature', ft_name, trecvid_ft_file)
     ft = np.load(file)
     fts.append(ft)
     fts = np.concatenate(fts, 0)
