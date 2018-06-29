@@ -95,7 +95,7 @@ def predict_eval_trecvid17_B():
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/ceve_score.py'
-  gpuid = 1
+  gpuid = 0
 
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.mean.0.5')
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5')
