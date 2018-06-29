@@ -184,6 +184,7 @@ class Model(framework.model.module.AbstractModel):
       return {
         self.OutKey.LOG_PROB: norm_log_prob,
         self.OutKey.NLOG_PROB: norm_neg_log_prob,
+        self.OutKey.SIM: norm_log_prob,
       }
 
     def tst(ft_embed):
