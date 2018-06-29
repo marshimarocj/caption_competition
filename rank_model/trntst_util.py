@@ -307,7 +307,7 @@ class ScoreTrnReader(framework.model.data.Reader):
       neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
 
       neg_captions = self.int2str(neg_captionids)
-      deltas = get_scores(neg_captions, pos_vids)
+      deltas = get_scores(neg_captions, pos_vids, self.cider_scorer)
 
       fts = np.concatenate([pos_fts, neg_fts], 0)
       captionids = np.concatenate([pos_captionids, neg_captionids], 0)
