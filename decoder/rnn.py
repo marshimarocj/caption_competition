@@ -262,8 +262,9 @@ class Decoder(framework.model.module.AbstractModule):
         if kwargs['search_strategy'] == 'sample':
           assert ('num_sample' in kwargs) and ('topk' in kwargs)
 
-          out_wids = self._sample_topk_word_steps(in_ops[self.InKey.INIT_WID], state, 
-            kwargs['num_sample'], kwargs['topk'])
+          # out_wids = self._sample_topk_word_steps(in_ops[self.InKey.INIT_WID], state, 
+          #   kwargs['num_sample'], kwargs['topk'])
+          out_wids, log_probs = sample_ops()
           print out_wids.get_shape()
         elif kwargs['search_strategy'] == 'greedy':
           out_wids = self._greedy_word_steps(in_ops[self.InKey.INIT_WID], state)
