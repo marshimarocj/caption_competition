@@ -53,6 +53,7 @@ def gen_cfg(**kwargs):
   cfg.num_epoch = kwargs['num_epoch']
   cfg.num_sample = kwargs['num_sample']
   cfg.reward_metric = kwargs['reward_metric']
+  cfg.alpha = kwargs['alpha']
 
   enc = cfg.subcfgs[VE]
   enc.dim_fts = kwargs['dim_fts']
@@ -332,7 +333,7 @@ class TrnTst(framework.model.trntst.PGTrnTst):
     elif self.model_cfg.reward_metric == 'bcmr':
       baselines = trntst_util.eval_BCMR_in_rollout(baseline_out_wids, vids, self.int2str, self.cider_scorer, self.vid2captions)
       rewards = trntst_util.eval_BCMR_in_rollout(roll_out_wids, vids, self.int2str, self.cider_scorer, self.vid2captions)
-    print rollout_wids.shape
+    print roll_out_wids.shape
     roll_caption_ids, roll_caption_masks = trntst_util.gen_captionid_masks_from_wids(roll_out_wids)
 
     data['rewards'] = rewards - baselines # (None, num_sample,)
