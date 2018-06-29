@@ -232,7 +232,7 @@ class TrnTst(framework.model.trntst.TrnTst):
     }
 
   def predict_and_eval_in_val(self, sess, tst_reader, metrics):
-    trntst_util.predict_eval_in_val(self, sess, tst_reader, metrics)
+    trntst_util.predict_and_eval_in_val(self, sess, tst_reader, metrics)
 
   def predict_in_tst(self, sess, tst_reader, predict_file):
     trntst_util.predict_in_tst(self, sess, tst_reader, predict_file, 
