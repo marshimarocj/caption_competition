@@ -4,6 +4,7 @@ import numpy as np
 
 from bleu.bleu import Bleu
 from cider.cider import Cider
+import framework.model.trntst
 
 VD = 'decoder'
 
