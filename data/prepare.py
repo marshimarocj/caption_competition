@@ -243,31 +243,41 @@ def prepare_trecvid17_gen_val():
   #   cPickle.dump([idxs, captionids, caption_masks], fout)
 
   #############caption_dict###########
-  vid2captions = {}
+  # vid2captions = {}
+  # caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(caption_file) as f:
+  #   vid2captions = cPickle.load(f)
+  # base = 0
+  # for vid in vid2captions:
+  #   if vid > base:
+  #     base = vid
+  # base += 1
+  # print len(vid2captions)
+
+  # with open(gt_file) as f:
+  #   data = json.load(f)
+  # for vid in data:
+  #   captions = data[vid]
+  #   vid = int(vid) - 1 + base
+  #   vid2captions[vid] = captions
+  # print len(vid2captions)
+  # # print vid2captions[105207]
+  # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump(vid2captions, fout)
+
+  ##########vid##########
   caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  out_file = os.path.join(out_root_dir, 'split', 'val_videoids.npy')
+
   with open(caption_file) as f:
     vid2captions = cPickle.load(f)
-  base = 0
-  for vid in vid2captions:
-    if vid > base:
-      base = vid
-  base += 1
-  print len(vid2captions)
-
-  with open(gt_file) as f:
-    data = json.load(f)
-  for vid in data:
-    captions = data[vid]
-    vid = int(vid) - 1 + base
-    vid2captions[vid] = captions
-  print len(vid2captions)
-  # print vid2captions[105207]
-  out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump(vid2captions, fout)
+  max_vid = max(vid2captions.keys())
+  vids = range(max_vid-1880+1, max_vid+1)
+  np.save(out_file, vids)
 
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  prepare_trecvid17_rank_val()
-  # prepare_trecvid17_gen_val()
+  # prepare_trecvid17_rank_val()
+  prepare_trecvid17_gen_val()
