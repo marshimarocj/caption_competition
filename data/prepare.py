@@ -340,20 +340,41 @@ def merge_tgif_trecvid17_gen_trn():
   #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
 
   ##########vid##########
-  tgif_vid_files = [
-    os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
-    os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
-    os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+  # tgif_vid_files = [
+  #   os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
+  #   os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
+  #   os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+  # ]
+  # vids = []
+  # for file in tgif_vid_files:
+  #   vids.append(np.load(file))
+  # vids = np.concatenate(vids, 0)
+  # base = np.max(vids) + 1
+  # vids = [vids, range(base, base + 1880)]
+  # vids = np.concatenate(vids)
+  # out_file = os.path.join(out_root_dir, 'split', 'trn_videoids.npy')
+  # np.save(out_file, vids)
+
+  ##########ft#########
+  tgif_ft_files = [
+    'trn_ft.npy',
+    'val_ft.npy',
+    'tst_ft.npy',
   ]
-  vids = []
-  for file in tgif_vid_files:
-    vids.append(np.load(file))
-  vids = np.concatenate(vids, 0)
-  base = np.max(vids) + 1
-  vids = [vids, range(base, base + 1880)]
-  vids = np.concatenate(vids)
-  out_file = os.path.join(out_root_dir, 'split', 'trn_videoids.npy')
-  np.save(out_file, vids)
+  trecvid_ft_file = 'val_ft.npy'
+  for ft_name in ['i3d', 'resnet200']:
+    print ft_name
+    fts = []
+    for tgif_ft_file in tgif_ft_files:
+      file = os.path.join(tgif_root_dir, 'mp_feature', ft_name, tgif_ft_file)
+      ft = np.load(file)
+      fts.append(ft)
+    file = os.path.join('/data1/jiac/trecvid2018/rank/mp_feature', 'mp_feature', ft_name, trecivd_ft_file)
+    ft = np.load(file)
+    fts.append(ft)
+    fts = np.concatenate(fts, 0)
+    out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
+    np.save(out_file, fts)
 
 
 if __name__ == '__main__':
