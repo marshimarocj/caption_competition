@@ -32,7 +32,8 @@ def get_mean_ft_files(root_dir, modal_feature_names, splits, dir_name='mp_featur
 '''expr
 '''
 def prepare_vevd():
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
