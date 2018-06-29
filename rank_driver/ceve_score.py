@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     trn_reader = rank_model.ceve_score.TrnReader(
       model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file,
-      path_cfg.trn_vid_file, path_cfg.word_file)
+      path_cfg.trn_vid_file, path_cfg.word_file, path_cfg.groundtruth_file)
     val_reader = rank_model.ceve_score.ValReader(
       path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file)
     if path_cfg.model_file != '':

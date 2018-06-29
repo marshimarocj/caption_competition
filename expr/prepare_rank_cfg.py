@@ -130,6 +130,7 @@ def prepare_ceve_score():
     'word_file': word_file,
     'embed_file': embed_file,
     'output_dir': output_dir,
+    'groundtruth_file': os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl'),
   }
   path_cfg_file = '%s.path.json'%outprefix
 
@@ -207,5 +208,5 @@ def prepare_rnnve():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  prepare_rnnve()
-  # prepare_ceve_score()
+  # prepare_rnnve()
+  prepare_ceve_score()

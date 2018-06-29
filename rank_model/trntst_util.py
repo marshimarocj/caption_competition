@@ -9,6 +9,7 @@ import numpy as np
 
 import framework.model.trntst
 import framework.util.caption.utility
+import service.fast_cider
 
 
 class PathCfg(framework.model.trntst.PathCfg):
@@ -36,6 +37,7 @@ class ScorePathCfg(PathCfg):
   def __init__(self):
     super(ScorePathCfg, self).__init__()
     self.trn_vid_file = ''
+    self.groundtruth_file = ''
 
 
 class TrnTst(framework.model.trntst.TrnTst):
@@ -237,7 +239,7 @@ class TstReader(framework.model.data.Reader):
 
 
 class ScoreTrnReader(framework.model.data.Reader):
-  def __init__(self, num_neg, ft_files, annotation_file, vid_file, word_file):
+  def __init__(self, num_neg, ft_files, annotation_file, vid_file, word_file, gt_file):
     self.num_neg = num_neg
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
@@ -264,6 +266,12 @@ class ScoreTrnReader(framework.model.data.Reader):
 
     self.num_caption = self.captionids.shape[0]
     self.idxs = range(self.num_caption)
+
+    with open(gt_file) as f:
+      vid2captions = cPickle.load(f)
+    self.cider_scorer = service.fast_cider.CiderScore()
+    self.cider_scorer.init_refs(vid2captions)
+
 
   def num_record(self):
     return self.num_caption
@@ -314,51 +322,64 @@ class ScoreTrnReader(framework.model.data.Reader):
       }
 
 
-def cider_scorer(data, q):
-  # server_url = 'http://127.0.0.1:8888/cider'
-  server_url = 'http://172.17.0.1:8888/cider'
-
-  r = requests.post(server_url, json=data)
-  data = json.loads(r.text)
-  q.put(data)
-
-
-def get_scores(neg_captions, pos_vids):
-  num_pos = pos_vids.shape[0]
-  num_neg = len(neg_captions)
-
-  vid2idx = {}
-  for i, vid in enumerate(pos_vids):
-    vid2idx[vid] = i
-
-  q = Queue()
-  for vid in pos_vids:
-    eval_data = []
-    for i, neg_caption in enumerate(neg_captions):
-      eval_data.append({
-        'pred': neg_caption,
-        'id': '%d_%d'%(vid, i),
-        'vid': vid,
-      })
-    worker = threading.Thread(
-      target=cider_scorer, args=(eval_data, q))
-    worker.start()
-
-  deltas = np.zeros((num_pos, num_neg), dtype=np.float32)
-  for t in range(num_pos):
-    data = q.get()
-    # print data['service']
-    data = data['data']
-    for d in data:
-      score = d['score']
-      id = d['id']
-      fields = id.split('_')
-      vid = int(fields[0])
-      j = int(fields[1])
-      deltas[vid2idx[vid], j] = score
-  # print deltas.shape
-
+def get_scores(neg_captions, pos_vids, cider_scorer):
+  num_neg = neg_captions
+  deltas = []
+  for pos_vid in pos_vids:
+    score, scores = cider_scorer.compute_cider(neg_captions, [pos_vid]*num_neg)
+    deltas.append(scores)
+  deltas = np.array(deltas, dtype=np.float32)
   deltas = 1.0 - deltas
   deltas = np.maximum(deltas, np.zeros(deltas.shape))
 
   return deltas
+
+
+# def cider_scorer(data, q):
+#   # server_url = 'http://127.0.0.1:8888/cider'
+#   server_url = 'http://172.17.0.1:8888/cider'
+
+#   r = requests.post(server_url, json=data)
+#   data = json.loads(r.text)
+#   q.put(data)
+
+
+# def get_scores(neg_captions, pos_vids):
+#   num_pos = pos_vids.shape[0]
+#   num_neg = len(neg_captions)
+
+#   vid2idx = {}
+#   for i, vid in enumerate(pos_vids):
+#     vid2idx[vid] = i
+
+#   q = Queue()
+#   for vid in pos_vids:
+#     eval_data = []
+#     for i, neg_caption in enumerate(neg_captions):
+#       eval_data.append({
+#         'pred': neg_caption,
+#         'id': '%d_%d'%(vid, i),
+#         'vid': vid,
+#       })
+#     worker = threading.Thread(
+#       target=cider_scorer, args=(eval_data, q))
+#     worker.start()
+
+#   deltas = np.zeros((num_pos, num_neg), dtype=np.float32)
+#   for t in range(num_pos):
+#     data = q.get()
+#     # print data['service']
+#     data = data['data']
+#     for d in data:
+#       score = d['score']
+#       id = d['id']
+#       fields = id.split('_')
+#       vid = int(fields[0])
+#       j = int(fields[1])
+#       deltas[vid2idx[vid], j] = score
+#   # print deltas.shape
+
+#   deltas = 1.0 - deltas
+#   deltas = np.maximum(deltas, np.zeros(deltas.shape))
+
+#   return deltas
