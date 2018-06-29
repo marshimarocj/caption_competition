@@ -59,7 +59,7 @@ def prepare_vevd():
 
   model_cfg = gen_model.vevd.gen_cfg(**params)
   outprefix = '%s.%d.%d.%s'%(
-    os.path.join(outdir, '_'.join(modal_feature_names)),
+    os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'],
     model_spec)
   model_cfg_file = '%s.model.json'%outprefix
