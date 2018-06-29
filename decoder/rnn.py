@@ -255,6 +255,7 @@ class Decoder(framework.model.module.AbstractModule):
 
     def rollout():
       assert 'search_strategy' in kwargs
+      print kwargs['search_strategy']
 
       with tf.variable_scope(self.name_scope):
         state = self._ft_step(in_ops[self.InKey.FT])
@@ -263,6 +264,7 @@ class Decoder(framework.model.module.AbstractModule):
 
           out_wids = self._sample_topk_word_steps(in_ops[self.InKey.INIT_WID], state, 
             kwargs['num_sample'], kwargs['topk'])
+          print out_wids.get_shape()
         elif kwargs['search_strategy'] == 'greedy':
           out_wids = self._greedy_word_steps(in_ops[self.InKey.INIT_WID], state)
           out_wids = tf.expand_dims(out_wids, 1) # (None, 1, num_step)
