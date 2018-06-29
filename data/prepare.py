@@ -395,28 +395,47 @@ def prepare_trecvid16_gen_val():
   trecvid_root_dir = '/data1/jiac/trecvid2017/rank' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/generation'
   word_file = os.path.join(trecvid_root_dir, 'generation', 'annotation', 'int2word.pkl')
-  gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
 
   #########caption mask ##########
-  trecvid_caption_mask_files = [
-    os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.A.pkl'),
-    os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.B.pkl'),
-  ]
-  idxs = []
-  caption_ids = []
-  caption_masks = []
-  for file in trecvid_caption_mask_files:
-    with open(file) as f:
-      data = cPickle.load(f)
-    idxs.append(data[0])
-    caption_ids.append(data[1])
-    caption_masks.append(data[2])
-  idxs = np.concatenate(idxs, 0)
-  caption_ids = np.concatenate(caption_ids, 0)
-  caption_masks = np.concatenate(caption_masks, 0)
-  out_file = os.path.join(out_root_dir, 'split', 'val_id_caption_mask.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump([idxs, caption_ids, caption_masks], fout)
+  # trecvid_caption_mask_files = [
+  #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.A.pkl'),
+  #   os.path.join(trecvid_root_dir, 'split', 'tst_id_caption_mask.B.pkl'),
+  # ]
+  # idxs = []
+  # caption_ids = []
+  # caption_masks = []
+  # for file in trecvid_caption_mask_files:
+  #   with open(file) as f:
+  #     data = cPickle.load(f)
+  #   idxs.append(data[0])
+  #   caption_ids.append(data[1])
+  #   caption_masks.append(data[2])
+  # idxs = np.concatenate(idxs, 0)
+  # caption_ids = np.concatenate(caption_ids, 0)
+  # caption_masks = np.concatenate(caption_masks, 0)
+  # out_file = os.path.join(out_root_dir, 'split', 'val_id_caption_mask.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
+
+  #############caption_dict###########
+  vid2captions = {}
+  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  with open(caption_file) as f:
+    vid2captions = cPickle.load(f)
+  base = len(vid2captions)
+  print len(vid2captions)
+
+  trecvid_caption_file = os.path.join(trecvid_root_dir, 'annotation', 'human_caption_dict.pkl')
+  base = len(vid2captions)
+  with open(trecvid_caption_file) as f:
+    data = cPickle.load(f)
+  start = len(data) - 1915
+  for vid in range(start, start + 1915):
+    vid2captions[vid - start + base] = data[vid]
+  print len(vid2captions)
+  # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump(vid2captions, fout)
 
 
 if __name__ == '__main__':
