@@ -279,7 +279,7 @@ def prepare_trecvid17_rank_gen_val():
 
 def merge_tgif_trecvid17_gen_trn():
   trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
-  word_file = os.path.join(trecvid_root_dir, 'generation', 'annotation', 'int2word.pkl')
+  word_file = os.path.join(trecvid_root_dir, 'rank', 'annotation', 'int2word.pkl')
   gt_file = os.path.join(trecvid_root_dir, 'label', 'description', 'trecvid17.json')
   tgif_root_dir = '/data1/jiac/tgif'
   out_root_dir = '/data1/jiac/trecvid2018/generation'
