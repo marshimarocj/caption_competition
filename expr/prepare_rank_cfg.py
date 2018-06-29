@@ -165,8 +165,8 @@ def prepare_rnnve():
     'dim_joint_embed': 300,
 
     'max_words_in_caption': 30,
-    'pool': 'mean',
-    # 'pool': 'max',
+    # 'pool': 'mean',
+    'pool': 'max',
 
     # 'cell': 'gru',
     'cell': 'lstm',
