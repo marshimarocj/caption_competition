@@ -356,25 +356,39 @@ def merge_tgif_trecvid17_gen_trn():
   # np.save(out_file, vids)
 
   ##########ft#########
-  tgif_ft_files = [
-    'trn_ft.npy',
-    'val_ft.npy',
-    'tst_ft.npy',
-  ]
-  trecvid_ft_file = 'val_ft.npy'
-  for ft_name in ['i3d', 'resnet200']:
-    print ft_name
-    fts = []
-    for tgif_ft_file in tgif_ft_files:
-      file = os.path.join(tgif_root_dir, 'mp_feature', ft_name, tgif_ft_file)
-      ft = np.load(file)
-      fts.append(ft)
-    file = os.path.join('/data1/jiac/trecvid2018/rank', 'mp_feature', ft_name, trecvid_ft_file)
-    ft = np.load(file)
-    fts.append(ft)
-    fts = np.concatenate(fts, 0)
-    out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
-    np.save(out_file, fts)
+  # tgif_ft_files = [
+  #   'trn_ft.npy',
+  #   'val_ft.npy',
+  #   'tst_ft.npy',
+  # ]
+  # trecvid_ft_file = 'val_ft.npy'
+  # for ft_name in ['i3d', 'resnet200']:
+  #   print ft_name
+  #   fts = []
+  #   for tgif_ft_file in tgif_ft_files:
+  #     file = os.path.join(tgif_root_dir, 'mp_feature', ft_name, tgif_ft_file)
+  #     ft = np.load(file)
+  #     fts.append(ft)
+  #   file = os.path.join('/data1/jiac/trecvid2018/rank', 'mp_feature', ft_name, trecvid_ft_file)
+  #   ft = np.load(file)
+  #   fts.append(ft)
+  #   fts = np.concatenate(fts, 0)
+  #   out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
+  #   np.save(out_file, fts)
+
+  ##########caption_dict##########
+  tgif_caption_file = os.path.join(tgif_root_dir, 'annotation', 'human_caption_dict.pkl')
+  vid2captions = {}
+  with open(tgif_caption_file) as f:
+    data = cPickle.load(f)
+  base = len(vid2captions)
+  with open(gt_file) as f:
+    data = json.load(f)
+  for vid in range(len(data)):
+    vid2captions[vid + base] = data[str(vid+1)]
+  out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
+  with open(out_file, 'w') as fout:
+    cPickle.dump(vid2captions, fout)
 
 
 if __name__ == '__main__':
