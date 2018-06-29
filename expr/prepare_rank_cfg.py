@@ -230,7 +230,7 @@ def prepare_vevd_score():
     'content_keepin_prob': 1.,
     'cell_keepin_prob': 0.5,
     'cell_keepout_prob': 0.5,
-    'dim_fts': dim_fts,
+    'dim_fts': [1024, 2048],
     'num_neg': 16,
     'max_margin': 0.5,
   }
