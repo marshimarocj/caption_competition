@@ -52,7 +52,7 @@ def gen_cfg(**kwargs):
   cfg.base_lr = 1e-5
   cfg.num_epoch = kwargs['num_epoch']
   cfg.num_sample = kwargs['num_sample']
-  self.reward_metric = kwargs['reward_metric']
+  cfg.reward_metric = kwargs['reward_metric']
 
   enc = cfg.subcfgs[VE]
   enc.dim_fts = kwargs['dim_fts']
