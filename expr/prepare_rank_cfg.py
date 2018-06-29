@@ -237,7 +237,7 @@ def prepare_vevd_score():
 
   model_cfg = rank_model.vevd_score.gen_cfg(**params)
   outprefix = '%s.%d.%d.%d.%.1f.%s'%(
-    os.path.join(outdir, '_'.join(modal_feature_names)),
+    os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'],
     params['num_neg'], params['max_margin'],
     model_spec)
