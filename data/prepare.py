@@ -380,7 +380,7 @@ def merge_tgif_trecvid17_gen_trn():
   tgif_caption_file = os.path.join(tgif_root_dir, 'annotation', 'human_caption_dict.pkl')
   vid2captions = {}
   with open(tgif_caption_file) as f:
-    data = cPickle.load(f)
+    vid2captions = cPickle.load(f)
   base = len(vid2captions)
   with open(gt_file) as f:
     data = json.load(f)
@@ -443,5 +443,5 @@ if __name__ == '__main__':
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
 
-  # merge_tgif_trecvid17_gen_trn()
-  prepare_trecvid16_gen_val()
+  merge_tgif_trecvid17_gen_trn()
+  # prepare_trecvid16_gen_val()
