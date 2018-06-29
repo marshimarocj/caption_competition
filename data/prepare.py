@@ -443,5 +443,5 @@ if __name__ == '__main__':
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
 
-  merge_tgif_trecvid17_gen_trn()
-  # prepare_trecvid16_gen_val()
+  # merge_tgif_trecvid17_gen_trn()
+  prepare_trecvid16_gen_val()
