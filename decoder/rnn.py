@@ -259,9 +259,7 @@ class Decoder(framework.model.module.AbstractModule):
       with tf.variable_scope(self.name_scope):
         if kwargs['search_strategy'] == 'sample':
           assert ('num_sample' in kwargs) and ('topk' in kwargs)
-
           out_wids, log_probs = sample_ops()
-          # print out_wids.get_shape()
         elif kwargs['search_strategy'] == 'greedy':
           state = self._ft_step(in_ops[self.InKey.FT])
           out_wids = self._greedy_word_steps(in_ops[self.InKey.INIT_WID], state)
