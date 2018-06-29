@@ -104,7 +104,7 @@ def predict_eval():
   p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid=gpuid)
   p.wait()
 
-  out = eval_generation(predict_file, gt_file)
+  out = eval(predict_file, gt_file)
   with open('eval.%d.txt'%gpuid, 'w') as fout:
     content = '%.2f\t%.2f\t%.2f'%(
       out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
