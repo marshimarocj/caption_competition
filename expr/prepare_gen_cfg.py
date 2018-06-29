@@ -44,7 +44,7 @@ def prepare_vevd():
     'resnet200',
   ]
 
-  dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits, dir_name='mao_mp_feature')
+  dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
 
   params = {
     'num_step': 30,
