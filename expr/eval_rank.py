@@ -69,8 +69,8 @@ def report_best_epoch():
 
 
 def predict_eval_trecvid17_B():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
@@ -90,18 +90,19 @@ def predict_eval_trecvid17_B():
   # gpuid = 1
   # # gpuid = 0
 
-  expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score')
-  log_dir = os.path.join(expr_name, 'log')
-  model_cfg_file = '%s.model.json'%expr_name
-  path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/ceve_score.py'
-  gpuid = 0
-
-  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.mean.0.5')
+  # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score')
   # log_dir = os.path.join(expr_name, 'log')
   # model_cfg_file = '%s.model.json'%expr_name
   # path_cfg_file = '%s.path.json'%expr_name
-  # python_file = '../rank_driver/rnnve.py'
+  # python_file = '../rank_driver/ceve_score.py'
+  # gpuid = 0
+
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.mean.0.5')
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/rnnve.py'
   gpuid = 0
 
   best_epoch, mir_A = select_best_epoch(log_dir)
@@ -127,5 +128,5 @@ def predict_eval_trecvid17_B():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
