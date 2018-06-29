@@ -22,7 +22,7 @@ def select_best_epoch(log_dir):
       file = os.path.join(log_dir, name)
       with open(file) as f:
         data = json.load(f)
-      mir = data['mir']
+      mir = data['cider']
       epoch = data['epoch']
       if mir > best_mir:
         best_mir = mir
