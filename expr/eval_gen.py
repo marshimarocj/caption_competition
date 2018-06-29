@@ -104,7 +104,7 @@ def predict_eval():
   p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid=gpuid)
   p.wait()
 
-  predict_file = os.path.join(preddir, 'epoch-%d.1.5.beam.json'%epoch)
+  predict_file = os.path.join(pred_dir, 'epoch-%d.1.5.beam.json'%epoch)
   out = eval(predict_file, gt_file)
   with open('eval.%d.txt'%gpuid, 'w') as fout:
     content = '%.2f\t%.2f\t%.2f'%(

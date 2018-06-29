@@ -119,8 +119,6 @@ class Model(framework.model.module.AbstractModel):
 
       return {
         self.InKey.FT: fts,
-        self.InKey.CAPTIONID: captionids,
-        self.InKey.CAPTION_MASK: caption_masks,
         self.InKey.IS_TRN: is_training,
       }
 
