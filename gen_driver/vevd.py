@@ -84,7 +84,7 @@ if __name__ == '__main__':
     m = gen_model.vevd.Model(model_cfg)
 
     path_cfg.predict_file = os.path.join(
-      path_cfg.output_dir, 'pred', 'epoch-%d.1.5.%s.json'%(opts.best_epoch, model_cfg.strategy))
+      path_cfg.output_dir, 'pred', 'epoch-%d.1.5.%s.json'%(opts.best_epoch, model_cfg.search_strategy))
     trntst = gen_model.vevd.TrnTst(model_cfg, path_cfg, m)
     trntst.gen_sent_mode = opts.gen_sent_mode
     tst_reader = gen_model.vevd.Reader(
