@@ -180,7 +180,7 @@ class Model(framework.model.module.AbstractModel):
       framework.model.module.Mode.TRN_VAL: trn_val,
       framework.model.module.Mode.TST: tst,
     }
-    return delegate[mode]()
+    return delegate[mode](ft_embed)
 
   def _add_loss(self):
     with tf.variable_scope(self.name_scope):
