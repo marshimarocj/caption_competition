@@ -348,6 +348,7 @@ def merge_tgif_trecvid17_gen_trn():
   vids = []
   for file in tgif_vid_files:
     vids.append(np.load(file))
+  vids = np.concatenate(vids, 0)
   base = np.max(vids) + 1
   vids = [vids, range(base, base + 1880)]
   vids = np.concatenate(vids)
