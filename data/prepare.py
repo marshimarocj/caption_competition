@@ -438,7 +438,7 @@ def prepare_trecvid16_gen_val():
   #   cPickle.dump(vid2captions, fout)
 
   ###########vid###########
-  caption_file = os.path.join(out_root_dir, 'annotation', 'human_capiton_dict.pkl')
+  caption_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
   out_file = os.path.join(out_root_dir, 'split', 'val_videoids.npy')
 
   with open(caption_file) as f:
