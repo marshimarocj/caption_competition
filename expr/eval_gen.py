@@ -87,12 +87,13 @@ def eval(predict_file, groundtruth_file):
 '''expr
 '''
 def predict_eval():
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
   model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
   python_file = '../gen_driver/vevd.py'
-  gpuid = 1
+  gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
