@@ -16,9 +16,9 @@ import framework.model.module
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
-import base
 import framework.impl.encoder.dnn
 import decoder.rnn
+import trntst_util
 
 VE = 'encoder'
 VD = 'decoder'
