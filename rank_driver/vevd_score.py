@@ -38,7 +38,7 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
 
   # auto fill params
   words = cPickle.load(open(path_cfg.word_file))
-  model_cfg.subcfgs[model.qvevd_score.VD].num_words = len(words)
+  model_cfg.subcfgs[rank_model.vevd_score.VD].num_words = len(words)
 
   return model_cfg
 
