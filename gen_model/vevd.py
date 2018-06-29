@@ -196,14 +196,14 @@ class Model(framework.model.module.AbstractModel):
     }
 
   def op_in_tst(self):
-    if self._config.strategy == 'beam':
+    if self._config.search_strategy == 'beam':
       return {
         self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
         self.OutKey.BEAM_CUM_LOG_PROB: self._outputs[self.OutKey.BEAM_CUM_LOG_PROB],
         self.OutKey.BEAM_PRE: self._outputs[self.OutKey.BEAM_PRE],
         self.OutKey.BEAM_END: self._outputs[self.OutKey.BEAM_END],
       }
-    elif self._config.strategy == 'sample':
+    elif self._config.search_strategy == 'sample':
       return {
         self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
         self.OutKey.LOG_PROB: self._outputs[self.OutKey.LOG_PROB],
