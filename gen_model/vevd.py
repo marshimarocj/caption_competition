@@ -86,7 +86,7 @@ class Model(framework.model.module.AbstractModel):
 
   def _set_submods(self):
     return {
-      VE: encoder.dnn.Encoder(self._config.subcfgs[VE]),
+      VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
       VD: decoder.rnn.Decoder(self._config.subcfgs[VD]),
     }
 
