@@ -325,8 +325,8 @@ def merge_tgif_trecvid17_gen_trn():
       trecvid_captionids.append(captionid)
       trecvid_caption_masks.append(caption_mask)
   trecvid_idxs = np.array(trecvid_idxs, dtype=np.int32)
-  trecvid_captionids = np.array(captionids, dtype=np.int32)
-  trecvid_caption_masks = np.array(caption_masks, dtype=np.int32)
+  trecvid_captionids = np.array(trecvid_captionids, dtype=np.int32)
+  trecvid_caption_masks = np.array(trecvid_caption_masks, dtype=np.int32)
 
   idxs.append(trecvid_idxs)
   caption_ids.append(trecvid_captionids)
