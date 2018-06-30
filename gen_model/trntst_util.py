@@ -211,7 +211,7 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
   line = line.strip()
   sock.close()
 
-  id_scores = json.load(line)
+  id_scores = json.loads(line)
   for d in id_scores:
     id = d['id']
     score = d['score']
