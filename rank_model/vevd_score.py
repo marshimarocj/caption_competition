@@ -296,7 +296,7 @@ class TrnTst(framework.model.trntst.TrnTst):
       }
       sim = sess.run(op_dict[self.model.OutKey.LOG_PROB], feed_dict=feed_dict)
       sims.append(sim)
-    sims = np.concatenate(sims, 0)
+    sims = np.array(sims, dtype=np.float32)
     np.save(predict_file, sims)
 
 
