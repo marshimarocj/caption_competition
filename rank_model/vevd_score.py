@@ -360,7 +360,7 @@ class TrnReader(framework.model.data.Reader):
         if ft_idx not in pos_ft_idxs:
           neg_captionids.append(self.captionids[idx])
           neg_caption_masks.append(self.caption_masks[idx])
-          if len(neg_fts) == self.num_neg:
+          if len(neg_captionids) == self.num_neg:
             break
       neg_captionids = np.array(neg_captionids, dtype=np.int32)
       neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
@@ -424,7 +424,7 @@ class ValReader(framework.model.data.Reader):
       cnt += 1
       # if cnt % 10 == 0:
       #   print cnt
-      if cnt == 100:
+      if cnt == 200:
         break
 
 
