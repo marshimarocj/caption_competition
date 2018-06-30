@@ -369,9 +369,9 @@ class TrnReader(framework.model.data.Reader):
       deltas = trntst_util.get_scores(neg_captions, pos_vids, self.cider_scorer)
 
       yield {
-        'fts': fts,
-        'captionids': captionids,
-        'caption_masks': caption_masks,
+        'fts': pos_fts,
+        'captionids': pos_captionids,
+        'caption_masks': pos_caption_masks,
         'neg_captionids': neg_captionids,
         'neg_caption_masks': neg_caption_masks,
         'deltas': deltas,
