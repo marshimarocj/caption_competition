@@ -425,6 +425,8 @@ class ValReader(framework.model.data.Reader):
         'gt': gt,
       }
       cnt += 1
+      if cnt % 10 == 0:
+        print cnt
       if cnt == 100:
         break
 
