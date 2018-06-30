@@ -256,8 +256,8 @@ class TrnTst(framework.model.trntst.TrnTst):
       self.model.inputs[self.model.InKey.FT]: data['fts'],
       self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
       self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
-      self.model.inputs[self.model.InKey.CAPTIONID]: data['neg_captionids'],
-      self.model.inputs[self.model.InKey.CAPTION_MASK]: data['neg_caption_masks'],
+      self.model.inputs[self.model.InKey.NCAPTIONID]: data['neg_captionids'],
+      self.model.inputs[self.model.InKey.NCAPTION_MASK]: data['neg_caption_masks'],
       self.model.inputs[self.model.InKey.DELTA]: data['deltas'],
       self.model.inputs[self.model.InKey.IS_TRN]: True,
     }
