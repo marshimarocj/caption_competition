@@ -414,6 +414,7 @@ class ValReader(framework.model.data.Reader):
       self.gts.append(vid2gid[vid])
 
   def yield_val_batch(self, batch_size):
+    cnt = 0
     for ft, gt in zip(self.fts, self.gts):
       fts = np.expand_dims(ft, 0)
       fts = np.repeat(fts, self.num_caption, 0)
@@ -423,6 +424,9 @@ class ValReader(framework.model.data.Reader):
         'caption_masks': self.caption_masks,
         'gt': gt,
       }
+      cnt += 1
+      if cnt == 100:
+        break
 
 
 class TstReader(framework.model.data.Reader):
