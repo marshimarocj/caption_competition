@@ -151,7 +151,7 @@ class Model(framework.model.module.AbstractModel):
       vd_inputs = {
         decoder.InKey.FT: ft_embed,
         decoder.InKey.INIT_WID: init_wid,
-        decoder.InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID][:-self._config.num_neg],
+        decoder.InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID],
       }
       out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, is_trn=False)
       log_prob = out_ops[decoder.OutKey.LOG_PROB]
