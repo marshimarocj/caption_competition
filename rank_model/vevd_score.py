@@ -153,13 +153,13 @@ class Model(framework.model.module.AbstractModel):
       batch_size = tf.shape(ft_embed)[0]
 
       # pos
-      caption_masks = in_ops[self.InKey.CAPTION_MASK][:-self._config.num_neg]
+      caption_masks = in_ops[self.InKey.CAPTION_MASK]
       init_wid = tf.zeros((batch_size,), dtype=tf.int32)
 
       vd_inputs = {
         decoder.InKey.FT: ft_embed,
         decoder.InKey.INIT_WID: init_wid,
-        decoder.InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID][:-self._config.num_neg],
+        decoder.InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID],
       }
       out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, is_trn=False)
       log_prob = out_ops[decoder.OutKey.LOG_PROB]
