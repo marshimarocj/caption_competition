@@ -147,7 +147,8 @@ class Model(framework.model.module.AbstractModel):
       # pos
       caption_masks = in_ops[self.InKey.CAPTION_MASK][:-self._config.num_neg]
       init_wid = tf.zeros((batch_size,), dtype=tf.int32)
-      batch_size = tf.Print(batch_size, [batch_size])
+
+      print self._config.num_neg
 
       vd_inputs = {
         decoder.InKey.FT: ft_embed,
