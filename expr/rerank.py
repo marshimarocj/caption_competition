@@ -22,8 +22,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.B.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.A.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5', 'pred', 'val.B.npy'),
   ]
   out_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
@@ -32,8 +34,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.A.rerank.20.npy'),
-    os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.B.rerank.20.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.A.rerank.20.npy'),
+    # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.0.5.score', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5', 'pred', 'val.A.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5', 'pred', 'val.B.rerank.20.npy'),
   ]
 
   topk = 20
@@ -133,5 +137,5 @@ def eval_rerank():
 
 
 if __name__ == '__main__':
-  # graph_match_rerank()
-  eval_rerank()
+  graph_match_rerank()
+  # eval_rerank()
