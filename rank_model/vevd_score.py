@@ -16,6 +16,7 @@ import framework.util.caption.utility
 import framework.impl.encoder.dnn
 import decoder.rnn
 import trntst_util
+import service.fast_cider
 
 
 VE = 'encoder'
