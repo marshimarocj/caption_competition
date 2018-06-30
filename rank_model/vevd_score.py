@@ -144,11 +144,23 @@ class Model(framework.model.module.AbstractModel):
     def trn_val(ft_embed):
       batch_size = tf.shape(ft_embed)[0]
 
+      # val
+      caption_masks = in_ops[self.InKey.CAPTION_MASK]
+      init_wid = tf.zeros((batch_size,), dtype=tf.int32)
+
+      vd_inputs = {
+        decoder.InKey.FT: ft_embed,
+        decoder.InKey.INIT_WID: init_wid,
+        decoder.InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID][:-self._config.num_neg],
+      }
+      out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, is_trn=False)
+      log_prob = out_ops[decoder.OutKey.LOG_PROB]
+      val_norm_log_prob = tf.reduce_sum(log_prob*caption_masks[:, 1:], axis=1) / \
+        tf.reduce_sum(caption_masks[:, 1:], axis=1) # (None,)
+
       # pos
       caption_masks = in_ops[self.InKey.CAPTION_MASK][:-self._config.num_neg]
       init_wid = tf.zeros((batch_size,), dtype=tf.int32)
-
-      print self._config.num_neg
 
       vd_inputs = {
         decoder.InKey.FT: ft_embed,
@@ -186,7 +198,7 @@ class Model(framework.model.module.AbstractModel):
       return {
         self.OutKey.LOG_PROB: norm_log_prob,
         self.OutKey.NLOG_PROB: norm_neg_log_prob,
-        self.OutKey.SIM: norm_log_prob,
+        self.OutKey.SIM: val_norm_log_prob,
       }
 
     def tst(ft_embed):
