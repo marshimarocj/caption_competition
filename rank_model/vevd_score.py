@@ -275,7 +275,7 @@ class TrnTst(framework.model.trntst.TrnTst):
         self.model.inputs[self.model.InKey.IS_TRN]: False,
       }
       sims = sess.run(op_dict[self.model.OutKey.LOG_PROB], feed_dict=feed_dict)
-      idxs = np.argsort(-sims[0])
+      idxs = np.argsort(-sims)
       rank = np.where(idxs == data['gt'])[0][0]
       rank += 1
       mir += 1. / rank
