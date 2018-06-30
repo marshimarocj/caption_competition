@@ -353,18 +353,15 @@ class TrnReader(framework.model.data.Reader):
       idxs = range(self.num_caption)
       random.shuffle(idxs)
 
-      neg_fts = []
       neg_captionids= []
       neg_caption_masks = []
       for idx in idxs:
         ft_idx = self.ft_idxs[idx]
         if ft_idx not in pos_ft_idxs:
-          neg_fts.append(self.fts[ft_idx])
           neg_captionids.append(self.captionids[idx])
           neg_caption_masks.append(self.caption_masks[idx])
           if len(neg_fts) == self.num_neg:
             break
-      neg_fts = np.array(neg_fts, dtype=np.float32)
       neg_captionids = np.array(neg_captionids, dtype=np.int32)
       neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
 
@@ -425,8 +422,8 @@ class ValReader(framework.model.data.Reader):
         'gt': gt,
       }
       cnt += 1
-      if cnt % 10 == 0:
-        print cnt
+      # if cnt % 10 == 0:
+      #   print cnt
       if cnt == 100:
         break
 
