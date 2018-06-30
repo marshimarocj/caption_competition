@@ -90,7 +90,6 @@ def prepare_self_critique():
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
   out_dir = os.path.join(root_dir, 'self_critique_expr')
-  model_spec = 'lstm'
 
   ft_names = [
     'i3d',
@@ -102,7 +101,8 @@ def prepare_self_critique():
   params = {
     'num_epoch': 200,
     'num_sample': 1,
-    'reward_metric': 'cider',
+    # 'reward_metric': 'cider',
+    'reward_metric': 'bcmr',
     'alpha': 1.,
 
     'num_step': 30,
@@ -117,8 +117,7 @@ def prepare_self_critique():
   model_cfg = gen_model.self_critique.gen_cfg(**params)
   outprefix = '%s.%d.%d.%s'%(
     os.path.join(out_dir, '_'.join(ft_names)),
-    params['dim_hidden'], params['dim_input'],
-    model_spec)
+    params['dim_hidden'], params['dim_input'], params['reward_metric'])
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
 

@@ -1,9 +1,11 @@
 import json
+import socket
 
 import numpy as np
 
 from bleu.bleu import Bleu
 from cider.cider import Cider
+from rouge.rouge import Rouge
 
 import framework.model.trntst
 
@@ -146,6 +148,78 @@ def eval_cider_in_rollout(out_wids, vids, int2str, cider):
     out_scores.append(scores)
 
   out_scores = np.array(out_scores, dtype=np.float32)
+  return out_scores
+
+
+def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
+  batch_size, num, num_step = out_wids.shape
+  out_scores = []
+  bleu_scorer = Bleu(2)
+  rouge_scorer = Rouge()
+
+  hyp_maps = []
+  for j in range(num):
+    hyp_maps.append({})
+  for i in range(batch_size):
+    vid = vids[i]
+    pred_captions = []
+    refs = {vid: vid2gt_captions[vid]}
+
+    bleu_scores = []
+    rouge_scores = []
+    for j in range(num):
+      pred_caption = int2str(np.expand_dims(out_wids[i, j], 0))[0]
+      pred_captions.append(pred_caption)
+      pred = {vid: [pred_caption]}
+
+      bleu_score, _ = bleu_scorer.compute_score(refs, pred)
+      rouge_score, _ = rouge_scorer.compute_score(refs, pred)
+
+      hyp_maps[j]['%d_%d'%(vid, j)] = [pred_caption]
+
+      bleu_scores.append(bleu_score)
+      rouge_scores.append(rouge_score)
+    _vids = [vids[i]]*num
+    _, cider_scores = cider.compute_cider(pred_captions, _vids)
+
+    out_score = []
+    for j in range(num):
+      bcmr_score = 0.5*bleu_scores[j][0] + 0.5*bleu_scores[j][1] + \
+        2.0 * rouge_scores[j] + 1.0 * cider_scores[j]
+      out_score.append(bcmr_score)
+    out_scores.append(out_score)
+  out_scores = np.array(out_scores, dtype=np.float32)
+
+  out = []
+  vid2idx = {}
+  for j in range(num):
+    for i, vid in enumerate(vids):
+      out.append({
+        'hyp': hyp_maps[j]['%d_%d'%(vid, j)]
+        'ref': vid2gt_captions[vid],
+        'id': '%d_%d'%(vid, j)
+        })
+      vid2idx[vid] = i
+  out = json.dumps(out)
+
+  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  sock.connect(('127.0.0.1', 9090))
+
+  sock.sendall(out + '\n') 
+  f = sock.makefile()
+  line = f.readline()
+  line = line.strip()
+  sock.close()
+
+  id_scores = json.load(line)
+  for d in id_scores:
+    id = d['id']
+    score = d['score']
+    fields = id.split('_')
+    vid = int(fields[0])
+    j = int(fields[1])
+    out_scores[vid2idx[vid], j] += 5.0*score
+
   return out_scores
 
 
