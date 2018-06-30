@@ -175,7 +175,7 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
       bleu_score, _ = bleu_scorer.compute_score(refs, pred)
       rouge_score, _ = rouge_scorer.compute_score(refs, pred)
 
-      hyp_maps[j]['%d_%d'%(vid, j)] = [pred_caption]
+      hyp_maps[j]['%d_%d'%(vid, j)] = pred_caption
 
       bleu_scores.append(bleu_score)
       rouge_scores.append(rouge_score)
@@ -195,7 +195,7 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
   for j in range(num):
     for i, vid in enumerate(vids):
       out.append({
-        'hyp': hyp_maps[j]['%d_%d'%(vid, j)]
+        'hyp': hyp_maps[j]['%d_%d'%(vid, j)],
         'ref': vid2gt_captions[vid],
         'id': '%d_%d'%(vid, j)
         })
@@ -203,7 +203,7 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
   out = json.dumps(out)
 
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  sock.connect(('127.0.0.1', 9090))
+  sock.connect(('172.17.0.1', 9090))
 
   sock.sendall(out + '\n') 
   f = sock.makefile()
