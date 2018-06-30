@@ -85,7 +85,8 @@ def prepare_vevd():
 
 
 def prepare_self_critique():
-  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
