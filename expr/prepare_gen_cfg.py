@@ -238,7 +238,7 @@ def prepare_margin():
 
   model_cfg = gen_model.margin.gen_cfg(**params)
   outprefix = '%s.%d.%d.%.1f.%d.%d.%.1f.%s'%(
-    os.path.join(out_dir, '_'.join(modal_feature_names)),
+    os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'],
     params['reward_alpha'],
     params['num_neg'], params['num_sample'], params['margin'],
