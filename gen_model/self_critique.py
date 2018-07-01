@@ -18,7 +18,6 @@ import framework.impl.encoder.dnn
 
 import decoder.rnn
 import trntst_util
-# import vevd
 import service.fast_cider
 
 VE = 'encoder'
