@@ -154,7 +154,6 @@ class Model(framework.model.module.AbstractPGModel):
   def get_out_ops_in_mode(self, in_ops, mode):
     num_sample = self._config.num_sample
     num_step = self._config.subcfgs[VD].num_step
-    num_class = self._config.subcfgs[VD].num_class
     dim_output = self._config.subcfgs[VE].dim_output
 
     encoder = self.submods[VE]
