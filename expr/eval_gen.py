@@ -87,12 +87,16 @@ def eval(predict_file, groundtruth_file):
 '''expr
 '''
 def predict_eval():
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
-  model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
-  python_file = '../gen_driver/vevd.py'
+  # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
+  # python_file = '../gen_driver/vevd.py'
+  # gpuid = 0
+
+  model_name = 'self_critique/i3d_resnet200.512.512.bcmr'
+  python_file = '../gen_driver/self_critique.py'
   gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
@@ -102,10 +106,12 @@ def predict_eval():
 
   epoch, cider = select_best_epoch(log_dir)
 
-  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid=gpuid)
+  p = gen_script_and_run(
+    python_file, model_cfg_file, path_cfg_file, epoch, 
+    gpuid=gpuid)
   p.wait()
 
-  predict_file = os.path.join(pred_dir, 'epoch-%d.1.5.beam.json'%epoch)
+  predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
   out = eval(predict_file, gt_file)
   with open('eval.%d.txt'%gpuid, 'w') as fout:
     content = '%.2f\t%.2f\t%.2f'%(

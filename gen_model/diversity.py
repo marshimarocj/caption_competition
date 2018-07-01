@@ -226,12 +226,14 @@ class Model(framework.model.module.AbstractPGModel):
         decoder.InKey.INIT_WID: init_wid,
       }
       if self._config.tst_strategy == 'greedy':
-        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, search_strategy='greedy')
+        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
+          search_strategy='greedy', task='generation')
         return {
           self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
         }
       elif self._config.tst_strategy == 'beam':
-        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, search_strategy='beam')
+        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
+          search_strategy='beam', task='generation')
         return {
           self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
           self.OutKey.BEAM_CUM_LOG_PROB: out_ops[decoder.OutKey.BEAM_CUM_LOG_PROB],
@@ -240,7 +242,7 @@ class Model(framework.model.module.AbstractPGModel):
         }
       elif self._config.tst_strategy == 'sample':
         out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
-          search_strategy='sample', num_sample=self._config.tst_num_sample, topk=self._config.tst_sample_topk)
+          search_strategy='sample', num_sample=self._config.tst_num_sample, topk=self._config.tst_sample_topk, task='generation')
         return {
           self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
           self.OutKey.SAMPLE_LOG_PROB: out_ops[decoder.OutKey.LOG_PROB],
