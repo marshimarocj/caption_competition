@@ -313,7 +313,7 @@ class TrnTst(framework.model.trntst.PGTrnTst):
     gt_file = path_cfg.groundtruth_file
     with open(gt_file) as f:
       self.vid2captions = cPickle.load(f)
-    self.cider_scorer = fast_cider.CiderScorer()
+    self.cider_scorer = service.fast_cider.CiderScorer()
     self.cider_scorer.init_refs(self.vid2captions)
 
   def feed_data_and_rollout(self, data, sess):
