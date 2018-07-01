@@ -159,6 +159,7 @@ def prepare_diversity():
   params = {
     'num_step': 30,
     'reward_alpha': .25,
+    'reward_metric': 'cider',
     'dim_input': 512,
     'dim_hidden': 512,
     'num_epoch': 100,
