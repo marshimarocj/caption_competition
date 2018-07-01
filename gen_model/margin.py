@@ -411,17 +411,15 @@ class TrnReader(framework.model.data.Reader):
           if len(neg_captionids) == self.num_neg:
             break
       neg_captionids = np.array(neg_captionids, dtype=np.int32)
+      neg_captionids = np.expand_dims(neg_captionids, 0)
 
       neg_scores = []
       for pos_vid in pos_vids:
         vids = [pos_vid] * self.num_neg
         if self.metric == 'cider':
-          neg_captionids = np.expand_dims(neg_captionids, 0)
-          print neg_captionids.shape
           scores = trntst_util.eval_cider_in_rollout(neg_captionids, vids, self.int2str, self.cider_scorer)
           neg_scores.append(scores[0])
         elif self.metric == 'bcmr':
-          neg_captionids = np.expand_dims(neg_captionids, 0)
           scores = trntst_util.eval_BCMR_in_rollout(neg_captionids, vids, self.int2str, self.cider_scorer, self.videoid2captions)
           neg_scores.append(scores[0])
       pn_scores = np.array(np_scores, dtype=np.float32)
