@@ -213,7 +213,7 @@ class Model(framework.model.module.AbstractPGModel):
       baseline_out_wid = out_ops[decoder.OutKey.OUT_WID]
 
       out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
-        search_strategy='sample', sample_topk=-1, num_sample=num_sample)
+        search_strategy='sample', topk=-1, num_sample=num_sample)
       roll_out_wid = out_ops[decoder.OutKey.OUT_WID]
 
       return {
@@ -241,7 +241,7 @@ class Model(framework.model.module.AbstractPGModel):
         }
       elif self._config.tst_strategy == 'sample':
         out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
-          search_strategy='sample', num_sample=self._config.tst_num_sample, sample_topk=self._config.tst_sample_topk)
+          search_strategy='sample', num_sample=self._config.tst_num_sample, topk=self._config.tst_sample_topk)
         return {
           self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
           self.OutKey.SAMPLE_LOG_PROB: out_ops[decoder.OutKey.LOG_PROB],
