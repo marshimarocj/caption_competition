@@ -231,7 +231,7 @@ class Model(framework.model.module.AbstractPGModel):
       framework.model.module.Mode.ROLLOUT: rollout,
       framework.model.module.Mode.TST: tst,
     }
-    return delegate[mode]()
+    return delegate[mode](ft_embed)
 
   def _add_loss(self):
     with tf.variable_scope(self.name_scope):
