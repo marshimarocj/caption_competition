@@ -403,26 +403,21 @@ class TrnReader(framework.model.data.Reader):
       idxs = range(self.num_caption)
       random.shuffle(idxs)
 
-      neg_fts = []
       neg_captionids= []
-      neg_caption_masks = []
       for idx in idxs:
         ft_idx = self.ft_idxs[idx]
         if ft_idx not in pos_ft_idxs:
-          neg_fts.append(self.fts[ft_idx])
           neg_captionids.append(self.captionids[idx])
-          neg_caption_masks.append(self.caption_masks[idx])
-          if len(neg_fts) == self.num_neg:
+          if len(neg_captionids) == self.num_neg:
             break
-      neg_fts = np.array(neg_fts, dtype=np.float32)
       neg_captionids = np.array(neg_captionids, dtype=np.int32)
-      neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
 
       neg_scores = []
       for pos_vid in pos_vids:
         vids = [pos_vid] * self.num_neg
         if self.metric == 'cider':
           neg_captionids = np.expand_dims(neg_captionids, 0)
+          print neg_captionids.shape
           scores = trntst_util.eval_cider_in_rollout(neg_captionids, vids, self.int2str, self.cider_scorer)
           neg_scores.append(scores[0])
         elif self.metric == 'bcmr':
