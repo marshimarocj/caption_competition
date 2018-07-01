@@ -87,7 +87,8 @@ def eval(predict_file, groundtruth_file):
 '''expr
 '''
 def predict_eval():
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
