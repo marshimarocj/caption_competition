@@ -163,7 +163,7 @@ class Model(framework.model.module.AbstractModel):
         decoder.InKey.INIT_WID: init_wid,
       }
       out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
-        task='generation', strategy=self._config.search_strategy)
+        task='generation', search_strategy=self._config.search_strategy)
       return {
         self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
         self.OutKey.BEAM_CUM_LOG_PROB: out_ops[decoder.OutKey.BEAM_CUM_LOG_PROB],

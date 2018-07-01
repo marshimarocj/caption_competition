@@ -269,13 +269,13 @@ class Decoder(framework.model.module.AbstractModule):
         }
 
     def tst_generation():
-      assert 'strategy' in kwargs
+      assert 'search_strategy' in kwargs
 
-      if kwargs['strategy'] == 'beam':
+      if kwargs['search_strategy'] == 'beam':
         with tf.variable_scope(self.name_scope):
           state = self._ft_step(in_ops[self.InKey.FT])
           return self._beam_search_word_steps(in_ops[self.InKey.INIT_WID], state)
-      elif kwargs['strategy'] == 'sample':
+      elif kwargs['search_strategy'] == 'sample':
         assert ('topk' in kwargs) and ('num_sample' in kwargs)
 
         out_wids, log_probs = sample_ops()
