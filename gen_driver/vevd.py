@@ -80,11 +80,12 @@ if __name__ == '__main__':
     if opts.val:
       path_cfg.tst_ftfiles = path_cfg.val_ftfiles
       path_cfg.tst_videoid_file = path_cfg.val_videoid_file
+      out_name = 'val'
 
     m = gen_model.vevd.Model(model_cfg)
 
     path_cfg.predict_file = os.path.join(
-      path_cfg.output_dir, 'pred', 'epoch-%d.1.5.%s.json'%(opts.best_epoch, model_cfg.search_strategy))
+      path_cfg.output_dir, 'pred', '%s-%d.1.5.%s.json'%(out_name, opts.best_epoch, model_cfg.search_strategy))
     trntst = gen_model.vevd.TrnTst(model_cfg, path_cfg, m)
     trntst.gen_sent_mode = opts.gen_sent_mode
     tst_reader = gen_model.vevd.Reader(

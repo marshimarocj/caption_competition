@@ -239,76 +239,78 @@ class TrnTst(framework.model.trntst.TrnTst):
       self.model_cfg.search_strategy)
 
 
-class Reader(framework.model.data.Reader):
-  def __init__(self, ft_files, videoid_file, 
-      shuffle=True, annotation_file=None, captionstr_file=None):
-    self.fts = np.empty(0) # (numVideo, dimVideo)
-    self.ft_idxs = np.empty(0) # (num_caption,)
-    self.captionids = np.empty(0) # (num_caption, maxWordsInCaption)
-    self.caption_masks = np.empty(0) # (num_caption, maxWordsInCaption)
-    self.videoids = []
-    self.videoid2captions = {} # (numVideo, numGroundtruth)
+Reader = trntst_util.Reader
 
-    self.shuffled_idxs = [] # (num_caption,)
-    self.num_caption = 0 # used in trn and val
-    self.num_ft = 0
+# class Reader(framework.model.data.Reader):
+#   def __init__(self, ft_files, videoid_file, 
+#       shuffle=True, annotation_file=None, captionstr_file=None):
+#     self.fts = np.empty(0) # (numVideo, dimVideo)
+#     self.ft_idxs = np.empty(0) # (num_caption,)
+#     self.captionids = np.empty(0) # (num_caption, maxWordsInCaption)
+#     self.caption_masks = np.empty(0) # (num_caption, maxWordsInCaption)
+#     self.videoids = []
+#     self.videoid2captions = {} # (numVideo, numGroundtruth)
 
-    fts = []
-    for ft_file in ft_files:
-      ft = np.load(ft_file)
-      fts.append(ft)
-    self.fts = np.concatenate(tuple(fts), axis=1)
-    self.fts = self.fts.astype(np.float32)
-    self.num_ft = self.fts.shape[0]
+#     self.shuffled_idxs = [] # (num_caption,)
+#     self.num_caption = 0 # used in trn and val
+#     self.num_ft = 0
 
-    self.videoids = np.load(open(videoid_file))
+#     fts = []
+#     for ft_file in ft_files:
+#       ft = np.load(ft_file)
+#       fts.append(ft)
+#     self.fts = np.concatenate(tuple(fts), axis=1)
+#     self.fts = self.fts.astype(np.float32)
+#     self.num_ft = self.fts.shape[0]
 
-    if annotation_file is not None:
-      self.ft_idxs, self.captionids, self.caption_masks = cPickle.load(file(annotation_file))
-      self.num_caption = self.ft_idxs.shape[0]
-    if captionstr_file is not None:
-      videoid2captions = cPickle.load(open(captionstr_file))
-      for videoid in self.videoids:
-        self.videoid2captions[videoid] = videoid2captions[videoid]
+#     self.videoids = np.load(open(videoid_file))
 
-    self.shuffled_idxs = range(self.num_caption)
-    if shuffle:
-      random.shuffle(self.shuffled_idxs)
+#     if annotation_file is not None:
+#       self.ft_idxs, self.captionids, self.caption_masks = cPickle.load(file(annotation_file))
+#       self.num_caption = self.ft_idxs.shape[0]
+#     if captionstr_file is not None:
+#       videoid2captions = cPickle.load(open(captionstr_file))
+#       for videoid in self.videoids:
+#         self.videoid2captions[videoid] = videoid2captions[videoid]
 
-  def num_record(self):
-    return self.num_caption
+#     self.shuffled_idxs = range(self.num_caption)
+#     if shuffle:
+#       random.shuffle(self.shuffled_idxs)
 
-  def yield_trn_batch(self, batch_size, **kwargs):
-    for i in range(0, self.num_caption, batch_size):
-      start = i
-      end = i + batch_size
-      idxs = self.shuffled_idxs[start:end]
+#   def num_record(self):
+#     return self.num_caption
 
-      yield {
-        'fts': self.fts[self.ft_idxs[idxs]],
-        'captionids': self.captionids[idxs],
-        'caption_masks': self.caption_masks[idxs],
-        'vids': self.videoids[self.ft_idxs[idxs]],
-      }
+#   def yield_trn_batch(self, batch_size, **kwargs):
+#     for i in range(0, self.num_caption, batch_size):
+#       start = i
+#       end = i + batch_size
+#       idxs = self.shuffled_idxs[start:end]
 
-  def yield_val_batch(self, batch_size, **kwargs):
-    for i in range(0, self.num_caption, batch_size):
-      start = i
-      end = i + batch_size
-      idxs = self.shuffled_idxs[start:end]
+#       yield {
+#         'fts': self.fts[self.ft_idxs[idxs]],
+#         'captionids': self.captionids[idxs],
+#         'caption_masks': self.caption_masks[idxs],
+#         'vids': self.videoids[self.ft_idxs[idxs]],
+#       }
 
-      yield {
-        'fts': self.fts[self.ft_idxs[idxs]],
-        'captionids': self.captionids[idxs],
-        'caption_masks': self.caption_masks[idxs],
-      }
+#   def yield_val_batch(self, batch_size, **kwargs):
+#     for i in range(0, self.num_caption, batch_size):
+#       start = i
+#       end = i + batch_size
+#       idxs = self.shuffled_idxs[start:end]
 
-  # when we generate tst batch, we never shuffle as we are not doing training
-  def yield_tst_batch(self, batch_size, **kwargs):
-    for i in range(0, self.num_ft, batch_size):
-      start = i
-      end = i + batch_size
+#       yield {
+#         'fts': self.fts[self.ft_idxs[idxs]],
+#         'captionids': self.captionids[idxs],
+#         'caption_masks': self.caption_masks[idxs],
+#       }
 
-      yield {
-        'fts': self.fts[start:end],
-      }
+#   # when we generate tst batch, we never shuffle as we are not doing training
+#   def yield_tst_batch(self, batch_size, **kwargs):
+#     for i in range(0, self.num_ft, batch_size):
+#       start = i
+#       end = i + batch_size
+
+#       yield {
+#         'fts': self.fts[start:end],
+#       }

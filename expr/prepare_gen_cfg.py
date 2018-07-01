@@ -7,6 +7,7 @@ import numpy as np
 
 import gen_model.vevd
 import gen_model.self_critique
+import gen_model.diversity
 
 
 '''func
@@ -140,6 +141,67 @@ def prepare_self_critique():
   json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
 
 
+def prepare_diversity():
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  annotation_dir = os.path.join(root_dir, 'annotation')
+  split_dir = os.path.join(root_dir, 'split')
+  splits = ['trn', 'val', 'tst']
+  out_dir = os.path.join(root_dir, 'diversity_expr')
+
+  ft_names = [
+    'i3d',
+    'resnet200',
+  ]
+
+  dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
+
+  params = {
+    'num_step': 30,
+    'reward_alpha': .25,
+    'dim_input': 512,
+    'dim_hidden': 512,
+    'num_epoch': 100,
+    'content_keepin_prob': 1.,
+    'cell_keepin_prob': 0.5,
+    'cell_keepout_prob': 0.5,
+    'dim_fts': dim_fts,
+    'num_sample': 5,
+    'sample_topk': -1,
+    'tst_strategy': 'beam',
+    'tst_num_sample': '100',
+    'tst_sample_topk': 5,
+    'min_ngram_in_diversity': 2,
+    'max_ngram_in_diversity': 4,
+  }
+
+  model_cfg = gen_model.diversity.gen_cfg(**params)
+  model_cfg.trn_batch_size = 32
+  outprefix = '%s.%d.%d.%.1f.%d.%d_%d.%s'%(
+    os.path.join(outdir, '_'.join(ft_names)),
+    params['dim_hidden'], params['dim_input'], params['reward_alpha'], params['num_sample'], 
+    params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], model_spec)
+  model_cfg_file = '%s.model.json'%outprefix
+  model_cfg.save(model_cfg_file)
+
+  output_dir = outprefix
+  path_cfg = {
+    'trn_ftfiles': split_ftfiles[0],
+    'val_ftfiles': split_ftfiles[1],
+    'tst_ftfiles': split_ftfiles[2],
+    'split_dir': split_dir,
+    'annotation_dir': annotation_dir,
+    'output_dir': output_dir,
+    'model_file': os.path.join(output_dir, 'model', 'pretrain'),
+  }
+  path_cfg_file = '%s.path.json'%outprefix
+
+  if not os.path.exists(path_cfg['output_dir']):
+    os.mkdir(path_cfg['output_dir'])
+
+  json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
 if __name__ == '__main__':
   # prepare_vevd()
-  prepare_self_critique()
+  # prepare_self_critique()
+  prepare_diversity()

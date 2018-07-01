@@ -1,5 +1,7 @@
 import json
 import socket
+import random
+import cPickle
 
 import numpy as np
 
@@ -223,6 +225,27 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
   return out_scores
 
 
+def eval_bleu_diversity_in_rollout(out_wids, int2str, min_ngram=0, max_ngram=4):
+  batch_size, num, num_step = out_wids.shape
+  out_scores = []
+  for i in range(batch_size):
+    pred_captions = []
+    for j in range(num):
+      pred_caption = int2str(np.expand_dims(out_wids[i, j], 0))[0]
+      pred_captions.append(pred_caption)
+    bleu_scorer = Bleu(4)
+    scores = []
+    for j in range(num):
+      gts = {0: pred_captions[:j] + pred_captions[j+1:]}
+      preds = {0: pred_captions[j:j+1]}
+      score, _ = bleu_scorer.compute_score(gts, preds)
+      scores.append(-np.mean(score[min_ngram:max_ngram]))
+    out_scores.append(scores)
+
+  out_scores = np.array(out_scores, dtype=np.float32) # (None, num_sample)
+  return out_scores
+
+
 def gen_captionid_masks_from_wids(out_wids):
   batch_size, num, num_step = out_wids.shape
   bos = np.zeros((batch_size, num, 1), dtype=np.int32)
@@ -233,3 +256,78 @@ def gen_captionid_masks_from_wids(out_wids):
     caption_masks[:, :, i] = caption_masks[:, :, i-1] * (caption_ids[:, :, i-1] != 1)
 
   return caption_ids, caption_masks
+
+
+class Reader(framework.model.data.Reader):
+  def __init__(self, ft_files, videoid_file, 
+      shuffle=True, annotation_file=None, captionstr_file=None):
+    self.fts = np.empty(0) # (numVideo, dimVideo)
+    self.ft_idxs = np.empty(0) # (num_caption,)
+    self.captionids = np.empty(0) # (num_caption, maxWordsInCaption)
+    self.caption_masks = np.empty(0) # (num_caption, maxWordsInCaption)
+    self.videoids = []
+    self.videoid2captions = {} # (numVideo, numGroundtruth)
+
+    self.shuffled_idxs = [] # (num_caption,)
+    self.num_caption = 0 # used in trn and val
+    self.num_ft = 0
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(tuple(fts), axis=1)
+    self.fts = self.fts.astype(np.float32)
+    self.num_ft = self.fts.shape[0]
+
+    self.videoids = np.load(open(videoid_file))
+
+    if annotation_file is not None:
+      self.ft_idxs, self.captionids, self.caption_masks = cPickle.load(file(annotation_file))
+      self.num_caption = self.ft_idxs.shape[0]
+    if captionstr_file is not None:
+      videoid2captions = cPickle.load(open(captionstr_file))
+      for videoid in self.videoids:
+        self.videoid2captions[videoid] = videoid2captions[videoid]
+
+    self.shuffled_idxs = range(self.num_caption)
+    if shuffle:
+      random.shuffle(self.shuffled_idxs)
+
+  def num_record(self):
+    return self.num_caption
+
+  def yield_trn_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_caption, batch_size):
+      start = i
+      end = i + batch_size
+      idxs = self.shuffled_idxs[start:end]
+
+      yield {
+        'fts': self.fts[self.ft_idxs[idxs]],
+        'captionids': self.captionids[idxs],
+        'caption_masks': self.caption_masks[idxs],
+        'vids': self.videoids[self.ft_idxs[idxs]],
+      }
+
+  def yield_val_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_caption, batch_size):
+      start = i
+      end = i + batch_size
+      idxs = self.shuffled_idxs[start:end]
+
+      yield {
+        'fts': self.fts[self.ft_idxs[idxs]],
+        'captionids': self.captionids[idxs],
+        'caption_masks': self.caption_masks[idxs],
+      }
+
+  # when we generate tst batch, we never shuffle as we are not doing training
+  def yield_tst_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_ft, batch_size):
+      start = i
+      end = i + batch_size
+
+      yield {
+        'fts': self.fts[start:end],
+      }
