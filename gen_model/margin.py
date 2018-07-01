@@ -377,8 +377,8 @@ class TrnReader(framework.model.data.Reader):
     random.shuffle(self.shuffled_idxs)
 
     videoid2captions = cPickle.load(open(captionstr_file))
-    for videoid in self.videoids:
-      self.videoid2captions[videoid] = videoid2captions[videoid]
+    for vid in self.vids:
+      self.videoid2captions[vid] = videoid2captions[vid]
 
     self.cider_scorer = service.fast_cider.CiderScorer()
     self.cider_scorer.init_refs(self.videoid2captions)
