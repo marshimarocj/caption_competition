@@ -207,7 +207,8 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   sock.connect(('172.17.0.1', 9090))
 
-  sock.sendall(out + '\n') 
+  out += '\n'
+  sock.sendall(out.encode('utf8'))
   f = sock.makefile()
   line = f.readline()
   line = line.strip()
