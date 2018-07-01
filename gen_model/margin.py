@@ -385,6 +385,9 @@ class TrnReader(framework.model.data.Reader):
 
     self.int2str = framework.util.caption.utility.CaptionInt2str(word_file)
 
+  def num_record(self):
+    return self.num_caption
+
   def yield_trn_batch(self, batch_size):
     for i in range(0, self.num_caption, batch_size):
       pos_idxs = self.idxs[i:i+batch_size]
