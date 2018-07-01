@@ -177,7 +177,7 @@ def prepare_diversity():
   model_cfg = gen_model.diversity.gen_cfg(**params)
   model_cfg.trn_batch_size = 32
   outprefix = '%s.%d.%d.%.1f.%d.%d_%d.%s'%(
-    os.path.join(outdir, '_'.join(ft_names)),
+    os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'], params['reward_alpha'], params['num_sample'], 
     params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], model_spec)
   model_cfg_file = '%s.model.json'%outprefix
