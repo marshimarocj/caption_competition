@@ -13,6 +13,7 @@ import framework.model.module
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
+from framework.model.module import Mode
 
 import framework.impl.encoder.dnn
 import decoder.rnn
