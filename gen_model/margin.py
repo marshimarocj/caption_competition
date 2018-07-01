@@ -245,7 +245,7 @@ class Model(framework.model.module.AbstractPGModel):
       # margin_rewards = tf.expand_dims(ps_ciders, 2) - tf.expand_dims(pn_ciders, 1) - self._config.margin
       # margin_rewards = tf.reduce_mean(margin_rewards, axis=2) # (None, num_sample)
       pn_cider = tf.reduce_logsumexp(100.*pn_ciders, 1, True) / 100.
-      pn_cider = ps_ciders - pn_cider - self._config.margin # (None, num_sample)
+      margin_rewards = ps_ciders - pn_cider - self._config.margin # (None, num_sample)
 
       reward = (1.0 - self._config.reward_alpha) * self._inputs[self.InKey.PN_REWARD] + self._config.reward_alpha * margin_rewards
       sample_log_prob = self._outputs[self.OutKey.LOG_PROB]
