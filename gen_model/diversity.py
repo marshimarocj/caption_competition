@@ -14,7 +14,7 @@ import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
 
-import framework.imple.encoder.dnn
+import framework.impl.encoder.dnn
 import decoder.rnn
 from decoder.rnn import CELL
 import service.fast_cider
