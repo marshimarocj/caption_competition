@@ -10,6 +10,7 @@ import numpy as np
 import tensorflow as tf
 
 import framework.model.module
+from framework.model.module import Mode
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
