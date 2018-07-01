@@ -422,11 +422,11 @@ class TrnReader(framework.model.data.Reader):
         elif self.metric == 'bcmr':
           scores = trntst_util.eval_BCMR_in_rollout(neg_captionids, vids, self.int2str, self.cider_scorer, self.videoid2captions)
           neg_scores.append(scores[0])
-      pn_scores = np.array(np_scores, dtype=np.float32)
+      neg_scores = np.array(neg_scores, dtype=np.float32)
 
       yield {
         'fts': pos_fts,
-        'neg_ciders': pn_scores,
+        'neg_ciders': neg_scores,
         'vids': pos_vids,
       }
 
