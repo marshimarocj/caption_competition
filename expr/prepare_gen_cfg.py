@@ -147,6 +147,7 @@ def prepare_diversity():
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
   out_dir = os.path.join(root_dir, 'diversity_expr')
+  model_spec = 'lstm'
 
   ft_names = [
     'i3d',
