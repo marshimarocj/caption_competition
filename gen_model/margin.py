@@ -306,11 +306,11 @@ class TrnTst(framework.model.trntst.PGTrnTst):
 
     vids = data['vids']
     if self.model_cfg.metric == 'cider':
-      baseline_ciders = trntst_util.eval_cider_in_rollout(baseline_out_wids, vids, self.int2str, self.cider) # (None, 1)
-      rollout_ciders = trntst_util.eval_cider_in_rollout(roll_out_wids, vids, self.int2str, self.cider) # (None, num_sample)
+      baseline_ciders = trntst_util.eval_cider_in_rollout(baseline_out_wids, vids, self.int2str, self.cider_scorer) # (None, 1)
+      rollout_ciders = trntst_util.eval_cider_in_rollout(roll_out_wids, vids, self.int2str, self.cider_scorer) # (None, num_sample)
     elif self.model_cfg.metric == 'bcmr':
-      baseline_ciders = trntst_util.eval_BCMR_in_rollout(baseline_out_wids, vids, self.int2str, self.cider, self.vid2captions) # (None, 1)
-      rollout_ciders = trntst_util.eval_BCMR_in_rollout(roll_out_wids, vids, self.int2str, self.cider, self.vid2captions) # (None, num_sample)
+      baseline_ciders = trntst_util.eval_BCMR_in_rollout(baseline_out_wids, vids, self.int2str, self.cider_scorer, self.vid2captions) # (None, 1)
+      rollout_ciders = trntst_util.eval_BCMR_in_rollout(roll_out_wids, vids, self.int2str, self.cider_scorer, self.vid2captions) # (None, num_sample)
     pos_rewards = rollout_ciders - baseline_ciders # (None, num_sample)
 
     data['pn_rewards'] = pos_rewards
