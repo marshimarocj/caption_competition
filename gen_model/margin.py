@@ -157,6 +157,9 @@ class Model(framework.model.module.AbstractPGModel):
 
     def trn_val(ft_embed):
       # val
+      with tf.variable_scope(self.name_scope):
+        num_pos = tf.shape(ft_embed)[0]
+        init_wid = tf.zeros((num_pos,), dtype=tf.int32)
       vd_inputs = {
         decoder.InKey.FT: ft_embed,
         decoder.InKey.INIT_WID: init_wid,
