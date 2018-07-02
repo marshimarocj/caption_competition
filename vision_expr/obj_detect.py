@@ -1,14 +1,14 @@
 import os
 import subprocess
 
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 from PIL import Image
 from PIL import GifImagePlugin
 
-from object_detection.utils import ops as utils_ops
-from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
+# from object_detection.utils import ops as utils_ops
+# from object_detection.utils import label_map_util
+# from object_detection.utils import visualization_utils as vis_util
 
 
 '''func
