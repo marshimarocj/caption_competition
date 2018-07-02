@@ -201,7 +201,8 @@ def eval_BCMR_in_rollout(out_wids, vids, int2str, cider, vid2gt_captions):
         'ref': vid2gt_captions[vid],
         'id': '%d_%d'%(vid, j)
         })
-      vid2idx[vid] = i
+      if vid not in vid2idx:
+        vid2idx[vid] = i
   out = json.dumps(out)
 
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
