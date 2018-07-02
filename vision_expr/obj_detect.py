@@ -93,9 +93,13 @@ def tst():
 def tst_read_gif():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data/gif' # gpu9
   names = [
-    'tumblr_nddhn3KnkB1rlew38o1_250.gif',
-    'tumblr_nddfr0AtIU1s3ycl0o1_500.gif',
-    'tumblr_npg0ytq3LG1tttzpyo1_1280.gif',
+    'tumblr_nd746k9J5Q1qbx0eko1_500.gif',
+    'tumblr_ni3zr0kGY71tt0tivo1_250.gif',
+    'tumblr_npfcfptpJX1u0chl3o1_400.gif',
+    'tumblr_nbaio6niSJ1s3ksyfo1_400.gif',
+    'tumblr_m931c6H3Tt1qa4llno1_500.gif',
+    'tumblr_nfyblj4eZI1rblf33o1_500.gif',
+    'tumblr_np1az4Cohq1spi58bo1_400.gif',
   ]
 
   for name in names:
