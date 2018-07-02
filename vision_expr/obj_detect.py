@@ -31,4 +31,4 @@ def tst():
 
 
 if __name__ == '__main__':
-  object_detect()
+  tst()
