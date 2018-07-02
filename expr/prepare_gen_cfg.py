@@ -143,12 +143,13 @@ def prepare_self_critique():
 
 
 def prepare_diversity():
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
   out_dir = os.path.join(root_dir, 'diversity_expr')
-  model_spec = 'lstm'
+  # model_spec = 'lstm'
 
   ft_names = [
     'i3d',
@@ -160,7 +161,8 @@ def prepare_diversity():
   params = {
     'num_step': 30,
     'reward_alpha': .25,
-    'reward_metric': 'cider',
+    # 'reward_metric': 'cider',
+    'reward_metric': 'bcmr',
     'dim_input': 512,
     'dim_hidden': 512,
     'num_epoch': 100,
@@ -182,7 +184,8 @@ def prepare_diversity():
   outprefix = '%s.%d.%d.%.1f.%d.%d_%d.%s'%(
     os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'], params['reward_alpha'], params['num_sample'], 
-    params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], model_spec)
+    # params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], model_spec)
+    params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], params['reward_metric'])
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
 
@@ -267,5 +270,5 @@ def prepare_margin():
 if __name__ == '__main__':
   # prepare_vevd()
   # prepare_self_critique()
-  # prepare_diversity()
-  prepare_margin()
+  prepare_diversity()
+  # prepare_margin()
