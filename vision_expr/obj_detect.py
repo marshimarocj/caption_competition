@@ -66,7 +66,7 @@ def prepare_tensor(graph):
 
     image_tensor = tf.get_default_graph().get_tensor_by_name('image_tensor:0')
 
-  return image_tensor, output_dict
+  return image_tensor, tensor_dict
 
 
 def run_inference_for_single_image(image_tensor, tensor_dict, image, sess):
