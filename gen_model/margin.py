@@ -57,6 +57,7 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.num_sample = kwargs['num_sample']
   cfg.margin = kwargs['margin']
+  cfg.metric = kwargs['metric']
 
   enc = cfg.subcfgs[VE]
   enc.dim_fts = kwargs['dim_fts']

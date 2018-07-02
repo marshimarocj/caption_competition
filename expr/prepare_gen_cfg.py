@@ -236,7 +236,8 @@ def prepare_margin():
     'num_sample': 5,
     'margin': .1,
     'strategy': 'beam',
-    'metric': 'cider',
+    # 'metric': 'cider',
+    'metric': 'bcmr',
   }
 
   model_cfg = gen_model.margin.gen_cfg(**params)
@@ -270,5 +271,5 @@ def prepare_margin():
 if __name__ == '__main__':
   # prepare_vevd()
   # prepare_self_critique()
-  prepare_diversity()
-  # prepare_margin()
+  # prepare_diversity()
+  prepare_margin()

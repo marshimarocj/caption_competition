@@ -56,6 +56,7 @@ def gen_cfg(**kwargs):
   cfg.base_lr = 1e-5
   cfg.num_epoch = kwargs['num_epoch']
   cfg.reward_alpha = kwargs['reward_alpha']
+  cfg.reward_metric = kwargs['reward_metric']
   cfg.num_sample = kwargs['num_sample']
   cfg.tst_strategy = kwargs['tst_strategy']
   cfg.tst_num_sample = kwargs['tst_num_sample']
