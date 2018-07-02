@@ -85,6 +85,8 @@ def tst():
       line_thickness=8)
   # image_np.save(out_file)
   print image_np.dtype, image_np.shape
+  image = Image.fromarray(image_np)
+  image.save(out_file)
 
 
 if __name__ == '__main__':
