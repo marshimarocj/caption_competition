@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import tensorflow as tf
 import numpy as np
@@ -105,16 +106,12 @@ def extract_imgs_from_gif():
 
   for name in names:
     file = os.path.join(root_dir, 'gif', name + '.gif')
-    imageObject = Image.open(file)
-    # print(imageObject.is_animated)
-    # print(imageObject.n_frames)
     out_dir = os.path.join(out_root_dir, name)
     if not os.path.exists(out_dir):
       os.mkdir(out_dir)
-    for frame in range(0,imageObject.n_frames):
-      out_file = os.path.join(out_dir + '%d.jpg'%frame)
-      imageObject.seek(frame)
-      imageObject.save(out_file)
+    cmd = ['convert', '-coalesce', file, os.path.join(out_dir, '%05d.jpg')]
+    p = subprocess.Popen(cmd)
+    p.wait()
 
 
 if __name__ == '__main__':
