@@ -3,6 +3,7 @@ import os
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from PIL import GifImagePlugin
 
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
@@ -89,5 +90,21 @@ def tst():
   image.save(out_file)
 
 
+def tst_read_gif():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data/gif' # gpu9
+  names = [
+    'tumblr_nddhn3KnkB1rlew38o1_250.gif',
+    'tumblr_nddfr0AtIU1s3ycl0o1_500.gif',
+    'tumblr_npg0ytq3LG1tttzpyo1_1280.gif',
+  ]
+
+  for name in names:
+    file = os.path.join(root_dir, name)
+    imageObject = Image.open(file)
+    print(imageObject.is_animated)
+    print(imageObject.n_frames)
+
+
 if __name__ == '__main__':
-  tst()
+  # tst()
+  tst_read_gif()
