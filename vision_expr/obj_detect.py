@@ -90,25 +90,33 @@ def tst():
   image.save(out_file)
 
 
-def tst_read_gif():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data/gif' # gpu9
+def extract_imgs_from_gif():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   names = [
-    'tumblr_nd746k9J5Q1qbx0eko1_500.gif',
-    'tumblr_ni3zr0kGY71tt0tivo1_250.gif',
-    'tumblr_npfcfptpJX1u0chl3o1_400.gif',
-    'tumblr_nbaio6niSJ1s3ksyfo1_400.gif',
-    'tumblr_m931c6H3Tt1qa4llno1_500.gif',
-    'tumblr_nfyblj4eZI1rblf33o1_500.gif',
-    'tumblr_np1az4Cohq1spi58bo1_400.gif',
+    'tumblr_nd746k9J5Q1qbx0eko1_500',
+    'tumblr_ni3zr0kGY71tt0tivo1_250',
+    'tumblr_npfcfptpJX1u0chl3o1_400',
+    'tumblr_nbaio6niSJ1s3ksyfo1_400',
+    'tumblr_m931c6H3Tt1qa4llno1_500',
+    'tumblr_nfyblj4eZI1rblf33o1_500',
+    'tumblr_np1az4Cohq1spi58bo1_400',
   ]
+  out_root_dir = os.path.join(root_dir, 'imgs')
 
   for name in names:
-    file = os.path.join(root_dir, name)
+    file = os.path.join(root_dir, 'gif', name + '.gif')
     imageObject = Image.open(file)
-    print(imageObject.is_animated)
-    print(imageObject.n_frames)
+    # print(imageObject.is_animated)
+    # print(imageObject.n_frames)
+    out_dir = os.path.join(out_root_dir, name)
+    if not os.path.exists(out_dir):
+      os.mkdir(out_dir)
+    for frame in range(0,imageObject.n_frames):
+      out_file = os.path.join(out_dir + '%d.jpg'%frame)
+      imageObject.seek(frame)
+      imageObject.save(out_file)
 
 
 if __name__ == '__main__':
   # tst()
-  tst_read_gif()
+  extract_imgs_from_gif()
