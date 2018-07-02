@@ -6,6 +6,7 @@ from PIL import Image
 
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
+from object_detection.utils import vis_util
 
 
 '''func
@@ -53,6 +54,7 @@ def tst():
   model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28/frozen_inference_graph.pb'
   label_map_file = '/home/jiac/toolkit/models/research/object_detection/data/oid_bbox_trainable_label_map.pbtxt'
   img_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image2.jpg'
+  out_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image2_detect.jpg'
 
   NUM_CLASSES = 545
 
@@ -72,6 +74,16 @@ def tst():
   image_np = load_image_into_numpy_array(image)
   image_np_expanded = np.expand_dims(image_np, axis=0)
   output_dict = run_inference_for_single_image(image_np, detection_graph)
+
+  vis_util.visualize_boxes_and_labels_on_image_array(
+      image_np,
+      output_dict['detection_boxes'],
+      output_dict['detection_classes'],
+      output_dict['detection_scores'],
+      category_index,
+      use_normalized_coordinates=True,
+      line_thickness=8)
+  image_np.save(out_file)
 
 
 if __name__ == '__main__':
