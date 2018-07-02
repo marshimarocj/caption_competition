@@ -83,7 +83,8 @@ def tst():
       category_index,
       use_normalized_coordinates=True,
       line_thickness=8)
-  image_np.save(out_file)
+  # image_np.save(out_file)
+  print image_np.dtype, image_np.shape
 
 
 if __name__ == '__main__':
