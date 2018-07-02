@@ -3,6 +3,7 @@ import os
 import tensorflow as tf
 from PIL import Image
 from object_detection.utils import ops as utils_ops
+from object_detection.utils import label_map_util
 
 
 '''func
