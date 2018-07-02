@@ -193,7 +193,8 @@ def detect_obj():
         image = Image.open(img_file)
         image_np = load_image_into_numpy_array(image)
         image_np_expanded = np.expand_dims(image_np, axis=0)
-        output_dict = run_inference_for_single_image(image_tensor, tensor_dict, image_np_expanded, sess)
+        output_dict = run_inference_for_single_image(
+          image_tensor, tensor_dict, image_np_expanded, sess)
 
         vis_util.visualize_boxes_and_labels_on_image_array(
           image_np,
