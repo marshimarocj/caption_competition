@@ -125,7 +125,7 @@ def detect_obj():
     'tumblr_nfyblj4eZI1rblf33o1_500',
     'tumblr_np1az4Cohq1spi58bo1_400',
   ]
-  img_root_dir = os.path.join(root_dir, 'img')
+  img_root_dir = os.path.join(root_dir, 'imgs')
   out_root_dir = os.path.join(root_dir, 'obj_detect')
   model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28/frozen_inference_graph.pb'
   label_map_file = '/home/jiac/toolkit/models/research/object_detection/data/oid_bbox_trainable_label_map.pbtxt'
