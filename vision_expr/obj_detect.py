@@ -53,8 +53,8 @@ def run_inference_for_single_image(image, graph):
 def tst():
   model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28/frozen_inference_graph.pb'
   label_map_file = '/home/jiac/toolkit/models/research/object_detection/data/oid_bbox_trainable_label_map.pbtxt'
-  img_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image2.jpg'
-  out_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image2_detect.jpg'
+  img_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image1.jpg'
+  out_file = '/home/jiac/toolkit/models/research/object_detection/test_images/image1_detect.jpg'
 
   NUM_CLASSES = 545
 
