@@ -181,7 +181,7 @@ def detect_obj():
   category_index = label_map_util.create_category_index(categories)
 
   with tf.Session(graph=detection_graph) as sess:
-    for name in names:
+    for name in names[:1]:
       img_dir = os.path.join(img_root_dir, name)
       img_names = os.listdir(img_dir)
       num = len(img_names)
@@ -196,17 +196,18 @@ def detect_obj():
         output_dict = run_inference_for_single_image(
           image_tensor, tensor_dict, image_np, sess)
 
-        vis_util.visualize_boxes_and_labels_on_image_array(
-          image_np,
-          output_dict['detection_boxes'],
-          output_dict['detection_classes'],
-          output_dict['detection_scores'],
-          category_index,
-          use_normalized_coordinates=True,
-          line_thickness=8)
-        out_file = os.path.join(out_dir, '%05d.jpg'%i)
-        image = Image.fromarray(image_np)
-        image.save(out_file)
+        # vis_util.visualize_boxes_and_labels_on_image_array(
+        #   image_np,
+        #   output_dict['detection_boxes'],
+        #   output_dict['detection_classes'],
+        #   output_dict['detection_scores'],
+        #   category_index,
+        #   use_normalized_coordinates=True,
+        #   line_thickness=8)
+        # out_file = os.path.join(out_dir, '%05d.jpg'%i)
+        # image = Image.fromarray(image_np)
+        # image.save(out_file)
+        print output_dict['num_detections'], output_dict['detection_classes']
 
 
 if __name__ == '__main__':
