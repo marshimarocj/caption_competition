@@ -20,37 +20,6 @@ def load_image_into_numpy_array(image):
       (im_height, im_width, 3)).astype(np.uint8)
 
 
-# def run_inference_for_single_image(image, graph):
-#   with graph.as_default():
-#     with tf.Session() as sess:
-#       # Get handles to input and output tensors
-#       ops = tf.get_default_graph().get_operations()
-#       all_tensor_names = {output.name for op in ops for output in op.outputs}
-#       tensor_dict = {}
-#       for key in [
-#           'num_detections', 'detection_boxes', 'detection_scores',
-#           'detection_classes', 'detection_masks'
-#       ]:
-#         tensor_name = key + ':0'
-#         if tensor_name in all_tensor_names:
-#           tensor_dict[key] = tf.get_default_graph().get_tensor_by_name(
-#               tensor_name)
-
-#       image_tensor = tf.get_default_graph().get_tensor_by_name('image_tensor:0')
-
-#       # Run inference
-#       output_dict = sess.run(tensor_dict,
-#                              feed_dict={image_tensor: np.expand_dims(image, 0)})
-
-#       # all outputs are float32 numpy arrays, so convert types as appropriate
-#       output_dict['num_detections'] = int(output_dict['num_detections'][0])
-#       output_dict['detection_classes'] = output_dict[
-#           'detection_classes'][0].astype(np.uint8)
-#       output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
-#       output_dict['detection_scores'] = output_dict['detection_scores'][0]
-#   return output_dict
-
-
 def prepare_tensor(graph):
   with graph.as_default():
     ops = tf.get_default_graph().get_operations()
@@ -80,6 +49,19 @@ def run_inference_for_single_image(image_tensor, tensor_dict, image, sess):
       'detection_classes'][0].astype(np.uint8)
   output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
   output_dict['detection_scores'] = output_dict['detection_scores'][0]
+
+  return output_dict
+
+
+def run_inference_for_images(image_tensor, tensor_dict, images, sess):
+  output_dict = sess.run(tensor_dict,
+                         feed_dict={image_tensor: np.expand_dims(image, 0)})
+
+  # all outputs are float32 numpy arrays, so convert types as appropriate
+  output_dict['num_detections'] = [int(d) for d in output_dict['num_detections']]
+  output_dict['detection_classes'] = [d.astype(np.uint8) for d in output_dict['detection_classes']]
+  output_dict['detection_boxes'] = [d for d in output_dict['detection_boxes']]
+  output_dict['detection_scores'] = [d for d in output_dict['detection_scores']]
 
   return output_dict
 
@@ -190,27 +172,46 @@ def detect_obj():
       out_dir = os.path.join(out_root_dir, name)
       if not os.path.exists(out_dir):
         os.mkdir(out_dir)
+
+      image_nps = []
+      images = []
       for i in range(num):
         img_file = os.path.join(img_dir, '%05d.jpg'%i)
         image = Image.open(img_file)
         image_np = load_image_into_numpy_array(image)
-        image_np_expanded = np.expand_dims(image_np, axis=0)
-        output_dict = run_inference_for_single_image(
-          image_tensor, tensor_dict, image_np, sess)
+        images.append(image)
+        image_nps.append(image_np)
+        # image_np_expanded = np.expand_dims(image_np, axis=0)
+        # output_dict = run_inference_for_single_image(
+        #   image_tensor, tensor_dict, image_np, sess)
 
+        # vis_util.visualize_boxes_and_labels_on_image_array(
+        #   image_np,
+        #   output_dict['detection_boxes'],
+        #   output_dict['detection_classes'],
+        #   output_dict['detection_scores'],
+        #   category_index,
+        #   min_score_thresh=.1,
+        #   use_normalized_coordinates=True,
+        #   line_thickness=4)
+        # out_file = os.path.join(out_dir, '%05d.jpg'%i)
+        # image = Image.fromarray(image_np)
+        # image.save(out_file)
+        # print output_dict['num_detections'], output_dict['detection_classes']
+      image_nps = np.array(image_nps, dtype=np.uint8)
+      output_dict = run_inference_for_single_image(
+          image_tensor, tensor_dict, image_nps, sess)
+      for i in range(num):
         vis_util.visualize_boxes_and_labels_on_image_array(
           image_np,
-          output_dict['detection_boxes'],
-          output_dict['detection_classes'],
-          output_dict['detection_scores'],
+          output_dict['detection_boxes'][i],
+          output_dict['detection_classes'][i],
+          output_dict['detection_scores'][i],
           category_index,
           min_score_thresh=.1,
           use_normalized_coordinates=True,
           line_thickness=4)
         out_file = os.path.join(out_dir, '%05d.jpg'%i)
-        image = Image.fromarray(image_np)
-        image.save(out_file)
-        # print output_dict['num_detections'], output_dict['detection_classes']
 
 
 def prepare_pseudo_tfrecord():
