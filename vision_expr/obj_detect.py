@@ -325,7 +325,7 @@ def prepare_for_matlab():
   ]
   obj_detect_dir = os.path.join(root_dir, 'obj_detect')
 
-  score_threshold = .05
+  score_threshold = .01
 
   for name in names:
     detect_file = os.path.join(obj_detect_dir, name + '.npz')
@@ -352,7 +352,7 @@ def prepare_for_matlab():
       boxes[:, 2] *= img_h
       boxes[:, 3] *= img_w
 
-      boxes = non_max_suppression_fast(boxes, 0.7)
+      boxes = non_max_suppression_fast(boxes, 0.5)
 
       with open(out_file, 'w') as fout:
         for box in boxes:
