@@ -276,7 +276,7 @@ def prepare_for_matlab():
     data = np.load(detect_file)
     boxes = data['boxes']
     classes = data['classes']
-    scores = data['scores']
+    scores = data['score']
 
     num_frame = scores.shape[0]
     for f in range(0, num_frame, 16):
