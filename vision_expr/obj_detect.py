@@ -325,7 +325,6 @@ def prepare_for_matlab():
   ]
   obj_detect_dir = os.path.join(root_dir, 'obj_detect')
 
-  topk = 10
   score_threshold = .05
 
   for name in names:
@@ -341,7 +340,7 @@ def prepare_for_matlab():
 
     min_size = min(img_w, img_h)/10
 
-    num_frame = scores.shape[0]
+    num_frame = frame_scores.shape[0]
     for f in range(0, num_frame, 16):
       out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
       sort_idxs = np.argsort(-scores[f])
