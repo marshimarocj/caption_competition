@@ -279,7 +279,7 @@ def prepare_for_matlab():
     scores = data['score']
 
     img_file = os.path.join(root_dir, 'imgs', name, '00000.jpg')
-    img = Image(img_file)
+    img = Image.open(img_file)
     w, h = img.size()
 
     num_frame = scores.shape[0]
