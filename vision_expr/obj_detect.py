@@ -375,11 +375,10 @@ def prepare_for_matlab():
     for f in range(0, num_frame, 16):
       all_boxes = []
       for i in range(f, min(f+3, num_frame)):
-        out_file = os.path.join(obj_detect_dir, name + '.%d.box'%i)
         sort_idxs = np.argsort(-frame_scores[f])
         valid_idxs = sort_idxs[sort_idxs >= score_threshold]
 
-        boxes = frame_boxes[f][valid_idxs]
+        boxes = frame_boxes[i][valid_idxs]
         boxes[:, 0] *= img_h
         boxes[:, 1] *= img_w
         boxes[:, 2] *= img_h
@@ -388,6 +387,7 @@ def prepare_for_matlab():
       all_boxes = np.concatenate(all_boxes, 0)
       boxes = non_max_suppression_fast(all_boxes, 0.75)
 
+      out_file = os.path.join(obj_detect_dir, name + '.%.box'%f)
       with open(out_file, 'w') as fout:
         for box in boxes:
           x = box[1]
