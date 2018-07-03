@@ -1,15 +1,15 @@
 import os
 import subprocess
 
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 from PIL import Image
 from PIL import GifImagePlugin
 
-from object_detection.utils import ops as utils_ops
-from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
-from object_detection.utils import dataset_util
+# from object_detection.utils import ops as utils_ops
+# from object_detection.utils import label_map_util
+# from object_detection.utils import visualization_utils as vis_util
+# from object_detection.utils import dataset_util
 
 
 '''func
@@ -187,6 +187,36 @@ def extract_imgs_from_gif():
     p.wait()
 
 
+def bat_extract_imgs_from_gif():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+
+  cnt = 0
+  for name in names:
+    file = os.path.join(root_dir, 'gif', name + '.gif')
+    out_dir = os.path.join(out_root_dir, name)
+    if not os.path.exists(out_dir):
+      os.mkdir(out_dir)
+    cmd = ['convert', '-coalesce', file, os.path.join(out_dir, '%05d.jpg')]
+    p = subprocess.Popen(cmd)
+    p.wait()
+
+    cnt += 1
+    if cnt % 100 == 0:
+      print cnt
+
+
 def detect_obj():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   names = [
@@ -269,47 +299,47 @@ def detect_obj():
       np.savez_compressed(out_file, score=out_scores, boxes=out_boxes, classes=out_classes)
 
 
-def prepare_pseudo_tfrecord():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  names = [
-    'tumblr_nd746k9J5Q1qbx0eko1_500',
-    'tumblr_ni3zr0kGY71tt0tivo1_250',
-    'tumblr_npfcfptpJX1u0chl3o1_400',
-    'tumblr_nbaio6niSJ1s3ksyfo1_400',
-    'tumblr_m931c6H3Tt1qa4llno1_500',
-    'tumblr_nfyblj4eZI1rblf33o1_500',
-    'tumblr_np1az4Cohq1spi58bo1_400',
-  ]
-  img_root_dir = os.path.join(root_dir, 'imgs')
-  out_file = '/home/jiac/data/openimage/pseudo_trn_records/0.record'
+# def prepare_pseudo_tfrecord():
+#   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+#   names = [
+#     'tumblr_nd746k9J5Q1qbx0eko1_500',
+#     'tumblr_ni3zr0kGY71tt0tivo1_250',
+#     'tumblr_npfcfptpJX1u0chl3o1_400',
+#     'tumblr_nbaio6niSJ1s3ksyfo1_400',
+#     'tumblr_m931c6H3Tt1qa4llno1_500',
+#     'tumblr_nfyblj4eZI1rblf33o1_500',
+#     'tumblr_np1az4Cohq1spi58bo1_400',
+#   ]
+#   img_root_dir = os.path.join(root_dir, 'imgs')
+#   out_file = '/home/jiac/data/openimage/pseudo_trn_records/0.record'
 
-  with tf.python_io.TFRecordWriter(out_file) as writer:
-    for name in names[:1]:
-      img_dir = os.path.join(img_root_dir, name)
-      img_names = os.listdir(img_dir)
-      num = len(img_names)
-      for i in range(num):
-        img_file = os.path.join(img_dir, '%05d.jpg'%i)
-        with tf.gfile.GFile(img_file, 'rb') as fid:
-          encoded_jpg = fid.read()
-        image = Image.open(img_file)
-        w, h = image.size
+#   with tf.python_io.TFRecordWriter(out_file) as writer:
+#     for name in names[:1]:
+#       img_dir = os.path.join(img_root_dir, name)
+#       img_names = os.listdir(img_dir)
+#       num = len(img_names)
+#       for i in range(num):
+#         img_file = os.path.join(img_dir, '%05d.jpg'%i)
+#         with tf.gfile.GFile(img_file, 'rb') as fid:
+#           encoded_jpg = fid.read()
+#         image = Image.open(img_file)
+#         w, h = image.size
 
-        tf_example = tf.train.Example(features=tf.train.Features(feature={
-            'image/height': dataset_util.int64_feature(h),
-            'image/width': dataset_util.int64_feature(w),
-            'image/filename': dataset_util.bytes_feature(img_file),
-            'image/source_id': dataset_util.bytes_feature(img_file),
-            'image/encoded': dataset_util.bytes_feature(encoded_jpg),
-            'image/format': dataset_util.bytes_feature(b"jpg"),
-            'image/object/bbox/xmin': dataset_util.float_list_feature([0.]),
-            'image/object/bbox/xmax': dataset_util.float_list_feature([1.]),
-            'image/object/bbox/ymin': dataset_util.float_list_feature([0.]),
-            'image/object/bbox/ymax': dataset_util.float_list_feature([1.]),
-            'image/object/class/text': dataset_util.bytes_list_feature('Person'),
-            'image/object/class/label': dataset_util.int64_list_feature([1]),
-        }))
-        writer.write(tf_example.SerializeToString())
+#         tf_example = tf.train.Example(features=tf.train.Features(feature={
+#             'image/height': dataset_util.int64_feature(h),
+#             'image/width': dataset_util.int64_feature(w),
+#             'image/filename': dataset_util.bytes_feature(img_file),
+#             'image/source_id': dataset_util.bytes_feature(img_file),
+#             'image/encoded': dataset_util.bytes_feature(encoded_jpg),
+#             'image/format': dataset_util.bytes_feature(b"jpg"),
+#             'image/object/bbox/xmin': dataset_util.float_list_feature([0.]),
+#             'image/object/bbox/xmax': dataset_util.float_list_feature([1.]),
+#             'image/object/bbox/ymin': dataset_util.float_list_feature([0.]),
+#             'image/object/bbox/ymax': dataset_util.float_list_feature([1.]),
+#             'image/object/class/text': dataset_util.bytes_list_feature('Person'),
+#             'image/object/class/label': dataset_util.int64_list_feature([1]),
+#         }))
+#         writer.write(tf_example.SerializeToString())
 
 
 def prepare_for_matlab():
@@ -368,6 +398,6 @@ def prepare_for_matlab():
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
+  bat_extract_imgs_from_gif()
   # detect_obj()
-  # prepare_pseudo_tfrecord()
-  prepare_for_matlab()
+  # prepare_for_matlab()
