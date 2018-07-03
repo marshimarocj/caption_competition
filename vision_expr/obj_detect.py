@@ -204,8 +204,9 @@ def detect_obj():
           output_dict['detection_classes'],
           output_dict['detection_scores'],
           category_index,
+          min_score_thresh=.1,
           use_normalized_coordinates=True,
-          line_thickness=8)
+          line_thickness=4)
         out_file = os.path.join(out_dir, '%05d.jpg'%i)
         image = Image.fromarray(image_np)
         image.save(out_file)
