@@ -385,7 +385,9 @@ def prepare_for_matlab():
         boxes[:, 3] *= img_w
         all_boxes.append(boxes)
       all_boxes = np.concatenate(all_boxes, 0)
+      shape = all_boxes.shape
       boxes = non_max_suppression_fast(all_boxes, 0.75)
+      print shape, boxes.shape
 
       out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
       with open(out_file, 'w') as fout:
