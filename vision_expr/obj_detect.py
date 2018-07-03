@@ -282,6 +282,8 @@ def prepare_for_matlab():
     img = Image.open(img_file)
     w, h = img.size
 
+    min_size = min(w, h)/10
+
     num_frame = scores.shape[0]
     for f in range(0, num_frame, 16):
       out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
@@ -297,6 +299,8 @@ def prepare_for_matlab():
           ymin = int(round(box[0]*h))
           w = int(round((box[3] - box[1])*w))
           h = int(round((box[2] - box[0])*h))
+          if w < min_size or h < min_size:
+            continue
           fout.write('%d %d %d %d %d\n'%(xmin, ymin, w, h, c))
 
 
