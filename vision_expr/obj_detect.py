@@ -213,7 +213,7 @@ def detect_obj():
 
 
 def prepare_pseudo_tfrecord():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data'
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   names = [
     'tumblr_nd746k9J5Q1qbx0eko1_500',
     'tumblr_ni3zr0kGY71tt0tivo1_250',
@@ -255,8 +255,50 @@ def prepare_pseudo_tfrecord():
         writer.write(tf_example.SerializeToString())
 
 
+def prepare_for_matlab():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  names = [
+    'tumblr_nd746k9J5Q1qbx0eko1_500',
+    'tumblr_ni3zr0kGY71tt0tivo1_250',
+    'tumblr_npfcfptpJX1u0chl3o1_400',
+    'tumblr_nbaio6niSJ1s3ksyfo1_400',
+    'tumblr_m931c6H3Tt1qa4llno1_500',
+    'tumblr_nfyblj4eZI1rblf33o1_500',
+    'tumblr_np1az4Cohq1spi58bo1_400',
+  ]
+  obj_detect_dir = os.path.join(root_dir, 'obj_detect')
+
+  topk = 10
+  score_threshold = .05
+
+  for name in names:
+    detect_file = os.path.join(obj_detect_dir, name + '.npz')
+    data = np.load(detect_file)
+    boxes = data['detection_boxes']
+    classes = data['detection_classes']
+    scores = data['detection_scores']
+
+    num_frame = scores.shape[0]
+    for f in range(0, num_frame, 16):
+      out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
+      sort_idxs = np.argsort(-scores[f])
+      with open(out_file, 'w') as fout:
+        for idx in sort_idxs:
+          score = scores[f][idx]
+          if score < score_threshold:
+            break
+          c = classes[f][idx]
+          box = boxes[f][idx]
+          xmin = int(round(box[1]))
+          ymin = int(round(box[0]))
+          w = int(round(box[3] - box[1]))
+          h = int(round(box[2] - box[0]))
+          fout.write('%d %d %d %d %d\n'%(xmin, ymin, w, h, c))
+
+
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
-  detect_obj()
+  # detect_obj()
   # prepare_pseudo_tfrecord()
+  prepare_for_matlab()
