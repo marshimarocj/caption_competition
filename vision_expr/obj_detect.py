@@ -343,7 +343,7 @@ def prepare_for_matlab():
     num_frame = frame_scores.shape[0]
     for f in range(0, num_frame, 16):
       out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
-      sort_idxs = np.argsort(-scores[f])
+      sort_idxs = np.argsort(-frame_scores[f])
       valid_idxs = sort_idxs[sort_idxs >= score_threshold]
 
       boxes = frame_boxes[f][valid_idxs]
