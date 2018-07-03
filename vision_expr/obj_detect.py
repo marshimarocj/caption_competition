@@ -274,9 +274,9 @@ def prepare_for_matlab():
   for name in names:
     detect_file = os.path.join(obj_detect_dir, name + '.npz')
     data = np.load(detect_file)
-    boxes = data['detection_boxes']
-    classes = data['detection_classes']
-    scores = data['detection_scores']
+    boxes = data['boxes']
+    classes = data['classes']
+    scores = data['scores']
 
     num_frame = scores.shape[0]
     for f in range(0, num_frame, 16):
