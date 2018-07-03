@@ -211,7 +211,7 @@ def gen_sh_convert_gif_to_mp4():
     with open('%d.sh'%s, 'w') as fout:
       for name in names:
         file = os.path.join(root_dir, 'gif', name + '.gif')
-        out_file = os.path.join(out_root_dir, name + '.mp4')
+        out_file = os.path.join(out_dir, name + '.mp4')
         if not os.path.exists(out_dir):
           os.mkdir(out_dir)
         # cmd = ['convert', '-coalesce', file, os.path.join(out_dir, '%05d.jpg')]
