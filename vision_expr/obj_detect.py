@@ -3,8 +3,7 @@ import subprocess
 
 # import tensorflow as tf
 import numpy as np
-from PIL import Image
-from PIL import GifImagePlugin
+import imageio
 
 # from object_detection.utils import ops as utils_ops
 # from object_detection.utils import label_map_util
@@ -307,6 +306,64 @@ def detect_obj():
       np.savez_compressed(out_file, score=out_scores, boxes=out_boxes, classes=out_classes)
 
 
+def bat_detect_obj():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  gif_dir = os.path.join(root_dir, 'gif')
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  out_dir = os.path.join(root_dir, 'obj_detect')
+
+  NUM_CLASSES = 546
+  gap = 16
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+
+  detection_graph = tf.Graph()
+  with detection_graph.as_default():
+    od_graph_def = tf.GraphDef()
+    with tf.gfile.GFile(model_file, 'rb') as fid:
+      serialized_graph = fid.read()
+      od_graph_def.ParseFromString(serialized_graph)
+      tf.import_graph_def(od_graph_def, name='')
+  image_tensor, tensor_dict = prepare_tensor(detection_graph)
+
+  cnt = 0
+  with tf.Session(graph=detection_graph) as sess:
+    for name in names:
+      gif_file = os.path.join(gif_dir, name + '.gif')
+      gif = imageio.mimread(gif_file)
+
+      out_boxes = []
+      out_classes = []
+      out_scores = []
+      for i in range(len(gif)):
+        if i % gap < 3:
+          img = gif[i][:, :, :3]
+          output_dict = run_inference_for_single_image(
+            image_tensor, tensor_dict, img, sess)
+          out_boxes.append(output_dict['detection_boxes'])
+          out_classes.append(output_dict['detection_classes'])
+          out_scores.append(output_dict['detection_scores'])
+      out_boxes = np.array(out_boxes, dtype=np.float32)
+      out_classes = np.array(out_classes, dtype=np.uint8)
+      out_scores = np.array(out_scores, dtype=np.float32)
+      out_file = os.path.join(out_dir, name + '.npz')
+      np.savez_compressed(out_file, scores=out_scores, boxes=out_boxes, classes=out_classes)
+
+      cnt += 1
+      if cnt % 100 == 0:
+        print cnt
+
+
 # def prepare_pseudo_tfrecord():
 #   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
 #   names = [
@@ -411,6 +468,7 @@ def prepare_for_matlab():
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
-  gen_sh_convert_gif_to_mp4()
+  # gen_sh_convert_gif_to_mp4()
   # detect_obj()
+  bat_detect_obj()
   # prepare_for_matlab()
