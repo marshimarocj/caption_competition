@@ -209,7 +209,7 @@ def detect_obj():
       out_classes = np.array(out_classes, dtype=np.uint8)
       out_scores = np.array(out_scores, dtype=np.float32)
       out_file = out_dir + '.npy'
-      np.save(out_file, out_scores)
+      np.savez_compressed(out_file, score=out_scores, boxes=out_boxes, classes=out_classes)
 
 
 def prepare_pseudo_tfrecord():
