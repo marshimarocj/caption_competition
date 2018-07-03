@@ -149,6 +149,7 @@ def detect_obj():
 
   NUM_CLASSES = 546
   gap = 16
+  max_num = 10
 
   detection_graph = tf.Graph()
   with detection_graph.as_default():
@@ -174,6 +175,9 @@ def detect_obj():
       if not os.path.exists(out_dir):
         os.mkdir(out_dir)
 
+      out_boxes = []
+      out_classes = []
+      out_scores = []
       for i in range(num):
         img_file = os.path.join(img_dir, '%05d.jpg'%i)
         image = Image.open(img_file)
@@ -182,21 +186,30 @@ def detect_obj():
         image_np_expanded = np.expand_dims(image_np, axis=0)
         output_dict = run_inference_for_single_image(
           image_tensor, tensor_dict, image_np, sess)
+        out_boxes.append(output_dict['detection_boxes'][:max_num]) # ymin, xmin, ymax, xmax
+        out_classes.append(output_dict['detection_classes'][:max_num])
+        out_scores.append(output_dict['detection_scores'][:max_num])
 
-        vis_util.visualize_boxes_and_labels_on_image_array(
-          image_np,
-          output_dict['detection_boxes'],
-          output_dict['detection_classes'],
-          output_dict['detection_scores'],
-          category_index,
-          min_score_thresh=.05,
-          max_boxes_to_draw=10,
-          use_normalized_coordinates=True,
-          line_thickness=4)
-        out_file = os.path.join(out_dir, '%05d.jpg'%i)
-        image = Image.fromarray(image_np)
-        image.save(out_file)
+        # vis_util.visualize_boxes_and_labels_on_image_array(
+        #   image_np,
+        #   output_dict['detection_boxes'],
+        #   output_dict['detection_classes'],
+        #   output_dict['detection_scores'],
+        #   category_index,
+        #   min_score_thresh=.05,
+        #   max_boxes_to_draw=10,
+        #   use_normalized_coordinates=True,
+        #   line_thickness=4)
+        # out_file = os.path.join(out_dir, '%05d.jpg'%i)
+        # image = Image.fromarray(image_np)
+        # image.save(out_file)
         # print output_dict['num_detections'], output_dict['detection_classes']
+
+      out_boxes = np.array(out_boxes, dtype=np.float32)
+      out_classes = np.array(out_classes, dtype=np.uint8)
+      out_scores = np.array(out_scores, dtype=np.float32)
+      out_file = out_dir + '.npy'
+      np.save(out_file, out_scores)
 
 
 def prepare_pseudo_tfrecord():
