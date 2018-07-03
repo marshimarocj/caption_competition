@@ -396,7 +396,7 @@ def prepare_for_matlab():
           y = box[0]
           w = box[3]-box[1]
           h = box[2]-box[0]
-          if x < img_w / 10. and y < img_h / 10.:
+          if w < img_w / 10. or h < img_h / 10.:
             continue
           fout.write('%d %d %d %d\n'%(x, y, w, h))
 
