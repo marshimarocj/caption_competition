@@ -356,8 +356,11 @@ def bat_detect_obj():
       out_frames = []
       for i in range(len(gif)):
         if i % gap < 3:
-          if gif[i].shape[2] == 4:
+          if len(gif[i].shape) == 3:
             img = gif[i][:, :, :3]
+          else:
+            img = np.expand_dims(gif[i], 2)
+
           img = Image.fromarray(img)
           img = img.convert('RGB')
           img_np = load_image_into_numpy_array(img)
