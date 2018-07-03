@@ -387,7 +387,7 @@ def prepare_for_matlab():
       all_boxes = np.concatenate(all_boxes, 0)
       boxes = non_max_suppression_fast(all_boxes, 0.75)
 
-      out_file = os.path.join(obj_detect_dir, name + '.%.box'%f)
+      out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
       with open(out_file, 'w') as fout:
         for box in boxes:
           x = box[1]
