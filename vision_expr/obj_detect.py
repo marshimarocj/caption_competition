@@ -340,8 +340,15 @@ def bat_detect_obj():
   cnt = 0
   with tf.Session(graph=detection_graph) as sess:
     for name in names:
+      cnt += 1
+      if cnt % 100 == 0:
+        print cnt
+
       gif_file = os.path.join(gif_dir, name + '.gif')
       gif = imageio.mimread(gif_file)
+      out_file = os.path.join(out_dir, name + '.npz')
+      if os.path.exists(out_file):
+        continue
 
       out_boxes = []
       out_classes = []
@@ -349,7 +356,8 @@ def bat_detect_obj():
       out_frames = []
       for i in range(len(gif)):
         if i % gap < 3:
-          img = gif[i][:, :, :3]
+          if gif[i].shape[2] == 4:
+            img = gif[i][:, :, :3]
           img = Image.fromarray(img)
           img = img.convert('RGB')
           img_np = load_image_into_numpy_array(img)
@@ -362,13 +370,8 @@ def bat_detect_obj():
       out_boxes = np.array(out_boxes, dtype=np.float32)
       out_classes = np.array(out_classes, dtype=np.uint8)
       out_scores = np.array(out_scores, dtype=np.float32)
-      out_file = os.path.join(out_dir, name + '.npz')
       np.savez_compressed(out_file, 
         scores=out_scores, boxes=out_boxes, classes=out_classes, frames=out_frames)
-
-      cnt += 1
-      if cnt % 100 == 0:
-        print cnt
 
 
 # def prepare_pseudo_tfrecord():
