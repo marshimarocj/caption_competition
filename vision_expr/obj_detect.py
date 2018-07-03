@@ -4,6 +4,7 @@ import subprocess
 import tensorflow as tf
 import numpy as np
 import imageio
+from PIL import Image
 
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
@@ -345,19 +346,25 @@ def bat_detect_obj():
       out_boxes = []
       out_classes = []
       out_scores = []
+      out_frames = []
       for i in range(len(gif)):
         if i % gap < 3:
           img = gif[i][:, :, :3]
+          img = Image.fromarray(img)
+          img = img.convert('RGB')
+          img_np = load_image_into_numpy_array(img)
           output_dict = run_inference_for_single_image(
-            image_tensor, tensor_dict, img, sess)
+            image_tensor, tensor_dict, img_np, sess)
           out_boxes.append(output_dict['detection_boxes'])
           out_classes.append(output_dict['detection_classes'])
           out_scores.append(output_dict['detection_scores'])
+          out_frames.append(i)
       out_boxes = np.array(out_boxes, dtype=np.float32)
       out_classes = np.array(out_classes, dtype=np.uint8)
       out_scores = np.array(out_scores, dtype=np.float32)
       out_file = os.path.join(out_dir, name + '.npz')
-      np.savez_compressed(out_file, scores=out_scores, boxes=out_boxes, classes=out_classes)
+      np.savez_compressed(out_file, 
+        scores=out_scores, boxes=out_boxes, classes=out_classes, frames=out_frames)
 
       cnt += 1
       if cnt % 100 == 0:
