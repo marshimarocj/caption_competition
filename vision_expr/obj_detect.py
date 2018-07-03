@@ -359,8 +359,6 @@ def bat_detect_obj():
         if i % gap < 3:
           if len(gif[i].shape) == 3:
             img = gif[i][:, :, :3]
-          else:
-            img = np.expand_dims(gif[i], 2)
           print img.shape, img.dtype
 
           img = Image.fromarray(img)
