@@ -373,17 +373,20 @@ def prepare_for_matlab():
 
     num_frame = frame_scores.shape[0]
     for f in range(0, num_frame, 16):
-      out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
-      sort_idxs = np.argsort(-frame_scores[f])
-      valid_idxs = sort_idxs[sort_idxs >= score_threshold]
+      all_boxes = []
+      for i in range(f, min(f+1, num_frame)):
+        out_file = os.path.join(obj_detect_dir, name + '.%d.box'%i)
+        sort_idxs = np.argsort(-frame_scores[f])
+        valid_idxs = sort_idxs[sort_idxs >= score_threshold]
 
-      boxes = frame_boxes[f][valid_idxs]
-      boxes[:, 0] *= img_h
-      boxes[:, 1] *= img_w
-      boxes[:, 2] *= img_h
-      boxes[:, 3] *= img_w
-
-      boxes = non_max_suppression_fast(boxes, 0.5)
+        boxes = frame_boxes[f][valid_idxs]
+        boxes[:, 0] *= img_h
+        boxes[:, 1] *= img_w
+        boxes[:, 2] *= img_h
+        boxes[:, 3] *= img_w
+        all_boxes.append(boxes)
+      all_boxes = np.concatenate(all_boxes, 0)
+      boxes = non_max_suppression_fast(all_boxes, 0.75)
 
       with open(out_file, 'w') as fout:
         for box in boxes:
@@ -399,6 +402,6 @@ def prepare_for_matlab():
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
-  bat_extract_imgs_from_gif()
+  # bat_extract_imgs_from_gif()
   # detect_obj()
-  # prepare_for_matlab()
+  prepare_for_matlab()
