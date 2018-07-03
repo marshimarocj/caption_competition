@@ -165,7 +165,7 @@ def detect_obj():
   category_index = label_map_util.create_category_index(categories)
 
   with tf.Session(graph=detection_graph) as sess:
-    for name in names[2:]:
+    for name in names:
       print name
       img_dir = os.path.join(img_root_dir, name)
       img_names = os.listdir(img_dir)
