@@ -230,7 +230,7 @@ def prepare_pseudo_tfrecord():
       img_dir = os.path.join(img_root_dir, name)
       img_names = os.listdir(img_dir)
       num = len(img_names)
-      for i in range(num):
+      for i in range(10):
         img_file = os.path.join(img_dir, '%05d.jpg'%i)
         with tf.gfile.GFile(img_file, 'rb') as fid:
           encoded_jpg = fid.read()
