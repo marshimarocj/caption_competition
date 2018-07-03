@@ -325,7 +325,7 @@ def prepare_for_matlab():
   ]
   obj_detect_dir = os.path.join(root_dir, 'obj_detect')
 
-  score_threshold = .01
+  score_threshold = .05
 
   for name in names:
     detect_file = os.path.join(obj_detect_dir, name + '.npz')
@@ -356,7 +356,13 @@ def prepare_for_matlab():
 
       with open(out_file, 'w') as fout:
         for box in boxes:
-          fout.write('%d %d %d %d\n'%(box[1], box[0], box[3]-box[1], box[2]-box[0]))
+          x = box[1]
+          y = box[0]
+          w = box[3]-box[1]
+          h = box[2]-box[0]
+          if x < img_w / 10. or y < img_h / 10.:
+            continue
+          fout.write('%d %d %d %d\n'%(x, y, w, h))
 
 
 if __name__ == '__main__':
