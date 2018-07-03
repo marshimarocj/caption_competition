@@ -375,7 +375,7 @@ def prepare_for_matlab():
     for f in range(0, num_frame, 16):
       all_boxes = []
       for i in range(f, min(f+3, num_frame)):
-        sort_idxs = np.argsort(-frame_scores[f])
+        sort_idxs = np.argsort(-frame_scores[i])
         valid_idxs = sort_idxs[sort_idxs >= score_threshold]
 
         boxes = frame_boxes[i][valid_idxs]
