@@ -199,7 +199,7 @@ def detect_obj():
         # image.save(out_file)
         # print output_dict['num_detections'], output_dict['detection_classes']
       image_nps = np.array(image_nps, dtype=np.uint8)
-      output_dict = run_inference_for_single_image(
+      output_dict = run_inference_for_images(
           image_tensor, tensor_dict, image_nps, sess)
       for i in range(num):
         vis_util.visualize_boxes_and_labels_on_image_array(
