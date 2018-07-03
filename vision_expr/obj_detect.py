@@ -280,7 +280,7 @@ def prepare_for_matlab():
 
     img_file = os.path.join(root_dir, 'imgs', name, '00000.jpg')
     img = Image.open(img_file)
-    w, h = img.size()
+    w, h = img.size
 
     num_frame = scores.shape[0]
     for f in range(0, num_frame, 16):
