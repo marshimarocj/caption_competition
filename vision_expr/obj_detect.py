@@ -354,6 +354,7 @@ def bat_detect_obj():
       out_classes = []
       out_scores = []
       out_frames = []
+      print gif_file
       for i in range(len(gif)):
         if i % gap < 3:
           if len(gif[i].shape) == 3:
