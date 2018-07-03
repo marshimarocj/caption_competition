@@ -187,10 +187,12 @@ def extract_imgs_from_gif():
     p.wait()
 
 
-def bat_extract_imgs_from_gif():
+def gen_sh_convert_gif_to_mp4():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
-  out_root_dir = os.path.join(root_dir, 'imgs')
+  out_dir = os.path.join(root_dir, 'mp4')
+
+  split = 8
 
   names = []
   with open(lst_file) as f:
@@ -203,19 +205,24 @@ def bat_extract_imgs_from_gif():
       name, _ = os.path.splitext(name)
       names.append(name)
 
-  cnt = 0
-  for name in names:
-    file = os.path.join(root_dir, 'gif', name + '.gif')
-    out_dir = os.path.join(out_root_dir, name)
-    if not os.path.exists(out_dir):
-      os.mkdir(out_dir)
-    cmd = ['convert', '-coalesce', file, os.path.join(out_dir, '%05d.jpg')]
-    p = subprocess.Popen(cmd)
-    p.wait()
+  gap = (len(names) + split - 1) / split
 
-    cnt += 1
-    if cnt % 100 == 0:
-      print cnt
+  for s in range(split):
+    with open('%d.sh'%s, 'w') as fout:
+      for name in names:
+        file = os.path.join(root_dir, 'gif', name + '.gif')
+        out_file = os.path.join(out_root_dir, name + '.mp4')
+        if not os.path.exists(out_dir):
+          os.mkdir(out_dir)
+        # cmd = ['convert', '-coalesce', file, os.path.join(out_dir, '%05d.jpg')]
+        cmd = [
+          'ffmpeg', '-i', file, 
+          '-movflags', 'faststart', 
+          '-pix_fmt', 'yuv420p', 
+          '-vf', '"scale=trunc(iw/2)*2:trunc(ih/2)*2"',
+          out_file
+        ]
+        fout.write(' '.join(cmd) + '\n')
 
 
 def detect_obj():
@@ -404,6 +411,6 @@ def prepare_for_matlab():
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
-  # bat_extract_imgs_from_gif()
+  gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  prepare_for_matlab()
+  # prepare_for_matlab()
