@@ -278,6 +278,10 @@ def prepare_for_matlab():
     classes = data['classes']
     scores = data['score']
 
+    img_file = os.path.join(root_dir, 'imgs', name, '00000.jpg')
+    img = Image(img_file)
+    w, h = img.size()
+
     num_frame = scores.shape[0]
     for f in range(0, num_frame, 16):
       out_file = os.path.join(obj_detect_dir, name + '.%d.box'%f)
@@ -289,10 +293,10 @@ def prepare_for_matlab():
             break
           c = classes[f][idx]
           box = boxes[f][idx]
-          xmin = int(round(box[1]))
-          ymin = int(round(box[0]))
-          w = int(round(box[3] - box[1]))
-          h = int(round(box[2] - box[0]))
+          xmin = int(round(box[1]*w))
+          ymin = int(round(box[0]*h))
+          w = int(round((box[3] - box[1])*w))
+          h = int(round((box[2] - box[0])*h))
           fout.write('%d %d %d %d %d\n'%(xmin, ymin, w, h, c))
 
 
