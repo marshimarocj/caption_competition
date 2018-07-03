@@ -352,7 +352,7 @@ def prepare_for_matlab():
       boxes[:, 2] *= img_h
       boxes[:, 3] *= img_w
 
-      boxes = non_max_suppression_fast(boxes, 0.5)
+      boxes = non_max_suppression_fast(boxes, 0.7)
 
       with open(out_file, 'w') as fout:
         for box in boxes:
