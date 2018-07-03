@@ -190,6 +190,7 @@ def extract_imgs_from_gif():
 def bat_extract_imgs_from_gif():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  out_root_dir = os.path.join(root_dir, 'imgs')
 
   names = []
   with open(lst_file) as f:
