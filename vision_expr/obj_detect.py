@@ -55,7 +55,7 @@ def run_inference_for_single_image(image_tensor, tensor_dict, image, sess):
 
 def run_inference_for_images(image_tensor, tensor_dict, images, sess):
   output_dict = sess.run(tensor_dict,
-                         feed_dict={image_tensor: np.expand_dims(image, 0)})
+                         feed_dict={image_tensor: images})
 
   # all outputs are float32 numpy arrays, so convert types as appropriate
   output_dict['num_detections'] = [int(d) for d in output_dict['num_detections']]
