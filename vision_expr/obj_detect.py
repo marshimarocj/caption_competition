@@ -345,6 +345,8 @@ def bat_detect_obj():
         print cnt
 
       gif_file = os.path.join(gif_dir, name + '.gif')
+      if not os.path.exists(gif_file):
+        continue
       gif = imageio.mimread(gif_file)
       out_file = os.path.join(out_dir, name + '.npz')
       if os.path.exists(out_file):
@@ -354,14 +356,12 @@ def bat_detect_obj():
       out_classes = []
       out_scores = []
       out_frames = []
-      print gif_file
       for i in range(len(gif)):
         if i % gap < 3:
           if len(gif[i].shape) == 3:
             img = gif[i][:, :, :3]
           else:
             img = gif[i]
-          print img.shape, img.dtype
 
           img = Image.fromarray(img)
           img = img.convert('RGB')
