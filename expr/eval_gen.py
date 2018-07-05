@@ -88,17 +88,21 @@ def eval(predict_file, groundtruth_file):
 '''
 def predict_eval():
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
-  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
   # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
   # python_file = '../gen_driver/vevd.py'
   # gpuid = 0
 
-  model_name = 'self_critique_expr/i3d_resnet200.512.512.lstm'
-  python_file = '../gen_driver/self_critique.py'
+  # model_name = 'self_critique_expr/i3d_resnet200.512.512.lstm'
+  # python_file = '../gen_driver/self_critique.py'
+  # gpuid = 0
+
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
+  python_file = '../gen_driver/diversity.py'
   gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
