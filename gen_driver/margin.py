@@ -85,7 +85,7 @@ if __name__ == '__main__':
     m = gen_model.margin.Model(model_cfg)
 
     path_cfg.predict_file = os.path.join(
-      path_cfg.output_dir, 'pred', '%s-%d.1.5.%s.json'%(out_name, opts.best_epoch, model_cfg.search_strategy))
+      path_cfg.output_dir, 'pred', '%s-%d.1.5.beam.json'%(out_name, opts.best_epoch))
     trntst = gen_model.margin.TrnTst(model_cfg, path_cfg, m)
     trntst.gen_sent_mode = opts.gen_sent_mode
     tst_reader = gen_model.margin.Reader(
