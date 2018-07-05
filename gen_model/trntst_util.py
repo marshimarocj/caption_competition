@@ -86,12 +86,19 @@ def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy):
       captionids, caption_masks = gen_captionid_masks_from_wids(out_wids)
       caption_masks = caption_masks[:, :, 1:]
       norm_log_prob = np.sum(log_probs * caption_masks, axis=-1) / np.sum(caption_masks, axis=-1) # (None, num_sample)
-      idxs = np.argmax(norm_log_prob, axis=1)
 
-      for i in range(captionids.shape[0]):
-        videoid = str(tst_reader.videoids[i+base])
-        caption = trntst.int2str(captionids[i][idxs[i]:idxs[i]+1])[0]
-        videoid2caption[videoid] = caption
+      if trntst.gen_sent_mode == 1:
+        idxs = np.argmax(norm_log_prob, axis=1)
+
+        for i in range(captionids.shape[0]):
+          videoid = str(tst_reader.videoids[i+base])
+          caption = trntst.int2str(captionids[i][idxs[i]:idxs[i]+1])[0]
+          videoid2caption[videoid] = caption
+      else:
+        for i in range(captionids.shape[0]):
+          videoid = str(tst_reader.videoids[i+base])
+          captions = trntst.int2str(captionids[i])
+          videoid2caption[videoid] = zip([float(d) for d in norm_log_prob[i]], captions)
 
       base += captionids.shape[0]
 

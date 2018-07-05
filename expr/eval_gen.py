@@ -148,7 +148,7 @@ def predict_sample():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch,
-    gpuid=gpuid, tst_strategy='sample', tst_num_sample=100, tst_sample_topk=10)
+    gpuid=gpuid, tst_strategy='sample', tst_num_sample=100, tst_sample_topk=10, gen_sent_mode=2)
   p.wait()
 
 
