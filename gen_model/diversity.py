@@ -104,7 +104,7 @@ class Model(framework.model.module.AbstractPGModel):
     ROLL_OUT_WID = 'roll_out_wid'
 
     SAMPLE_OUT_WID = 'sample_out_wid'
-    SAMPLE_LOG_PROB = 'sample_log_prob'
+    LOG_PROB = 'sample_log_prob'
 
   def _set_submods(self):
     return {
@@ -246,7 +246,7 @@ class Model(framework.model.module.AbstractPGModel):
           search_strategy='sample', num_sample=self._config.tst_num_sample, topk=self._config.tst_sample_topk, task='generation')
         return {
           self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
-          self.OutKey.SAMPLE_LOG_PROB: out_ops[decoder.OutKey.LOG_PROB],
+          self.OutKey.LOG_PROB: out_ops[decoder.OutKey.LOG_PROB],
         }
 
     delegate = {
@@ -297,7 +297,7 @@ class Model(framework.model.module.AbstractPGModel):
     elif self._config.tst_strategy == 'sample':
       return {
         self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
-        self.OutKey.SAMPLE_LOG_PROB: self._outputs[self.OutKey.SAMPLE_LOG_PROB],
+        self.OutKey.LOG_PROB: self._outputs[self.OutKey.LOG_PROB],
       }
 
 
