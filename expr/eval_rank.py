@@ -175,6 +175,8 @@ def predict_eval_vevd():
     predicts = np.load(predict_file)
     mir = calc_mir(predicts, vid2gt)
     out.append({'epoch': epoch, 'mir_A': mir})
+  with open(out_file, 'w') as fout:
+    json.dump(out, fout, indent=2)
 
 
 if __name__ == '__main__':
