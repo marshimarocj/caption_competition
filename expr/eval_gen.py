@@ -98,12 +98,13 @@ def predict_eval():
   # gpuid = 0
 
   # model_name = 'self_critique_expr/i3d_resnet200.512.512.lstm'
-  # python_file = '../gen_driver/self_critique.py'
-  # gpuid = 0
+  model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
+  python_file = '../gen_driver/self_critique.py'
+  gpuid = 1
 
-  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
-  python_file = '../gen_driver/diversity.py'
-  gpuid = 0
+  # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
+  # python_file = '../gen_driver/diversity.py'
+  # gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
