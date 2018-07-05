@@ -347,10 +347,10 @@ def bat_detect_obj():
       gif_file = os.path.join(gif_dir, name + '.gif')
       if not os.path.exists(gif_file):
         continue
-      gif = imageio.mimread(gif_file)
       out_file = os.path.join(out_dir, name + '.npz')
       if os.path.exists(out_file):
         continue
+      gif = imageio.mimread(gif_file)
       print name
 
       out_boxes = []
