@@ -174,7 +174,7 @@ def predict_eval_vevd():
       ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name%epoch)
     p.wait()
 
-    predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
+    predict_file = '%s/pred/%s.npy'%(expr_name, out_name%epoch)
     predicts = np.load(predict_file)
     mir = calc_mir(predicts, vid2gt)
     out.append({'epoch': epoch, 'mir_A': mir})
