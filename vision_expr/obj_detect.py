@@ -1,4 +1,5 @@
 import os
+import argparse
 import subprocess
 
 import tensorflow as tf
@@ -309,13 +310,21 @@ def detect_obj():
 
 def bat_detect_obj():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  # root_dir = '/home/jiac/data/tgif' # gpu8
   gif_dir = os.path.join(root_dir, 'gif')
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  # model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
   out_dir = os.path.join(root_dir, 'obj_detect')
 
   NUM_CLASSES = 546
   gap = 16
+  split = 4
+
+  parser = argparse.ArgumentParser()
+  parser.add_argument('chunk', type=int)
+  args = parser.parse_args()
+  chunk = args.chunk
 
   names = []
   with open(lst_file) as f:
@@ -327,6 +336,7 @@ def bat_detect_obj():
       name = url[pos+1:]
       name, _ = os.path.splitext(name)
       names.append(name)
+  split_gap = (len(names) + split - 1) / split
 
   detection_graph = tf.Graph()
   with detection_graph.as_default():
@@ -339,7 +349,7 @@ def bat_detect_obj():
 
   cnt = 0
   with tf.Session(graph=detection_graph) as sess:
-    for name in names:
+    for name in names[chunk*split_gap : (chunk+1)*split_gap]:
       cnt += 1
       if cnt % 100 == 0:
         print cnt
