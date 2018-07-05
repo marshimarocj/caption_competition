@@ -167,7 +167,7 @@ def predict_eval_vevd():
   out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   out = []
   for epoch in range(50):
-    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
       ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name%epoch)
     p.wait()
 
