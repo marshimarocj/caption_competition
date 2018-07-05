@@ -132,5 +132,26 @@ def predict_eval():
     fout.write(str(epoch) + '\t' + content + '\n')
 
 
+def predict_sample():
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
+  python_file = '../gen_driver/diversity.py'
+  gpuid = 0
+
+  log_dir = os.path.join(root_dir, model_name, 'log')
+  pred_dir = os.path.join(root_dir, model_name, 'pred')
+  model_cfg_file = os.path.join(root_dir, model_name + '.model.json')
+  path_cfg_file = os.path.join(root_dir, model_name + '.path.json')
+
+  epoch, cider = select_best_epoch(log_dir)
+
+  p = gen_script_and_run(
+    python_file, model_cfg_file, path_cfg_file, epoch,
+    gpuid=gpuid, tst_strategy='sample', tst_num_sample=100, tst_sample_topk=10)
+  p.wait()
+
+
 if __name__ == '__main__':
-  predict_eval()
+  # predict_eval()
+  predict_sample()
