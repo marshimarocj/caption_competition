@@ -140,6 +140,44 @@ def predict_eval_trecvid17_B():
   print best_epoch, mir_A, mir_B
 
 
+def predict_eval_vevd():
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  ft_names = ['i3d', 'resnet200']
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  out_name = 'val.A.%d'
+  label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+
+  vid2gt = {}
+  with open(label_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      vid = int(data[0])
+      gid = int(data[1])
+      vid2gt[vid] = gid
+
+  expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/vevd_score.py'
+  gpuid = 0
+
+  out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
+  out = []
+  for epoch in range(50):
+    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+      ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name%epoch)
+    p.wait()
+
+    predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
+    predicts = np.load(predict_file)
+    mir = calc_mir(predicts, vid2gt)
+    out.append({'epoch': epoch, 'mir_A': mir})
+
+
 if __name__ == '__main__':
-  report_best_epoch()
+  # report_best_epoch()
   # predict_eval_trecvid17_B()
+  predict_eval_vevd()
