@@ -87,8 +87,8 @@ def prepare_vevd():
 
 
 def prepare_self_critique():
-  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
@@ -102,10 +102,10 @@ def prepare_self_critique():
   dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
 
   params = {
-    'num_epoch': 200,
+    'num_epoch': 100,
     'num_sample': 1,
-    'reward_metric': 'cider',
-    # 'reward_metric': 'bcmr',
+    # 'reward_metric': 'cider',
+    'reward_metric': 'bcmr',
     'alpha': 1.,
 
     'num_step': 30,
