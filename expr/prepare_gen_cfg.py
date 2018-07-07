@@ -143,8 +143,8 @@ def prepare_self_critique():
 
 
 def prepare_diversity():
-  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
-  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
@@ -161,8 +161,8 @@ def prepare_diversity():
   params = {
     'num_step': 30,
     'reward_alpha': .25,
-    # 'reward_metric': 'cider',
-    'reward_metric': 'bcmr',
+    'reward_metric': 'cider',
+    # 'reward_metric': 'bcmr',
     'dim_input': 512,
     'dim_hidden': 512,
     'num_epoch': 100,
@@ -236,8 +236,8 @@ def prepare_margin():
     'num_sample': 5,
     'margin': .1,
     'strategy': 'beam',
-    # 'metric': 'cider',
-    'metric': 'bcmr',
+    'metric': 'cider',
+    # 'metric': 'bcmr',
   }
 
   model_cfg = gen_model.margin.gen_cfg(**params)
@@ -270,6 +270,6 @@ def prepare_margin():
 
 if __name__ == '__main__':
   # prepare_vevd()
-  prepare_self_critique()
-  # prepare_diversity()
+  # prepare_self_critique()
+  prepare_diversity()
   # prepare_margin()
