@@ -1,4 +1,5 @@
 import os
+import math
 
 import numpy as np
 import mosek
@@ -48,6 +49,7 @@ def graph_match_rerank():
 
   for pred_file, out_file in zip(pred_files, out_files):
     predicts = np.load(pred_file)
+    predicts = np.exp(predicts)
     num_video, num_caption = predicts.shape
 
     with mosek.Env() as env:
@@ -139,11 +141,11 @@ def eval_rerank():
 
   alphas = [.5, .7, .9]
   for alpha in alphas:
-    combined_predicts = (1 - alpha) * predicts + alpha * rerank_predicts
+    combined_predicts = (1 - alpha) * np.exp(predicts) + alpha * rerank_predicts
     combined_mir = eval_rank.calc_mir(combined_predicts, vid2gt)
     print alpha, combined_mir
 
 
 if __name__ == '__main__':
-  # graph_match_rerank()
-  eval_rerank()
+  graph_match_rerank()
+  # eval_rerank()
