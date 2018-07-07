@@ -88,9 +88,9 @@ def eval(predict_file, groundtruth_file):
 '''
 def predict_eval():
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
-  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
   # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
@@ -103,12 +103,13 @@ def predict_eval():
   # gpuid = 1
 
   # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
-  # python_file = '../gen_driver/diversity.py'
-  # gpuid = 0
-
-  model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
-  python_file = '../gen_driver/margin.py'
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
+  python_file = '../gen_driver/diversity.py'
   gpuid = 0
+
+  # model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
+  # python_file = '../gen_driver/margin.py'
+  # gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
@@ -153,5 +154,5 @@ def predict_sample():
 
 
 if __name__ == '__main__':
-  # predict_eval()
-  predict_sample()
+  predict_eval()
+  # predict_sample()
