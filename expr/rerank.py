@@ -135,17 +135,18 @@ def eval_rerank():
       vid2gt[vid] = gt
 
   predicts = np.load(pred_files[0])
+  predicts = np.exp(predicts)
   rerank_predicts = np.load(pred_files[1])
   mir = eval_rank.calc_mir(predicts, vid2gt)
   print mir
 
   alphas = [.5, .7, .9]
   for alpha in alphas:
-    combined_predicts = (1 - alpha) * np.exp(predicts) + alpha * rerank_predicts
+    combined_predicts = (1 - alpha) * predicts + alpha * rerank_predicts
     combined_mir = eval_rank.calc_mir(combined_predicts, vid2gt)
     print alpha, combined_mir
 
 
 if __name__ == '__main__':
-  graph_match_rerank()
-  # eval_rerank()
+  # graph_match_rerank()
+  eval_rerank()
