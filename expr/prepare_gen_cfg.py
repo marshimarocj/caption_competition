@@ -87,8 +87,8 @@ def prepare_vevd():
 
 
 def prepare_self_critique():
-  # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  root_dir = '/data1/jiac/trecvid2018/generation' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
@@ -104,8 +104,8 @@ def prepare_self_critique():
   params = {
     'num_epoch': 200,
     'num_sample': 1,
-    # 'reward_metric': 'cider',
-    'reward_metric': 'bcmr',
+    'reward_metric': 'cider',
+    # 'reward_metric': 'bcmr',
     'alpha': 1.,
 
     'num_step': 30,
@@ -270,6 +270,6 @@ def prepare_margin():
 
 if __name__ == '__main__':
   # prepare_vevd()
-  # prepare_self_critique()
+  prepare_self_critique()
   # prepare_diversity()
-  prepare_margin()
+  # prepare_margin()
