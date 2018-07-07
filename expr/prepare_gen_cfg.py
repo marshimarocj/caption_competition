@@ -271,5 +271,5 @@ def prepare_margin():
 if __name__ == '__main__':
   # prepare_vevd()
   # prepare_self_critique()
-  prepare_diversity()
-  # prepare_margin()
+  # prepare_diversity()
+  prepare_margin()
