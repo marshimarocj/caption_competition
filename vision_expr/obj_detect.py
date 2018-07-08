@@ -6,7 +6,6 @@ import subprocess
 import numpy as np
 import imageio
 from PIL import Image
-import cv2
 
 # from object_detection.utils import ops as utils_ops
 # from object_detection.utils import label_map_util
@@ -604,10 +603,10 @@ def prepare_lst_for_matlab():
         continue
 
       video_file = os.path.join(video_dir, name + '.mp4')
-      vr = cv2.VideoCapture(video_file)
-      num_frame = int(vr.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
-      print name, num_frame
+      vid = imageio.get_reader(video_file, 'ffmpeg')
+      num_frame = vid.get_length()
       if num_frame == 0:
+        print name, num_frame
         continue
 
       data = np.load(detect_file)
