@@ -501,7 +501,7 @@ def bat_prepare_for_matlab():
   detect_dir = os.path.join(root_dir, 'obj_detect')
 
   chunk = 0
-  score_threshold = .05
+  score_threshold = .01
   split = 4
   gap = 16
 
@@ -554,11 +554,11 @@ def bat_prepare_for_matlab():
       sort_idxs = np.argsort(all_scores)
       all_boxes = all_boxes[sort_idxs]
       suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
-      print all_boxes.shape, suppressed_boxes.shape
+      # print all_boxes.shape, suppressed_boxes.shape
 
       out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
-        for box in suppressed_boxes:
+        for box in suppressed_boxes[::-1]:
           x = box[1]
           y = box[0]
           w = box[3]-box[1]
