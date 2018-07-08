@@ -600,6 +600,8 @@ def prepare_lst_for_matlab():
         continue
 
       data = np.load(detect_file)
+      if 'scores' not in data:
+        continue
       scores = data['scores']
       num = scores.shape[0]
       num = (num + 2) / 3
