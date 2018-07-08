@@ -553,7 +553,7 @@ def bat_prepare_for_matlab():
       sort_idxs = np.argsort(-all_scores)
       all_boxes = all_boxes[sort_idxs]
       all_boxes = non_max_suppression_fast(all_boxes, 0.75)
-      print all_boxes
+      # print all_boxes
 
       out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
@@ -563,7 +563,8 @@ def bat_prepare_for_matlab():
           w = box[3]-box[1]
           h = box[2]-box[0]
           if w < img_w / 10. or h < img_h / 10.:
-            fout.write('%d %d %d %d\n'%(x, y, w, h))
+            continue
+          fout.write('%d %d %d %d\n'%(x, y, w, h))
 
 
 if __name__ == '__main__':
