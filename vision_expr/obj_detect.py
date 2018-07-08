@@ -517,12 +517,13 @@ def bat_prepare_for_matlab():
       names.append(name)
   split_gap = (len(names) + split - 1) / split
 
+  cnt = 0
   for name in names[chunk*split_gap : (chunk+1)*split_gap]:
   # for name in names[:5]:
     detect_file = os.path.join(detect_dir, name + '.npz')
     if not os.path.exists(detect_file):
       continue
-    print name
+    # print name
 
     gif_file = os.path.join(gif_dir, name + '.gif')
     gif = imageio.mimread(gif_file, memtest=False)
@@ -566,6 +567,9 @@ def bat_prepare_for_matlab():
           if w < img_w / 10. or h < img_h / 10.:
             continue
           fout.write('%d %d %d %d\n'%(x, y, w, h))
+    cnt += 1
+    if cnt % 1000 == 0:
+      print cnt
 
 
 if __name__ == '__main__':
