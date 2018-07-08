@@ -500,7 +500,7 @@ def bat_prepare_for_matlab():
   detect_dir = os.path.join(root_dir, 'obj_detect')
 
   chunk = 0
-  score_threshold = .025
+  score_threshold = .05
   split = 4
   gap = 16
 
@@ -540,7 +540,7 @@ def bat_prepare_for_matlab():
       all_boxes = []
       all_scores = []
       for j in range(min(i+3, num)):
-        valid_idxs = scores[j] > score_threshold
+        valid_idxs = scores[j] >= score_threshold
         valid_boxes = boxes[j][valid_idxs]
         valid_boxes[:, 0] *= img_h
         valid_boxes[:, 1] *= img_w
