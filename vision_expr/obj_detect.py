@@ -547,7 +547,7 @@ def bat_prepare_for_matlab():
         valid_boxes[:, 2] *= img_h
         valid_boxes[:, 3] *= img_w
         all_boxes.append(valid_boxes)
-        all_scores.append(scores[i][valid_idxs])
+        all_scores.append(scores[j][valid_idxs])
       all_boxes = np.concatenate(all_boxes, 0)
       all_scores = np.concatenate(all_scores)
       sort_idxs = np.argsort(-all_scores)
