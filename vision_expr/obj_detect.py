@@ -604,7 +604,7 @@ def prepare_lst_for_matlab():
         continue
 
       video_file = os.path.join(video_dir, name + '.mp4')
-      vr = cv2.VideoReader(video_file)
+      vr = cv2.VideoCapture(video_file)
       num_frame = int(vr.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
       if num_frame == 0:
         continue
