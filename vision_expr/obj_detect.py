@@ -6,7 +6,6 @@ import tensorflow as tf
 import numpy as np
 import imageio
 from PIL import Image
-import cv2
 
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
