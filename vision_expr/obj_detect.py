@@ -552,12 +552,12 @@ def bat_prepare_for_matlab():
       all_scores = np.concatenate(all_scores)
       sort_idxs = np.argsort(all_scores)
       all_boxes = all_boxes[sort_idxs]
-      all_boxes = non_max_suppression_fast(all_boxes, 0.75)
-      # print all_boxes.shape
+      suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
+      print all_boxes.shape, suppressed_boxes.shape
 
       out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
-        for box in all_boxes:
+        for box in suppressed_boxes:
           x = box[1]
           y = box[0]
           w = box[3]-box[1]
