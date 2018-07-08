@@ -90,6 +90,7 @@ def non_max_suppression_fast(boxes, overlapThresh):
   # boxes by the bottom-right y-coordinate of the bounding box
   area = (x2 - x1 + 1) * (y2 - y1 + 1)
   # idxs = np.argsort(y2)
+  idxs = np.array(range(y2.shape[0]), dtype=np.int32)
  
   # keep looping while some indexes still remain in the indexes
   # list
