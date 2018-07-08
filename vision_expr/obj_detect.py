@@ -605,7 +605,7 @@ def prepare_lst_for_matlab():
       video_file = os.path.join(video_dir, name + '.mp4')
       vid = imageio.get_reader(video_file, 'ffmpeg')
       num_frame = vid.get_length()
-      if num_frame == 0:
+      if num_frame < 5:
         print name, num_frame
         continue
 
