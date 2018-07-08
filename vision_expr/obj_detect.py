@@ -539,7 +539,7 @@ def bat_prepare_for_matlab():
     for i in range(0, num, 3):
       all_boxes = []
       all_scores = []
-      for j in range(min(i+3, num)):
+      for j in range(i, min(i+3, num)):
         valid_idxs = scores[j] >= score_threshold
         valid_boxes = boxes[j][valid_idxs]
         valid_boxes[:, 0] *= img_h
