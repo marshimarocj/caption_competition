@@ -502,6 +502,7 @@ def bat_prepare_for_matlab():
   chunk = 0
   score_threshold = .05
   split = 4
+  gap = 16
 
   names = []
   with open(lst_file) as f:
@@ -516,7 +517,7 @@ def bat_prepare_for_matlab():
   split_gap = (len(names) + split - 1) / split
 
   # for name in names[chunk*split_gap : (chunk+1)*split_gap]:
-  for name in names[:10]:
+  for name in names[:5]:
     detect_file = os.path.join(detect_dir, name + '.npz')
     if not os.path.exists(detect_file):
       continue
@@ -552,8 +553,9 @@ def bat_prepare_for_matlab():
       sort_idxs = np.argsort(-all_scores)
       all_boxes = all_boxes[sort_idxs]
       all_boxes = non_max_suppression_fast(all_boxes, 0.75)
+      print all_boxes
 
-      out_file = os.path.join(out_dir, '%d.box'%i)
+      out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
         for box in all_boxes:
           x = box[1]
