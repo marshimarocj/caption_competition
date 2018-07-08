@@ -493,10 +493,79 @@ def prepare_for_matlab():
           fout.write('%d %d %d %d\n'%(x, y, w, h))
 
 
+def bat_prepare_for_matlab():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  gif_dir = os.path.join(root_dir, 'gif')
+  detect_dir = os.path.join(root_dir, 'obj_detect')
+
+  chunk = 0
+  score_threshold = .05
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+  split_gap = (len(names) + split - 1) / split
+
+  # for name in names[chunk*split_gap : (chunk+1)*split_gap]:
+  for name in names[:10]:
+    detect_file = os.path.join(detect_dir, name + '.npz')
+    if not os.path.exists(out_file):
+      continue
+
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    gif = imageio.mimread(gif_file, memtest=False)
+    img_h, img_w, _ = gif[0].shape
+
+    out_dir = os.path.join(detect_dir, name)
+    if not os.path.exists(out_dir):
+      os.mkdir(out_dir)
+
+    data = np.load(detect_file)
+    boxes = data['boxes']
+    scores = data['scores']
+    num = boxes.shape[0]
+    for i in range(0, num, 3):
+      all_boxes = []
+      all_scores = []
+      for j in range(min(i+3, num)):
+        valid_idxs = scores[j] > score_threshold
+        valid_boxes = boxes[j][valid_idxs]
+        valid_boxes[:, 0] *= img_h
+        valid_boxes[:, 1] *= img_w
+        valid_boxes[:, 2] *= img_h
+        valid_boxes[:, 3] *= img_w
+        all_boxes.append(valid_boxes)
+        all_scores.append(scores[i][valid_idxs])
+      all_boxes = np.concatenate(all_boxes, 0)
+      all_scores = np.concatenate(all_scores)
+      sort_idxs = np.argsort(-all_scores)
+      all_boxes = all_boxes[sort_idxs]
+      all_boxes = non_max_suppression_fast(all_boxes, 0.75)
+
+      out_file = os.path.join(out_dir, '%d.box'%i)
+      with open(out_file, 'w') as fout:
+        for box in all_boxes:
+          x = box[1]
+          y = box[0]
+          w = box[3]-box[1]
+          h = box[2]-box[0]
+          if w < img_w / 10. or h < img_h / 10.:
+            fout.write('%d %d %d %d\n'%(x, y, w, h))
+
+
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  bat_detect_obj()
+  # bat_detect_obj()
   # prepare_for_matlab()
+  bat_prepare_for_matlab()
