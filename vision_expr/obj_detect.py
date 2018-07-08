@@ -520,11 +520,12 @@ def bat_prepare_for_matlab():
     detect_file = os.path.join(detect_dir, name + '.npz')
     if not os.path.exists(detect_file):
       continue
+    print name
 
     gif_file = os.path.join(gif_dir, name + '.gif')
     gif = imageio.mimread(gif_file, memtest=False)
-    print gif[0].shape
-    img_h, img_w, _ = gif[0].shape
+    img_h = gif[0].shape[0]
+    img_w = gif[0].shape[1]
 
     out_dir = os.path.join(detect_dir, name)
     if not os.path.exists(out_dir):
