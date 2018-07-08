@@ -518,7 +518,7 @@ def bat_prepare_for_matlab():
   # for name in names[chunk*split_gap : (chunk+1)*split_gap]:
   for name in names[:10]:
     detect_file = os.path.join(detect_dir, name + '.npz')
-    if not os.path.exists(out_file):
+    if not os.path.exists(detect_file):
       continue
 
     gif_file = os.path.join(gif_dir, name + '.gif')
