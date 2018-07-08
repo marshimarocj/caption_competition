@@ -535,6 +535,8 @@ def bat_prepare_for_matlab():
       os.mkdir(out_dir)
 
     data = np.load(detect_file)
+    if 'scores' not in data:
+      continue
     boxes = data['boxes']
     scores = data['scores']
     num = boxes.shape[0]
@@ -615,5 +617,5 @@ if __name__ == '__main__':
   # detect_obj()
   # bat_detect_obj()
   # prepare_for_matlab()
-  # bat_prepare_for_matlab()
-  prepare_lst_for_matlab()
+  bat_prepare_for_matlab()
+  # prepare_lst_for_matlab()
