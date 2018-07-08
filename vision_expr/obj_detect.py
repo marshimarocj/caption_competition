@@ -523,6 +523,7 @@ def bat_prepare_for_matlab():
 
     gif_file = os.path.join(gif_dir, name + '.gif')
     gif = imageio.mimread(gif_file, memtest=False)
+    print gif[0].shape
     img_h, img_w, _ = gif[0].shape
 
     out_dir = os.path.join(detect_dir, name)
