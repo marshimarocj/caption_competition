@@ -500,7 +500,7 @@ def bat_prepare_for_matlab():
   detect_dir = os.path.join(root_dir, 'obj_detect')
 
   chunk = 0
-  score_threshold = .01
+  score_threshold = .05
   split = 4
   gap = 16
 
