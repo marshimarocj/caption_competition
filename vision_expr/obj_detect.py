@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np
 import imageio
 from PIL import Image
+import cv2
 
 from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
@@ -572,6 +573,40 @@ def bat_prepare_for_matlab():
       print cnt
 
 
+def prepare_lst_for_matlab():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  detect_dir = os.path.join(root_dir, 'obj_detect')
+  out_file = os.path.join(root_dir, 'split.0.lst')
+
+  chunk = 0
+  split = 4
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+  split_gap = (len(names) + split - 1) / split
+
+  with open(out_file, 'w') as fout:
+    for name in names[chunk*split_gap : (chunk+1)*split_gap]:
+      detect_file = os.path.join(detect_dir, name + '.npz')
+      if not os.path.exists(detect_file):
+        continue
+
+      data = np.load(detect_file)
+      scores = data['scores']
+      num = scores.shape[0]
+      num = (num + 2) / 3
+      fout.write('%s %d\n'%(name, num))
+
+
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
@@ -579,4 +614,5 @@ if __name__ == '__main__':
   # detect_obj()
   # bat_detect_obj()
   # prepare_for_matlab()
-  bat_prepare_for_matlab()
+  # bat_prepare_for_matlab()
+  prepare_lst_for_matlab()
