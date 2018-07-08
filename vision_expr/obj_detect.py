@@ -2,15 +2,16 @@ import os
 import argparse
 import subprocess
 
-import tensorflow as tf
+# import tensorflow as tf
 import numpy as np
 import imageio
 from PIL import Image
+import cv2
 
-from object_detection.utils import ops as utils_ops
-from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
-from object_detection.utils import dataset_util
+# from object_detection.utils import ops as utils_ops
+# from object_detection.utils import label_map_util
+# from object_detection.utils import visualization_utils as vis_util
+# from object_detection.utils import dataset_util
 
 
 '''func
@@ -577,6 +578,7 @@ def bat_prepare_for_matlab():
 def prepare_lst_for_matlab():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  video_dir = os.path.join(root_dir, 'mp4')
   detect_dir = os.path.join(root_dir, 'obj_detect')
   out_file = os.path.join(root_dir, 'split.0.lst')
 
@@ -601,6 +603,12 @@ def prepare_lst_for_matlab():
       if not os.path.exists(detect_file):
         continue
 
+      video_file = os.path.join(video_dir, name + '.mp4')
+      vr = cv2.VideoReader(video_file)
+      num_frame = int(vr.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
+      if num_frame == 0:
+        continue
+
       data = np.load(detect_file)
       if 'scores' not in data:
         continue
@@ -617,5 +625,5 @@ if __name__ == '__main__':
   # detect_obj()
   # bat_detect_obj()
   # prepare_for_matlab()
-  bat_prepare_for_matlab()
-  # prepare_lst_for_matlab()
+  # bat_prepare_for_matlab()
+  prepare_lst_for_matlab()
