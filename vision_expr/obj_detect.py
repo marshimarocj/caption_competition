@@ -501,6 +501,7 @@ def bat_prepare_for_matlab():
 
   chunk = 0
   score_threshold = .05
+  split = 4
 
   names = []
   with open(lst_file) as f:
