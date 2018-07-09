@@ -630,11 +630,11 @@ def viz_tracking():
   viz_dir = os.path.join(root_dir, 'viz')
 
   colormap = [ # rgb
-    [228,26,28],
-    [55,126,184],
-    [77,175,74],
-    [152,78,163],
-    [255,127,0],
+    [228,26,28][::-1],
+    [55,126,184][::-1],
+    [77,175,74][::-1],
+    [152,78,163][::-1],
+    [255,127,0][::-1],
   ]
   gap = 16
 
@@ -678,11 +678,12 @@ def viz_tracking():
           w = int(w)
           h = int(h)
           new_canvas = canvas.copy()
-          cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)][::-1], 2);
+          cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
           score = scores[j, i]
           canvas = canvas * (1. - score) + score * new_canvas
         canvas = canvas[:, :, ::-1]
         canvas = canvas.astype(np.uint8)
+        canvas = np.array(canvas, order='F')
         out_imgs.append(canvas)
         frame += 1
 
