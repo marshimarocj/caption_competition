@@ -229,7 +229,7 @@ def viz_kcf_tracking():
           x, y, w, h = all_bboxs[j][i]
           new_canvas = canvas.copy()
           cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
-          score = scores[j][i]
+          score = all_scores[j][i]
           canvas = canvas * (1. - score) + score * new_canvas
           canvas = canvas.astype(np.uint8)
         canvas = canvas[:, :, ::-1] # rgb
