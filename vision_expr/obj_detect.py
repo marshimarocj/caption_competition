@@ -396,7 +396,7 @@ def bat_detect_obj():
         scores=out_scores, boxes=out_boxes, classes=out_classes, frames=out_frames)
 
 
-def prepare_for_matlab():
+def prepare_for_track():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   names = [
     'tumblr_nd746k9J5Q1qbx0eko1_500',
@@ -463,7 +463,8 @@ def bat_prepare_for_track():
   chunk = 0
   score_threshold = .01
   split = 4
-  gap = 16
+  # gap = 16
+  gap = 8
 
   names = []
   with open(lst_file) as f:
@@ -478,8 +479,8 @@ def bat_prepare_for_track():
   split_gap = (len(names) + split - 1) / split
 
   cnt = 0
-  for name in names[chunk*split_gap : (chunk+1)*split_gap]:
-  # for name in names[:5]:
+  # for name in names[chunk*split_gap : (chunk+1)*split_gap]:
+  for name in names[:100]:
     detect_file = os.path.join(detect_dir, name + '.npz')
     if not os.path.exists(detect_file):
       continue
@@ -497,13 +498,34 @@ def bat_prepare_for_track():
     data = np.load(detect_file)
     if 'scores' not in data:
       continue
-    boxes = data['boxes']
-    scores = data['scores']
-    num = boxes.shape[0]
+    boxes_16 = data['boxes']
+    scores_16 = data['scores']
+
+    detect_file = os.path.join(detect_dir, name + '.8.npz')
+    data = np.load(detect_file)
+    boxes_8 = data['boxes']
+    scores_8 = data['scores']
+
+    num = boxes_16.shape[0] + boxes_8.shape[0]
+    idx_16 = 0
+    idx_8 = 0
     for i in range(0, num, 3):
+      if (i/3)%2 == 0:
+        boxes = boxes_16
+        scores = scores_16
+        start = idx_16
+        end = min(idx_16+3, boxes_16.shape[0])
+        idx_16 = end
+      else:
+        boxes = boxes_8
+        scores = scores_8
+        start = idx_8
+        end = min(idx_8+3, boxes_8.shape[0])
+        idx_8 = end
+
       all_boxes = []
       all_scores = []
-      for j in range(i, min(i+3, num)):
+      for j in range(start, end):
         valid_idxs = scores[j] >= score_threshold
         valid_boxes = boxes[j][valid_idxs]
         valid_boxes[:, 0] *= img_h
@@ -539,6 +561,6 @@ if __name__ == '__main__':
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  bat_detect_obj()
+  # bat_detect_obj()
   # prepare_for_matlab()
-  # bat_prepare_for_matlab()
+  bat_prepare_for_track()
