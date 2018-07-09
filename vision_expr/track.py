@@ -219,7 +219,7 @@ def viz_kcf_tracking():
           all_bboxs.append(bboxs)
           all_scores.append(scores)
       num_rect = len(all_scores)
-      num_frame = len(all_scores[0])
+      num_frame = len(all_scores[0]) if num_rect > 0 else 0
       for i in range(num_frame):
         if frame >= len(gif):
           break
