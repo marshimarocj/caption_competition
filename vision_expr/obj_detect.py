@@ -6,6 +6,7 @@ import subprocess
 import numpy as np
 # import imageio
 # from PIL import Image
+from scipy.io import loadmat
 import cv2
 
 # from object_detection.utils import ops as utils_ops
@@ -621,6 +622,65 @@ def prepare_lst_for_matlab():
       fout.write('%s %d\n'%(name, num))
 
 
+def viz_tracking():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  track_root_dir = os.path.join(root_dir, 'track')
+  gif_dir = os.path.join(root_dir, 'gif')
+  viz_dir = os.path.join(root_dir, 'viz')
+
+  colormap = [ # rgb
+    [166,206,227],
+    [31,120,180],
+    [178,223,138],
+    [51,160,44],
+    [251,154,153],
+    [227,26,28],
+    [253,191,111],
+    [255,127,0],
+    [202,178,214],
+    [106,61,154],
+  ]
+  gap = 16
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+
+  for name in names[:10]:
+    gif_file = os.path.join(gid_dir, name + '.gif')
+    gif = imageio.mimread(gif_file, memtest=False)
+
+    track_dir = os.path.join(track_root_dir, name)
+    num = len(os.listdir(track_dir))
+    frame = 0
+    out_imgs = []
+    for i in range(num):
+      track_file = os.path.join(track_dir, '%d.mat'%(i*gap))
+      data = loadmat(track_file)
+      bboxs = data['results']
+      scores = data['scores']
+      num_rect, num_frame = scores.shape
+      for i in range(num_frame):
+        img = gif[frame][:, :, ::-1] # bgr
+        for j in range(num_rect):
+          x, y, w, h = bboxs[j, i]
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%10][::-1], 2);
+        img = img[:, :, ::-1]
+        out_imgs.append(img)
+        frame += 1
+
+    out_file = os.path.join(viz_dir, name + '.gif')
+    imageio.mimsave(out_file, out_imgs)
+
+
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
@@ -629,4 +689,5 @@ if __name__ == '__main__':
   # bat_detect_obj()
   # prepare_for_matlab()
   # bat_prepare_for_matlab()
-  prepare_lst_for_matlab()
+  # prepare_lst_for_matlab()
+  viz_tracking()
