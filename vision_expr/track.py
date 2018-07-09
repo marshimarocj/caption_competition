@@ -150,7 +150,7 @@ def kcf_tracking():
 
   for name, num in name_nums[:100]:
     video_file = os.path.join(video_dir, name + '.mp4')
-    bbox_dir = os.path.join(obj_detect_dir, name)
+    bbox_dir = os.path.join(obj_detect_root_dir, name)
     track_dir = os.path.join(track_root_dir, name)
     if not os.path.exists(track_dir):
       os.mkdir(track_dir)
