@@ -676,7 +676,7 @@ def viz_tracking():
           y = int(y)
           w = int(w)
           h = int(h)
-          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%len(colormap)][::-1], 2);
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
         img = img[:, :, ::-1]
         out_imgs.append(img)
         frame += 1
