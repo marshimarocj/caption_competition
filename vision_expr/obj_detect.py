@@ -668,7 +668,7 @@ def viz_tracking():
       for i in range(num_frame):
         if frame >= len(gif):
           break
-        img = np.asarray(gif[frame][:, :, ::-1], order='C') # bgr
+        img = np.asarray(gif[frame][:, :, ::-1], order='C', dtype=np.uint8) # bgr
         # print type(img), img.shape, img.dtype
         canvas = img.copy()
         for j in range(num_rect):
@@ -683,6 +683,7 @@ def viz_tracking():
           # print colormap[j%len(colormap)]
           score = scores[j, i]
           canvas = canvas * (1. - score) + score * new_canvas
+          canvas = canvas.astype(np.uint8)
         canvas = canvas[:, :, ::-1]
         canvas = canvas.astype(np.uint8)
         out_imgs.append(canvas)
