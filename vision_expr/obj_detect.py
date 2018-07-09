@@ -679,7 +679,7 @@ def viz_tracking():
           h = int(h)
           new_canvas = canvas.copy()
           # cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
-            cv2.rectangle(new_canvas, (x, y), (x+w, y+h), (0, 0, 255), 2);
+          cv2.rectangle(new_canvas, (x, y), (x+w, y+h), (0, 0, 255), 2);
           # print colormap[j%len(colormap)]
           score = scores[j, i]
           canvas = canvas * (1. - score) + score * new_canvas
