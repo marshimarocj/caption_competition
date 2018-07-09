@@ -651,6 +651,8 @@ def viz_tracking():
 
   for name in names[:100]:
     gif_file = os.path.join(gif_dir, name + '.gif')
+    if not os.path.exists(gif_file):
+      continue
     gif = imageio.mimread(gif_file, memtest=False)
     if len(gif[0].shape) < 3:
       continue
