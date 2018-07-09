@@ -670,6 +670,7 @@ def viz_tracking():
       num_rect, num_frame = scores.shape
       for i in range(num_frame):
         img = gif[frame][:, :, ::-1] # bgr
+        print type(img), img.shape, img.dtype
         for j in range(num_rect):
           x, y, w, h = bboxs[j, i]
           cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%10][::-1], 2);
