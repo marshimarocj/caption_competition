@@ -668,7 +668,7 @@ def viz_tracking():
       for i in range(num_frame):
         if frame >= len(gif):
           break
-        img = np.asarray(gif[frame][:, :, :3], order='F', dtype=np.uint8) # bgr
+        img = np.asarray(gif[frame][:, :, :3], dtype=np.uint8) # bgr
         # print type(img), img.shape, img.dtype
         canvas = img[:, :, ::-1].copy()
         for j in range(num_rect):
