@@ -480,7 +480,7 @@ def bat_prepare_for_track():
 
   cnt = 0
   # for name in names[chunk*split_gap : (chunk+1)*split_gap]:
-  for name in names[:100]:
+  for name in names[:5]:
     detect_file = os.path.join(detect_dir, name + '.npz')
     if not os.path.exists(detect_file):
       continue
