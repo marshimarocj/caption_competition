@@ -310,12 +310,12 @@ def detect_obj():
 
 
 def bat_detect_obj():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  # root_dir = '/home/jiac/data/tgif' # gpu8
+  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  root_dir = '/home/jiac/data/tgif' # gpu8
   gif_dir = os.path.join(root_dir, 'gif')
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
-  model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
-  # model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
+  # model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
   out_dir = os.path.join(root_dir, 'obj_detect')
 
   NUM_CLASSES = 546
@@ -396,49 +396,6 @@ def bat_detect_obj():
         scores=out_scores, boxes=out_boxes, classes=out_classes, frames=out_frames)
 
 
-# def prepare_pseudo_tfrecord():
-#   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-#   names = [
-#     'tumblr_nd746k9J5Q1qbx0eko1_500',
-#     'tumblr_ni3zr0kGY71tt0tivo1_250',
-#     'tumblr_npfcfptpJX1u0chl3o1_400',
-#     'tumblr_nbaio6niSJ1s3ksyfo1_400',
-#     'tumblr_m931c6H3Tt1qa4llno1_500',
-#     'tumblr_nfyblj4eZI1rblf33o1_500',
-#     'tumblr_np1az4Cohq1spi58bo1_400',
-#   ]
-#   img_root_dir = os.path.join(root_dir, 'imgs')
-#   out_file = '/home/jiac/data/openimage/pseudo_trn_records/0.record'
-
-#   with tf.python_io.TFRecordWriter(out_file) as writer:
-#     for name in names[:1]:
-#       img_dir = os.path.join(img_root_dir, name)
-#       img_names = os.listdir(img_dir)
-#       num = len(img_names)
-#       for i in range(num):
-#         img_file = os.path.join(img_dir, '%05d.jpg'%i)
-#         with tf.gfile.GFile(img_file, 'rb') as fid:
-#           encoded_jpg = fid.read()
-#         image = Image.open(img_file)
-#         w, h = image.size
-
-#         tf_example = tf.train.Example(features=tf.train.Features(feature={
-#             'image/height': dataset_util.int64_feature(h),
-#             'image/width': dataset_util.int64_feature(w),
-#             'image/filename': dataset_util.bytes_feature(img_file),
-#             'image/source_id': dataset_util.bytes_feature(img_file),
-#             'image/encoded': dataset_util.bytes_feature(encoded_jpg),
-#             'image/format': dataset_util.bytes_feature(b"jpg"),
-#             'image/object/bbox/xmin': dataset_util.float_list_feature([0.]),
-#             'image/object/bbox/xmax': dataset_util.float_list_feature([1.]),
-#             'image/object/bbox/ymin': dataset_util.float_list_feature([0.]),
-#             'image/object/bbox/ymax': dataset_util.float_list_feature([1.]),
-#             'image/object/class/text': dataset_util.bytes_list_feature('Person'),
-#             'image/object/class/label': dataset_util.int64_list_feature([1]),
-#         }))
-#         writer.write(tf_example.SerializeToString())
-
-
 def prepare_for_matlab():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   names = [
@@ -497,7 +454,7 @@ def prepare_for_matlab():
           fout.write('%d %d %d %d\n'%(x, y, w, h))
 
 
-def bat_prepare_for_matlab():
+def bat_prepare_for_track():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   gif_dir = os.path.join(root_dir, 'gif')
