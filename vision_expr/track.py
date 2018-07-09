@@ -8,6 +8,15 @@ from scipy.io import loadmat
 import cv2
 
 
+colormap = [ # bgr
+  [228,26,28][::-1],
+  [55,126,184][::-1],
+  [77,175,74][::-1],
+  [152,78,163][::-1],
+  [255,127,0][::-1],
+]
+
+
 '''func
 '''
 
@@ -65,13 +74,6 @@ def viz_tracking():
   gif_dir = os.path.join(root_dir, 'gif')
   viz_dir = os.path.join(root_dir, 'viz')
 
-  colormap = [ # rgb
-    [228,26,28][::-1],
-    [55,126,184][::-1],
-    [77,175,74][::-1],
-    [152,78,163][::-1],
-    [255,127,0][::-1],
-  ]
   gap = 16
 
   names = []
@@ -106,7 +108,7 @@ def viz_tracking():
       for i in range(num_frame):
         if frame >= len(gif):
           break
-        img = np.asarray(gif[frame][:, :, :3], dtype=np.uint8) # bgr
+        img = np.asarray(gif[frame][:, :, :3], dtype=np.uint8) # rgb
         # print type(img), img.shape, img.dtype
         canvas = img[:, :, ::-1].copy()
         for j in range(num_rect):
@@ -167,7 +169,79 @@ def kcf_tracking():
     p.wait()
 
 
+def viz_kcf_tracking():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+  gif_dir = os.path.join(root_dir, 'gif')
+  viz_dir = os.path.join(root_dir, 'kcf_viz')
+
+  gap = 16
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+
+  for name in names[:100]:
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    if not os.path.exists(gif_file):
+      continue
+    gif = imageio.mimread(gif_file, memtest=False)
+    if len(gif[0].shape) < 3:
+      continue
+
+    track_dir = os.path.join(track_root_dir, name)
+    num = len(os.listdir(track_dir))
+    frame = 0
+    out_imgs = []
+    for i in range(num):
+      track_file = os.path.join(track_dir, '%d.track'%(i*gap))
+      all_bboxs = []
+      all_scores = []
+      with open(track_file) as f:
+        for line in f:
+          line = line.strip()
+          data = line.split(' ')
+          bboxs = []
+          scores = []
+          for i in range(0, len(data), 5):
+            bbox = [int(d) for d in data[i:i+4]]
+            score = float(data[i+4])
+            bboxs.append(bbox)
+            scores.append(score)
+          all_bboxs.append(bboxs)
+          all_scores.append(scores)
+      num_rect = len(all_scores)
+      num_frame = len(all_scores[0])
+      for i in range(num_frame):
+        if frame >= len(gif):
+          break
+        img = np.asarray(gif[frame][:, :, :3], dtype=np.uint8) # rgb
+        canvas = img[:, :, ::-1].copy()
+        for j in range(num_rect):
+          x, y, w, h = all_boxes[j][i]
+          new_canvas = canvas.copy()
+          cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
+          score = scores[j][i]
+          canvas = canvas * (1. - score) + score * new_canvas
+          canvas = canvas.astype(np.uint8)
+        canvas = canvas[:, :, ::-1] # rgb
+        canvas = canvas.astype(np.uint8)
+        out_imgs.append(canvas)
+
+    out_file = os.path.join(viz_dir, name + '.gif')
+    imageio.mimsave(out_file, out_imgs)
+
+
 if __name__ == '__main__':
   # prepare_lst_for_matlab()
   # viz_tracking()
-  kcf_tracking()
+  # kcf_tracking()
+  viz_kcf_tracking()
