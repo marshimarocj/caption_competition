@@ -652,7 +652,7 @@ def viz_tracking():
   for name in names[:10]:
     gif_file = os.path.join(gif_dir, name + '.gif')
     gif = imageio.mimread(gif_file, memtest=False)
-    if len(gif[frame].shape) < 3:
+    if len(gif[0].shape) < 3:
       continue
 
     track_dir = os.path.join(track_root_dir, name)
