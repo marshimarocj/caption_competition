@@ -4,7 +4,7 @@ import subprocess
 
 # import tensorflow as tf
 import numpy as np
-# import imageio
+import imageio
 # from PIL import Image
 from scipy.io import loadmat
 import cv2
