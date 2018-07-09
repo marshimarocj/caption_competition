@@ -310,12 +310,12 @@ def detect_obj():
 
 
 def bat_detect_obj():
-  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  root_dir = '/home/jiac/data/tgif' # gpu8
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  # root_dir = '/home/jiac/data/tgif' # gpu8
   gif_dir = os.path.join(root_dir, 'gif')
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
-  # model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
-  model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
+  model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  # model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
   out_dir = os.path.join(root_dir, 'obj_detect')
 
   NUM_CLASSES = 546
@@ -359,7 +359,7 @@ def bat_detect_obj():
       gif_file = os.path.join(gif_dir, name + '.gif')
       if not os.path.exists(gif_file):
         continue
-      out_file = os.path.join(out_dir, name + '.npz')
+      out_file = os.path.join(out_dir, name + '.8.npz')
       if os.path.exists(out_file):
         continue
       try:
@@ -581,6 +581,6 @@ if __name__ == '__main__':
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  # bat_detect_obj()
+  bat_detect_obj()
   # prepare_for_matlab()
-  bat_prepare_for_matlab()
+  # bat_prepare_for_matlab()
