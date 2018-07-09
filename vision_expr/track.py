@@ -235,6 +235,7 @@ def viz_kcf_tracking():
         canvas = canvas[:, :, ::-1] # rgb
         canvas = canvas.astype(np.uint8)
         out_imgs.append(canvas)
+        frame += 1
 
     out_file = os.path.join(viz_dir, name + '.gif')
     imageio.mimsave(out_file, out_imgs)
