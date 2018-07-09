@@ -630,16 +630,11 @@ def viz_tracking():
   viz_dir = os.path.join(root_dir, 'viz')
 
   colormap = [ # rgb
-    [166,206,227],
-    [31,120,180],
-    [178,223,138],
-    [51,160,44],
-    [251,154,153],
-    [227,26,28],
-    [253,191,111],
+    [228,26,28],
+    [55,126,184],
+    [77,175,74],
+    [152,78,163],
     [255,127,0],
-    [202,178,214],
-    [106,61,154],
   ]
   gap = 16
 
@@ -669,6 +664,8 @@ def viz_tracking():
       scores = data['scores']
       num_rect, num_frame = scores.shape
       for i in range(num_frame):
+        if frame >= len(gif):
+          break
         img = np.asarray(gif[frame][:, :, ::-1], order='C') # bgr
         # print type(img), img.shape, img.dtype
         for j in range(num_rect):
@@ -677,7 +674,7 @@ def viz_tracking():
           y = int(y)
           w = int(w)
           h = int(h)
-          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%10][::-1], 2);
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%len(colormap)][::-1], 2);
         img = img[:, :, ::-1]
         out_imgs.append(img)
         frame += 1
