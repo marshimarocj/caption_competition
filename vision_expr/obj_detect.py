@@ -669,7 +669,7 @@ def viz_tracking():
       scores = data['scores']
       num_rect, num_frame = scores.shape
       for i in range(num_frame):
-        img = np.asarray(gif[frame][:, :, ::-1]) # bgr
+        img = np.asarray(gif[frame][:, :, ::-1], order='C') # bgr
         print type(img), img.shape, img.dtype
         for j in range(num_rect):
           x, y, w, h = bboxs[j, i]
