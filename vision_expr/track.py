@@ -243,6 +243,6 @@ def viz_kcf_tracking():
 
 if __name__ == '__main__':
   # prepare_lst_for_matlab()
-  # viz_tracking()
+  viz_tracking()
   # kcf_tracking()
-  viz_kcf_tracking()
+  # viz_kcf_tracking()
