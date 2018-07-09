@@ -360,8 +360,8 @@ def bat_detect_obj():
       if not os.path.exists(gif_file):
         continue
       out_file = os.path.join(out_dir, name + '.8.npz')
-      if os.path.exists(out_file):
-        continue
+      # if os.path.exists(out_file):
+      #   continue
       try:
         gif = imageio.mimread(gif_file, memtest=False)
       except:
@@ -378,6 +378,7 @@ def bat_detect_obj():
             img = gif[i][:, :, :3]
           else:
             img = gif[i]
+          print i
 
           img = Image.fromarray(img)
           img = img.convert('RGB')
