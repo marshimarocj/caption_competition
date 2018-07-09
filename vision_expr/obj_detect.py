@@ -670,14 +670,19 @@ def viz_tracking():
           break
         img = np.asarray(gif[frame][:, :, ::-1], order='C') # bgr
         # print type(img), img.shape, img.dtype
+        alpha_imgs = [img.copy()]
         for j in range(num_rect):
           x, y, w, h = bboxs[j, i]
           x = int(x)
           y = int(y)
           w = int(w)
           h = int(h)
-          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap[j%len(colormap)][::-1], 2);
+          alpah_imgs.append(img.copy())
+        for i, score in enumerate(scores[:, frame]):
+          img = alpha_imgs[i] * (1. - score)  + alpha_imgs[i+1] * score 
         img = img[:, :, ::-1]
+        img = img.astype(np.uint8)
         out_imgs.append(img)
         frame += 1
 
