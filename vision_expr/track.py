@@ -410,14 +410,12 @@ def generate_tracklet():
       for fid in associate:
         bid = associate[fid]['bid']
         alphas = np.arange(gap) / float(gap-1)
+        alphas = np.expand_dims(alphas, 1)
+        boxes = forward_boxs[fid] * (1. - alphas) + backward_boxs[bid] * alphas
         # boxes = []
         # for alpha in alphas:
         #   boxes.append(forward_boxs[fid, 0] * (1. - alpha) + backward_boxs[bid, -1] * alpha)
         # boxes = np.array(boxes)
-        boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
-        # print forward_boxs[fid]
-        # print backward_boxs[bid]
-        # print boxes
         associate[fid]['boxs'] = boxes
       associates.append(associate)
 
