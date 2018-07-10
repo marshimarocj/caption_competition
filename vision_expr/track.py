@@ -16,6 +16,21 @@ colormap = [ # bgr
   [255,127,0][::-1],
 ]
 
+colormap12 = [
+  [166,206,227][::-1],
+  [31,120,180][::-1],
+  [178,223,138][::-1],
+  [51,160,44][::-1],
+  [251,154,153][::-1],
+  [227,26,28][::-1],
+  [253,191,111][::-1],
+  [255,127,0][::-1],
+  [202,178,214][::-1],
+  [106,61,154][::-1],
+  [255,255,153][::-1],
+  [177,89,40][::-1],
+]
+
 
 '''func
 '''
@@ -431,10 +446,58 @@ def generate_tracklet():
         fout.write('\n')
 
 
+def viz_tracklet():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+  gif_dir = os.path.join(root_dir, 'gif')
+  viz_dir = os.path.join(root_dir, 'kcf_viz')
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      url = line[:pos]
+      pos = url.rfind('/')
+      name = url[pos+1:]
+      name, _ = os.path.splitext(name)
+      names.append(name)
+
+  for name in names[:100]:
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    if not os.path.exists(gif_file):
+      continue
+    gif = imageio.mimread(gif_file, memtest=False)
+    if len(gif[0].shape) < 3:
+      continue
+    out_imgs = []
+    for i in range(len(gif)):
+      out_imgs.append(gif[i][:, :, ::-1])
+
+    track_file = os.path.join(track_root_dir, name, 'merge.track')
+    if not os.path.exists(track_file):
+      continue
+    with open(track_file) as f:
+      for t, line in enumerate(f):
+        line = line.strip()
+        data = line.split(' ')
+        start = int(data[0])
+        boxs = data[1:]
+        for i in range(0, len(boxs), 4):
+          frame = start + i/4
+          x, y, w, h = [int(d) for d in boxs[i:i+4]]
+          img = out_imgs[frame]
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[j%len(colormap12)], 2);
+    out_file = os.path.join(viz_dir, name + '.merge.gif')
+    imageio.mimsave(out_file, out_imgs)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
   # associate_forward_backward()
-  generate_tracklet()
+  # generate_tracklet()
+  viz_tracklet()
