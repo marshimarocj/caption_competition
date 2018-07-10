@@ -411,8 +411,8 @@ def generate_tracklet():
         bid = associate[fid]['bid']
         if fid in bid2buffer:
           boxs = np.concatenate([bid2buffer[fid][1], boxs], 1)
-          del bid2buffer[fid]
           buffers.append({'bid': bid, 'boxs': boxs, 'start': bid2buffer[fid][0]})
+          del bid2buffer[fid]
         else:
           buffers.append({'bid': bid, 'boxs': boxs, 'start': f*8})
       for bid in bid2buffer:
