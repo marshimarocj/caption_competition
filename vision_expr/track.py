@@ -368,6 +368,71 @@ def associate_forward_backward():
           fout.write('%d %d %f\n'%(r, c, iou))
 
 
+def viz_association():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  gif_dir = os.path.join(root_dir, 'gif')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+  gap = 8
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  for name, num_frame in name_frames[:100]:
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    if not os.path.exists(gif_file):
+      continue
+    gif = imageio.mimread(gif_file, memtest=False)
+    if len(gif[0].shape) < 3:
+      continue
+    imgs = []
+    for i in range(len(gif)):
+      img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
+      imgs.append(img[:, :, ::-1].copy())
+
+    track_dir = os.path.join(track_root_dir, name)
+    for frame in range(0, num_frame, gap):
+      associate_file = os.path.join(track_dir, '%d.associate'%frame)
+      if not os.path.exists(associate_file):
+        continue
+
+      with open(associate_file) as f:
+        for line in f:
+          line = line.strip()
+          data = line.split(' ')
+          associate[int(data[0])] = {'bid': int(data[1])}
+
+      forward_file = os.path.join(track_dir, '%d.track'%frame)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%frame)
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, True)
+
+      cnt = 0
+      for fid in associate:
+        bid = associate[fid]['bid']
+        alphas = np.arange(gap) / float(gap-1)
+        alphas = np.expand_dims(alphas, 1)
+        boxes = forward_boxs[fid] * (1. - alphas) + backward_boxs[bid] * alphas
+        for i in range(gap):
+          f = frame + i
+          img = imgs[i]
+          x, y, w, h = [int(d) for d in boxes[f]]
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
+        cnt += 1
+    out_imgs = []
+    for img in imgs:
+      out_imgs.append(img[:, :, ::-1])
+    out_file = os.path.join(viz_dir, name + '.associate.gif')
+    imageio.mimsave(out_file, out_imgs)
+
+
 def generate_tracklet():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'split.0.lst')
@@ -517,4 +582,5 @@ if __name__ == '__main__':
   # viz_kcf_tracking()
   # associate_forward_backward()
   # generate_tracklet()
-  viz_tracklet()
+  # viz_tracklet()
+  viz_association()
