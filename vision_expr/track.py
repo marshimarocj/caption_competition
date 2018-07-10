@@ -406,12 +406,8 @@ def generate_tracklet():
       backward_file = os.path.join(track_dir, '%d.rtrack'%frame)
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, True)
-      forward_valid = forward_scores >= score_threshold
-      forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
-      backward_valid = backward_scores >= score_threshold
-      backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
-      forward_boxs = np.where(forward_valid, forward_boxs, backward_boxs)
-      backward_boxs = np.where(backward_valid, backward_boxs, forward_boxs)
+      # forward_valid = forward_scores >= score_threshold
+      # backward_valid = backward_scores >= score_threshold
 
       for fid in associate:
         bid = associate[fid]['bid']
