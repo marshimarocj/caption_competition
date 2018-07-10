@@ -139,7 +139,7 @@ def kcf_tracking():
   video_dir = os.path.join(root_dir, 'mp4')
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
-  gap = 16
+  gap = 8
 
   name_nums = []
   with open(lst_file) as f:
@@ -163,8 +163,12 @@ def kcf_tracking():
       video_file,
       bbox_dir + '/',
       track_dir + '/',
-      str(num), str(gap),
+      str(num), str(gap), '0',
     ]
+    p = subprocess.Popen(cmd)
+    p.wait()
+
+    cmd[-1] = '1'
     p = subprocess.Popen(cmd)
     p.wait()
 
@@ -243,6 +247,6 @@ def viz_kcf_tracking():
 
 if __name__ == '__main__':
   # prepare_lst_for_matlab()
-  viz_tracking()
-  # kcf_tracking()
+  # viz_tracking()
+  kcf_tracking()
   # viz_kcf_tracking()
