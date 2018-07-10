@@ -471,9 +471,9 @@ def viz_tracklet():
     gif = imageio.mimread(gif_file, memtest=False)
     if len(gif[0].shape) < 3:
       continue
-    out_imgs = []
+    imgs = []
     for i in range(len(gif)):
-      out_imgs.append(gif[i][:, :, ::-1])
+      imgs.append(gif[i][:, :, ::-1])
 
     track_file = os.path.join(track_root_dir, name, 'merge.track')
     if not os.path.exists(track_file):
@@ -487,8 +487,12 @@ def viz_tracklet():
         for i in range(0, len(boxs), 4):
           frame = start + i/4
           x, y, w, h = [int(d) for d in boxs[i:i+4]]
-          img = out_imgs[frame]
+          img = imgs[frame]
           cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[t%len(colormap12)], 2);
+
+    out_imgs = []
+    for img in imgs:
+      out_imgs.append(img[:, :, ::-1])
     out_file = os.path.join(viz_dir, name + '.merge.gif')
     imageio.mimsave(out_file, out_imgs)
 
