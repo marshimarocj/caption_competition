@@ -423,8 +423,8 @@ def viz_association():
         boxes = forward_boxs[fid] * (1. - alphas) + backward_boxs[bid] * alphas
         for i in range(gap):
           f = frame + i
-          img = imgs[i]
-          x, y, w, h = [int(d) for d in boxes[f]]
+          img = imgs[f]
+          x, y, w, h = [int(d) for d in boxes[i]]
           cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
         cnt += 1
     out_imgs = []
