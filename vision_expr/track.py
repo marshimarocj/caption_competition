@@ -335,22 +335,21 @@ def associate_forward_backward():
         intersect_volumes += intersect
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
-      iou = intersect_volumes / union_volumes
-      print iou.shape
+      ious = intersect_volumes / union_volumes
   #     ious += np.max(iou, 0).tolist()
   #     ious += np.max(iou, 1).tolist()
   # print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
 
       pairs = [] # greedy
       for i in range(min(num_forward, num_backward)):
-        idx = np.amax(iou)
+        idx = int(np.amax(ious))
         r = idx / num_backward
         c = idx % num_backward
-        if iou[r, c] < iou_threshold:
+        if ious[r, c] < iou_threshold:
           break
-        pairs.append((r, c, iou[r, c]))
-        iou[r] = 0.
-        iou[:, c] = 0.
+        pairs.append((r, c, ious[r, c]))
+        ious[r] = 0.
+        ious[:, c] = 0.
       out_file = os.path.join(track_dir, '%d.associate'%f)
       with open(out_file, 'w') as fout:
         for r, c, iou in pairs:
