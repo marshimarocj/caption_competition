@@ -488,7 +488,7 @@ def viz_tracklet():
           frame = start + i/4
           x, y, w, h = [int(d) for d in boxs[i:i+4]]
           img = out_imgs[frame]
-          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[j%len(colormap12)], 2);
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[t%len(colormap12)], 2);
     out_file = os.path.join(viz_dir, name + '.merge.gif')
     imageio.mimsave(out_file, out_imgs)
 
