@@ -412,6 +412,7 @@ def generate_tracklet():
       for fid in associate:
         bid = associate[fid]['bid']
         alpha = np.arange(gap) / float(gap-1)
+        print alpha
         alpha = np.expand_dims(alpha, 1)
         boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
         associate[fid]['boxs'] = boxes
@@ -507,5 +508,5 @@ if __name__ == '__main__':
   # kcf_tracking()
   # viz_kcf_tracking()
   # associate_forward_backward()
-  # generate_tracklet()
-  viz_tracklet()
+  generate_tracklet()
+  # viz_tracklet()
