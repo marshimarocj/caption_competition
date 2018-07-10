@@ -370,7 +370,7 @@ def generate_tracklet():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  for name, num_frame in name_frames[:1]:
+  for name, num_frame in name_frames[1:2]:
     track_dir = os.path.join(track_root_dir, name)
     associates = []
     for frame in range(0, num_frame, gap):
@@ -408,7 +408,7 @@ def generate_tracklet():
       print bid2buffer.keys()
       buffers = []
       for fid in associate:
-        print fid, fid in bid2buffer
+        # print fid, fid in bid2buffer
         boxs = associate[fid]['boxs']
         bid = associate[fid]['bid']
         if fid in bid2buffer:
