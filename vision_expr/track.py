@@ -414,6 +414,8 @@ def generate_tracklet():
         alpha = np.arange(gap) / float(gap-1)
         alpha = np.expand_dims(alpha, 1)
         boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
+        print forward_boxs
+        print backward_boxs
         print boxes
         associate[fid]['boxs'] = boxes
       associates.append(associate)
