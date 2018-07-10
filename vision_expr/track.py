@@ -329,7 +329,7 @@ def associate_forward_backward():
         intersect = bbox_intersect(forward_boxs[:, i], backward_boxs[:, i]) # (num_forward, num_backward)
         intersect_volumes += intersect
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
-        uniion_volumes += union
+        union_volumes += union
       iou = intersect_volumes / union_volumes
       ious += np.max(iou, 0).tolist()
       ious += np.max(iou, 1).tolist()
