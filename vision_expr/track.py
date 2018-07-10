@@ -404,7 +404,7 @@ def generate_tracklet():
     for associate in associates:
       bid2buffer = {}
       for d in buffers:
-        buffers[d['bid']]  = d['boxs']
+        bid2buffer[d['bid']]  = d['boxs']
       buffers = []
       for fid in associate:
         boxs = associate[fid]['boxs']
