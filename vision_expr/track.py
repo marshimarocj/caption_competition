@@ -314,7 +314,7 @@ def associate_forward_backward():
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   gap = 8
-  iou_threshold = 0.3
+  iou_threshold = 0.5
   # gap = 4
   # iou_threshold = 0.5
 
@@ -582,7 +582,7 @@ if __name__ == '__main__':
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
-  # associate_forward_backward()
+  associate_forward_backward()
   # generate_tracklet()
   # viz_tracklet()
-  viz_association()
+  # viz_association()
