@@ -320,8 +320,8 @@ def bat_detect_obj():
 
   NUM_CLASSES = 546
   # gap = 16
-  # gap = 8
-  gap = 4
+  gap = 8
+  # gap = 4
   split = 4
 
   parser = argparse.ArgumentParser()
@@ -354,16 +354,16 @@ def bat_detect_obj():
   with tf.Session(graph=detection_graph) as sess:
     for name in names[chunk*split_gap : (chunk+1)*split_gap]:
       cnt += 1
-      # if cnt % 100 == 0:
-      #   print cnt
-      if cnt == 200:
-        break
+      if cnt % 100 == 0:
+        print cnt
+      # if cnt == 200:
+      #   break
 
       gif_file = os.path.join(gif_dir, name + '.gif')
       if not os.path.exists(gif_file):
         continue
-      # out_file = os.path.join(out_dir, name + '.8.npz')
-      out_file = os.path.join(out_dir, name + '.4.npz')
+      out_file = os.path.join(out_dir, name + '.8.npz')
+      # out_file = os.path.join(out_dir, name + '.4.npz')
       if os.path.exists(out_file):
         continue
       try:
@@ -577,6 +577,6 @@ if __name__ == '__main__':
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  # bat_detect_obj()
+  bat_detect_obj()
   # prepare_for_matlab()
-  bat_prepare_for_track()
+  # bat_prepare_for_track()
