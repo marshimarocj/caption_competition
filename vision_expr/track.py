@@ -494,7 +494,7 @@ def viz_tracklet():
         for i in range(0, len(boxs), 4):
           avg_area += int(boxs[i+2]) * int(boxs[i+3])
         avg_area /= len(boxs)/4
-        if avg_area >= h*w/2:
+        if avg_area >= h*w*2/3:
           continue
         for i in range(0, len(boxs), 4):
           frame = start + i/4
