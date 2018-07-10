@@ -203,7 +203,7 @@ def viz_kcf_tracking():
       continue
 
     track_dir = os.path.join(track_root_dir, name)
-    num = len(os.listdir(track_dir))
+    num = (len(os.listdir(track_dir)) + 1)/2
     frame = 0
     out_imgs = []
     for i in range(num):
