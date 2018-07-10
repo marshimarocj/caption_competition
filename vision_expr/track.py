@@ -413,9 +413,10 @@ def generate_tracklet():
         bid = associate[fid]['bid']
         if fid in bid2buffer:
           boxs = np.concatenate([bid2buffer[fid], boxs], 1)
-          buffers.append({'bid': bid, 'boxs': boxs})
-        else:
-          tracklets.append(boxs)
+          del bid2buffer[fid]
+        buffers.append({'bid': bid, 'boxs': boxs})
+        for bid in bid2buffer:
+          tracklets.append(bid2buffer[bid])
     for d in buffers:
       tracklets.append(d['boxs'])
     print name, num_frame, len(tracklets)
