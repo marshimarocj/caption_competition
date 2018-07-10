@@ -413,7 +413,6 @@ def generate_tracklet():
           boxs = np.concatenate([bid2buffer[fid], boxs], 1)
           del bid2buffer[fid]
         buffers.append({'bid': bid, 'boxs': boxs})
-      print bid2buffer.keys()
       for bid in bid2buffer:
         tracklets.append(bid2buffer[bid])
     for d in buffers:
