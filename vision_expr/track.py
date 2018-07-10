@@ -382,7 +382,6 @@ def generate_tracklet():
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   gap = 8
-  score_threshold = 0.2
 
   name_frames = []
   with open(lst_file) as f:
@@ -515,6 +514,6 @@ if __name__ == '__main__':
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
-  associate_forward_backward()
-  # generate_tracklet()
+  # associate_forward_backward()
+  generate_tracklet()
   # viz_tracklet()
