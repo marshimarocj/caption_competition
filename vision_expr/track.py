@@ -336,6 +336,7 @@ def associate_forward_backward():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
+      print ious.shape
   #     ious += np.max(iou, 0).tolist()
   #     ious += np.max(iou, 1).tolist()
   # print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
