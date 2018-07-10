@@ -323,11 +323,6 @@ def associate_forward_backward():
       num_forward = forward_boxs.shape[0]
       num_backward = backward_boxs.shape[0]
 
-      forward_volumes = forward_boxs[:, :, 2] * forward_boxs[:, :, 3]
-      forward_volumes = np.sum(forward_volumes * forward_valid, 1) # (num_obj)
-      backward_volumes = backward_boxs[:, :, 2] * bacward_boxs[:, :, 3]
-      backward_volumes = np.sum(backward_volumes * backward_valid, 1)
-
       intersect_volumes = np.zeros(num_forward, num_backward)
       union_volumes = np.zeros(num_forward, num_backward)
       for i in range(gap):
