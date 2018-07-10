@@ -26,7 +26,7 @@ def load_track(file, reverse=False):
     for line in f:
       line = line.strip()
       data = line.split(' ')
-      num = len(data)
+      num = len(data) / 5 * 5
       boxs = []
       scores = []
       for i in range(0, num, 5):
