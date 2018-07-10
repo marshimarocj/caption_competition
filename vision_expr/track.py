@@ -511,5 +511,5 @@ if __name__ == '__main__':
   # kcf_tracking()
   # viz_kcf_tracking()
   # associate_forward_backward()
-  generate_tracklet()
-  # viz_tracklet()
+  # generate_tracklet()
+  viz_tracklet()
