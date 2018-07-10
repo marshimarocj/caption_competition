@@ -490,12 +490,12 @@ def viz_tracklet():
         data = line.split(' ')
         start = int(data[0])
         boxs = data[1:]
-        avg_area = 0.
-        for i in range(0, len(boxs), 4):
-          avg_area += int(boxs[i+2]) * int(boxs[i+3])
-        avg_area /= len(boxs)/4
-        if avg_area >= h*w*2/3:
-          continue
+        # avg_area = 0.
+        # for i in range(0, len(boxs), 4):
+        #   avg_area += int(boxs[i+2]) * int(boxs[i+3])
+        # avg_area /= len(boxs)/4
+        # if avg_area >= h*w*2/3:
+        #   continue
         for i in range(0, len(boxs), 4):
           frame = start + i/4
           x, y, w, h = [int(d) for d in boxs[i:i+4]]
