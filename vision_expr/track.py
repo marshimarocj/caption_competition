@@ -19,6 +19,49 @@ colormap = [ # bgr
 
 '''func
 '''
+def load_track(file, reverse=False):
+  with open(file) as f:
+    all_boxs = []
+    all_scores = []
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      num = len(data)
+      boxs = []
+      scores = []
+      for i in range(0, num, 5):
+        x, y, w, h = [int(d) for d in data[i:i+4]]
+        score = float(d[i+4])
+        boxs.append((x, y, w, h))
+        scores.append(score)
+      if reverse:
+        boxs = boxs[::-1]
+        scores = scores[::-1]
+      all_boxs.append(boxs)
+      all_scores.append(scores)
+    all_boxs = np.array(all_boxs, dtype=np.float32)
+    all_scores = np.array(all_scores, dtype=np.float32)
+  return all_boxs, all_scores
+
+
+def bbox_intersect(lboxs, rboxs):
+  lboxs = np.expand_dims(lboxs, 1)
+  rboxs = np.expand_dims(rboxs, 0)
+  x1 = np.maximum(lboxs[:, :, 0], rboxs[:, :, 0])
+  y1 = np.maximum(lboxs[:, :, 1], rboxs[:, :, 1])
+  x2 = np.minimum(lboxs[:, :, 0] + lboxs[:, :, 2], rboxs[:, :, 0] + rboxs[:, :, 2])
+  y2 = np.minimum(lboxs[:, :, 1] + lboxs[:, :, 3], rboxs[:, :, 1] + rboxs[:, :, 2])
+  w = np.maximum(x2 - x1, np.zeros(x1.shape))
+  h = np.maximum(y2 - y1, np.zeros(y1.shape))
+  return w * h
+
+
+def bbox_union(lboxs, rboxs):
+  intersect = bbox_intersect(lboxs, rboxs)
+  lareas = lboxs[:, 2] * lboxs[:, 3]
+  rareas = rboxs[:, 2] * rboxs[:, 3]
+  union = np.expand_dims(lareas, 1) + np.expand_dims(rareas, 0) - intersect
+  return union
 
 
 '''expr
@@ -244,12 +287,61 @@ def viz_kcf_tracking():
 
 def associate_forward_backward():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  lst_file = os.path.join(root_dir, 'split.0.lst')
   track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+  gap = 8
+  score_threshold = 0.2
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  ious = []
+  for name, num_frame in name_frames[:100]:
+    track_dir = os.path.join(track_root_dir, name)
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      if not os.path.exists(backward_file):
+        continue
+
+       # (num_obj, num_frame, 4), (num_obj, num_frame)
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+      forward_valid = forward_scores >= score_threshold
+      backward_valid = backward_scores >= score_threshold
+      forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
+      backward_boxs = np.where(back_valid, backward_boxs, np.zeros(backward_boxs, shape))
+      num_forward = forward_boxs.shape[0]
+      num_backward = backward_boxs.shape[0]
+
+      forward_volumes = forward_boxs[:, :, 2] * forward_boxs[:, :, 3]
+      forward_volumes = np.sum(forward_volumes * forward_valid, 1) # (num_obj)
+      backward_volumes = backward_boxs[:, :, 2] * bacward_boxs[:, :, 3]
+      backward_volumes = np.sum(backward_volumes * backward_valid, 1)
+
+      intersect_volumes = np.zeros(num_forward, num_backward)
+      union_volumes = np.zeros(num_forward, num_backward)
+      for i in range(gap):
+        intersect = bbox_intersect(forward_boxs[:, i], backward_boxs[:, i]) # (num_forward, num_backward)
+        intersect_volumes += intersect
+        union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
+        uniion_volumes += union
+      iou = intersect_volumes / union_volumes
+      ious += np.max(iou, 0).tolist()
+      ious += np.max(iou, 1).tolist()
+  print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
 
 
 if __name__ == '__main__':
-  prepare_num_frame_lst()
+  # prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
+  associate_forward_backward()
