@@ -247,7 +247,7 @@ def viz_kcf_tracking():
       name, _ = os.path.splitext(name)
       names.append(name)
 
-  for name in names[:1]:
+  for name in names[:10]:
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
       continue
