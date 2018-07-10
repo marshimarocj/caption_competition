@@ -180,7 +180,8 @@ def viz_kcf_tracking():
   gif_dir = os.path.join(root_dir, 'gif')
   viz_dir = os.path.join(root_dir, 'kcf_viz')
 
-  gap = 16
+  gap = 8
+  score_threshold = 0.2
 
   names = []
   with open(lst_file) as f:
@@ -231,11 +232,13 @@ def viz_kcf_tracking():
         canvas = img[:, :, ::-1].copy()
         for j in range(num_rect):
           x, y, w, h = all_bboxs[j][i]
-          new_canvas = canvas.copy()
-          cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
           score = all_scores[j][i]
-          canvas = canvas * (1. - score) + score * new_canvas
-          canvas = canvas.astype(np.uint8)
+          if score >= scorethreshold:
+            cv2.rectangle(canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
+          # new_canvas = canvas.copy()
+          # cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
+          # canvas = canvas * (1. - score) + score * new_canvas
+          # canvas = canvas.astype(np.uint8)
         canvas = canvas[:, :, ::-1] # rgb
         canvas = canvas.astype(np.uint8)
         out_imgs.append(canvas)
@@ -248,5 +251,5 @@ def viz_kcf_tracking():
 if __name__ == '__main__':
   # prepare_lst_for_matlab()
   # viz_tracking()
-  kcf_tracking()
-  # viz_kcf_tracking()
+  # kcf_tracking()
+  viz_kcf_tracking()
