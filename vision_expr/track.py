@@ -419,8 +419,16 @@ def generate_tracklet():
         tracklets.append(bid2buffer[bid])
     for d in buffers:
       tracklets.append((d['start'], d['boxs']))
-    print name, num_frame, len(tracklets)
-    print [d[0] for d in tracklets]
+    # print name, num_frame, len(tracklets)
+    # print [d[0] for d in tracklets]
+    out_file = os.path.join(track_root_dir, name, 'merge.track')
+    with open(out_file, 'w') as fout:
+      for start, boxs in tracklets:
+        fout.write('%d '%start)
+        for box in boxs:
+          for d in box:
+            fout.write('%d '%int(d))
+        fout.write('\n')
 
 
 if __name__ == '__main__':
