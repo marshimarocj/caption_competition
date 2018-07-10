@@ -319,7 +319,7 @@ def associate_forward_backward():
       backward_valid = backward_scores >= score_threshold
       backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
       forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
-      backward_boxs = np.where(backward_valid, backward_boxs, np.zeros(backward_boxs, shape))
+      backward_boxs = np.where(backward_valid, backward_boxs, np.zeros(backward_boxs.shape))
       num_forward = forward_boxs.shape[0]
       num_backward = backward_boxs.shape[0]
 
