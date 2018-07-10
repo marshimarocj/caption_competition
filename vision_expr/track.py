@@ -343,14 +343,12 @@ def associate_forward_backward():
 
       pairs = [] # greedy
       for i in range(min(num_forward, num_backward)):
-        idx = int(np.amax(ious))
-        r = idx / num_backward
-        c = idx % num_backward
-        if ious[r, c] < iou_threshold:
+        idx = np.unravel_index(np.amax(ious), ious.shape)
+        if ious[idx] < iou_threshold:
           break
-        pairs.append((r, c, ious[r, c]))
-        ious[r] = 0.
-        ious[:, c] = 0.
+        pairs.append((idx[0], idx[1], ious[idx]))
+        ious[idx[0]] = 0.
+        ious[:, idx[1]] = 0.
       out_file = os.path.join(track_dir, '%d.associate'%f)
       with open(out_file, 'w') as fout:
         for r, c, iou in pairs:
