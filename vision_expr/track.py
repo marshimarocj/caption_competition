@@ -302,7 +302,9 @@ def associate_forward_backward():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  ious = []
+  iou_threshold = 0.3
+
+  # ious = []
   for name, num_frame in name_frames[:100]:
     track_dir = os.path.join(track_root_dir, name)
     for f in range(0, num_frame, gap):
@@ -334,9 +336,24 @@ def associate_forward_backward():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       iou = intersect_volumes / union_volumes
-      ious += np.max(iou, 0).tolist()
-      ious += np.max(iou, 1).tolist()
-  print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
+  #     ious += np.max(iou, 0).tolist()
+  #     ious += np.max(iou, 1).tolist()
+  # print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
+
+      pairs = [] # greedy
+      for i in range(min(num_forward, num_backward)):
+        idx = np.amax(iou)
+        r = idx / num_backward
+        c = idx % num_backward
+        if iou[r, c] < iou_threshold:
+          break
+        pairs.append((r, c, iou[r, c]))
+        iou[r] = 0.
+        iou[:, c] = 0.
+      out_file = os.path.join(track_dir, '%d.associate'%f)
+      with open(out_file, 'w') as fout:
+        for r, c, iou in pairs:
+          fout.write('%d %d %f\n'%(r, c, iou))
 
 
 if __name__ == '__main__':
