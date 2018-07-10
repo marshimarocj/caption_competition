@@ -373,8 +373,8 @@ def generate_tracklet():
   for name, num_frame in name_frames[:100]:
     track_dir = os.path.join(track_root_dir, name)
     associates = []
-    for f in range(0, num_frame, gap):
-      associate_file = os.path.join(track_dir, '%d.associate'%f)
+    for frame in range(0, num_frame, gap):
+      associate_file = os.path.join(track_dir, '%d.associate'%frame)
       if not os.path.exists(associate_file):
         associates.append({})
         continue
@@ -386,8 +386,8 @@ def generate_tracklet():
           data = line.split(' ')
           associate[int(data[0])] = {'bid': int(data[1])}
 
-      forward_file = os.path.join(track_dir, '%d.track'%f)
-      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      forward_file = os.path.join(track_dir, '%d.track'%frame)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%frame)
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, True)
 
