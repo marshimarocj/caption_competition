@@ -403,6 +403,7 @@ def viz_association():
       if not os.path.exists(associate_file):
         continue
 
+      associate = {}
       with open(associate_file) as f:
         for line in f:
           line = line.strip()
