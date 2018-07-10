@@ -485,7 +485,7 @@ def viz_tracklet():
       continue
     with open(track_file) as f:
       cnt = 0
-      for line in enumerate(f):
+      for line in f:
         line = line.strip()
         data = line.split(' ')
         start = int(data[0])
