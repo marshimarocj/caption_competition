@@ -234,6 +234,7 @@ def viz_kcf_tracking():
 
   gap = 8
   score_threshold = 0.2
+  reverse = True
 
   names = []
   with open(lst_file) as f:
@@ -246,7 +247,7 @@ def viz_kcf_tracking():
       name, _ = os.path.splitext(name)
       names.append(name)
 
-  for name in names[:100]:
+  for name in names[:1]:
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
       continue
@@ -259,7 +260,12 @@ def viz_kcf_tracking():
     frame = 0
     out_imgs = []
     for i in range(num):
-      track_file = os.path.join(track_dir, '%d.track'%(i*gap))
+      if reverse:
+        track_file = os.path.join(track_dir, '%d.rtrack'%(i*gap))
+      else:
+        track_file = os.path.join(track_dir, '%d.track'%(i*gap))
+      if not os.path.exists(track_file):
+        break
       all_bboxs = []
       all_scores = []
       with open(track_file) as f:
@@ -273,6 +279,9 @@ def viz_kcf_tracking():
             score = float(data[i+4])
             bboxs.append(bbox)
             scores.append(score)
+          if reverse:
+            bboxs = bboxs[::-1]
+            scores = scores[::-1]
           all_bboxs.append(bboxs)
           all_scores.append(scores)
       num_rect = len(all_scores)
@@ -287,16 +296,15 @@ def viz_kcf_tracking():
           score = all_scores[j][i]
           if score >= score_threshold:
             cv2.rectangle(canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
-          # new_canvas = canvas.copy()
-          # cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
-          # canvas = canvas * (1. - score) + score * new_canvas
-          # canvas = canvas.astype(np.uint8)
         canvas = canvas[:, :, ::-1] # rgb
         canvas = canvas.astype(np.uint8)
         out_imgs.append(canvas)
         frame += 1
 
-    out_file = os.path.join(viz_dir, name + '.gif')
+    if not reverse:
+      out_file = os.path.join(viz_dir, name + '.gif')
+    else:
+      out_file = os.path.join(viz_dir, name + '.reverse.gif')
     imageio.mimsave(out_file, out_imgs)
 
 
@@ -507,7 +515,7 @@ if __name__ == '__main__':
   # prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
-  # viz_kcf_tracking()
+  viz_kcf_tracking()
   # associate_forward_backward()
   # generate_tracklet()
-  viz_tracklet()
+  # viz_tracklet()
