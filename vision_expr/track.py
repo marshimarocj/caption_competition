@@ -373,6 +373,7 @@ def viz_association():
   lst_file = os.path.join(root_dir, 'split.0.lst')
   gif_dir = os.path.join(root_dir, 'gif')
   track_root_dir = os.path.join(root_dir, 'kcf_track')
+  viz_dir = os.path.join(root_dir, 'kcf_viz')
 
   gap = 8
 
