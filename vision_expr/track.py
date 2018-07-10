@@ -336,7 +336,6 @@ def associate_forward_backward():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-      print ious.shape
   #     ious += np.max(iou, 0).tolist()
   #     ious += np.max(iou, 1).tolist()
   # print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
@@ -355,9 +354,75 @@ def associate_forward_backward():
           fout.write('%d %d %f\n'%(r, c, iou))
 
 
+def generate_tracklet():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+  gap = 8
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  for name, num_frame in name_frames[:100]:
+    track_dir = os.path.join(track_root_dir, name)
+    associates = []
+    for f in range(0, num_frame, gap):
+      associate_file = os.path.join(track_dir, '%d.associate'%f)
+      if not os.path.exists(associate_file):
+        associates.append({})
+        continue
+
+      associate = {}
+      with open(associate_file) as f:
+        for line in f:
+          line = line.strip()
+          data = line.split(' ')
+          associate[int(data[0])] = {'bid': int(data[1])}
+
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, True)
+
+      for fid in associate:
+        bid = associate[fid]['bid']
+        alpha = np.arange(gap) / (gap-1)
+        alpha = np.expand_dims(alpha, 1)
+        boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
+        associate[fid]['boxs'] = boxes
+
+      associates.append(associate)
+    tracklets = []
+    buffers = []
+    for associate in associates:
+      bid2buffer = {}
+      for d in buffers:
+        buffers[d['bid']]  = d['boxs']
+      buffers = []
+      for fid in associate:
+        boxs = associate[fid]['boxs']
+        bid = associate[fid]['bid']
+        if fid in bid2buffer:
+          boxs = np.concatenate([bid2buffer[fid], boxs], 1)
+          buffers.append({'bid': bid, 'boxs': boxs})
+        else:
+          tracklets.append(boxs)
+    for d in buffers:
+      tracklets.append(d['boxs'])
+    print name, num_frame, len(tracklets)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
-  associate_forward_backward()
+  # associate_forward_backward()
+  generate_tracklet()
