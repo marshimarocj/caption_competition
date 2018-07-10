@@ -386,7 +386,7 @@ def generate_tracklet():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  for name, num_frame in name_frames[:100]:
+  for name, num_frame in name_frames[:1]:
     track_dir = os.path.join(track_root_dir, name)
     associates = []
     for frame in range(0, num_frame, gap):
@@ -412,9 +412,9 @@ def generate_tracklet():
       for fid in associate:
         bid = associate[fid]['bid']
         alpha = np.arange(gap) / float(gap-1)
-        print alpha
         alpha = np.expand_dims(alpha, 1)
         boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
+        print boxes
         associate[fid]['boxs'] = boxes
       associates.append(associate)
 
