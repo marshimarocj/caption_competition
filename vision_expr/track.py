@@ -315,9 +315,9 @@ def associate_forward_backward():
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, reverse=True)
       forward_valid = forward_scores >= score_threshold
-      forward_valid = np.repeat(np.expand_dims(forward_valid, 1), 4, 2).astype(np.bool_)
+      forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
       backward_valid = backward_scores >= score_threshold
-      backward_valid = np.repeat(np.expand_dims(backward_valid, 1), 4, 2).astype(np.bool_)
+      backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
       forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
       backward_boxs = np.where(back_valid, backward_boxs, np.zeros(backward_boxs, shape))
       num_forward = forward_boxs.shape[0]
