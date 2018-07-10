@@ -329,7 +329,6 @@ def associate_forward_backward():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  # ious = []
   for name, num_frame in name_frames[:100]:
     track_dir = os.path.join(track_root_dir, name)
     for f in range(0, num_frame, gap):
@@ -345,13 +344,6 @@ def associate_forward_backward():
       num_backward = backward_boxs.shape[0]
       if num_forward == 0 or num_backward == 0:
         continue
-
-      # forward_valid = forward_scores >= score_threshold
-      # forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
-      # backward_valid = backward_scores >= score_threshold
-      # backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
-      # forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
-      # backward_boxs = np.where(backward_valid, backward_boxs, np.zeros(backward_boxs.shape))
 
       intersect_volumes = np.zeros((num_forward, num_backward))
       union_volumes = np.zeros((num_forward, num_backward))
@@ -486,21 +478,30 @@ def viz_tracklet():
     for i in range(len(gif)):
       img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
       imgs.append(img[:, :, ::-1].copy())
+    h, w, _ = imgs[0].shape
 
     track_file = os.path.join(track_root_dir, name, 'merge.track')
     if not os.path.exists(track_file):
       continue
     with open(track_file) as f:
-      for t, line in enumerate(f):
+      cnt = 0
+      for line in enumerate(f):
         line = line.strip()
         data = line.split(' ')
         start = int(data[0])
         boxs = data[1:]
+        avg_area = 0.
+        for i in range(0, len(boxs), 4):
+          avg_area += int(boxs[i+2]) * int(boxs[i+3])
+        avg_area /= len(boxs)/4
+        if avg_area >= h*w/2:
+          continue
         for i in range(0, len(boxs), 4):
           frame = start + i/4
           x, y, w, h = [int(d) for d in boxs[i:i+4]]
           img = imgs[frame]
-          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[t%len(colormap12)], 2);
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
+        cnt += 1
 
     out_imgs = []
     for img in imgs:
