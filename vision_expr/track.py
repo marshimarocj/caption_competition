@@ -386,7 +386,7 @@ def generate_tracklet():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  for name, num_frame in name_frames[:1]:
+  for name, num_frame in name_frames[:100]:
     track_dir = os.path.join(track_root_dir, name)
     associates = []
     for frame in range(0, num_frame, gap):
@@ -406,17 +406,18 @@ def generate_tracklet():
       backward_file = os.path.join(track_dir, '%d.rtrack'%frame)
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, True)
-      # forward_valid = forward_scores >= score_threshold
-      # backward_valid = backward_scores >= score_threshold
 
       for fid in associate:
         bid = associate[fid]['bid']
-        alpha = np.arange(gap) / float(gap-1)
-        alpha = np.expand_dims(alpha, 1)
-        boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
-        print forward_boxs[fid]
-        print backward_boxs[bid]
-        print boxes
+        alphas = np.arange(gap) / float(gap-1)
+        boxes = []
+        for alpha in alphas:
+          boxes.append(forward_boxs[fid, 0] * (1. - alpha) + backward_boxs[bid, -1] * alpha)
+        boxes = np.array(boxes)
+        # boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
+        # print forward_boxs[fid]
+        # print backward_boxs[bid]
+        # print boxes
         associate[fid]['boxs'] = boxes
       associates.append(associate)
 
