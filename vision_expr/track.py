@@ -375,6 +375,7 @@ def generate_tracklet():
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   gap = 8
+  score_threshold = 0.2
 
   name_frames = []
   with open(lst_file) as f:
@@ -405,10 +406,16 @@ def generate_tracklet():
       backward_file = os.path.join(track_dir, '%d.rtrack'%frame)
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, True)
+      forward_valid = forward_scores >= score_threshold
+      forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
+      backward_valid = backward_scores >= score_threshold
+      backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
+      forward_boxs = np.where(forward_valid, forward_boxs, backward_boxs)
+      backward_boxs = np.where(backward_valid, backward_boxs, forward_boxs)
 
       for fid in associate:
         bid = associate[fid]['bid']
-        alpha = np.arange(gap) / (gap-1)
+        alpha = np.arange(gap) / float(gap-1)
         alpha = np.expand_dims(alpha, 1)
         boxes = forward_boxs[fid] * (1. - alpha) + backward_boxs[bid] * alpha
         associate[fid]['boxs'] = boxes
@@ -504,5 +511,5 @@ if __name__ == '__main__':
   # kcf_tracking()
   # viz_kcf_tracking()
   # associate_forward_backward()
-  # generate_tracklet()
-  viz_tracklet()
+  generate_tracklet()
+  # viz_tracklet()
