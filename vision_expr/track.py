@@ -65,7 +65,7 @@ def bbox_intersect(lboxs, rboxs):
   x1 = np.maximum(lboxs[:, :, 0], rboxs[:, :, 0])
   y1 = np.maximum(lboxs[:, :, 1], rboxs[:, :, 1])
   x2 = np.minimum(lboxs[:, :, 0] + lboxs[:, :, 2], rboxs[:, :, 0] + rboxs[:, :, 2])
-  y2 = np.minimum(lboxs[:, :, 1] + lboxs[:, :, 3], rboxs[:, :, 1] + rboxs[:, :, 2])
+  y2 = np.minimum(lboxs[:, :, 1] + lboxs[:, :, 3], rboxs[:, :, 1] + rboxs[:, :, 3])
   w = np.maximum(x2 - x1, np.zeros(x1.shape))
   h = np.maximum(y2 - y1, np.zeros(y1.shape))
   return w * h
@@ -314,7 +314,11 @@ def associate_forward_backward():
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   gap = 8
-  score_threshold = 0.2
+  iou_threshold = 0.3
+  # gap = 4
+  # iou_threshold = 0.5
+
+  # score_threshold = 0.2
 
   name_frames = []
   with open(lst_file) as f:
@@ -324,8 +328,6 @@ def associate_forward_backward():
       name = data[0]
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
-
-  iou_threshold = 0.3
 
   # ious = []
   for name, num_frame in name_frames[:100]:
@@ -344,12 +346,12 @@ def associate_forward_backward():
       if num_forward == 0 or num_backward == 0:
         continue
 
-      forward_valid = forward_scores >= score_threshold
-      forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
-      backward_valid = backward_scores >= score_threshold
-      backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
-      forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
-      backward_boxs = np.where(backward_valid, backward_boxs, np.zeros(backward_boxs.shape))
+      # forward_valid = forward_scores >= score_threshold
+      # forward_valid = np.repeat(np.expand_dims(forward_valid, 2), 4, 2).astype(np.bool_)
+      # backward_valid = backward_scores >= score_threshold
+      # backward_valid = np.repeat(np.expand_dims(backward_valid, 2), 4, 2).astype(np.bool_)
+      # forward_boxs = np.where(forward_valid, forward_boxs, np.zeros(forward_boxs.shape))
+      # backward_boxs = np.where(backward_valid, backward_boxs, np.zeros(backward_boxs.shape))
 
       intersect_volumes = np.zeros((num_forward, num_backward))
       union_volumes = np.zeros((num_forward, num_backward))
@@ -359,9 +361,6 @@ def associate_forward_backward():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-  #     ious += np.max(iou, 0).tolist()
-  #     ious += np.max(iou, 1).tolist()
-  # print np.median(ious), np.mean(ious), np.percentile(ious, 10), np.percentile(ious, 90)
 
       pairs = [] # greedy
       for i in range(min(num_forward, num_backward)):
@@ -515,7 +514,7 @@ if __name__ == '__main__':
   # prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
-  viz_kcf_tracking()
-  # associate_forward_backward()
+  # viz_kcf_tracking()
+  associate_forward_backward()
   # generate_tracklet()
   # viz_tracklet()
