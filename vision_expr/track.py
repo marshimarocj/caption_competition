@@ -23,7 +23,7 @@ colormap = [ # bgr
 
 '''expr
 '''
-def prepare_lst_for_matlab():
+def prepare_num_frame_lst():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   video_dir = os.path.join(root_dir, 'mp4')
@@ -54,17 +54,11 @@ def prepare_lst_for_matlab():
       video_file = os.path.join(video_dir, name + '.mp4')
       vid = cv2.VideoCapture(video_file)
       num_frame = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
-      if num_frame < 5:
-        print name, num_frame
-        continue
 
       data = np.load(detect_file)
       if 'scores' not in data:
         continue
-      scores = data['scores']
-      num = scores.shape[0]
-      num = (num + 2) / 3
-      fout.write('%s %d\n'%(name, num))
+      fout.write('%s %d\n'%(name, num_frame))
 
 
 def viz_tracking():
@@ -248,8 +242,14 @@ def viz_kcf_tracking():
     imageio.mimsave(out_file, out_imgs)
 
 
+def associate_forward_backward():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+
 if __name__ == '__main__':
-  # prepare_lst_for_matlab()
+  prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
-  viz_kcf_tracking()
+  # viz_kcf_tracking()
