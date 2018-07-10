@@ -310,17 +310,18 @@ def detect_obj():
 
 
 def bat_detect_obj():
-  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  root_dir = '/home/jiac/data/tgif' # gpu8
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  # root_dir = '/home/jiac/data/tgif' # gpu8
   gif_dir = os.path.join(root_dir, 'gif')
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
-  # model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
-  model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
+  model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  # model_file = '/home/jiac/models/tf/object_detection/faster_rcnn_inception_resnet_v2_atrous_oid_2018_01_28_threshold/frozen_inference_graph.pb'
   out_dir = os.path.join(root_dir, 'obj_detect')
 
   NUM_CLASSES = 546
   # gap = 16
-  gap = 8
+  # gap = 8
+  gap = 4
   split = 4
 
   parser = argparse.ArgumentParser()
@@ -353,13 +354,16 @@ def bat_detect_obj():
   with tf.Session(graph=detection_graph) as sess:
     for name in names[chunk*split_gap : (chunk+1)*split_gap]:
       cnt += 1
-      if cnt % 100 == 0:
-        print cnt
+      # if cnt % 100 == 0:
+      #   print cnt
+      if cnt == 200:
+        break
 
       gif_file = os.path.join(gif_dir, name + '.gif')
       if not os.path.exists(gif_file):
         continue
-      out_file = os.path.join(out_dir, name + '.8.npz')
+      # out_file = os.path.join(out_dir, name + '.8.npz')
+      out_file = os.path.join(out_dir, name + '.4.npz')
       if os.path.exists(out_file):
         continue
       try:
@@ -561,6 +565,6 @@ if __name__ == '__main__':
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  # bat_detect_obj()
+  bat_detect_obj()
   # prepare_for_matlab()
-  bat_prepare_for_track()
+  # bat_prepare_for_track()
