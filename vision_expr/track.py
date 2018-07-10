@@ -343,7 +343,7 @@ def associate_forward_backward():
 
       pairs = [] # greedy
       for i in range(min(num_forward, num_backward)):
-        idx = np.unravel_index(np.amax(ious), ious.shape)
+        idx = np.unravel_index(np.argmax(ious, axis=None), ious.shape)
         if ious[idx] < iou_threshold:
           break
         pairs.append((idx[0], idx[1], ious[idx]))
