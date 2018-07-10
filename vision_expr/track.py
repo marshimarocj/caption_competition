@@ -432,7 +432,7 @@ def generate_tracklet():
         boxs = associate[fid]['boxs']
         bid = associate[fid]['bid']
         if fid in bid2buffer:
-          boxs = np.concatenate([bid2buffer[fid][1], boxs], 1)
+          boxs = np.concatenate([bid2buffer[fid][1], boxs], 0)
           buffers.append({'bid': bid, 'boxs': boxs, 'start': bid2buffer[fid][0]})
           del bid2buffer[fid]
         else:
@@ -511,5 +511,5 @@ if __name__ == '__main__':
   # kcf_tracking()
   # viz_kcf_tracking()
   # associate_forward_backward()
-  # generate_tracklet()
-  viz_tracklet()
+  generate_tracklet()
+  # viz_tracklet()
