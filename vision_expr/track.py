@@ -233,7 +233,7 @@ def viz_kcf_tracking():
         for j in range(num_rect):
           x, y, w, h = all_bboxs[j][i]
           score = all_scores[j][i]
-          if score >= scorethreshold:
+          if score >= score_threshold:
             cv2.rectangle(canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
           # new_canvas = canvas.copy()
           # cv2.rectangle(new_canvas, (x, y), (x+w, y+h), colormap[j%len(colormap)], 2);
