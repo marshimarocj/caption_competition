@@ -473,7 +473,8 @@ def viz_tracklet():
       continue
     imgs = []
     for i in range(len(gif)):
-      imgs.append(gif[i][:, :, ::-1])
+      img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
+      imgs.append(img[:, :, ::-1])
 
     track_file = os.path.join(track_root_dir, name, 'merge.track')
     if not os.path.exists(track_file):
