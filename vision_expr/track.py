@@ -31,7 +31,7 @@ def load_track(file, reverse=False):
       scores = []
       for i in range(0, num, 5):
         x, y, w, h = [int(d) for d in data[i:i+4]]
-        score = float(d[i+4])
+        score = float(data[i+4])
         boxs.append((x, y, w, h))
         scores.append(score)
       if reverse:
