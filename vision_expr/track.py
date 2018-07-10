@@ -401,23 +401,26 @@ def generate_tracklet():
 
     tracklets = []
     buffers = []
-    for associate in associates:
+    for f, associate in enumerate(associates):
       bid2buffer = {}
       for d in buffers:
-        bid2buffer[d['bid']]  = d['boxs']
+        bid2buffer[d['bid']]  = (d['start'], d['boxs'])
       buffers = []
       for fid in associate:
         boxs = associate[fid]['boxs']
         bid = associate[fid]['bid']
         if fid in bid2buffer:
-          boxs = np.concatenate([bid2buffer[fid], boxs], 1)
+          boxs = np.concatenate([bid2buffer[fid][1], boxs], 1)
           del bid2buffer[fid]
-        buffers.append({'bid': bid, 'boxs': boxs})
+          buffers.append({'bid': bid, 'boxs': boxs, 'start': bid2buffer[fid][0]})
+        else:
+          buffers.append({'bid': bid, 'boxs': boxs, 'start': f*8})
       for bid in bid2buffer:
         tracklets.append(bid2buffer[bid])
     for d in buffers:
-      tracklets.append(d['boxs'])
+      tracklets.append((d['start'], d['boxs']))
     print name, num_frame, len(tracklets)
+    print [d[0] for d in tracklets]
 
 
 if __name__ == '__main__':
