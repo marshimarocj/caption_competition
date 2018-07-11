@@ -88,11 +88,11 @@ def viterbi_decoding(edges):
   nexts = [-np.ones((edges[-1].shape[1],), dtype=np.int32)]
 
   for i in range(0, num_step-1):
-    w = np.where(edges[i] > 0, edges[i] + forward_sums[i], edges[i])
+    w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
     forward_sums.append(np.max(w, 0))
     prevs.append(np.argmax(w, 0))
   for i in range(1, num_step):
-    w = np.where(edges[-i] > 0, edges[-i] + backward_sums[i-1], edges[-i])
+    w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(0, backward_sums[i-1]), edges[-i])
     backward_sums.append(np.max(w, 1))
     nexts.append(np.argmax(w, 1))
 
