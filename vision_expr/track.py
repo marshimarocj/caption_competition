@@ -146,21 +146,21 @@ def viterbi_decoding_rerank(edges):
   for i in range(0, num_step-1):
     w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
     forward_sums.append(np.max(w, 0))
-    num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.ones(edges[i].shape))
-    prevs.append(np.argmax(w, 0))
-    idxs = np.argmax(w, 0)
+    num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.zeros(edges[i].shape))
+    max_idxs = np.argmax(w, 0)
+    prevs.append(max_idxs)
     forward_num = []
-    for c, idx in enumerate(idxs):
+    for c, idx in enumerate(max_idxs):
       forward_num.append(num[idx, c])
     forward_nums.append(np.array(forward_num))
   for i in range(1, num_step):
     w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
     backward_sums.append(np.max(w, 1))
-    num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.ones(edges[-i].shape))
-    nexts.append(np.argmax(w, 1))
-    idxs = np.argmax(w, 1)
+    num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.zeros(edges[-i].shape))
+    max_idxs = np.argmax(w, 1)
+    nexts.append(max_idxsl)
     backward_num = []
-    for r, idx in enumerate(idxs):
+    for r, idx in enumerate(max_idxs):
       backward_num.append(num[r, idx])
     backward_nums.append(np.array(backward_num))
 
