@@ -132,71 +132,71 @@ def viterbi_decoding(edges):
   return max_sum, path
 
 
-# max sum proposal with min rerank
-def viterbi_decoding_rerank(edges):
-  num_step = len(edges) + 1
+# # max sum proposal with cut
+# def viterbi_decoding_rerank(edges):
+#   num_step = len(edges) + 1
 
-  forward_sums = [np.zeros(edges[0].shape[0],)]
-  forward_nums = [np.zeros(edges[0].shape[0],)]
-  prevs = [-np.ones((edges[0].shape[0],), dtype=np.int32)]
-  backward_sums = [np.zeros((edges[-1].shape[1],))]
-  backward_nums = [np.zeros((edges[-1].shape[1],))]
-  nexts = [-np.ones((edges[-1].shape[1],), dtype=np.int32)]
+#   forward_sums = [np.zeros(edges[0].shape[0],)]
+#   forward_nums = [np.zeros(edges[0].shape[0],)]
+#   prevs = [-np.ones((edges[0].shape[0],), dtype=np.int32)]
+#   backward_sums = [np.zeros((edges[-1].shape[1],))]
+#   backward_nums = [np.zeros((edges[-1].shape[1],))]
+#   nexts = [-np.ones((edges[-1].shape[1],), dtype=np.int32)]
 
-  for i in range(0, num_step-1):
-    w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
-    forward_sums.append(np.max(w, 0))
-    num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.zeros(edges[i].shape))
-    max_idxs = np.argmax(w, 0)
-    prevs.append(max_idxs)
-    forward_num = []
-    for c, idx in enumerate(max_idxs):
-      forward_num.append(num[idx, c])
-    forward_nums.append(np.array(forward_num))
-  for i in range(1, num_step):
-    w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
-    backward_sums.append(np.max(w, 1))
-    num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.zeros(edges[-i].shape))
-    max_idxs = np.argmax(w, 1)
-    nexts.append(max_idxs)
-    backward_num = []
-    for r, idx in enumerate(max_idxs):
-      backward_num.append(num[r, idx])
-    backward_nums.append(np.array(backward_num))
+#   for i in range(0, num_step-1):
+#     w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
+#     forward_sums.append(np.max(w, 0))
+#     num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.zeros(edges[i].shape))
+#     max_idxs = np.argmax(w, 0)
+#     prevs.append(max_idxs)
+#     forward_num = []
+#     for c, idx in enumerate(max_idxs):
+#       forward_num.append(num[idx, c])
+#     forward_nums.append(np.array(forward_num))
+#   for i in range(1, num_step):
+#     w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
+#     backward_sums.append(np.max(w, 1))
+#     num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.zeros(edges[-i].shape))
+#     max_idxs = np.argmax(w, 1)
+#     nexts.append(max_idxs)
+#     backward_num = []
+#     for r, idx in enumerate(max_idxs):
+#       backward_num.append(num[r, idx])
+#     backward_nums.append(np.array(backward_num))
 
-  max_score = 0.
-  max_id = -1
-  max_step = -1
-  for i in range(num_step):
-    total_sum = forward_sums[i] + backward_sums[-i-1]
-    total_num = forward_nums[i] + backward_nums[-i-1] + 1
-    score = total_sum / total_num + np.log(total_num)
-    if np.max(score) > max_score:
-      max_score = np.max(score)
-      max_id = np.argmax(score)
-      max_step = i
+#   max_score = 0.
+#   max_id = -1
+#   max_step = -1
+#   for i in range(num_step):
+#     total_sum = forward_sums[i] + backward_sums[-i-1]
+#     total_num = forward_nums[i] + backward_nums[-i-1] + 1
+#     score = total_sum / total_num + np.log(total_num)
+#     if np.max(score) > max_score:
+#       max_score = np.max(score)
+#       max_id = np.argmax(score)
+#       max_step = i
 
-  t = max_step
-  i = max_id
-  path = []
-  while t >= 0:
-    path.append((t, i))
-    if forward_sums[t][i] == 0:
-      break
-    i = prevs[t][i]
-    t -= 1
-  path = path[::-1]
+#   t = max_step
+#   i = max_id
+#   path = []
+#   while t >= 0:
+#     path.append((t, i))
+#     if forward_sums[t][i] == 0:
+#       break
+#     i = prevs[t][i]
+#     t -= 1
+#   path = path[::-1]
 
-  t = max_step
-  i = max_id
-  while t < num_step-1:
-    if backward_sums[-t-1][i] == 0:
-      break
-    i = nexts[-t-1][i]
-    t += 1
-    path.append((t, i))
+#   t = max_step
+#   i = max_id
+#   while t < num_step-1:
+#     if backward_sums[-t-1][i] == 0:
+#       break
+#     i = nexts[-t-1][i]
+#     t += 1
+#     path.append((t, i))
 
-  return max_score, path
+#   return max_score, path
 
 
 def remove_path_node_from_graph(edges, path):
@@ -209,6 +209,73 @@ def remove_path_node_from_graph(edges, path):
     else:
       edges[t][i] = 0
       edges[t-1][:, i] = 0
+
+
+def calc_boxs_for_path(path, all_forward_boxs, all_backward_boxs, alphas):
+  num_step = len(path)
+  all_boxs = []
+  for i in range(num_step-1):
+    step = path[i][0]
+    fid = path[i][1]
+    bid = path[i+1][1]
+    boxs = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
+    all_boxs.append(boxs)
+  return all_boxs
+
+
+def calc_area_maxmin_ratio(all_boxs):
+  min_area = 1e10
+  max_area = 0.
+  for boxs in all_boxs:
+    areas = boxs[:, 2] * boxs[:, 3]
+    if np.max(areas) > max_area:
+      max_area = np.max(areas)
+    if np.min(areas) < min_area:
+      min_area = np.min(areas)
+  return max_area / min_area
+
+
+def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ratio_threshold, refined_paths):
+  if end-begin <= max_num_step:
+    maxmin_ratio = calc_area_maxmin_ratio(all_boxs[begin:end])
+    if maxmin_ratio < maxmin_ratio_threshold:
+      refined_paths.append(path[begin:end+1])
+    return
+
+  lmin = []
+  lmax = []
+  rmin = []
+  rmax = []
+  for i in range(begin, end):
+    if i == begin:
+      area = all_boxs[i][0, 2] * all_boxs[i][0, 3]
+      lmin.append(area)
+      lmax.append(area)
+    else:
+      areas = all_boxs[i-1][:, 2] * all_boxs[i-1][:, 3]
+      lmin.append(min(lmin[-1], np.min(areas)))
+      lmax.append(max(lmax[-1], np.max(areas)))
+  for i in range(end-1, begin-1, -1):
+    if i == end-1:
+      area = all_boxs[i][-1, 2] * all_boxs[i][-1, 3]
+      rmin.append(area)
+      rmax.append(area)
+    else:
+      areas = all_boxs[i][:, 2] * all_boxs[i][:, 3]
+      rmin.append(min(rmin[-1], np.min(areas)))
+      rmax.append(max(rmax[-1], np.max(areas)))
+  min_ratio = 1e10.
+  cut = -1
+  for i in range(begin, end):
+    lratio = lmax[i] / lmin[i]
+    rratio = rmax[i] / rmin[i]
+    if min(lratio, rratio) < min_ratio:
+      min_ratio = min(lratio, rratio)
+      cut = i
+  if cut > begin:
+    cut_balance_maxmin_ratio(path, all_boxs, begin, cut, max_num_step, maxmin_ratio_threshold, refined_paths)
+  if cut < end:
+    cut_balance_maxmin_ratio(path, all_boxs, cut, end, max_num_step, maxmin_ratio_threshold, refined_paths)
 
 
 '''expr
@@ -756,16 +823,13 @@ def build_association_graph():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-      # valid = ious >= iou_threshold
-      # ious = np.where(valid, ious, np.zeros(scores.shape))
-      # edges.append(ious)
       valid = ious >= iou_threshold
       scores += ious
       scores = np.where(valid, scores, np.zeros(scores.shape))
       edges.append(scores)
 
     # out_file = os.path.join(track_root_dir, name + '.viterbi')
-    out_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
+    out_file = os.path.join(track_root_dir, name + '.viterbi.cut')
     with open(out_file, 'w') as fout:
       while True:
         # max_sum, path = viterbi_decoding(edges)
@@ -776,7 +840,6 @@ def build_association_graph():
           fout.write('%d,%d '%(t, id))
         fout.write('\n')
         remove_path_node_from_graph(edges, path)
-    fout.close()
 
 
 def viz_viterbi_path():
@@ -858,8 +921,73 @@ def viz_viterbi_path():
     imageio.mimsave(out_file, out_imgs)
 
 
-def cut_track():
-  pass
+def refine_viterbi_path():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+  gap = 8
+  max_num_step =  4
+  maxmin_ratio_threshold = 2
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  debug_set = set([
+    'tumblr_nqq3ibcw841rvg72ao1_400', 
+    'tumblr_npw7v7W07C1tmj047o1_250',
+    'tumblr_n0lv33BBrb1rc0kvpo1_r1_250'
+  ])
+
+  alphas = np.arange(gap) / float(gap-1)
+  alphas = np.expand_dims(alphas, 1)
+  for name, num_frame in name_frames[:100]:
+    if name not in debug_set:
+      continue
+
+    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    paths = []
+    with open(path_file) as f:
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        path = []
+        for d in data:
+          fields = d.split(',')
+          path.append((int(fields[0]), int(fields[1])))
+        paths.append(path)
+
+    track_dir = os.path.join(track_root_dir, name)
+    all_forward_boxs = []
+    all_backward_boxs = []
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      if not os.path.exists(backward_file):
+        continue
+
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+      all_forward_boxs.append(forward_boxs)
+      all_backward_boxs.append(backward_boxs)
+    refined_paths = []
+    for path in paths:
+      num_step = len(path)
+      all_boxs = calc_boxs_for_path(path, all_forward_boxs, all_backward_boxs, alphas)
+      cut_balance_maxmin_ratio(
+        path, all_boxs, 0, num_step-1,max_num_step, maxmin_ratio_threshold, refined_paths)
+    out_file = os.path.join(track_root_dir, name + '.viterbi.refine')
+    with open(out_file, 'w') as fout:
+      for path in refined_paths:
+        for t, id in path:
+          fout.write('%d,%d '%(t, id))
+        fout.write('\n')
 
 
 if __name__ == '__main__':
@@ -875,4 +1003,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  viz_viterbi_path()
+  refine_viterbi_path()
+  # viz_viterbi_path()
