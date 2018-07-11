@@ -851,6 +851,7 @@ def viz_viterbi_path():
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
         if (i+1)*gap % 32 == 0:
           cnt += 1
+      cnt += 1
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
