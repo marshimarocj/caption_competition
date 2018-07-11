@@ -845,7 +845,8 @@ def build_association_graph():
         scores += ious
         scores = np.where(valid, scores, np.zeros(scores.shape))
         edges.append(scores)
-      else:
+      elif os.path.exists(forward_file):
+        print name, num_frame
         forward_boxs, forward_scores = load_track(forward_file)
         num_forward = forward_boxs.shape[0]
         scores = iou_threshold * np.eye(num_forward, num_forward)
