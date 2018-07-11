@@ -872,8 +872,8 @@ def viz_viterbi_path():
   alphas = np.arange(gap) / float(gap-1)
   alphas = np.expand_dims(alphas, 1)
   for name, num_frame in name_frames[:100]:
-    if name not in debug_set:
-      continue
+    # if name not in debug_set:
+    #   continue
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
       continue
@@ -887,7 +887,6 @@ def viz_viterbi_path():
 
     # path_file = os.path.join(track_root_dir, name + '.viterbi')
     path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
-    # path_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -930,7 +929,6 @@ def viz_viterbi_path():
       out_imgs.append(img[:, :, ::-1])
     # out_file = os.path.join(viz_dir, name + '.viterbi.gif')
     out_file = os.path.join(viz_dir, name + '.viterbi.refine.gif')
-    # out_file = os.path.join(viz_dir, name + '.viterbi.rerank.gif')
     imageio.mimsave(out_file, out_imgs)
 
 
@@ -1016,5 +1014,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  refine_viterbi_path()
-  # viz_viterbi_path()
+  # refine_viterbi_path()
+  viz_viterbi_path()
