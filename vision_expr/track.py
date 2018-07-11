@@ -277,7 +277,7 @@ def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ra
   if cut > begin:
     cut_balance_maxmin_ratio(path, all_boxs, begin, cut, max_num_step, maxmin_ratio_threshold, refined_paths)
   if cut < end:
-    cut_balance_maxmin_ratio(path, all_boxs, cut, end, max_num_step, maxmin_ratio_threshold, refined_paths)
+    cut_balance_maxmin_ratio(path, all_boxs, cut+1, end, max_num_step, maxmin_ratio_threshold, refined_paths)
 
 
 '''expr
