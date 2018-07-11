@@ -269,8 +269,8 @@ def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ra
   min_ratio = 1e10
   cut = -1
   for i in range(begin, end):
-    lratio = lmax[i] / lmin[i]
-    rratio = rmax[i] / rmin[i]
+    lratio = lmax[i-begin] / lmin[i-begin]
+    rratio = rmax[i-begin] / rmin[i-begin]
     if min(lratio, rratio) < min_ratio:
       min_ratio = min(lratio, rratio)
       cut = i
