@@ -700,7 +700,8 @@ def build_association_graph():
     with open(out_file, 'w') as fout:
       while True:
         max_sum, path = viterbi_decoding(edges)
-        if max_sum < iou_threshold + score_threshold:
+        # if max_sum < iou_threshold + score_threshold:
+        if max_sum < iou_threshold:
           break
         for t, id in path:
           fout.write('%d,%d '%(t, id))
