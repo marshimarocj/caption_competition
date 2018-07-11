@@ -683,7 +683,7 @@ def build_association_graph():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-      ious = np.where(ious >= iou_threshold, ious, np.zeros(ious.shape[0]))
+      ious = np.where(ious >= iou_threshold, ious, np.zeros(ious.shape))
 
       edges.append(ious)
 
