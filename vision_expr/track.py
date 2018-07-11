@@ -779,7 +779,8 @@ def viz_viterbi_path():
           f = step * gap + j
           x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
-      cnt += 1
+        if (i+1)*gap % 64 == 0:
+          cnt += 1
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
@@ -799,5 +800,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
+  # build_association_graph()
   viz_viterbi_path()
