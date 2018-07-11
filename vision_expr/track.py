@@ -862,9 +862,17 @@ def viz_viterbi_path():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
+  debug_set = set([
+    'tumblr_nqq3ibcw841rvg72ao1_400', 
+    'tumblr_npw7v7W07C1tmj047o1_250',
+    'tumblr_n0lv33BBrb1rc0kvpo1_r1_250'
+  ])
+
   alphas = np.arange(gap) / float(gap-1)
   alphas = np.expand_dims(alphas, 1)
   for name, num_frame in name_frames[:100]:
+    if name not in debug_set:
+      continue
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
       continue
@@ -876,7 +884,8 @@ def viz_viterbi_path():
       img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
       imgs.append(img[:, :, ::-1].copy())
 
-    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    # path_file = os.path.join(track_root_dir, name + '.viterbi')
+    path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
     # path_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
     paths = []
     with open(path_file) as f:
@@ -918,7 +927,8 @@ def viz_viterbi_path():
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
-    out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    # out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    out_file = os.path.join(viz_dir, name + '.viterbi.refine.gif')
     # out_file = os.path.join(viz_dir, name + '.viterbi.rerank.gif')
     imageio.mimsave(out_file, out_imgs)
 
@@ -1005,5 +1015,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  refine_viterbi_path()
-  # viz_viterbi_path()
+  # refine_viterbi_path()
+  viz_viterbi_path()
