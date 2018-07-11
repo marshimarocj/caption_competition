@@ -158,7 +158,7 @@ def viterbi_decoding_rerank(edges):
     backward_sums.append(np.max(w, 1))
     num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.zeros(edges[-i].shape))
     max_idxs = np.argmax(w, 1)
-    nexts.append(max_idxsl)
+    nexts.append(max_idxs)
     backward_num = []
     for r, idx in enumerate(max_idxs):
       backward_num.append(num[r, idx])
