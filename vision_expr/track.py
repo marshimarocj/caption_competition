@@ -767,7 +767,7 @@ def viz_viterbi_path():
         boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
         for j in range(gap):
           f = step * gap + j
-          x, y, w, h = [int(d) for d in boxes[i]]
+          x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
       cnt += 1
     out_imgs = []
