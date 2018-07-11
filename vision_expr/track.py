@@ -761,11 +761,10 @@ def viz_viterbi_path():
     for path in paths:
       num_step = len(path)
       for i in range(num_step-1):
-        f_step = path[i][0]
+        step = path[i][0]
         fid = path[i][1]
-        b_step = path[i+1][0]
         bid = path[i+1][1]
-        boxes = all_forward_boxs[f_step][fid] * (1. - alphas) + all_backward_boxs[b_step][bid]
+        boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
         for j in range(gap):
           f = f_step * gap + j
           x, y, w, h = [int(d) for d in boxes[i]]
