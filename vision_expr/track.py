@@ -797,5 +797,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
-  # viz_viterbi_path()
+  # build_association_graph()
+  viz_viterbi_path()
