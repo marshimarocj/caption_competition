@@ -1016,5 +1016,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  refine_viterbi_path()
-  # viz_viterbi_path()
+  # refine_viterbi_path()
+  viz_viterbi_path()
