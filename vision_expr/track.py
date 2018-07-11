@@ -132,7 +132,7 @@ def viterbi_decoding(edges):
   return max_sum, path
 
 
-# max sum proposal with rerank on mean + log(n)
+# max sum proposal with min rerank
 def viterbi_decoding_rerank(edges):
   num_step = len(edges) + 1
 
@@ -811,8 +811,8 @@ def viz_viterbi_path():
       img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
       imgs.append(img[:, :, ::-1].copy())
 
-    # path_file = os.path.join(track_root_dir, name + '.viterbi')
-    path_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
+    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    # path_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -849,15 +849,17 @@ def viz_viterbi_path():
           f = step * gap + j
           x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
-        # if (i+1)*gap % 32 == 0:
-        #   cnt += 1
       cnt += 1
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
-    # out_file = os.path.join(viz_dir, name + '.viterbi.gif')
-    out_file = os.path.join(viz_dir, name + '.viterbi.rerank.gif')
+    out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    # out_file = os.path.join(viz_dir, name + '.viterbi.rerank.gif')
     imageio.mimsave(out_file, out_imgs)
+
+
+def cut_track():
+  pass
 
 
 if __name__ == '__main__':
