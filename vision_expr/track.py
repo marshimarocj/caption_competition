@@ -700,6 +700,82 @@ def build_association_graph():
     fout.close()
 
 
+def viz_viterbi_path():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  gif_dir = os.path.join(root_dir, 'gif')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
+  viz_dir = os.path.join(root_dir, 'kcf_viz')
+
+  gap = 8
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  alphas = np.arange(gap) / float(gap-1)
+  for name, num_frame in name_frames[:100]:
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    if not os.path.exists(gif_file):
+      continue
+    gif = imageio.mimread(gif_file, memtest=False)
+    if len(gif[0].shape) < 3:
+      continue
+    imgs = []
+    for i in range(len(gif)):
+      img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
+      imgs.append(img[:, :, ::-1].copy())
+
+    track_dir = os.path.join(track_root_dir, name)
+    path_file = os.path.join(track_dir, name + '.viterbi')
+    paths = []
+    with open(path_file) as f:
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        path = []
+        for d in data:
+          fields = d.split(',')
+          path.append((int(fields[0]), int(fields[1])))
+        paths.append(path)
+    all_forward_boxs = []
+    all_backward_boxs = []
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      if not os.path.exists(backward_file):
+        continue
+
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+      all_forward_boxs.append(all_forward_boxs)
+      all_backward_boxs.append(all_backward_boxs)
+    cnt = 0
+    for path in paths:
+      num_step = len(path)
+      for i in range(num_step-1):
+        f_step = path[i][0]
+        fid = path[i][1]
+        b_step = path[i+1][0]
+        bid = path[i+1][1]
+        boxes = all_forward_boxs[f_step][fid] * (1. - alphas) + all_backward_boxs[b_step][bid]
+        for j in range(gap):
+          f = f_step * gap + j
+          x, y, w, h = [int(d) for d in boxes[i]]
+          cv2.rectangle(img, (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
+      cnt += 1
+    out_imgs = []
+    for img in imgs:
+      out_imgs.append(img[:, :, ::-1])
+    out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    imageio.mimsave(out_file, out_imgs)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # viz_tracking()
@@ -712,4 +788,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
+  # build_association_graph()
+  viz_viterbi_path()
