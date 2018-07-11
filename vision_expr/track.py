@@ -751,7 +751,7 @@ def build_association_graph():
       # valid = ious >= iou_threshold
       # ious = np.where(valid, ious, np.zeros(scores.shape))
       # edges.append(ious)
-      valid = np.logical_and(ious >= iou_threshold, scores >= score_threshold)
+      valid = ious >= iou_threshold
       scores += ious
       scores = np.where(valid, scores, np.zeros(scores.shape))
       edges.append(scores)
