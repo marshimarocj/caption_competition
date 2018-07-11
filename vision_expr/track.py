@@ -196,6 +196,8 @@ def viterbi_decoding_rerank(edges):
     t += 1
     path.append((t, i))
 
+  print max_score, path
+
   return max_score, path
 
 
