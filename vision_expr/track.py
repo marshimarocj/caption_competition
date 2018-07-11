@@ -79,6 +79,7 @@ def bbox_union(lboxs, rboxs):
   return union
 
 
+# max sum
 def viterbi_decoding(edges):
   num_step = len(edges) + 1
 
@@ -648,6 +649,7 @@ def build_association_graph():
 
   gap = 8
   iou_threshold = 0.5
+  score_threshold = 0.5
 
   name_frames = []
   with open(lst_file) as f:
@@ -674,6 +676,10 @@ def build_association_graph():
       num_backward = backward_boxs.shape[0]
       if num_forward == 0 or num_backward == 0:
         continue
+      forward_scores = np.mean(forward_scores, 1)
+      backward_scores = np.mean(backward_scores, 1)
+      scores = np.expand_dims(forward_scores, 1) + np.expand_dims(backward_scores, 0)
+      scores = scores / 2.
 
       intersect_volumes = np.zeros((num_forward, num_backward))
       union_volumes = np.zeros((num_forward, num_backward))
@@ -683,15 +689,17 @@ def build_association_graph():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-      ious = np.where(ious >= iou_threshold, ious, np.zeros(ious.shape))
+      valid = np.logical_and(ious >= iou_threshold, scores >= score_threshold)
+      scores += ious
+      scores = np.where(valid, scores, np.zeros(scores.shape))
 
-      edges.append(ious)
+      edges.append(scores)
 
     out_file = os.path.join(track_root_dir, name + '.viterbi')
     with open(out_file, 'w') as fout:
       while True:
         max_sum, path = viterbi_decoding(edges)
-        if max_sum < iou_threshold:
+        if max_sum < iou_threshold + score_threshold:
           break
         for t, id in path:
           fout.write('%d,%d '%(t, id))
@@ -789,5 +797,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  # build_association_graph()
-  viz_viterbi_path()
+  build_association_graph()
+  # viz_viterbi_path()
