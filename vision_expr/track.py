@@ -147,14 +147,22 @@ def viterbi_decoding_rerank(edges):
     w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
     forward_sums.append(np.max(w, 0))
     num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.ones(edges[i].shape))
-    forward_nums.append(num[w==np.max(w, 0, keepdims=True)])
     prevs.append(np.argmax(w, 0))
+    idxs = np.argmax(w, 0)
+    forward_num = []
+    for i, idx in enumerate(idxs):
+      forward_num.append(num[idx, i])
+    forward_nums.append(np.array(forward_num))
   for i in range(1, num_step):
     w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
     backward_sums.append(np.max(w, 1))
     num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.ones(edges[-i].shape))
-    backward_nums.append(num[w==np.max(w, 1, keepdims=True)])
     nexts.append(np.argmax(w, 1))
+    idxs = np.argmax(w, 1)
+    backward_num = []
+    for i, idx in enumerate(idxs):
+      backward_num.append(num[i, idx])
+    backward_nums.append(np.array(backward_num))
 
   max_score = 0.
   max_id = -1
