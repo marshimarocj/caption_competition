@@ -264,6 +264,8 @@ def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ra
       areas = all_boxs[i][:, 2] * all_boxs[i][:, 3]
       rmin.append(min(rmin[-1], np.min(areas)))
       rmax.append(max(rmax[-1], np.max(areas)))
+  rmin = rmin[::-1]
+  rmax = rmax[::-1]
   min_ratio = 1e10.
   cut = -1
   for i in range(begin, end):
