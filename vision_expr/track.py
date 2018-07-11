@@ -281,6 +281,21 @@ def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ra
     cut_balance_maxmin_ratio(path, all_boxs, cut+1, end, max_num_step, maxmin_ratio_threshold, refined_paths)
 
 
+def load_path(path_file):
+  paths = []
+  with open(path_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      path = []
+      for d in data:
+        fields = d.split(',')
+        path.append((int(fields[0]), int(fields[1])))
+      paths.append(path)
+
+  return paths
+
+
 '''expr
 '''
 def prepare_num_frame_lst():
@@ -786,7 +801,6 @@ def build_association_graph():
 
   gap = 8
   iou_threshold = 0.5
-  # score_threshold = 0.5
 
   name_frames = []
   with open(lst_file) as f:
@@ -803,40 +817,44 @@ def build_association_graph():
     for f in range(0, num_frame, gap):
       forward_file = os.path.join(track_dir, '%d.track'%f)
       backward_file = os.path.join(track_dir, '%d.rtrack'%f)
-      if not os.path.exists(backward_file):
-        continue
+      # if not os.path.exists(backward_file):
+      #   continue
 
-      # (num_obj, num_frame, 4), (num_obj, num_frame)
-      forward_boxs, forward_scores = load_track(forward_file)
-      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
-      num_forward = forward_boxs.shape[0]
-      num_backward = backward_boxs.shape[0]
-      if num_forward == 0 or num_backward == 0:
-        continue
-      forward_scores = np.mean(forward_scores, 1)
-      backward_scores = np.mean(backward_scores, 1)
-      scores = np.expand_dims(forward_scores, 1) + np.expand_dims(backward_scores, 0)
-      scores = scores / 2.
+      if os.path.exists(backward_file):
+        # (num_obj, num_frame, 4), (num_obj, num_frame)
+        forward_boxs, forward_scores = load_track(forward_file)
+        backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+        num_forward = forward_boxs.shape[0]
+        num_backward = backward_boxs.shape[0]
+        if num_forward == 0 or num_backward == 0:
+          continue
+        forward_scores = np.mean(forward_scores, 1)
+        backward_scores = np.mean(backward_scores, 1)
+        scores = np.expand_dims(forward_scores, 1) + np.expand_dims(backward_scores, 0)
+        scores = scores / 2.
 
-      intersect_volumes = np.zeros((num_forward, num_backward))
-      union_volumes = np.zeros((num_forward, num_backward))
-      for i in range(gap):
-        intersect = bbox_intersect(forward_boxs[:, i], backward_boxs[:, i]) # (num_forward, num_backward)
-        intersect_volumes += intersect
-        union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
-        union_volumes += union
-      ious = intersect_volumes / union_volumes
-      valid = ious >= iou_threshold
-      scores += ious
-      scores = np.where(valid, scores, np.zeros(scores.shape))
-      edges.append(scores)
+        intersect_volumes = np.zeros((num_forward, num_backward))
+        union_volumes = np.zeros((num_forward, num_backward))
+        for i in range(gap):
+          intersect = bbox_intersect(forward_boxs[:, i], backward_boxs[:, i]) # (num_forward, num_backward)
+          intersect_volumes += intersect
+          union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
+          union_volumes += union
+        ious = intersect_volumes / union_volumes
+        valid = ious >= iou_threshold
+        scores += ious
+        scores = np.where(valid, scores, np.zeros(scores.shape))
+        edges.append(scores)
+      else:
+        forward_boxs, forward_scores = load_track(forward_file)
+        num_forward = forward_boxs.shape[0]
+        scores = iou_threshold * np.eye(num_forward, num_forward)
+        edges.append(scores)
 
-    # out_file = os.path.join(track_root_dir, name + '.viterbi')
-    out_file = os.path.join(track_root_dir, name + '.viterbi.cut')
+    out_file = os.path.join(track_root_dir, name + '.viterbi')
     with open(out_file, 'w') as fout:
       while True:
-        # max_sum, path = viterbi_decoding(edges)
-        max_sum, path = viterbi_decoding_rerank(edges)
+        max_sum, path = viterbi_decoding(edges)
         if max_sum < iou_threshold:
           break
         for t, id in path:
@@ -1013,6 +1031,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  # build_association_graph()
+  build_association_graph()
   # refine_viterbi_path()
-  viz_viterbi_path()
+  # viz_viterbi_path()
