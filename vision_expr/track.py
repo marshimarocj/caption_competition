@@ -236,10 +236,11 @@ def calc_area_maxmin_ratio(all_boxs):
 
 
 def cut_balance_maxmin_ratio(path, all_boxs, begin, end, max_num_step, maxmin_ratio_threshold, refined_paths):
+  maxmin_ratio = calc_area_maxmin_ratio(all_boxs[begin:end])
+  if maxmin_ratio < maxmin_ratio_threshold:
+    refined_paths.append(path[begin:end+1])
+    return
   if end-begin <= max_num_step:
-    maxmin_ratio = calc_area_maxmin_ratio(all_boxs[begin:end])
-    if maxmin_ratio < maxmin_ratio_threshold:
-      refined_paths.append(path[begin:end+1])
     return
 
   lmin = []
@@ -1015,5 +1016,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  # refine_viterbi_path()
-  viz_viterbi_path()
+  refine_viterbi_path()
+  # viz_viterbi_path()
