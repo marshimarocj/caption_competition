@@ -196,8 +196,6 @@ def viterbi_decoding_rerank(edges):
     t += 1
     path.append((t, i))
 
-  print max_score, path
-
   return max_score, path
 
 
@@ -813,7 +811,8 @@ def viz_viterbi_path():
       img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
       imgs.append(img[:, :, ::-1].copy())
 
-    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    # path_file = os.path.join(track_root_dir, name + '.viterbi')
+    path_file = os.path.join(track_root_dir, name + '.viterbi.rerank')
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -855,7 +854,8 @@ def viz_viterbi_path():
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
-    out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    # out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    out_file = os.path.join(viz_dir, name + '.viterbi.rerank.gif')
     imageio.mimsave(out_file, out_imgs)
 
 
@@ -871,5 +871,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
-  # viz_viterbi_path()
+  # build_association_graph()
+  viz_viterbi_path()
