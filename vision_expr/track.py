@@ -695,6 +695,7 @@ def build_association_graph():
           break
         for t, id in path:
           fout.write('%d,%d '%(t, id))
+        fout.write('\n')
         remove_path_node_from_graph(edges, path)
     fout.close()
 
