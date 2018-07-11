@@ -754,8 +754,8 @@ def viz_viterbi_path():
 
       forward_boxs, forward_scores = load_track(forward_file)
       backward_boxs, backward_scores = load_track(backward_file, reverse=True)
-      all_forward_boxs.append(all_forward_boxs)
-      all_backward_boxs.append(all_backward_boxs)
+      all_forward_boxs.append(forward_boxs)
+      all_backward_boxs.append(backward_boxs)
     cnt = 0
     for path in paths:
       num_step = len(path)
