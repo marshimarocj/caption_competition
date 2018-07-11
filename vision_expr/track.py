@@ -719,6 +719,7 @@ def viz_viterbi_path():
       name_frames.append((name, num_frame))
 
   alphas = np.arange(gap) / float(gap-1)
+  alphas = np.expand_dims(alphas, 1)
   for name, num_frame in name_frames[:100]:
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
