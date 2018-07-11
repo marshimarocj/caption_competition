@@ -649,7 +649,7 @@ def build_association_graph():
 
   gap = 8
   iou_threshold = 0.5
-  score_threshold = 0.5
+  # score_threshold = 0.5
 
   name_frames = []
   with open(lst_file) as f:
@@ -689,7 +689,8 @@ def build_association_graph():
         union = bbox_union(forward_boxs[:, i], backward_boxs[:, i])
         union_volumes += union
       ious = intersect_volumes / union_volumes
-      valid = np.logical_and(ious >= iou_threshold, scores >= score_threshold)
+      # valid = np.logical_and(ious >= iou_threshold, scores >= score_threshold)
+      valid = ious >= iou_threshold
       scores += ious
       scores = np.where(valid, scores, np.zeros(scores.shape))
 
@@ -797,5 +798,5 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  # build_association_graph()
+  build_association_graph()
   viz_viterbi_path()
