@@ -172,7 +172,7 @@ def viterbi_decoding_rerank(edges):
     total_num = forward_nums[i] + backward_nums[-i-1] + 1
     score = total_sum / total_num + np.log(total_num)
     if np.max(score) > max_score:
-      max_sum = np.max(score)
+      max_score = np.max(score)
       max_id = np.argmax(score)
       max_step = i
 
@@ -196,7 +196,7 @@ def viterbi_decoding_rerank(edges):
     t += 1
     path.append((t, i))
 
-  return max_sum, path
+  return max_score, path
 
 
 def remove_path_node_from_graph(edges, path):
