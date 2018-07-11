@@ -961,8 +961,8 @@ def refine_viterbi_path():
   alphas = np.arange(gap) / float(gap-1)
   alphas = np.expand_dims(alphas, 1)
   for name, num_frame in name_frames[:100]:
-    if name not in debug_set:
-      continue
+    # if name not in debug_set:
+    #   continue
 
     path_file = os.path.join(track_root_dir, name + '.viterbi')
     paths = []
@@ -1016,5 +1016,5 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  # refine_viterbi_path()
-  viz_viterbi_path()
+  refine_viterbi_path()
+  # viz_viterbi_path()
