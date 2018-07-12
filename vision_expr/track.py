@@ -90,12 +90,20 @@ def viterbi_decoding(edges):
 
   for i in range(0, num_step-1):
     w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
-    forward_sums.append(np.max(w, 0))
-    prevs.append(np.argmax(w, 0))
+    if w.size > 0:
+      forward_sums.append(np.max(w, 0))
+      prevs.append(np.argmax(w, 0))
+    else:
+      forward_sums.append(np.zeros((w.shape[1],)))
+      prevs.append(-np.ones((w.shape[1],)))
   for i in range(1, num_step):
     w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
-    backward_sums.append(np.max(w, 1))
-    nexts.append(np.argmax(w, 1))
+    if w.size > 0:
+      backward_sums.append(np.max(w, 1))
+      nexts.append(np.argmax(w, 1))
+    else:
+      backward_sums.append(np.zeros((w.shape[0],)))
+      nexts.append(-np.ones((w.shape[0],)))
 
   total_sums = []
   max_sum = 0.
@@ -104,7 +112,7 @@ def viterbi_decoding(edges):
   for i in range(num_step):
     total_sum = forward_sums[i] + backward_sums[-i-1]
     total_sums.append(total_sum)
-    if np.max(total_sum) > max_sum:
+    if total_sum.size > 0 and np.max(total_sum) > max_sum:
       max_sum = np.max(total_sum)
       max_id = np.argmax(total_sum)
       max_step = i
@@ -130,73 +138,6 @@ def viterbi_decoding(edges):
     path.append((t, i))
 
   return max_sum, path
-
-
-# # max sum proposal with cut
-# def viterbi_decoding_rerank(edges):
-#   num_step = len(edges) + 1
-
-#   forward_sums = [np.zeros(edges[0].shape[0],)]
-#   forward_nums = [np.zeros(edges[0].shape[0],)]
-#   prevs = [-np.ones((edges[0].shape[0],), dtype=np.int32)]
-#   backward_sums = [np.zeros((edges[-1].shape[1],))]
-#   backward_nums = [np.zeros((edges[-1].shape[1],))]
-#   nexts = [-np.ones((edges[-1].shape[1],), dtype=np.int32)]
-
-#   for i in range(0, num_step-1):
-#     w = np.where(edges[i] > 0, edges[i] + np.expand_dims(forward_sums[i], 1), edges[i])
-#     forward_sums.append(np.max(w, 0))
-#     num = np.where(edges[i] > 0, np.ones(edges[i].shape) + np.expand_dims(forward_nums[i], 1), np.zeros(edges[i].shape))
-#     max_idxs = np.argmax(w, 0)
-#     prevs.append(max_idxs)
-#     forward_num = []
-#     for c, idx in enumerate(max_idxs):
-#       forward_num.append(num[idx, c])
-#     forward_nums.append(np.array(forward_num))
-#   for i in range(1, num_step):
-#     w = np.where(edges[-i] > 0, edges[-i] + np.expand_dims(backward_sums[i-1], 0), edges[-i])
-#     backward_sums.append(np.max(w, 1))
-#     num = np.where(edges[-i] > 0, np.ones(edges[-i].shape) + np.expand_dims(backward_nums[i-1], 0), np.zeros(edges[-i].shape))
-#     max_idxs = np.argmax(w, 1)
-#     nexts.append(max_idxs)
-#     backward_num = []
-#     for r, idx in enumerate(max_idxs):
-#       backward_num.append(num[r, idx])
-#     backward_nums.append(np.array(backward_num))
-
-#   max_score = 0.
-#   max_id = -1
-#   max_step = -1
-#   for i in range(num_step):
-#     total_sum = forward_sums[i] + backward_sums[-i-1]
-#     total_num = forward_nums[i] + backward_nums[-i-1] + 1
-#     score = total_sum / total_num + np.log(total_num)
-#     if np.max(score) > max_score:
-#       max_score = np.max(score)
-#       max_id = np.argmax(score)
-#       max_step = i
-
-#   t = max_step
-#   i = max_id
-#   path = []
-#   while t >= 0:
-#     path.append((t, i))
-#     if forward_sums[t][i] == 0:
-#       break
-#     i = prevs[t][i]
-#     t -= 1
-#   path = path[::-1]
-
-#   t = max_step
-#   i = max_id
-#   while t < num_step-1:
-#     if backward_sums[-t-1][i] == 0:
-#       break
-#     i = nexts[-t-1][i]
-#     t += 1
-#     path.append((t, i))
-
-#   return max_score, path
 
 
 def remove_path_node_from_graph(edges, path):
@@ -827,7 +768,10 @@ def build_association_graph():
         num_forward = forward_boxs.shape[0]
         num_backward = backward_boxs.shape[0]
         if num_forward == 0 or num_backward == 0:
+          scores = np.zeros((num_forward, num_backward))
+          edge.append(scores)
           continue
+
         forward_scores = np.mean(forward_scores, 1)
         backward_scores = np.mean(backward_scores, 1)
         scores = np.expand_dims(forward_scores, 1) + np.expand_dims(backward_scores, 0)
