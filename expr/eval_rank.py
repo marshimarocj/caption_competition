@@ -145,7 +145,7 @@ def predict_eval_vevd():
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A'
+  out_name = 'val.B'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   vid2gt = {}
@@ -154,7 +154,7 @@ def predict_eval_vevd():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[1])
+      gid = int(data[2])
       vid2gt[vid] = gid
 
   expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
