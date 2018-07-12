@@ -157,8 +157,6 @@ def predict_eval_vevd():
       gid = int(data[1])
       vid2gt[vid] = gid
 
-  best_epoch, _ = select_best_epoch(log_dir)
-
   expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
@@ -166,6 +164,8 @@ def predict_eval_vevd():
   python_file = '../rank_driver/vevd_score.py'
   gpuid = 0
   # gpuid = 1
+
+  best_epoch, _ = select_best_epoch(log_dir)
 
   # out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   # out_file = os.path.join(expr_name, 'pred', 'eval.50.100.json')
