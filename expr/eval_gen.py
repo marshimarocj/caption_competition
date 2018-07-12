@@ -102,7 +102,7 @@ def predict_eval():
   # python_file = '../gen_driver/self_critique.py'
   # gpuid = 0
 
-  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
   # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
   python_file = '../gen_driver/diversity.py'
   gpuid = 1
