@@ -169,15 +169,15 @@ def predict_eval_vevd():
 
   # out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   # out_file = os.path.join(expr_name, 'pred', 'eval.50.100.json')
-  out = []
-  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
-    ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
-  p.wait()
+  # out = []
+  # p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
+  #   ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+  # p.wait()
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
   predicts = np.load(predict_file)
   mir = calc_mir(predicts, vid2gt)
-  print best_epoch, mir
+  print epoch, mir
   # out.append({'epoch': epoch, 'mir_A': mir})
   # with open(out_file, 'w') as fout:
   #   json.dump(out, fout, indent=2)
