@@ -459,16 +459,17 @@ def prepare_for_track():
 
 
 def bat_prepare_for_track():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  root_dir = '/home/jiac/data/tgif' # gpu8
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   gif_dir = os.path.join(root_dir, 'gif')
   detect_dir = os.path.join(root_dir, 'obj_detect')
 
-  chunk = 0
+  chunk = 3
   score_threshold = .01
   split = 4
   # gap = 16
-  gap = 4
+  gap = 8
 
   names = []
   with open(lst_file) as f:
@@ -510,34 +511,22 @@ def bat_prepare_for_track():
     boxes_8 = data['boxes']
     scores_8 = data['scores']
 
-    detect_file = os.path.join(detect_dir, name + '.4.npz')
-    data = np.load(detect_file)
-    boxes_4 = data['boxes']
-    scores_4 = data['scores']
-
-    num = boxes_16.shape[0] + boxes_8.shape[0] + boxes_4.shape[0]
+    num = boxes_16.shape[0] + boxes_8.shape[0]
     idx_16 = 0
     idx_8 = 0
-    idx_4 = 0
     for i in range(0, num, 3):
-      if (i/3)%4 == 0:
+      if (i/3)%2 == 0:
         boxes = boxes_16
         scores = scores_16
         start = idx_16
         end = min(idx_16+3, boxes_16.shape[0])
         idx_16 = end
-      elif (i/3)%2 == 0:
+      else:
         boxes = boxes_8
         scores = scores_8
         start = idx_8
         end = min(idx_8+3, boxes_8.shape[0])
         idx_8 = end
-      else:
-        boxes = boxes_4
-        scores = scores_4
-        start = idx_4
-        end = min(idx_4+3, boxes_4.shape[0])
-        idx_4 = end
 
       all_boxes = []
       all_scores = []
@@ -577,6 +566,6 @@ if __name__ == '__main__':
   # extract_imgs_from_gif()
   # gen_sh_convert_gif_to_mp4()
   # detect_obj()
-  bat_detect_obj()
+  # bat_detect_obj()
   # prepare_for_matlab()
-  # bat_prepare_for_track()
+  bat_prepare_for_track()
