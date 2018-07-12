@@ -97,7 +97,7 @@ def predict_eval():
   # python_file = '../gen_driver/vevd.py'
   # gpuid = 0
 
-  model_name = 'self_critique_expr/i3d_resnet200.512.512.lstm'
+  model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
   # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
   python_file = '../gen_driver/self_critique.py'
   gpuid = 0
