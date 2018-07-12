@@ -116,6 +116,8 @@ def viterbi_decoding(edges):
       max_sum = np.max(total_sum)
       max_id = np.argmax(total_sum)
       max_step = i
+  if max_sum == 0:
+    return max_sum, []
 
   t = max_step
   i = max_id
