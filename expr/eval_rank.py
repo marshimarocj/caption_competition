@@ -144,7 +144,7 @@ def predict_eval_vevd():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
   out_name = 'val.B'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
@@ -162,17 +162,17 @@ def predict_eval_vevd():
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/vevd_score.py'
-  gpuid = 0
-  # gpuid = 1
+  # gpuid = 0
+  gpuid = 1
 
   epoch, _ = select_best_epoch(log_dir)
 
   # out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   # out_file = os.path.join(expr_name, 'pred', 'eval.50.100.json')
-  # out = []
-  # p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
-  #   ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
-  # p.wait()
+  out = []
+  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
+    ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+  p.wait()
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
   predicts = np.load(predict_file)
