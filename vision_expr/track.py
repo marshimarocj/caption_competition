@@ -891,9 +891,8 @@ def viz_viterbi_path():
         if step < len(all_backward_boxs):
           boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
         else:
-          print all_forward_boxs[step].shape
           boxes = all_forward_boxs[step][fid]
-        for j in range(gap):
+        for j in range(min(gap, boxes.shape[0])):
           f = step * gap + j
           x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
