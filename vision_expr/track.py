@@ -769,7 +769,7 @@ def build_association_graph():
         num_backward = backward_boxs.shape[0]
         if num_forward == 0 or num_backward == 0:
           scores = np.zeros((num_forward, num_backward))
-          edge.append(scores)
+          edges.append(scores)
           continue
 
         forward_scores = np.mean(forward_scores, 1)
