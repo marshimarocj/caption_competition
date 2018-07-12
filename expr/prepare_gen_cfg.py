@@ -149,7 +149,6 @@ def prepare_diversity():
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
   out_dir = os.path.join(root_dir, 'diversity_expr')
-  # model_spec = 'lstm'
 
   ft_names = [
     'i3d',
@@ -161,8 +160,8 @@ def prepare_diversity():
   params = {
     'num_step': 30,
     'reward_alpha': .25,
-    'reward_metric': 'cider',
-    # 'reward_metric': 'bcmr',
+    # 'reward_metric': 'cider',
+    'reward_metric': 'bcmr',
     'dim_input': 512,
     'dim_hidden': 512,
     'num_epoch': 100,
@@ -271,5 +270,5 @@ def prepare_margin():
 if __name__ == '__main__':
   # prepare_vevd()
   # prepare_self_critique()
-  # prepare_diversity()
-  prepare_margin()
+  prepare_diversity()
+  # prepare_margin()
