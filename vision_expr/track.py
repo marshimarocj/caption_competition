@@ -854,8 +854,8 @@ def viz_viterbi_path():
       img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
       imgs.append(img[:, :, ::-1].copy())
 
-    # path_file = os.path.join(track_root_dir, name + '.viterbi')
-    path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
+    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    # path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -873,13 +873,13 @@ def viz_viterbi_path():
     for f in range(0, num_frame, gap):
       forward_file = os.path.join(track_dir, '%d.track'%f)
       backward_file = os.path.join(track_dir, '%d.rtrack'%f)
-      if not os.path.exists(backward_file):
-        continue
 
-      forward_boxs, forward_scores = load_track(forward_file)
-      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
-      all_forward_boxs.append(forward_boxs)
-      all_backward_boxs.append(backward_boxs)
+      if os.path.exists(forward_file):
+        forward_boxs, forward_scores = load_track(forward_file)
+        all_forward_boxs.append(forward_boxs)
+      if os.path.exists(backward_file):
+        backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+        all_backward_boxs.append(backward_boxs)
     cnt = 0
     for path in paths:
       num_step = len(path)
@@ -887,7 +887,10 @@ def viz_viterbi_path():
         step = path[i][0]
         fid = path[i][1]
         bid = path[i+1][1]
-        boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
+        if step < len(all_backward_boxs):
+          boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
+        else:
+          boxes = all_forward_boxs[step]
         for j in range(gap):
           f = step * gap + j
           x, y, w, h = [int(d) for d in boxes[j]]
@@ -896,8 +899,8 @@ def viz_viterbi_path():
     out_imgs = []
     for img in imgs:
       out_imgs.append(img[:, :, ::-1])
-    # out_file = os.path.join(viz_dir, name + '.viterbi.gif')
-    out_file = os.path.join(viz_dir, name + '.viterbi.refine.gif')
+    out_file = os.path.join(viz_dir, name + '.viterbi.gif')
+    # out_file = os.path.join(viz_dir, name + '.viterbi.refine.gif')
     imageio.mimsave(out_file, out_imgs)
 
 
@@ -982,6 +985,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
+  # build_association_graph()
   # refine_viterbi_path()
-  # viz_viterbi_path()
+  viz_viterbi_path()
