@@ -165,7 +165,7 @@ def predict_eval_vevd():
   gpuid = 0
   # gpuid = 1
 
-  best_epoch, _ = select_best_epoch(log_dir)
+  epoch, _ = select_best_epoch(log_dir)
 
   # out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   # out_file = os.path.join(expr_name, 'pred', 'eval.50.100.json')
