@@ -890,7 +890,7 @@ def viz_viterbi_path():
         if step < len(all_backward_boxs):
           boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
         else:
-          boxes = all_forward_boxs[step]
+          boxes = all_forward_boxs[step][fid]
         for j in range(gap):
           f = step * gap + j
           x, y, w, h = [int(d) for d in boxes[j]]
