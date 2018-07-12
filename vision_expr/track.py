@@ -132,7 +132,7 @@ def viterbi_decoding(edges):
 
   t = max_step
   i = max_id
-  print (t, i)
+  # print (t, i)
   while t < num_step-1:
     if backward_sums[-t-1][i] == 0:
       break
@@ -757,8 +757,8 @@ def build_association_graph():
 
   debug_set = set(['tumblr_nqlr0rn8ox1r2r0koo1_400'])
   for name, num_frame in name_frames[:100]:
-    if name not in debug_set:
-      continue
+    # if name not in debug_set:
+    #   continue
     track_dir = os.path.join(track_root_dir, name)
     edges = []
     for f in range(0, num_frame, gap):
