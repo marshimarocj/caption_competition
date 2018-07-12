@@ -403,9 +403,9 @@ def bat_detect_obj():
 
 def bat_detect_obj_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  video_dir = os.path.join(root_dir, '16')
   model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
-  out_dir = os.path.join(root_dir, '16_obj_detect')
+  video_dir = os.path.join(root_dir, '17')
+  out_dir = os.path.join(root_dir, '17_obj_detect')
 
   NUM_CLASSES = 546
   gap = 8
