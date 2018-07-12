@@ -465,7 +465,11 @@ def bat_prepare_for_track():
   gif_dir = os.path.join(root_dir, 'gif')
   detect_dir = os.path.join(root_dir, 'obj_detect')
 
-  chunk = 3
+  parser = argparse.ArgumentParser()
+  parser.add_argument('chunk', type=int)
+  args = parser.parse_args()
+  chunk = args.chunk
+
   score_threshold = .01
   split = 4
   # gap = 16

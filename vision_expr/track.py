@@ -243,13 +243,14 @@ def load_path(path_file):
 '''expr
 '''
 def prepare_num_frame_lst():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  root_dir = '/home/jiac/data2/tgif' # gpu8
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   video_dir = os.path.join(root_dir, 'mp4')
   detect_dir = os.path.join(root_dir, 'obj_detect')
-  out_file = os.path.join(root_dir, 'split.0.lst')
+  chunk = 1
+  out_file = os.path.join(root_dir, 'split.%d.lst'%chunk)
 
-  chunk = 0
   split = 4
 
   names = []
@@ -970,7 +971,7 @@ def refine_viterbi_path():
 
 
 if __name__ == '__main__':
-  # prepare_num_frame_lst()
+  prepare_num_frame_lst()
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
@@ -981,6 +982,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
-  # refine_viterbi_path()
-  viz_viterbi_path()
+  # build_association_graph()
+  # # refine_viterbi_path()
+  # viz_viterbi_path()
