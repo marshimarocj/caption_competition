@@ -843,6 +843,7 @@ def viz_viterbi_path():
   for name, num_frame in name_frames[:100]:
     # if name not in debug_set:
     #   continue
+    print name, num_frame
     gif_file = os.path.join(gif_dir, name + '.gif')
     if not os.path.exists(gif_file):
       continue
