@@ -438,7 +438,7 @@ def bat_detect_obj_vtt():
         if frame % gap < 3:
           img = img[:, :, ::-1]
           output_dict = run_inference_for_single_image(
-            image_tensor, tensor_dict, img_np, sess)
+            image_tensor, tensor_dict, img, sess)
           out_boxes.append(output_dict['detection_boxes'])
           out_classes.append(output_dict['detection_classes'])
           out_scores.append(output_dict['detection_scores'])
