@@ -512,8 +512,8 @@ def prepare_for_track():
 
 
 def bat_prepare_for_track():
-  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  # root_dir = '/home/jiac/data/tgif' # gpu8
+  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  root_dir = '/home/jiac/data/tgif' # gpu8
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   gif_dir = os.path.join(root_dir, 'gif')
   detect_dir = os.path.join(root_dir, 'obj_detect')
