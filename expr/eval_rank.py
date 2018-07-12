@@ -145,7 +145,7 @@ def predict_eval_vevd():
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.B'
+  out_name = 'val.A'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   vid2gt = {}
@@ -162,8 +162,8 @@ def predict_eval_vevd():
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/vevd_score.py'
-  # gpuid = 0
-  gpuid = 1
+  gpuid = 0
+  # gpuid = 1
 
   epoch, _ = select_best_epoch(log_dir)
 
