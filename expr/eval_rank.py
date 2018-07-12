@@ -154,7 +154,7 @@ def predict_eval_vevd():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[2])
+      gid = int(data[1])
       vid2gt[vid] = gid
 
   expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
