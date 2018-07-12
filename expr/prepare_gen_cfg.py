@@ -183,7 +183,6 @@ def prepare_diversity():
   outprefix = '%s.%d.%d.%.1f.%d.%d_%d.%s'%(
     os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'], params['reward_alpha'], params['num_sample'], 
-    # params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], model_spec)
     params['min_ngram_in_diversity'], params['max_ngram_in_diversity'], params['reward_metric'])
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)

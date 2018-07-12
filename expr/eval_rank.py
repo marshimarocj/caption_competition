@@ -145,7 +145,7 @@ def predict_eval_vevd():
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A.%d'
+  out_name = 'val.A'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   vid2gt = {}
@@ -157,6 +157,8 @@ def predict_eval_vevd():
       gid = int(data[1])
       vid2gt[vid] = gid
 
+  best_epoch, _ = select_best_epoch(log_dir)
+
   expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
@@ -165,21 +167,20 @@ def predict_eval_vevd():
   gpuid = 0
   # gpuid = 1
 
-  out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
+  # out_file = os.path.join(expr_name, 'pred', 'eval.0.50.json')
   # out_file = os.path.join(expr_name, 'pred', 'eval.50.100.json')
   out = []
-  for epoch in range(50):
-  # for epoch in range(50, 100):
-    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
-      ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name%epoch)
-    p.wait()
+  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
+    ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+  p.wait()
 
-    predict_file = '%s/pred/%s.npy'%(expr_name, out_name%epoch)
-    predicts = np.load(predict_file)
-    mir = calc_mir(predicts, vid2gt)
-    out.append({'epoch': epoch, 'mir_A': mir})
-  with open(out_file, 'w') as fout:
-    json.dump(out, fout, indent=2)
+  predict_file = '%s/pred/%s.npy'%(expr_name, out_name%epoch)
+  predicts = np.load(predict_file)
+  mir = calc_mir(predicts, vid2gt)
+  print best_epoch, mir
+  # out.append({'epoch': epoch, 'mir_A': mir})
+  # with open(out_file, 'w') as fout:
+  #   json.dump(out, fout, indent=2)
 
 
 if __name__ == '__main__':
