@@ -103,13 +103,13 @@ def predict_eval():
   # gpuid = 0
 
   # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
-  # # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
-  # python_file = '../gen_driver/diversity.py'
-  # gpuid = 1
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
+  python_file = '../gen_driver/diversity.py'
+  gpuid = 1
 
-  model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
-  python_file = '../gen_driver/margin.py'
-  gpuid = 0
+  # model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
+  # python_file = '../gen_driver/margin.py'
+  # gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
