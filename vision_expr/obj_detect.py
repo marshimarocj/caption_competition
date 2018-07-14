@@ -647,7 +647,7 @@ def bat_prepare_for_track_vtt():
 
     num = boxes.shape[0]
     print name, num
-    for i in range(num, 3):
+    for i in range(0, num, 3):
       start = i
       end = min(i+3, num)
 
@@ -670,7 +670,6 @@ def bat_prepare_for_track_vtt():
         sort_idxs = np.argsort(all_scores)
         all_boxes = all_boxes[sort_idxs]
         suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
-      print suppressed_boxes.shape
 
       out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
