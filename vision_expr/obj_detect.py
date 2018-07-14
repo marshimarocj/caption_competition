@@ -623,8 +623,10 @@ def bat_prepare_for_track_vtt():
   model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
   # video_dir = os.path.join(root_dir, '16')
   # detect_dir = os.path.join(root_dir, '16_obj_detect')
-  video_dir = os.path.join(root_dir, '17')
-  detect_dir = os.path.join(root_dir, '17_obj_detect')
+  # video_dir = os.path.join(root_dir, '17')
+  # detect_dir = os.path.join(root_dir, '17_obj_detect')
+  video_dir = os.path.join(root_dir, '18')
+  detect_dir = os.path.join(root_dir, '18_obj_detect')
 
   score_threshold = .01
   gap = 8
