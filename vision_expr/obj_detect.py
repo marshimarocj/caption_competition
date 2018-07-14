@@ -618,6 +618,67 @@ def bat_prepare_for_track():
       print cnt
 
 
+def bat_prepare_for_track_vtt():
+  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  model_file = '/home/jiac/data/openimage/change_threshold_expr/export/frozen_inference_graph.pb'
+  video_dir = os.path.join(root_dir, '16')
+  detect_dir = os.path.join(root_dir, '16_obj_detect')
+
+  score_threshold = .01
+  gap = 8
+
+  names = os.listdir(video_dir)
+  for name in names:
+    name, _ = os.path.splitext(name)
+
+    video_file = os.path.join(video_dir, name + '.mp4')
+    vid = cv2.VideoCapture(video_file)
+    img_h = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT))
+    img_w = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH))
+
+    out_dir = os.path.join(detect_dir, name)
+    if not os.path.exists(out_dir):
+      os.mkdir(out_dir)
+
+    detect_file = os.path.join(detect_dir, name + '.npz')
+    data = np.load(detect_file)
+    boxes = data['boxes']
+    scores = data['scores']
+
+    num = boxs.shape[0]
+    for i in range(num, 3):
+      start = i
+      end = min(i+3, num)
+
+      all_boxes = []
+      all_scores = []
+      for j in range(start, end):
+        valid_idxs = scores[j] >= score_threshold
+        valid_boxes = boxes[j][valid_idxs]
+        valid_boxes[:, 0] *= img_h
+        valid_boxes[:, 1] *= img_w
+        valid_boxes[:, 2] *= img_h
+        valid_boxes[:, 3] *= img_w
+        all_boxes.append(valid_boxes)
+        all_scores.append(scores[j][valid_idxs])
+      all_boxes = np.concatenate(all_boxes, 0)
+      all_scores = np.concatenate(all_scores)
+      sort_idxs = np.argsort(all_scores)
+      all_boxes = all_boxes[sort_idxs]
+      suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
+
+      out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
+      with open(out_file, 'w') as fout:
+        for box in suppressed_boxes[::-1]:
+          x = box[1]
+          y = box[0]
+          w = box[3]-box[1]
+          h = box[2]-box[0]
+          if w < img_w / 10. or h < img_h / 10.:
+            continue
+          fout.write('%d %d %d %d\n'%(x, y, w, h))
+
+
 if __name__ == '__main__':
   # tst()
   # extract_imgs_from_gif()
@@ -626,4 +687,5 @@ if __name__ == '__main__':
   # bat_detect_obj()
   # bat_detect_obj_vtt()
   # prepare_for_matlab()
-  bat_prepare_for_track()
+  # bat_prepare_for_track()
+  bat_prepare_for_track_vtt()
