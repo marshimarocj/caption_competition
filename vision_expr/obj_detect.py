@@ -630,6 +630,7 @@ def bat_prepare_for_track_vtt():
   names = os.listdir(video_dir)
   for name in names:
     name, _ = os.path.splitext(name)
+    print name
 
     video_file = os.path.join(video_dir, name + '.mp4')
     vid = cv2.VideoCapture(video_file)
@@ -661,11 +662,14 @@ def bat_prepare_for_track_vtt():
         valid_boxes[:, 3] *= img_w
         all_boxes.append(valid_boxes)
         all_scores.append(scores[j][valid_idxs])
-      all_boxes = np.concatenate(all_boxes, 0)
-      all_scores = np.concatenate(all_scores)
-      sort_idxs = np.argsort(all_scores)
-      all_boxes = all_boxes[sort_idxs]
-      suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
+      if len(all_boxes) == 0:
+        suppressed_boxes = np.array(all_boxes)
+      else:
+        all_boxes = np.concatenate(all_boxes, 0)
+        all_scores = np.concatenate(all_scores)
+        sort_idxs = np.argsort(all_scores)
+        all_boxes = all_boxes[sort_idxs]
+        suppressed_boxes = non_max_suppression_fast(all_boxes, 0.75)
 
       out_file = os.path.join(out_dir, '%d.box'%(i / 3 * gap))
       with open(out_file, 'w') as fout:
