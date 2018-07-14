@@ -645,7 +645,7 @@ def bat_prepare_for_track_vtt():
     boxes = data['boxes']
     scores = data['scores']
 
-    num = boxs.shape[0]
+    num = boxes.shape[0]
     for i in range(num, 3):
       start = i
       end = min(i+3, num)
