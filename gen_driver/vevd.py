@@ -27,6 +27,9 @@ def build_parser():
 2: top_k perplexity+sentence {vid: [(perplexity, sent), ...]}, useful for simple ensemble
       '''
   )
+  parser.add_argument('--tst_strategy', dest='tst_strategy', default='beam')
+  parser.add_argument('--tst_num_sample', dest='tst_num_sample', type=int, default=100)
+  parser.add_argument('--tst_sample_topk', dest='tst_sample_topk', type=int, default=10)
   parser.add_argument('--val', dest='val', type=int, default=True)
 
   return parser
@@ -81,12 +84,24 @@ if __name__ == '__main__':
       path_cfg.tst_ftfiles = path_cfg.val_ftfiles
       path_cfg.tst_videoid_file = path_cfg.val_videoid_file
       out_name = 'val'
+    if opts.tst_strategy == 'beam':
+      path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
+        '%s-%d.%d.%d.%s.json'%(out_name,
+          opts.best_epoch, opts.gen_sent_mode, model_cfg.subcfgs[gen_model.diversity.VD].sent_pool_size, opts.tst_strategy))
+    elif opts.tst_strategy == 'sample':
+      path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
+        '%s-%d.%d.%d.%s.json'%(out_name,
+          opts.best_epoch, opts.tst_num_sample, opts.tst_sample_topk, opts.tst_strategy))
+    path_cfg.log_file = None
+    model_cfg.search_strategy = opts.tst_strategy
+    model_cfg.tst_num_sample = opts.tst_num_sample
+    model_cfg.tst_sample_topk = opts.tst_sample_topk
 
     m = gen_model.vevd.Model(model_cfg)
 
-    path_cfg.predict_file = os.path.join(
-      path_cfg.output_dir, 'pred', '%s-%d.1.5.%s.json'%(out_name, opts.best_epoch, model_cfg.search_strategy))
-    trntst = gen_model.vevd.TrnTst(model_cfg, path_cfg, m)
+    # path_cfg.predict_file = os.path.join(
+    #   path_cfg.output_dir, 'pred', '%s-%d.1.5.%s.json'%(out_name, opts.best_epoch, model_cfg.search_strategy))
+    trntst = gen_model.vevd.TrnTst(model_cfg, path_cfg, m, gen_sent_mode=opts.gen_sent_mode)
     trntst.gen_sent_mode = opts.gen_sent_mode
     tst_reader = gen_model.vevd.Reader(
       path_cfg.tst_ftfiles, path_cfg.tst_videoid_file)

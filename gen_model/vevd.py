@@ -30,6 +30,8 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.subcfgs[VD] = decoder.rnn.Config()
 
     self.search_strategy = 'beam'
+    self.tst_num_sample = -1
+    self.tst_sample_topk= -1
 
   def _assert(self):
     assert self.subcfgs[VE].dim_output == self.subcfgs[VD].subcfgs[CELL].dim_hidden
@@ -162,14 +164,22 @@ class Model(framework.model.module.AbstractModel):
         decoder.InKey.FT: ft_embed,
         decoder.InKey.INIT_WID: init_wid,
       }
-      out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
-        task='generation', search_strategy=self._config.search_strategy)
-      return {
-        self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
-        self.OutKey.BEAM_CUM_LOG_PROB: out_ops[decoder.OutKey.BEAM_CUM_LOG_PROB],
-        self.OutKey.BEAM_PRE: out_ops[decoder.OutKey.BEAM_PRE],
-        self.OutKey.BEAM_END: out_ops[decoder.OutKey.BEAM_END],
-      }
+      if self._config.search_strategy == 'beam':
+        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
+          task='generation', search_strategy='beam')
+        return {
+          self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
+          self.OutKey.BEAM_CUM_LOG_PROB: out_ops[decoder.OutKey.BEAM_CUM_LOG_PROB],
+          self.OutKey.BEAM_PRE: out_ops[decoder.OutKey.BEAM_PRE],
+          self.OutKey.BEAM_END: out_ops[decoder.OutKey.BEAM_END],
+        }
+      elif self._config.search_strategy == 'sample':
+        out_ops = decoder.get_out_ops_in_mode(vd_inputs, mode, 
+          search_strategy='sample', num_sample=self._config.tst_num_sample, topk=self._config.tst_sample_topk, task='generation')
+        return {
+          self.OutKey.OUT_WID: out_ops[decoder.OutKey.OUT_WID],
+          self.OutKey.LOG_PROB: out_ops[decoder.OutKey.LOG_PROB],
+        }
 
     delegate = {
       framework.model.module.Mode.TRN_VAL: trn_val,

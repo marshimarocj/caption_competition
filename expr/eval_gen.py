@@ -134,12 +134,17 @@ def predict_eval():
 
 
 def predict_sample():
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
 
-  # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
-  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
-  python_file = '../gen_driver/diversity.py'
-  gpuid = 1
+  # # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
+  # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
+  # python_file = '../gen_driver/diversity.py'
+  # gpuid = 1
+
+  model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
+  python_file = '../gen_driver/vevd.py'
+  gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
