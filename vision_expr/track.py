@@ -283,9 +283,9 @@ def prepare_num_frame_lst():
 
 def prepare_num_frame_lst_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  video_dir = os.path.join(root_dir, '16')
-  detect_dir = os.path.join(root_dir, '16_obj_detect')
-  out_file = os.path.join(root_dir, '16.lst')
+  video_dir = os.path.join(root_dir, '17')
+  detect_dir = os.path.join(root_dir, '17_obj_detect')
+  out_file = os.path.join(root_dir, '17.lst')
 
   names = os.listdir(video_dir)
   with open(out_file, 'w') as fout:
