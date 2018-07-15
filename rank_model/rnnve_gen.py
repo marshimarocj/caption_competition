@@ -53,6 +53,6 @@ class TstReader(framework.model.data.Reader):
       fts = np.expand_dims(ft, 0)
       yield {
         'fts': fts,
-        'captionids': self.captionids[i*num_candidate:(i+1)*num_candidate],
-        'caption_masks': self.caption_masks[i*num_candidate:(i+1)*num_candidate],
+        'captionids': self.captionids[i*self.num_candidate:(i+1)*self.num_candidate],
+        'caption_masks': self.caption_masks[i*self.num_candidate:(i+1)*self.num_candidate],
       }
