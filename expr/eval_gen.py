@@ -84,6 +84,16 @@ def eval(predict_file, groundtruth_file):
   return out
 
 
+def gen_caption(captionid, words):
+  caption = []
+  for wid in captionid:
+    if wid == 1:
+      break
+    caption.append(words[wid])
+  caption = ' '.join(caption[1:])
+  return caption
+
+
 '''expr
 '''
 def predict_eval():
@@ -180,7 +190,57 @@ def rerank_sample():
   p.wait()
 
 
+def eval_rerank_caption():
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')
+  gt_file = os.path.join(root_dir, 'generation', 'annotation', 'human_caption_dict.pkl')
+  word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
+
+  annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
+  pred_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
+
+  vids = np.load(vid_file)
+
+  with open(gt_file) as f:
+    data = cPickle.load(f)
+  gts = {}
+  for vid in vids:
+    gts[vid] = data[vid]
+
+  with open(annotation_file) as f:
+    fid, captionids, capiton_masks = cPickle.load(f)
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  scores = np.load(pred_file)
+  captionids = np.reshape(captionids, scores.shape + (-1,))
+  idxs = np.argsort(-scores, 1)
+  pred = {}
+  for idx, captionid, vid in zip(idxs, captionids, vids):
+    pred[vid] = gen_caption(captionid[idx], words)
+
+  bleu_scorer = Bleu(4)
+  meteor_scorer = Meteor()
+  rouge_scorer = Rouge()
+  cider_scorer = Cider()
+  # closest score
+  res_bleu, _ = bleu_scorer.compute_score(gts, pred)
+  # metero handles the multi references (don't know the details yet)
+  res_meteor, _ = meteor_scorer.compute_score(gts, pred)
+  meteor_scorer.meteor_p.kill()
+  # average
+  res_rouge, _ = rouge_scorer.compute_score(gts, pred)
+  # average
+  res_cider, _ = cider_scorer.compute_score(gts, pred)
+
+  with open('eval.%d.txt'%gpuid, 'w') as fout:
+    content = '%.2f\t%.2f\t%.2f'%(
+      res_bleu*100, res_meteor*100, res_cider*100)
+    print content
+    fout.write(content + '\n')
+
+
 if __name__ == '__main__':
   # predict_eval()
   # predict_sample()
-  rerank_sample()
+  # rerank_sample()
+  eval_rerank_caption()
