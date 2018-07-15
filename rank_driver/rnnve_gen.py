@@ -63,7 +63,7 @@ if __name__ == '__main__':
   m = rank_model.rnnve_gen.Model(model_cfg)
 
   path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
-  path_cfg.predict_file = out_file
+  path_cfg.predict_file = opts.out_file
   path_cfg.log_file = None
 
   trntst = rank_model.rnnve_gen.TrnTst(model_cfg, path_cfg, m)
