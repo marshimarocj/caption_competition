@@ -136,7 +136,7 @@ def predict_eval():
 def predict_sample():
   root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
 
-  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.lstm'
+  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
   python_file = '../gen_driver/diversity.py'
   gpuid = 0
 
@@ -154,5 +154,5 @@ def predict_sample():
 
 
 if __name__ == '__main__':
-  predict_eval()
-  # predict_sample()
+  # predict_eval()
+  predict_sample()
