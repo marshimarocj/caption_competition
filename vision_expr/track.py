@@ -288,17 +288,18 @@ def prepare_num_frame_lst_vtt():
   out_file = os.path.join(root_dir, '16.lst')
 
   names = os.listdir(video_dir)
-  for name in names:
-    name, _ = os.path.splitext(name)
-    video_file = os.path.join(video_dir, name + '.mp4')
-    vid = cv2.VideoCapture(video_file)
-    num_frame = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
+  with open(out_file, 'w') as fout:
+    for name in names:
+      name, _ = os.path.splitext(name)
+      video_file = os.path.join(video_dir, name + '.mp4')
+      vid = cv2.VideoCapture(video_file)
+      num_frame = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
 
-    detect_file = os.path.join(detect_dir, name + '.npz')
-    data = np.load(detect_file)
-    if 'scores' not in data:
-      continue
-    fout.write('%s %d\n'%(name, num_frame))
+      detect_file = os.path.join(detect_dir, name + '.npz')
+      data = np.load(detect_file)
+      if 'scores' not in data:
+        continue
+      fout.write('%s %d\n'%(name, num_frame))
 
 
 def viz_tracking():
