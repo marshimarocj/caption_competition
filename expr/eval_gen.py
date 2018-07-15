@@ -159,6 +159,10 @@ def predict_sample():
   p.wait()
 
 
+def rerank_sample():
+  root_dir = ''
+
+
 if __name__ == '__main__':
   # predict_eval()
   predict_sample()

@@ -170,8 +170,8 @@ def prepare_rnnve():
     # 'pool': 'mean',
     'pool': 'max',
 
-    # 'cell': 'gru',
-    'cell': 'lstm',
+    'cell': 'gru',
+    # 'cell': 'lstm',
     'cell_dim_hidden': 150,
   }
 
@@ -271,6 +271,6 @@ def prepare_vevd_score():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
+  prepare_rnnve()
   # prepare_ceve_score()
-  prepare_vevd_score()
+  # prepare_vevd_score()
