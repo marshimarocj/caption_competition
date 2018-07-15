@@ -284,6 +284,7 @@ def prepare_num_frame_lst():
 def prepare_num_frame_lst_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
   video_dir = os.path.join(root_dir, '16')
+  detect_dir = os.path.join(root_dir, '16_obj_detect')
   out_file = os.path.join(root_dir, '16.lst')
 
   names = os.listdir(video_dir)
@@ -293,6 +294,7 @@ def prepare_num_frame_lst_vtt():
     vid = cv2.VideoCapture(video_file)
     num_frame = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
 
+    detect_file = os.path.join(detect_dir, name + '.npz')
     data = np.load(detect_file)
     if 'scores' not in data:
       continue
