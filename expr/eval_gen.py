@@ -175,8 +175,7 @@ def rerank_sample():
 
   python_file = '../rank_driver/rnnve_gen.py'
   p = gen_script_and_run(
-    python_file, model_cfg_file, path_cfg_file, best_epoch,
-    gpuid=gpuid, best_epoch=best_epoch, 
+    python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid, 
     annotation_file=annotation_file, ft_files=','.join(ft_files), out_file=out_file, num_candidate=num_candidate)
   p.wait()
 
