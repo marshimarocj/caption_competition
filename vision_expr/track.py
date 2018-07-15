@@ -281,6 +281,24 @@ def prepare_num_frame_lst():
       fout.write('%s %d\n'%(name, num_frame))
 
 
+def prepare_num_frame_lst_vtt():
+  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  video_dir = os.path.join(root_dir, '16')
+  out_file = os.path.join(root_dir, '16.lst')
+
+  names = os.listdir(video_dir)
+  for name in names:
+    name, _ = os.path.splitext(name)
+    video_file = os.path.join(video_dir, name + '.mp4')
+    vid = cv2.VideoCapture(video_file)
+    num_frame = int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
+
+    data = np.load(detect_file)
+    if 'scores' not in data:
+      continue
+    fout.write('%s %d\n'%(name, num_frame))
+
+
 def viz_tracking():
   root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
@@ -971,7 +989,8 @@ def refine_viterbi_path():
 
 
 if __name__ == '__main__':
-  prepare_num_frame_lst()
+  # prepare_num_frame_lst()
+  prepare_num_frame_lst_vtt()
   # viz_tracking()
   # kcf_tracking()
   # viz_kcf_tracking()
