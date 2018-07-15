@@ -25,7 +25,8 @@ RCELL = rnnve.RCELL
 ModelConfig = rnnve.ModelConfig
 gen_cfg = rnnve.gen_cfg
 Model = rnnve.Model
-
+TrnTst = rnnve.TrnTst
+PathCfg = rnnve.PathCfg
 
 class TstReader(framework.model.data.Reader):
   def __init__(self, ft_files, annotation_file, num_candidate):
