@@ -27,7 +27,7 @@ def build_parser():
   parser.add_argument('--annotation_file', dest='annotation_file')
   parser.add_argument('--out_file', dest='out_file')
   parser.add_argument('--ft_files', dest='ft_files')
-  parser.add_argument('--num_candidate', dest='num_candidate')
+  parser.add_argument('--num_candidate', dest='num_candidate', type=int)
 
   return parser
 
