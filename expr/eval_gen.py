@@ -160,9 +160,28 @@ def predict_sample():
 
 
 def rerank_sample():
-  root_dir = ''
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  model_name = 'rnnve_expr/i3d_resnet200.300.150.gru.max.0.5'
+  model_cfg_file = os.path.join(root_dir, 'rank', model_name + '.model.json')
+  path_cfg_file = os.path.join(root_dir, 'rank', model_name + '.path.json')
+  ft_names = ['i3d', 'resnet200']
+  ft_files = [os.path.join(root_dir, 'generation', 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
+  annotation_file = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
+
+  best_epoch = 77
+  num_candidate = 100
+  gpuid = 0
+
+  python_file = '../rank_driver/rnnve_gen.py'
+  p = gen_script_and_run(
+    python_file, model_cfg_file, path_cfg_file, best_epoch,
+    gpuid=gpuid, best_epoch=best_epoch, 
+    annotation_file=annotation_file, ft_files=','.join(ft_files), out_file=out_file, num_candidate=num_candidate)
+  p.wait()
 
 
 if __name__ == '__main__':
   # predict_eval()
-  predict_sample()
+  # predict_sample()
+  rerank_sample()
