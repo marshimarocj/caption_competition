@@ -15,8 +15,8 @@ from prepare import caption2id_mask
 '''
 def gen_captionid_mask():
   root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
-  pred_dir = os.path.join(root_dir, 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.lstm', 'pred')
-  caption_file = os.path.join(pred_dir, 'val-44.100.10.sample.json')
+  pred_dir = os.path.join(root_dir, 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred')
+  caption_file = os.path.join(pred_dir, 'val-51.100.10.sample.json')
   vid_file = os.path.join(root_dir, 'split', 'val_videoids.npy')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   out_file = os.path.join(pred_dir, 'sample.100.pkl')
