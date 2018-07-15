@@ -166,8 +166,8 @@ def rerank_sample():
   path_cfg_file = os.path.join(root_dir, 'rank', model_name + '.path.json')
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'generation', 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
-  annotation_file = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
-  out_file = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
+  annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
+  out_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
 
   best_epoch = 77
   num_candidate = 100
