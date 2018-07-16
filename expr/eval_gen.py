@@ -216,7 +216,7 @@ def eval_rerank_caption():
   idxs = np.argmax(-scores, 1)
   pred = {}
   for idx, captionid, vid in zip(idxs, captionids, vids):
-    pred[vid] = gen_caption(captionid[idx], words)
+    pred[vid] = [gen_caption(captionid[idx], words)]
 
   bleu_scorer = Bleu(4)
   meteor_scorer = Meteor()
