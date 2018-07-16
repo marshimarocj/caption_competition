@@ -371,7 +371,7 @@ def kcf_tracking():
   # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   # lst_file = os.path.join(root_dir, 'split.0.lst')
   root_dir = '/home/jiac/data/tgif/' # gpu8
-  lst_file = os.path.join(root_dir, 'split.2.lst')
+  lst_file = os.path.join(root_dir, 'split.3.lst')
   obj_detect_root_dir = os.path.join(root_dir, 'obj_detect')
   video_dir = os.path.join(root_dir, 'mp4')
   track_root_dir = os.path.join(root_dir, 'kcf_track')
