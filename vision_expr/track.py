@@ -3,7 +3,7 @@ import argparse
 import subprocess
 
 import numpy as np
-# import imageio
+import imageio
 from scipy.io import loadmat
 import cv2
 
@@ -1008,10 +1008,10 @@ def refine_viterbi_path():
 
 
 if __name__ == '__main__':
-  # prepare_num_frame_lst()
+  prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
   # viz_tracking()
-  kcf_tracking()
+  # kcf_tracking()
   # viz_kcf_tracking()
 
   # associate_forward_backward()
