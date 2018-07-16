@@ -375,10 +375,10 @@ def kcf_tracking():
   # track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '17.lst')
-  obj_detect_root_dir = os.path.join(root_dir, '17_obj_detect')
-  video_dir = os.path.join(root_dir, '17')
-  track_root_dir = os.path.join(root_dir, '17_kcf_track')
+  lst_file = os.path.join(root_dir, '18.lst')
+  obj_detect_root_dir = os.path.join(root_dir, '18_obj_detect')
+  video_dir = os.path.join(root_dir, '18')
+  track_root_dir = os.path.join(root_dir, '18_kcf_track')
 
   gap = 8
   # num_thread = 8
