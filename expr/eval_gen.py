@@ -213,6 +213,7 @@ def eval_rerank_caption():
     words = cPickle.load(f)
   scores = np.load(pred_file)
   captionids = np.reshape(captionids, scores.shape + (-1,))
+  print captionids.shape
   idxs = np.argsort(-scores, 1)
   pred = {}
   for idx, captionid, vid in zip(idxs, captionids, vids):
