@@ -232,7 +232,7 @@ def eval_rerank_caption():
   # average
   res_cider, _ = cider_scorer.compute_score(gts, pred)
 
-  with open('eval.%d.txt'%gpuid, 'w') as fout:
+  with open('eval.txt', 'w') as fout:
     content = '%.2f\t%.2f\t%.2f'%(
       res_bleu*100, res_meteor*100, res_cider*100)
     print content
