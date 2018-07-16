@@ -206,8 +206,11 @@ def eval_rerank_caption():
   # annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
   # pred_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
 
-  annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.pkl')
-  pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.npy')
+  # annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.pkl')
+  # pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.npy')
+
+  annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.pkl')
+  pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.npy')
 
   vids = np.load(vid_file)
 
