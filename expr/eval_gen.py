@@ -203,8 +203,11 @@ def eval_rerank_caption():
   gt_file = os.path.join(root_dir, 'generation', 'annotation', 'human_caption_dict.pkl')
   word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
 
-  annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
-  pred_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
+  # annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
+  # pred_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
+
+  annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.npy')
 
   vids = np.load(vid_file)
 
@@ -249,5 +252,5 @@ def eval_rerank_caption():
 if __name__ == '__main__':
   # predict_eval()
   # predict_sample()
-  rerank_sample()
-  # eval_rerank_caption()
+  # rerank_sample()
+  eval_rerank_caption()
