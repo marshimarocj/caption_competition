@@ -234,7 +234,7 @@ def eval_rerank_caption():
 
   with open('eval.txt', 'w') as fout:
     content = '%.2f\t%.2f\t%.2f'%(
-      res_bleu*100, res_meteor*100, res_cider*100)
+      res_bleu[3]*100, res_meteor*100, res_cider*100)
     print content
     fout.write(content + '\n')
 
