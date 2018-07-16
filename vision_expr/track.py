@@ -370,18 +370,20 @@ def viz_tracking():
 def kcf_tracking():
   # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   # lst_file = os.path.join(root_dir, 'split.0.lst')
-  # obj_detect_root_dir = os.path.join(root_dir, 'obj_detect')
-  # video_dir = os.path.join(root_dir, 'mp4')
-  # track_root_dir = os.path.join(root_dir, 'kcf_track')
+  root_dir = '/home/jiac/data/tgif/' # gpu8
+  lst_file = os.path.join(root_dir, 'split.1.lst')
+  obj_detect_root_dir = os.path.join(root_dir, 'obj_detect')
+  video_dir = os.path.join(root_dir, 'mp4')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
 
-  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '18.lst')
-  obj_detect_root_dir = os.path.join(root_dir, '18_obj_detect')
-  video_dir = os.path.join(root_dir, '18')
-  track_root_dir = os.path.join(root_dir, '18_kcf_track')
+  # root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  # lst_file = os.path.join(root_dir, '18.lst')
+  # obj_detect_root_dir = os.path.join(root_dir, '18_obj_detect')
+  # video_dir = os.path.join(root_dir, '18')
+  # track_root_dir = os.path.join(root_dir, '18_kcf_track')
 
   gap = 8
-  # num_thread = 8
+  num_thread = 4
 
   name_nums = []
   with open(lst_file) as f:
@@ -393,7 +395,7 @@ def kcf_tracking():
       name_nums.append((name, num))
 
   # for name, num in name_nums[:100]:
-  # ps = []
+  ps = []
   for name, num in name_nums:
     video_file = os.path.join(video_dir, name + '.mp4')
     bbox_dir = os.path.join(obj_detect_root_dir, name)
@@ -410,18 +412,18 @@ def kcf_tracking():
       str(num), str(gap), '0',
     ]
     p = subprocess.Popen(cmd)
-    p.wait()
-    # ps.append(p)    
+    # p.wait()
+    ps.append(p)
 
     cmd[-1] = '1'
     p = subprocess.Popen(cmd)
-    p.wait()
-    # ps.append(p)
+    # p.wait()
+    ps.append(p)
 
-    # if len(ps) >= num_thread:
-    #   for p in ps:
-    #     p.wait()
-    #   ps = []
+    if len(ps) >= num_thread:
+      for p in ps:
+        p.wait()
+      ps = []
 
 
 def viz_kcf_tracking():
@@ -1008,10 +1010,10 @@ def refine_viterbi_path():
 
 
 if __name__ == '__main__':
-  prepare_num_frame_lst()
+  # prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
   # viz_tracking()
-  # kcf_tracking()
+  kcf_tracking()
   # viz_kcf_tracking()
 
   # associate_forward_backward()
