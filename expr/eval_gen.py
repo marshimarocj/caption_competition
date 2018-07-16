@@ -180,15 +180,15 @@ def rerank_sample():
   # annotation_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.pkl')
   # out_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'sample.100.npy')
 
-  annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.pkl')
-  out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.npy')
+  # annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.pkl')
+  # out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.cider', 'pred', 'sample.100.npy')
 
-  # annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.pkl')
-  # out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.npy')
+  annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.npy')
 
   best_epoch = 77
   num_candidate = 100
-  gpuid = 0
+  gpuid = 1
 
   python_file = '../rank_driver/rnnve_gen.py'
   p = gen_script_and_run(
