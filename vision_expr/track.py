@@ -3,7 +3,7 @@ import argparse
 import subprocess
 
 import numpy as np
-# import imageio
+import imageio
 from scipy.io import loadmat
 import cv2
 
@@ -248,7 +248,7 @@ def prepare_num_frame_lst():
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   video_dir = os.path.join(root_dir, 'mp4')
   detect_dir = os.path.join(root_dir, 'obj_detect')
-  chunk = 1
+  chunk = 2
   out_file = os.path.join(root_dir, 'split.%d.lst'%chunk)
 
   split = 4
@@ -1009,10 +1009,10 @@ def refine_viterbi_path():
 
 
 if __name__ == '__main__':
-  # prepare_num_frame_lst()
+  prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
   # viz_tracking()
-  kcf_tracking()
+  # kcf_tracking()
   # viz_kcf_tracking()
 
   # associate_forward_backward()
