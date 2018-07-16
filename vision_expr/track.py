@@ -368,17 +368,17 @@ def viz_tracking():
 
 
 def kcf_tracking():
-  # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
-  # lst_file = os.path.join(root_dir, 'split.0.lst')
-  # obj_detect_root_dir = os.path.join(root_dir, 'obj_detect')
-  # video_dir = os.path.join(root_dir, 'mp4')
-  # track_root_dir = os.path.join(root_dir, 'kcf_track')
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  obj_detect_root_dir = os.path.join(root_dir, 'obj_detect')
+  video_dir = os.path.join(root_dir, 'mp4')
+  track_root_dir = os.path.join(root_dir, 'kcf_track')
 
-  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '18.lst')
-  obj_detect_root_dir = os.path.join(root_dir, '18_obj_detect')
-  video_dir = os.path.join(root_dir, '18')
-  track_root_dir = os.path.join(root_dir, '18_kcf_track')
+  # root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  # lst_file = os.path.join(root_dir, '18.lst')
+  # obj_detect_root_dir = os.path.join(root_dir, '18_obj_detect')
+  # video_dir = os.path.join(root_dir, '18')
+  # track_root_dir = os.path.join(root_dir, '18_kcf_track')
 
   gap = 8
 

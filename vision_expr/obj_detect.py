@@ -695,5 +695,5 @@ if __name__ == '__main__':
   # bat_detect_obj()
   # bat_detect_obj_vtt()
   # prepare_for_matlab()
-  # bat_prepare_for_track()
-  bat_prepare_for_track_vtt()
+  bat_prepare_for_track()
+  # bat_prepare_for_track_vtt()
