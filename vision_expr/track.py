@@ -248,7 +248,7 @@ def prepare_num_frame_lst():
   lst_file = os.path.join(root_dir, 'tgif-v1.0.tsv')
   video_dir = os.path.join(root_dir, 'mp4')
   detect_dir = os.path.join(root_dir, 'obj_detect')
-  chunk = 2
+  chunk = 3
   out_file = os.path.join(root_dir, 'split.%d.lst'%chunk)
 
   split = 4
