@@ -1065,7 +1065,7 @@ def viz_viterbi_path_vtt():
         break
       imgs.append(img)
 
-    path_file = os.path.join(track_dir, name + '.viterbi.refine')
+    path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
     paths = []
     with open(path_file) as f:
       for line in f:
