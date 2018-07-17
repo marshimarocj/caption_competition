@@ -1037,7 +1037,7 @@ def viz_viterbi_path_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
   lst_file = os.path.join(root_dir, '16.lst')
   video_dir = os.path.join(root_dir, '16')
-  track_dir = os.path.join(root_dir, '16_kcf_track')
+  track_root_dir = os.path.join(root_dir, '16_kcf_track')
   viz_dir = os.path.join(root_dir, '16_kcf_viz')
 
   gap = 8
