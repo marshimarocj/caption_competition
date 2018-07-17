@@ -795,10 +795,9 @@ def build_association_graph():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  debug_set = set(['tumblr_nqlr0rn8ox1r2r0koo1_400'])
-  for name, num_frame in name_frames[:100]:
-    # if name not in debug_set:
-    #   continue
+  # debug_set = set(['tumblr_nqlr0rn8ox1r2r0koo1_400'])
+  # for name, num_frame in name_frames[:100]:
+  for name, num_frame in name_frames:
     track_dir = os.path.join(track_root_dir, name)
     edges = []
     for f in range(0, num_frame, gap):
@@ -1013,7 +1012,7 @@ if __name__ == '__main__':
   # prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
   # viz_tracking()
-  kcf_tracking()
+  # kcf_tracking()
   # viz_kcf_tracking()
 
   # associate_forward_backward()
@@ -1022,6 +1021,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  # build_association_graph()
+  build_association_graph()
   # # refine_viterbi_path()
   # viz_viterbi_path()
