@@ -1109,7 +1109,9 @@ def viz_viterbi_path_vtt():
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
       cnt += 1
     out_file = os.path.join(viz_dir, name + '.mp4')
-    vid = cv2.VideoWriter(out_file)
+    fourcc = cv2.VideoWriter_fourcc(*'H264')
+    h, w, _ = imgs[0].shape
+    vid = cv2.VideoWriter(out_file, fourcc, 30.0, (w, h))
     for img in imgs:
       vid.write(img)
 
