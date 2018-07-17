@@ -961,19 +961,22 @@ def refine_viterbi_path():
       num_frame = int(data[1])
       name_frames.append((name, num_frame))
 
-  debug_set = set([
-    'tumblr_nqq3ibcw841rvg72ao1_400', 
-    'tumblr_npw7v7W07C1tmj047o1_250',
-    'tumblr_n0lv33BBrb1rc0kvpo1_r1_250'
-  ])
+  # debug_set = set([
+  #   'tumblr_nqq3ibcw841rvg72ao1_400', 
+  #   'tumblr_npw7v7W07C1tmj047o1_250',
+  #   'tumblr_n0lv33BBrb1rc0kvpo1_r1_250'
+  # ])
 
   alphas = np.arange(gap) / float(gap-1)
   alphas = np.expand_dims(alphas, 1)
-  for name, num_frame in name_frames[:100]:
+  # for name, num_frame in name_frames[:100]:
+  for name, num_frame in name_frames:
     # if name not in debug_set:
     #   continue
 
     path_file = os.path.join(track_root_dir, name + '.viterbi')
+    if not os.path.exists(path_file):
+      continue
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -1025,6 +1028,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
-  # # refine_viterbi_path()
+  # build_association_graph()
+  refine_viterbi_path()
   # viz_viterbi_path()
