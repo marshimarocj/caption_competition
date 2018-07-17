@@ -1033,6 +1033,87 @@ def refine_viterbi_path():
         fout.write('\n')
 
 
+def viz_viterbi_path_vtt():
+  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  lst_file = os.path.join(root_dir, '16.lst')
+  video_dir = os.path.join(root_dir, '16')
+  track_dir = os.path.join(root_dir, '16_kcf_track')
+  viz_dir = os.path.join(root_dir, '16_kcf_viz')
+
+  gap = 8
+
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  alphas = np.arange(gap) / float(gap-1)
+  alphas = np.expand_dims(alphas, 1)
+  for name, num_frame in name_frames:
+    video_file = os.path.join(video_dir, name + '.mp4')
+    if not os.path.exists(video_file):
+      continue
+    vid = cv2.VideoCapture()
+    imgs = []
+    while True:
+      flag, img = vid.read()
+      if not flag:
+        break
+      imgs.append(img)
+
+    path_file = os.path.join(track_dir, name + '.viterbi.refine')
+    paths = []
+    with open(path_file) as f:
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        path = []
+        for d in data:
+          fields = d.split(',')
+          path.append((int(fields[0]), int(fields[1])))
+        paths.append(path)
+
+    track_dir = os.path.join(track_root_dir, name)
+    all_forward_boxs = []
+    all_backward_boxs = []
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+
+      if os.path.exists(forward_file):
+        forward_boxs, forward_scores = load_track(forward_file)
+        all_forward_boxs.append(forward_boxs)
+      if os.path.exists(backward_file):
+        backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+        all_backward_boxs.append(backward_boxs)
+    cnt = 0
+    for path in paths:
+      num_step = len(path)
+      for i in range(num_step-1):
+        step = path[i][0]
+        fid = path[i][1]
+        bid = path[i+1][1]
+        if step < len(all_backward_boxs):
+          boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
+        else:
+          boxes = all_forward_boxs[step][fid]
+        for j in range(min(gap, boxes.shape[0])):
+          f = step * gap + j
+          if f >= len(imgs):
+            continue 
+          x, y, w, h = [int(d) for d in boxes[j]]
+          cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
+      cnt += 1
+    out_file = os.path.join(viz_dir, name + '.mp4')
+    vid = cv2.VideoWriter(out_file)
+    for img in imgs:
+      vid.write(img)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
@@ -1047,5 +1128,6 @@ if __name__ == '__main__':
   # viz_tracklet()
 
   # build_association_graph()
-  refine_viterbi_path()
+  # refine_viterbi_path()
   # viz_viterbi_path()
+  viz_viterbi_path_vtt()
