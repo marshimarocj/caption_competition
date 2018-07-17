@@ -834,8 +834,8 @@ def build_association_graph():
       scores = np.where(valid, scores, np.zeros(scores.shape))
       edges.append(scores)
     if len(edges) == 0:
-      print name
- 
+      continue
+
     out_file = os.path.join(track_root_dir, name + '.viterbi')
     with open(out_file, 'w') as fout:
       while True:
