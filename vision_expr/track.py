@@ -954,9 +954,13 @@ def viz_viterbi_path():
 def refine_viterbi_path():
   # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   # lst_file = os.path.join(root_dir, 'split.0.lst')
-  root_dir = '/home/jiac/data/tgif' # gpu8
-  lst_file = os.path.join(root_dir, 'split.3.lst')
-  track_root_dir = os.path.join(root_dir, 'kcf_track')
+  # root_dir = '/home/jiac/data/tgif' # gpu8
+  # lst_file = os.path.join(root_dir, 'split.3.lst')
+  # track_root_dir = os.path.join(root_dir, 'kcf_track')
+
+  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  lst_file = os.path.join(root_dir, '16.lst')
+  track_root_dir = os.path.join(root_dir, '16_kcf_track')
 
   gap = 8
   max_num_step =  4
@@ -1038,6 +1042,6 @@ if __name__ == '__main__':
   # generate_tracklet()
   # viz_tracklet()
 
-  build_association_graph()
-  # refine_viterbi_path()
+  # build_association_graph()
+  refine_viterbi_path()
   # viz_viterbi_path()
