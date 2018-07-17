@@ -959,8 +959,10 @@ def refine_viterbi_path():
   # track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '16.lst')
-  track_root_dir = os.path.join(root_dir, '16_kcf_track')
+  # lst_file = os.path.join(root_dir, '16.lst')
+  # track_root_dir = os.path.join(root_dir, '16_kcf_track')
+  lst_file = os.path.join(root_dir, '17.lst')
+  track_root_dir = os.path.join(root_dir, '17_kcf_track')
 
   gap = 8
   max_num_step =  4
