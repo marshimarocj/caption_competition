@@ -782,7 +782,7 @@ def build_association_graph():
   # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   # lst_file = os.path.join(root_dir, 'split.0.lst')
   root_dir = '/home/jiac/data/tgif' # gpu8
-  lst_file = os.path.join(root_dir, 'split.2.lst')
+  lst_file = os.path.join(root_dir, 'split.3.lst')
   track_root_dir = os.path.join(root_dir, 'kcf_track')
 
   gap = 8
