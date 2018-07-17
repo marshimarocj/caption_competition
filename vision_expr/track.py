@@ -788,8 +788,10 @@ def build_association_graph():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
   # lst_file = os.path.join(root_dir, '16.lst')
   # track_root_dir = os.path.join(root_dir, '16_kcf_track')
-  lst_file = os.path.join(root_dir, '17.lst')
-  track_root_dir = os.path.join(root_dir, '17_kcf_track')
+  # lst_file = os.path.join(root_dir, '17.lst')
+  # track_root_dir = os.path.join(root_dir, '17_kcf_track')
+  lst_file = os.path.join(root_dir, '18.lst')
+  track_root_dir = os.path.join(root_dir, '18_kcf_track')
 
   gap = 8
   iou_threshold = 0.5
