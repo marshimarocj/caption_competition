@@ -1057,14 +1057,13 @@ def viz_viterbi_path_vtt():
     video_file = os.path.join(video_dir, name + '.mp4')
     if not os.path.exists(video_file):
       continue
-    vid = cv2.VideoCapture()
+    vid = cv2.VideoCapture(video_file)
     imgs = []
     while True:
       flag, img = vid.read()
       if not flag:
         break
       imgs.append(img)
-    print len(imgs)
 
     path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
     paths = []
