@@ -109,7 +109,7 @@ def extract_tgif():
   # root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
   # lst_file = os.path.join(root_dir, 'split.0.lst')
   root_dir = '/home/jiac/data/tgif' # gpu8
-  lst_file = os.path.join(root_dir, 'split.2.lst')
+  lst_file = os.path.join(root_dir, 'split.1.lst')
   gif_dir = os.path.join(root_dir, 'gif')
   track_dir = os.path.join(root_dir, 'kcf_track')
   model_file = '/home/jiac/models/tf/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
