@@ -1067,6 +1067,8 @@ def viz_viterbi_path_vtt():
       imgs.append(img)
 
     path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
+    if not os.path.exists(path_file):
+      continue
     paths = []
     with open(path_file) as f:
       for line in f:
@@ -1109,17 +1111,17 @@ def viz_viterbi_path_vtt():
           x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
       cnt += 1
-    out_imgs = []
-    for img in imgs:
-      out_imgs.append(img[:, :, ::-1])
-    out_file = os.path.join(viz_dir, name + '.gif')
-    imageio.mimsave(out_file, out_imgs)
-    # out_file = os.path.join(viz_dir, name + '.mp4')
-    # fourcc = cv2.cv.CV_FOURCC(*'H264')
-    # h, w, _ = imgs[0].shape
-    # vid = cv2.VideoWriter(out_file, fourcc, fps, (w, h))
+    # out_imgs = []
     # for img in imgs:
-    #   vid.write(img)
+    #   out_imgs.append(img[:, :, ::-1])
+    # out_file = os.path.join(viz_dir, name + '.gif')
+    # imageio.mimsave(out_file, out_imgs)
+    out_file = os.path.join(viz_dir, name + '.avi')
+    fourcc = cv2.cv.CV_FOURCC(*'XVID')
+    h, w, _ = imgs[0].shape
+    vid = cv2.VideoWriter(out_file, fourcc, fps, (w, h))
+    for img in imgs:
+      vid.write(img)
 
 
 if __name__ == '__main__':
