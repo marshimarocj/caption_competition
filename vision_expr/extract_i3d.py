@@ -111,7 +111,7 @@ def extract_tgif():
   gif_dir = os.path.join(root_dir, 'gif')
   track_dir = os.path.join(root_dir, 'kcf_track')
   model_file = '/home/jiac/models/tf/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
-  out_dir = os.path.join(root_dir, '18_track_ft', 'i3d_rgb')
+  out_dir = os.path.join(root_dir, 'track_ft', 'i3d_rgb')
 
   graph = i3d_wrapper.i3d_extract_graph.I3dExtractGraph('RGB')
   graph.load_model(model_file)
