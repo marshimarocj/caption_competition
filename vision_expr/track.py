@@ -3,7 +3,7 @@ import argparse
 import subprocess
 
 import numpy as np
-# import imageio
+import imageio
 # from scipy.io import loadmat
 import cv2
 
@@ -1109,12 +1109,17 @@ def viz_viterbi_path_vtt():
           x, y, w, h = [int(d) for d in boxes[j]]
           cv2.rectangle(imgs[f], (x, y), (x+w, y+h), colormap12[cnt%len(colormap12)], 2);
       cnt += 1
-    out_file = os.path.join(viz_dir, name + '.mp4')
-    fourcc = cv2.cv.CV_FOURCC(*'H264')
-    h, w, _ = imgs[0].shape
-    vid = cv2.VideoWriter(out_file, fourcc, fps, (w, h))
+    out_imgs = []
     for img in imgs:
-      vid.write(img)
+      out_imgs.append(img[:, :, ::-1])
+    out_file = os.path.join(viz_dir, name + '.gif')
+    imageio.mimsave(out_file, out_imgs)
+    # out_file = os.path.join(viz_dir, name + '.mp4')
+    # fourcc = cv2.cv.CV_FOURCC(*'H264')
+    # h, w, _ = imgs[0].shape
+    # vid = cv2.VideoWriter(out_file, fourcc, fps, (w, h))
+    # for img in imgs:
+    #   vid.write(img)
 
 
 if __name__ == '__main__':
