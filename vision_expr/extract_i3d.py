@@ -3,7 +3,7 @@ import json
 
 import cv2
 
-import i3d.i3d_extract_graph
+import i3d_wrapper.i3d_extract_graph
 
 
 '''func
