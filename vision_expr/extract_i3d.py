@@ -104,5 +104,14 @@ def extract_vtt():
     np.save(out_file, out_fts)
 
 
+def extract_tgif():
+  root_dir = '/home/jiac/data2/tgif/TGIF-Release/data' # gpu9
+  lst_file = os.path.join(root_dir, 'split.0.lst')
+  gif_dir = os.path.join(root_dir, 'gif')
+  track_dir = os.path.join(root_dir, 'kcf_track')
+  model_file = '/home/jiac/models/tf/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
+  out_dir = os.path.join(root_dir, '18_track_ft', 'i3d_rgb')
+
+
 if __name__ == '__main__':
   extract_vtt()
