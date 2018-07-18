@@ -96,6 +96,7 @@ def extract_vtt():
         ft = graph.extract_feature([crop_imgs[i:i+64]])
         fts.append(ft[0])
       fts = np.array(fts)
+      print fts.shape
       ft = np.mean(np.mean(np.mean(fts, 0), 1), 2)
       out_fts.append(ft)
     out_file = os.path.join(out_dir, name + '.npy')
