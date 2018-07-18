@@ -2,6 +2,7 @@ import os
 import json
 
 import cv2
+import numpy as np
 
 import i3d_wrapper.i3d_extract_graph
 
