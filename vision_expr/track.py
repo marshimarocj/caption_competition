@@ -1058,6 +1058,7 @@ def viz_viterbi_path_vtt():
     if not os.path.exists(video_file):
       continue
     vid = cv2.VideoCapture(video_file)
+    fps = int(vid.get(cv2.cv.CV_CAP_PROP_FPS))
     imgs = []
     while True:
       flag, img = vid.read()
@@ -1111,7 +1112,7 @@ def viz_viterbi_path_vtt():
     out_file = os.path.join(viz_dir, name + '.mp4')
     fourcc = cv2.cv.CV_FOURCC(*'H264')
     h, w, _ = imgs[0].shape
-    vid = cv2.VideoWriter(out_file, fourcc, 30.0, (w, h))
+    vid = cv2.VideoWriter(out_file, fourcc, fps, (w, h))
     for img in imgs:
       vid.write(img)
 
