@@ -24,11 +24,11 @@ def load_video(file):
 '''
 def extract_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '16.lst')
-  video_dir = os.path.join(root_dir, '16')
-  track_dir = os.path.join(root_dir, '16_kcf_track')
+  lst_file = os.path.join(root_dir, '17.lst')
+  video_dir = os.path.join(root_dir, '17')
+  track_dir = os.path.join(root_dir, '17_kcf_track')
   model_file = '/home/jiac/toolkit/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
-  out_dir = os.path.join(root_dir, '16_track_ft', 'i3d_rgb')
+  out_dir = os.path.join(root_dir, '17_track_ft', 'i3d_rgb')
 
   graph = i3d_wrapper.i3d_extract_graph.I3dExtractGraph('RGB')
   graph.load_model(model_file)
