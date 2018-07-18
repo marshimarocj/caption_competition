@@ -1100,8 +1100,8 @@ def viz_viterbi_path_vtt():
 
 def export_track():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '17.lst')
-  track_root_dir = os.path.join(root_dir, '17_kcf_track')
+  lst_file = os.path.join(root_dir, '18.lst')
+  track_root_dir = os.path.join(root_dir, '18_kcf_track')
 
   gap = 8
   name_frames = []
