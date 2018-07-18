@@ -3,7 +3,7 @@ import argparse
 import subprocess
 
 import numpy as np
-import imageio
+# import imageio
 # from scipy.io import loadmat
 import cv2
 
