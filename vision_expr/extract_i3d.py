@@ -130,10 +130,16 @@ def extract_tgif():
   for name in names:
     gif_file = os.path.join(gif_dir, name + '.gif')
     track_file = os.path.join(track_dir, name + '.json')
+    out_file = os.path.join(out_dir, name + '.npy')
     if not os.path.exists(track_file):
       continue
+    if os.path.exists(out_file):
+      continue
 
-    gif = imageio.mimread(gif_file, memtest=False)
+    try:
+      gif = imageio.mimread(gif_file, memtest=False)
+    except:
+      continue
     if len(gif[0].shape) < 3:
       continue
     imgs = []
