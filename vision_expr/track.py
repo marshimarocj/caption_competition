@@ -900,17 +900,8 @@ def viz_viterbi_path():
       imgs.append(img[:, :, ::-1].copy())
 
     path_file = os.path.join(track_root_dir, name + '.viterbi')
-    # path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
-    paths = []
-    with open(path_file) as f:
-      for line in f:
-        line = line.strip()
-        data = line.split(' ')
-        path = []
-        for d in data:
-          fields = d.split(',')
-          path.append((int(fields[0]), int(fields[1])))
-        paths.append(path)
+    # # path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
+    paths = load_path(path_file)
 
     track_dir = os.path.join(track_root_dir, name)
     all_forward_boxs = []
@@ -995,17 +986,8 @@ def refine_viterbi_path():
     path_file = os.path.join(track_root_dir, name + '.viterbi')
     if not os.path.exists(path_file):
       continue
-    paths = []
-    with open(path_file) as f:
-      for line in f:
-        line = line.strip()
-        data = line.split(' ')
-        path = []
-        for d in data:
-          fields = d.split(',')
-          path.append((int(fields[0]), int(fields[1])))
-        paths.append(path)
-
+    paths = load_path(path_file)
+    
     track_dir = os.path.join(track_root_dir, name)
     all_forward_boxs = []
     all_backward_boxs = []
@@ -1069,16 +1051,7 @@ def viz_viterbi_path_vtt():
     path_file = os.path.join(track_root_dir, name + '.viterbi.refine')
     if not os.path.exists(path_file):
       continue
-    paths = []
-    with open(path_file) as f:
-      for line in f:
-        line = line.strip()
-        data = line.split(' ')
-        path = []
-        for d in data:
-          fields = d.split(',')
-          path.append((int(fields[0]), int(fields[1])))
-        paths.append(path)
+    paths = load_path(path_file)
 
     track_dir = os.path.join(track_root_dir, name)
     all_forward_boxs = []
@@ -1124,6 +1097,67 @@ def viz_viterbi_path_vtt():
       vid.write(img)
 
 
+def export_track():
+  root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
+  lst_file = os.path.join(root_dir, '16.lst')
+  video_dir = os.path.join(root_dir, '16')
+  track_root_dir = os.path.join(root_dir, '16_kcf_track')
+
+  gap = 8
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      name_frames.append((name, num_frame))
+
+  alphas = np.arange(gap) / float(gap-1)
+  alphas = np.expand_dims(alphas, 1)
+  for name, num_frame in name_frames:
+    path_file = os.path.join(track_root_dir, name + '.viterbi')
+    if not os.path.exists(path_file):
+      continue
+    paths = load_path(path_file)
+
+    track_dir = os.path.join(track_root_dir, name)
+    all_forward_boxs = []
+    all_backward_boxs = []
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      backward_file = os.path.join(track_dir, '%d.rtrack'%f)
+      if not os.path.exists(backward_file):
+        continue
+
+      forward_boxs, forward_scores = load_track(forward_file)
+      backward_boxs, backward_scores = load_track(backward_file, reverse=True)
+      all_forward_boxs.append(forward_boxs)
+      all_backward_boxs.append(backward_boxs)
+    out = []
+    for path in paths:
+      num_step = len(path)
+      out_path = []
+      for i in range(num_step-1):
+        step = path[i][0]
+        fid = path[i][1]
+        bid = path[i+1][1]
+        if step < len(all_backward_boxs):
+          boxes = all_forward_boxs[step][fid] * (1. - alphas) + all_backward_boxs[step][bid] * alphas
+        else:
+          boxes = all_forward_boxs[step][fid]
+        for j in range(min(gap, boxes.shape[0])):
+          f = step * gap + j
+          x, y, w, h = [int(d) for d in boxes[j]]
+          out_path.append({
+            'frame': f, 'x': x, 'y': y, 'w': w,'h': h,
+            })
+      out.append(out_path)
+    out_file = os.path.join(track_root_dir, name + '.json')
+    with open(out_file, 'w') as fout:
+      json.dump(out, fout, indent=2)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
@@ -1140,4 +1174,6 @@ if __name__ == '__main__':
   # build_association_graph()
   # refine_viterbi_path()
   # viz_viterbi_path()
-  viz_viterbi_path_vtt()
+  # viz_viterbi_path_vtt()
+
+  export_track()
