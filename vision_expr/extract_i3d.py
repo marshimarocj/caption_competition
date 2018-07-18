@@ -96,9 +96,10 @@ def extract_vtt():
         ft = graph.extract_feature([crop_imgs[i:i+64]])
         fts.append(ft[0])
       fts = np.array(fts)
-      print fts.shape
-      ft = np.mean(np.mean(np.mean(fts, 0), 1), 2)
-      out_fts.append(ft)
+      # print fts.shape
+      for i in range(4)[::-1]:
+        fts = np.mean(fts, i)
+      out_fts.append(fts)
     out_file = os.path.join(out_dir, name + '.npy')
     np.save(out_file, out_fts)
 
