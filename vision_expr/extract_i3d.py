@@ -29,7 +29,7 @@ def extract_vtt():
   model_file = '/home/jiac/toolkit/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
   out_dir = os.path.join(root_dir, '16_track_ft', 'i3d_rgb')
 
-  graph = i3d.i3d_extract_graph.I3dExtractGraph('RGB')
+  graph = i3d_wrapper.i3d_extract_graph.I3dExtractGraph('RGB')
   graph.load_model(model_file)
   print 'load complete'
 
