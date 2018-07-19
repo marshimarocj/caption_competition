@@ -94,6 +94,7 @@ def extract_vtt():
         crop_img = np.moveaxis(crop_img, [0, 1, 2], [1, 2, 0])
         crop_imgs.append(crop_img)
       crop_imgs = np.array(crop_imgs, dtype=np.float32)
+      print crop_imgs.shape
       arg_params['data'] = mx.nd.array(crop_imgs, ctx)
       arg_params['pool1_output'] = mx.nd.empty((1,), ctx)
       exe = net.bind(ctx, arg_params, args_grad=None, grad_req='null', aux_states=aux_params)
