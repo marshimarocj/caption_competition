@@ -1163,7 +1163,7 @@ def export_track():
       json.dump(out, fout, indent=2)
 
 
-def export_1frame_track():
+def export_missing_track():
   root_dir = '/home/jiac/data2/tgif' # gpu9
   valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
   lst_file = os.path.join(root_dir, 'TGIF-Release', 'data', 'split.0.lst')
@@ -1230,4 +1230,4 @@ if __name__ == '__main__':
   # viz_viterbi_path_vtt()
 
   # export_track()
-  export_1frame_track()
+  export_missing_track()

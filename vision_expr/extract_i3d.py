@@ -233,6 +233,8 @@ def extract_missing_tgif():
     if os.path.exists(out_file):
       continue
 
+    print name
+
     gif = imageio.mimread(gif_file, memtest=False)
     imgs = []
     if len(gif[0].shape) < 3:
@@ -245,6 +247,54 @@ def extract_missing_tgif():
         img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
         imgs.append(img[:, :, ::-1].copy())
     img_h, img_w, _ = imgs[0].shape
+
+    with open(track_file) as f:
+      paths = json.load(f)
+    out_fts = []
+    for path in paths:
+      max_w = max([d['w'] for d in path])
+      max_h = max([d['h'] for d in path])
+      crop_size = max(max_w, max_h)
+      crop_imgs = []
+      for d in path:
+        frame = d['frame']
+        if frame >= len(imgs):
+          break
+
+        cx = d['x'] + d['w']/2
+        cy = d['y'] + d['h']/2
+        crop_img = 128*np.ones((crop_size, crop_size, 3), dtype=np.uint8)
+        min_x = cx - crop_size/2
+        min_y = cy - crop_size/2
+        max_x = min_x + crop_size
+        max_y = min_y + crop_size
+        crop_min_x = max(-min_x, 0)
+        crop_max_x = crop_size - max(max_x - img_w, 0)
+        crop_min_y = max(-min_y, 0)
+        crop_max_y = crop_size - max(max_y - img_h, 0)
+        crop_img[crop_min_y:crop_max_y, crop_min_x:crop_max_x] = imgs[frame][max(min_y, 0):max_y, max(min_x, 0):max_x]
+
+        crop_img = cv2.resize(crop_img, (224, 224))
+        crop_img = crop_img[:, :, ::-1]
+        crop_img = crop_img / 255.
+        crop_img = crop_img * 2 - 1.
+        crop_imgs.append(crop_img)
+      i = 0
+      valid_len = len(crop_imgs)
+      while len(crop_imgs) < 64:
+        crop_imgs.append(crop_imgs[i%valid_len])
+        i += 1
+      fts = []
+      for i in range(0, len(crop_imgs), 16):
+        if i + 64 > len(crop_imgs):
+          break
+        ft = graph.extract_feature([crop_imgs[i:i+64]])
+        fts.append(ft[0])
+      fts = np.array(fts)
+      for i in range(4)[::-1]:
+        fts = np.mean(fts, i)
+      out_fts.append(fts)
+    np.save(out_file, out_fts)
 
 
 if __name__ == '__main__':
