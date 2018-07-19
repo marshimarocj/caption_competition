@@ -94,14 +94,18 @@ def extract_vtt():
         crop_img = np.moveaxis(crop_img, [0, 1, 2], [1, 2, 0])
         crop_imgs.append(crop_img)
       crop_imgs = np.array(crop_imgs, dtype=np.float32)
-      print crop_imgs.shape
+      # print crop_imgs.shape
       arg_params['data'] = mx.nd.array(crop_imgs, ctx)
       arg_params['pool1_output'] = mx.nd.empty((1,), ctx)
       exe = net.bind(ctx, arg_params, args_grad=None, grad_req='null', aux_states=aux_params)
       exe.forward(is_train=False)
 
-      fts = exe.outputs[0].asnumpy()
-      print fts.shape
+      ft = exe.outputs[0].asnumpy()
+      for d in [3, 2, 0]:
+        ft = np.mean(ft, d)
+      out_fts.append(ft)
+    out_file = os.path.join(out_dir, name + '.npy')
+    np.save(out_file, out_fts)
 
 
 if __name__ == '__main__':
