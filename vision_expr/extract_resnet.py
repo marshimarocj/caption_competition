@@ -34,12 +34,12 @@ def change_device(arg_params, aux_params, ctx):
 '''
 def extract_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '16.lst')
-  video_dir = os.path.join(root_dir, '16')
-  track_dir = os.path.join(root_dir, '16_kcf_track')
+  lst_file = os.path.join(root_dir, '17.lst')
+  video_dir = os.path.join(root_dir, '17')
+  track_dir = os.path.join(root_dir, '17_kcf_track')
   model_prefix = '/home/jiac/models/mxnet/resnet/11k/resnet-200/fullconv-resnet-imagenet-200-0'
   model_epoch = 22
-  out_dir = os.path.join(root_dir, '16_track_ft', 'resnet200')
+  out_dir = os.path.join(root_dir, '17_track_ft', 'resnet200')
 
   ctx = mx.gpu(0)
   symbol, arg_params, aux_params = mx.model.load_checkpoint(model_prefix, model_epoch)
