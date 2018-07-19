@@ -1163,6 +1163,58 @@ def export_track():
       json.dump(out, fout, indent=2)
 
 
+def export_1frame_track():
+  root_dir = '/home/jiac/data2/tgif' # gpu9
+  valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
+  lst_file = os.path.join(root_dir, 'TGIF-Release', 'data', 'split.0.lst')
+  track_root_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'kcf_track')
+
+  valid_videos = np.load(valid_video_lst_file)
+  valid_videos = set(videos.tolist())
+
+  gap = 8
+  name_frames = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      num_frame = int(data[1])
+      if name not in valid_videos:
+        continue
+      name_frames.append((name, num_frame))
+
+  for name, num_frame in name_frames:
+    out_file = os.path.join(track_root_dir, name + '.json')
+    if os.path.exists(out_file):
+      continue
+
+    print name, num_frame
+
+    track_dir = os.path.join(track_root_dir, name)
+    all_forward_boxs = []
+    for f in range(0, num_frame, gap):
+      forward_file = os.path.join(track_dir, '%d.track'%f)
+      forward_boxs, forward_scores = load_track(forward_file)
+      all_forward_boxs.append(forward_boxs)
+    all_forward_boxs = np.array(all_forward_boxs).T
+
+    out = []
+    for forward_boxs in all_forward_boxs:
+      out_path = []
+      for f, box in enumerate(forward_boxs):
+        out_path.append({
+          'frame': f,
+          'x': int(box[0]),
+          'y': int(box[1]),
+          'w': int(box[2]),
+          'h': int(box[3]),
+        })
+      out.append(out_path)
+    with open(out_file, 'w') as fout:
+      json.dump(out, fout, indent=2)
+
+
 if __name__ == '__main__':
   # prepare_num_frame_lst()
   # prepare_num_frame_lst_vtt()
@@ -1181,4 +1233,5 @@ if __name__ == '__main__':
   # viz_viterbi_path()
   # viz_viterbi_path_vtt()
 
-  export_track()
+  # export_track()
+  export_1frame_track()

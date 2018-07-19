@@ -201,6 +201,53 @@ def extract_tgif():
     np.save(out_file, out_fts)
 
 
+def extract_missing_tgif():
+  root_dir = '/home/jiac/data2/tgif' # gpu9
+  valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
+  lst_file = os.path.join(root_dir, 'TGIF-Release', 'data', 'split.0.lst')
+  gif_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'gif')
+  track_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'kcf_track')
+  model_file = '/home/jiac/models/tf/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
+  out_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'track_ft', 'i3d_rgb')
+
+  valid_videos = np.load(valid_video_lst_file)
+  valid_videos = set(videos.tolist())
+
+  graph = i3d_wrapper.i3d_extract_graph.I3dExtractGraph('RGB')
+  graph.load_model(model_file)
+  print 'load complete'
+
+  names = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      name = data[0]
+      if name in valid_videos:
+        names.append(name)
+
+  for name in names:
+    gif_file = os.path.join(gif_dir, name + '.gif')
+    track_file = os.path.join(track_dir, name + '.json')
+    out_file = os.path.join(out_dir, name + '.npy')
+    if os.path.exists(out_file):
+      continue
+
+    gif = imageio.mimread(gif_file, memtest=False)
+    imgs = []
+    if len(gif[0].shape) < 3:
+      for i in range(len(gif)):
+        img = np.asarray(gif[i][:, :], dtype=np.uint8)
+        img = np.expand_dims(img, 2)
+        imgs.append(img.copy())
+    else:
+      for i in range(len(gif)):
+        img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
+        imgs.append(img[:, :, ::-1].copy())
+    img_h, img_w, _ = imgs[0].shape
+
+
 if __name__ == '__main__':
   # extract_vtt()
-  extract_tgif()
+  # extract_tgif()
+  extract_missing_tgif()
