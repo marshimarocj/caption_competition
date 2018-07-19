@@ -1192,19 +1192,13 @@ def export_1frame_track():
     print name, num_frame
 
     track_dir = os.path.join(track_root_dir, name)
-    all_forward_boxs = []
-    for f in range(0, num_frame, gap):
-      forward_file = os.path.join(track_dir, '%d.track'%f)
-      forward_boxs, forward_scores = load_track(forward_file)
-      all_forward_boxs.append(forward_boxs)
-    all_forward_boxs = np.array(all_forward_boxs)
-    all_forward_boxs = np.swapaxes(all_forward_boxs, 0, 1)
-    print all_forward_boxs.shape
+    forward_file = os.path.join(track_dir, '0.track')
+    forward_boxs, forward_scores = load_track(forward_file)
 
     out = []
-    for forward_boxs in all_forward_boxs:
+    for forward_box in forward_boxs:
       out_path = []
-      for f, box in enumerate(forward_boxs):
+      for f, box in enumerate(forward_box):
         out_path.append({
           'frame': f,
           'x': int(box[0]),
