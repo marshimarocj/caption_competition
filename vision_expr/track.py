@@ -1169,7 +1169,7 @@ def export_missing_track():
   # lst_file = os.path.join(data_root_dir, 'split.0.lst')
   root_dir = '/home/jiac/data/tgif' # gpu8
   data_root_dir = root_dir
-  lst_file = os.path.join(data_root_dir, 'split.3.lst')
+  lst_file = os.path.join(data_root_dir, 'split.2.lst')
   valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
   track_root_dir = os.path.join(data_root_dir, 'kcf_track')
 
@@ -1191,6 +1191,8 @@ def export_missing_track():
   for name, num_frame in name_frames:
     out_file = os.path.join(track_root_dir, name + '.json')
     if os.path.exists(out_file):
+      continue
+    if num_frame == 0:
       continue
 
     print name, num_frame
