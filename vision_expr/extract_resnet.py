@@ -89,7 +89,7 @@ def extract_vtt():
         crop_max_y = crop_size - max(max_y - img_h, 0)
         crop_img[crop_min_y:crop_max_y, crop_min_x:crop_max_x] = imgs[frame][max(min_y, 0):max_y, max(min_x, 0):max_x]
 
-        crop_img = cv2.resize(crop_img, (224, 224))
+        crop_img = cv2.resize(crop_img, (240, 240))
         crop_img = crop_img[:, :, ::-1] # rgb
         crop_img = np.moveaxis(crop_img, [0, 1, 2], [1, 2, 0])
         crop_imgs.append(crop_img)
