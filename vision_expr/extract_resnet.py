@@ -20,6 +20,16 @@ def load_video(file):
   return imgs
 
 
+def change_device(arg_params, aux_params, ctx):
+  new_args = dict()
+  new_auxs = dict()
+  for k, v in arg_params.items():
+    new_args[k] = v.as_in_context(ctx)
+  for k, v in aux_params.items():
+    new_auxs[k] = v.as_in_context(ctx)
+  return new_args, new_auxs
+
+
 '''expr
 '''
 def extract_vtt():
