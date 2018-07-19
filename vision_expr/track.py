@@ -1197,7 +1197,9 @@ def export_1frame_track():
       forward_file = os.path.join(track_dir, '%d.track'%f)
       forward_boxs, forward_scores = load_track(forward_file)
       all_forward_boxs.append(forward_boxs)
-    all_forward_boxs = np.array(all_forward_boxs).T
+    all_forward_boxs = np.array(all_forward_boxs)
+    all_forward_boxs = np.swapaxes(all_forward_boxs, 0, 1)
+    print all_forward_boxs.shape
 
     out = []
     for forward_boxs in all_forward_boxs:
