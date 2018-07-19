@@ -101,7 +101,7 @@ def extract_vtt():
       exe.forward(is_train=False)
 
       fts = exe.outputs[0].asnumpy()
-      print ft.shape
+      print fts.shape
 
 
 if __name__ == '__main__':
