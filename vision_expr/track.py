@@ -1170,7 +1170,7 @@ def export_1frame_track():
   track_root_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'kcf_track')
 
   valid_videos = np.load(valid_video_lst_file)
-  valid_videos = set(videos.tolist())
+  valid_videos = set(valid_videos.tolist())
 
   gap = 8
   name_frames = []

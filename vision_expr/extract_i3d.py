@@ -211,7 +211,7 @@ def extract_missing_tgif():
   out_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'track_ft', 'i3d_rgb')
 
   valid_videos = np.load(valid_video_lst_file)
-  valid_videos = set(videos.tolist())
+  valid_videos = set(valid_videos.tolist())
 
   graph = i3d_wrapper.i3d_extract_graph.I3dExtractGraph('RGB')
   graph.load_model(model_file)
