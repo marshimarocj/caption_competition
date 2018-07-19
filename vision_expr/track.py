@@ -1164,10 +1164,14 @@ def export_track():
 
 
 def export_missing_track():
-  root_dir = '/home/jiac/data2/tgif' # gpu9
+  # root_dir = '/home/jiac/data2/tgif' # gpu9
+  # data_root_dir = os.path.join(root_dir, 'TGIF-Release', 'data')
+  # lst_file = os.path.join(data_root_dir, 'split.0.lst')
+  root_dir = '/home/jiac/data2/tgif' # gpu8
+  data_root_dir = root_dir
+  lst_file = os.path.join(data_root_dir, 'split.1.lst')
   valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
-  lst_file = os.path.join(root_dir, 'TGIF-Release', 'data', 'split.0.lst')
-  track_root_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'kcf_track')
+  track_root_dir = os.path.join(data_root_dir, 'kcf_track')
 
   valid_videos = np.load(valid_video_lst_file)
   valid_videos = set(valid_videos.tolist())
