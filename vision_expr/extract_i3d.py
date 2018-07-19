@@ -202,13 +202,16 @@ def extract_tgif():
 
 
 def extract_missing_tgif():
-  root_dir = '/home/jiac/data2/tgif' # gpu9
+  # root_dir = '/home/jiac/data2/tgif' # gpu9
+  # data_root_dir = os.path.join(root_dir, 'TGIF-Release', 'data')
+  root_dir = '/home/jiac/data/tgif' # gpu8
+  data_root_dir = root_dir
   valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
-  lst_file = os.path.join(root_dir, 'TGIF-Release', 'data', 'split.0.lst')
-  video_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'mp4')
-  track_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'kcf_track')
+  lst_file = os.path.join(data_root_dir, 'split.0.lst')
+  video_dir = os.path.join(data_root_dir, 'mp4')
+  track_dir = os.path.join(data_root_dir, 'kcf_track')
   model_file = '/home/jiac/models/tf/kinetics-i3d/data/checkpoints/rgb_imagenet/model.ckpt'
-  out_dir = os.path.join(root_dir, 'TGIF-Release', 'data', 'track_ft', 'i3d_rgb')
+  out_dir = os.path.join(data_root_dir, 'track_ft', 'i3d_rgb')
 
   valid_videos = np.load(valid_video_lst_file)
   valid_videos = set(valid_videos.tolist())
@@ -235,17 +238,6 @@ def extract_missing_tgif():
 
     print name
 
-    # gif = imageio.mimread(gif_file, memtest=False)
-    # imgs = []
-    # if len(gif[0].shape) < 3:
-    #   for i in range(len(gif)):
-    #     img = np.asarray(gif[i][:, :], dtype=np.uint8)
-    #     img = np.expand_dims(img, 2)
-    #     imgs.append(img.copy())
-    # else:
-    #   for i in range(len(gif)):
-    #     img = np.asarray(gif[i][:, :, :3], dtype=np.uint8)
-    #     imgs.append(img[:, :, ::-1].copy())
     imgs = load_video(video_file)
     img_h, img_w, _ = imgs[0].shape
 
