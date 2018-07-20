@@ -135,10 +135,10 @@ class Model(framework.model.module.AbstractModel):
       dim_outputs =[self._config.dim_joint_embed, 1]
       layer = 0
       for dim_input, dim_output in zip(dim_inputs, dim_outputs):
-        W = tf.contrib.framework.model_variable('aggregate_W_%d',
+        W = tf.contrib.framework.model_variable('aggregate_W_%d'%layer,
           shape=(dim_input, dim_output), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
-        B = tf.contrib.framework.model_variable('aggregate_B_%d',
+        B = tf.contrib.framework.model_variable('aggregate_B_%d'%layer,
           shape=(dim_output,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
         self.aggregate_Ws.append(W)
