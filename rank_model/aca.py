@@ -227,7 +227,7 @@ class Model(framework.model.module.AbstractModel):
 
           return pos_sim
 
-        def calc_neg_word_sim():
+        def calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, neg_mask):
           # attend
           neg_alpha = tf.reshape(neg_alpha, (-1, dim_embed)) # (num_neg*num_word, dim_embed)
           pos_beta = tf.reshape(pos_beta, (-1, dim_embed)) # (num_pos, dim_embed)
@@ -270,7 +270,7 @@ class Model(framework.model.module.AbstractModel):
 
           return neg_sim
 
-        def calc_neg_ft_sim():
+        def calc_neg_ft_sim(neg_fts, pos_wvecs, pos_alpha, neg_beta, pos_mask):
           # attend
           pos_alpha = tf.reshape(pos_alpha, (-1, dim_embed)) # (num_pos*num_word, dim_embed)
           neg_beta = tf.reshape(neg_beta, (-1, dim_embed)) # (num_neg, dim_embed)
@@ -316,8 +316,8 @@ class Model(framework.model.module.AbstractModel):
           return neg_sim
 
         pos_sim = calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask)
-        neg_word_sim = calc_neg_word_sim()
-        neg_ft_sim = calc_neg_ft_sim()
+        neg_word_sim = calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, neg_mask)
+        neg_ft_sim = calc_neg_ft_sim(neg_fts, pos_wvecs, pos_alpha, neg_beta, pos_mask)
         neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
 
