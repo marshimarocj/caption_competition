@@ -387,7 +387,7 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.SIM: sim,
         self.OutKey.P_SIM: pos_sim,
         self.OutKey.NF_SIM: neg_ft_sim,
-        self.OutKey.NC_SIM: neg_caption_sim,
+        self.OutKey.NC_SIM: neg_word_sim,
       }
     else:
       sim = tst(wvecs, fts, mask, is_trn)
