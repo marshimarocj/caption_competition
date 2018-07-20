@@ -207,7 +207,7 @@ class Model(framework.model.module.AbstractModel):
           wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
           wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
 
-          wvec_ft = tf.concat([wvec_bar, fts], 1)
+          wvec_ft = tf.concat([wvec_bar, pos_fts], 1)
           ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           ft_compare = tf.layers.dropout(ft_compare, training=is_trn)
           ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
