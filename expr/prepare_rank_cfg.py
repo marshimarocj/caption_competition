@@ -290,7 +290,7 @@ def prepare_aca():
     'alpha': 0.5,
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
-    'scale_tanh': 10.,
+    'tanh_scale': 10.
     'dim_joint_embed': 300,
 
     'max_words_in_caption': 30,
@@ -299,7 +299,7 @@ def prepare_aca():
   outprefix = '%s.%d.%.1f.%.1f'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
-    params['alpha'], params['scale_tanh'])
+    params['alpha'], params['tanh_scale'])
 
   model_cfg = rank_model.aca.gen_cfg(**params)
 
