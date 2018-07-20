@@ -31,7 +31,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.margin = 0.1
     self.alpha = 0.5
     self.num_neg = 1
-    self.tanh_scale = 1.
+    # self.tanh_scale = 1.
 
 
 def gen_cfg(**kwargs):
@@ -49,7 +49,7 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
-  cfg.tanh_scale = kwargs['tanh_scale']
+  # cfg.tanh_scale = kwargs['tanh_scale']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
 
@@ -215,11 +215,13 @@ class Model(framework.model.module.AbstractModel):
           # aggregate
           pos_mask = tf.expand_dims(pos_mask, 2)
           wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 1) / tf.reduce_sum(pos_mask, 1)
+          wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+          ft_compare = tf.nn.l2_normalize(ft_compare, -1)
           pos_sim = tf.concat([wvec_aggregate, ft_compare], 1)
           pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           pos_sim = tf.nn.relu(pos_sim)
           pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          pos_sim = tf.tanh(pos_sim / self._config.tanh_scale) # (num_pos, 1)
+          # pos_sim = tf.tanh(pos_sim / self._config.tanh_scale) # (num_pos, 1)
           pos_sim = tf.reshape(pos_sim, (num_pos,))
 
           return pos_sim
@@ -258,11 +260,13 @@ class Model(framework.model.module.AbstractModel):
           # aggregate
           neg_mask = tf.reshape(neg_mask, (num_neg, 1, num_word, 1))
           wvec_aggregate = tf.reduce_sum(wvec_compare * neg_mask, 2) / tf.reduce_sum(neg_mask, 2)
+          wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+          ft_compare = tf.nn.l2_normalize(ft_compare, -1)
           neg_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], 2), (-1, dim_embed*2))
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           neg_sim = tf.nn.relu(neg_sim)
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          neg_sim = tf.tanh(neg_sim / self._config.tanh_scale) # (num_neg*num_pos, 1)
+          # neg_sim = tf.tanh(neg_sim / self._config.tanh_scale) # (num_neg*num_pos, 1)
           neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
 
           return neg_sim
@@ -303,11 +307,13 @@ class Model(framework.model.module.AbstractModel):
           # aggregate
           pos_mask = tf.reshape(pos_mask, (1, num_pos, num_word, 1))
           wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 2) / tf.reduce_sum(pos_mask, 2)
+          wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+          ft_compare = tf.nn.l2_normalize(ft_compare, -1)
           neg_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], 2), (-1, dim_embed*2))
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           neg_sim = tf.nn.relu(neg_sim)
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          neg_sim = tf.tanh(neg_sim / self._config.tanh_scale) # (num_neg*num_pos, 1)
+          # neg_sim = tf.tanh(neg_sim / self._config.tanh_scale) # (num_neg*num_pos, 1)
           neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
 
           return neg_sim
@@ -368,11 +374,13 @@ class Model(framework.model.module.AbstractModel):
         # aggregate
         mask = tf.reshape(mask, (1, num_caption, num_word, 1))
         wvec_aggregate = tf.reduce_sum(wvec_compare * mask, 2) / tf.reduce_sum(mask, 2)
+        wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+        ft_compare = tf.nn.l2_normalize(ft_compare, -1)
         sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], 2), (-1, dim_embed*2))
         sim = tf.nn.xw_plus_b(sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
         sim = tf.nn.relu(sim)
         sim = tf.nn.xw_plus_b(sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-        sim = tf.tanh(sim / self._config.tanh_scale)
+        # sim = tf.tanh(sim / self._config.tanh_scale)
         sim = tf.reshape(sim, (num_ft, num_caption))
 
         return sim
