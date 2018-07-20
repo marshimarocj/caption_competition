@@ -126,10 +126,8 @@ class Model(framework.model.module.AbstractModel):
       self.compare_B = tf.contrib.framework.model_variable('compare_B',
         shape=(self._config.dim_joint_embed), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-0.1, 0.1))
-      self._weights.append(self.word_compare_W)
-      self._weights.append(self.word_compare_B)
-      self._weights.append(self.ft_compare_W)
-      self._weights.append(self.ft_compare_B)
+      self._weights.append(self.compare_W)
+      self._weights.append(self.compare_B)
 
       self.aggregate_Ws = []
       self.aggregate_Bs = []
