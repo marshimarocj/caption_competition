@@ -167,22 +167,22 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
-        pos_fts = fts[:pos]
-        neg_fts = fts[pos:]
-        pos_wvecs = wvecs[:pos]
-        neg_wvecs = wvecs[pos:]
-        pos_mask = mask[:pos]
-        neg_mask = mask[pos:]
+        pos_fts = fts[:num_pos]
+        neg_fts = fts[num_pos:]
+        pos_wvecs = wvecs[:num_pos]
+        neg_wvecs = wvecs[num_pos:]
+        pos_mask = mask[:num_pos]
+        neg_mask = mask[num_pos:]
 
         alpha = tf.nn.xw_plus_b(wvecs, self.word_att_W, self.word_att_B)
         alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
         beta = tf.nn.tanh(beta)
         beta = tf.expand_dims(beta, 1) # (None, 1, dim_embed)
-        pos_alpha = alpha[:pos]
-        neg_alpha = alpha[pos:]
-        pos_beta = beta[:pos]
-        neg_beta = beta[pos:]
+        pos_alpha = alpha[:num_pos]
+        neg_alpha = alpha[num_pos:]
+        pos_beta = beta[:num_pos]
+        neg_beta = beta[num_pos:]
 
         def calc_pos_sim():
           # attend
