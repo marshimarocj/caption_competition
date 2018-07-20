@@ -44,7 +44,7 @@ def gen_cfg(**kwargs):
   cfg.base_lr = 1e-4
   cfg.num_epoch = kwargs['num_epoch']
 
-  cfg.margin = .1
+  cfg.margin = kwargs['margin']
   cfg.alpha = kwargs['alpha']
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']

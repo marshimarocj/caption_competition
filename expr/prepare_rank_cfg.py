@@ -287,6 +287,7 @@ def prepare_aca():
   params = {
     'num_epoch': 50,
 
+    'margin': 0.5,
     'alpha': 0.5,
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
