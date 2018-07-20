@@ -194,7 +194,7 @@ class Model(framework.model.module.AbstractModel):
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
           att /= tf.reduce_sum(att, 1, True)
-          wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, num_word, dim_word)
+          wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_word)
 
           # compare
           expanded_fts = tf.tile(tf.expand_dims(pos_fts, 1), [1, num_word, 1]) # (num_pos, num_word, dim_ft)
@@ -207,10 +207,7 @@ class Model(framework.model.module.AbstractModel):
           wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
           wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
 
-          wvec_ft = tf.concat([
-            tf.reshape(wvec_bar, (-1, dim_word)), # (num_pos*num_word, dim_word)
-            tf.reshape(expanded_fts, (-1, dim_ft)) # (num_pos*num_word, dim_ft)
-            ], 1)
+          wvec_ft = tf.concat([wvec_bar, fts], 1)
           ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           ft_compare = tf.layers.dropout(ft_compare, training=is_trn)
           ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
