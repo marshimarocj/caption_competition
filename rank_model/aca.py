@@ -174,8 +174,9 @@ class Model(framework.model.module.AbstractModel):
         pos_mask = mask[:num_pos]
         neg_mask = mask[num_pos:]
 
-        alpha = tf.nn.xw_plus_b(wvecs, self.word_att_W, self.word_att_B)
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
         alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
+        alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
         beta = tf.nn.tanh(beta)
         beta = tf.expand_dims(beta, 1) # (None, 1, dim_embed)
@@ -330,12 +331,11 @@ class Model(framework.model.module.AbstractModel):
         dim_embed = self._config.dim_joint_embed
 
         # attend
-        alpha = tf.nn.xw_plus_b(wvecs, self.word_att_W, self.word_att_B)
-        alpha = tf.nn.tanh(alpha) # (num_caption, num_word, dim_embed)
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
+        alpha = tf.nn.tanh(alpha) # (num_caption*num_word, dim_embed)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
         beta = tf.nn.tanh(beta) # (num_ft, dim_embed)
 
-        alpha = tf.reshape(alpha, -1, dim_embed) # (num_caption*num_word, dim_embed)
         att = tf.matmul(beta, alpha, transpose_b=True) # (num_ft, num_caption*num_word)
         att = tf.reshape(att, (num_ft, num_caption, num_word))
         att = tf.nn.softmax(att, 2)
