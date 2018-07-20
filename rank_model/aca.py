@@ -366,7 +366,7 @@ class Model(framework.model.module.AbstractModel):
         ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
         ft_compare = tf.layers.dropout(ft_compare, training=is_trn)
         ft_compare = tf.nn.relu(ft_compare)
-        ft_compare = tf.reshape(ft_compare, (num_ft, num_capiton, dim_embed))
+        ft_compare = tf.reshape(ft_compare, (num_ft, num_caption, dim_embed))
 
         # aggregate
         mask = tf.reshape(mask, (1, num_caption, num_word, 1))
