@@ -373,7 +373,7 @@ class Model(framework.model.module.AbstractModel):
         wvec_aggregate = tf.reduce_sum(wvec_compare * mask, 2) / tf.reduce_sum(mask, 2)
         sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], 2), (-1, dim_embed*2))
         sim = tf.nn.xw_plus_b(sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
-        sim = tf.relu(sim)
+        sim = tf.nn.relu(sim)
         sim = tf.nn.xw_plus_b(sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
         sim = tf.tanh(sim / self._config.tanh_scale)
         sim = tf.reshape(sim, (num_ft, num_caption))
