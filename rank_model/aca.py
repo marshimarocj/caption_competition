@@ -171,6 +171,7 @@ class Model(framework.model.module.AbstractModel):
         neg_fts = fts[num_pos:]
         pos_wvecs = wvecs[:num_pos]
         neg_wvecs = wvecs[num_pos:]
+        mask = tf.to_float(mask)
         pos_mask = mask[:num_pos]
         neg_mask = mask[num_pos:]
 
@@ -185,7 +186,8 @@ class Model(framework.model.module.AbstractModel):
         pos_beta = beta[:num_pos]
         neg_beta = beta[num_pos:]
 
-        def calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask):
+        # def calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask):
+        def calc_pos_sim():
           # attend
           att = tf.matmul(pos_alpha, pos_beta, transpose_b=True) # (num_pos, num_word, 1)
           att = att[:, :, 0] # (num_pos, num_word)
@@ -313,7 +315,8 @@ class Model(framework.model.module.AbstractModel):
 
           return neg_sim
 
-        pos_sim = calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask)
+        # pos_sim = calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask)
+        pos_sim = calc_pos_sim()
         neg_word_sim = calc_neg_word_sim()
         neg_ft_sim = calc_neg_ft_sim()
         neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
@@ -329,6 +332,7 @@ class Model(framework.model.module.AbstractModel):
         dim_word = self._config.subcfgs[WE].dim_embed
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
+        mask = tf.to_float(mask)
 
         # attend
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
