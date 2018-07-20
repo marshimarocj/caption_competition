@@ -111,14 +111,14 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.word_att_W)
       self._weights.append(self.word_att_B)
 
-      # self.ft_att_W = tf.contrib.framework.model_variable('ft_att_W',
-      #   shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
-      #   initializer=tf.contrib.layers.xavier_initializer())
-      # self.ft_att_B = tf.contrib.framework.model_variable('ft_att_B',
-      #   shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-      #   initializer=tf.random_uniform_initializer(-0.1, 0.1))
-      # self._weights.append(self.ft_att_W)
-      # self._weights.append(self.ft_att_B)
+      self.ft_att_W = tf.contrib.framework.model_variable('ft_att_W',
+        shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
+        initializer=tf.contrib.layers.xavier_initializer())
+      self.ft_att_B = tf.contrib.framework.model_variable('ft_att_B',
+        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.ft_att_W)
+      self._weights.append(self.ft_att_B)
 
       self.compare_W = tf.contrib.framework.model_variable('compare_W',
         shape=(self._config.subcfgs[WE].dim_embed + self._config.dim_ft, self._config.dim_joint_embed), 
