@@ -341,9 +341,9 @@ class Model(framework.model.module.AbstractModel):
 
         # attend
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
-        alpha = tf.nn.tanh(alpha) # (num_caption*num_word, dim_embed)
+        alpha = tf.nn.relu(alpha) # (num_caption*num_word, dim_embed)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
-        beta = tf.nn.tanh(beta) # (num_ft, dim_embed)
+        beta = tf.nn.relu(beta) # (num_ft, dim_embed)
 
         att = tf.matmul(beta, alpha, transpose_b=True) # (num_ft, num_caption*num_word)
         att = tf.reshape(att, (num_ft, num_caption, num_word))
