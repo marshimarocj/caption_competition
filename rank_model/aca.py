@@ -318,8 +318,8 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_sim = calc_neg_ft_sim(neg_fts, pos_wvecs, pos_alpha, neg_beta, pos_mask)
         # neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
         # neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
-        neg_word_sim = tf.reduce_max(neg_word_sim, 0)
-        neg_ft_sim = tf.reduce_max(neg_ft_sim, 0)
+        neg_word_sim = tf.reduce_mean(neg_word_sim, 0)
+        neg_ft_sim = tf.reduce_mean(neg_ft_sim, 0)
 
         return pos_sim, neg_word_sim, neg_ft_sim
 
