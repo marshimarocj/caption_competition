@@ -263,7 +263,7 @@ class Model(framework.model.module.AbstractModel):
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           neg_sim = tf.nn.relu(neg_sim)
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          neg_sim = tf.reshape((num_neg, num_pos))
+          neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
 
           return neg_sim
 
@@ -309,7 +309,7 @@ class Model(framework.model.module.AbstractModel):
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           neg_sim = tf.nn.relu(neg_sim)
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          neg_sim = tf.reshape((num_neg, num_pos))
+          neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
 
           return neg_sim
 
