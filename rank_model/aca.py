@@ -219,7 +219,7 @@ class Model(framework.model.module.AbstractModel):
           pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           pos_sim = tf.nn.relu(pos_sim)
           pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          pos_sim = tf.reshape((num_pos,))
+          pos_sim = tf.reshape(pos_sim, (num_pos,))
 
           return pos_sim
 
