@@ -176,10 +176,10 @@ class Model(framework.model.module.AbstractModel):
         neg_mask = mask[num_pos:]
 
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
-        alpha = tf.nn.relu(alpha) # (None, num_word, dim_embed)
+        alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
-        beta = tf.nn.relu(beta)
+        beta = tf.nn.tanh(beta)
         beta = tf.expand_dims(beta, 1) # (None, 1, dim_embed)
         pos_alpha = alpha[:num_pos]
         neg_alpha = alpha[num_pos:]
@@ -232,7 +232,7 @@ class Model(framework.model.module.AbstractModel):
           att = tf.nn.softmax(att, 1)
           att *= tf.expand_dims(neg_mask, 2)
           att /= tf.reduce_sum(att, 1, True)
-          att = tf.Print(att, [att, tf.reduce_max(att, 1)])
+          att = tf.Print(att, [tf.reduce_max(att, 1), tf.shape(att)])
           wvecs_bar = tf.reduce_sum(
             tf.expand_dims(neg_wvecs, 2) * tf.expand_dims(att, 3), 1) # (num_neg, num_pos, dim_word)
 
