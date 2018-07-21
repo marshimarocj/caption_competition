@@ -167,7 +167,7 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
-        fts = tf.nn.l2_normalize(fts, -1)
+        # fts = tf.nn.l2_normalize(fts, -1)
         pos_fts = fts[:num_pos]
         neg_fts = fts[num_pos:]
         pos_wvecs = wvecs[:num_pos]
@@ -197,30 +197,30 @@ class Model(framework.model.module.AbstractModel):
           wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_word)
 
           # compare
-          expanded_fts = tf.tile(tf.expand_dims(pos_fts, 1), [1, num_word, 1]) # (num_pos, num_word, dim_ft)
-          wvec_ft = tf.concat([
-            tf.reshape(pos_wvecs, (-1, dim_word)), # (num_pos*num_word, dim_word)
-            tf.reshape(expanded_fts, (-1, dim_ft)) # (num_pos*num_word, dim_ft)
-            ], 1)
-          wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
-          wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
-          wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
+          # expanded_fts = tf.tile(tf.expand_dims(pos_fts, 1), [1, num_word, 1]) # (num_pos, num_word, dim_ft)
+          # wvec_ft = tf.concat([
+          #   tf.reshape(pos_wvecs, (-1, dim_word)), # (num_pos*num_word, dim_word)
+          #   tf.reshape(expanded_fts, (-1, dim_ft)) # (num_pos*num_word, dim_ft)
+          #   ], 1)
+          # wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
+          # wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
+          # wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
 
-          wvec_ft = tf.concat([wvec_bar, pos_fts], 1)
-          ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
-          ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
+          # wvec_ft = tf.concat([wvec_bar, pos_fts], 1)
+          # ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
+          # ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
 
           # aggregate
-          pos_mask = tf.expand_dims(pos_mask, 2)
-          wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 1) / tf.reduce_sum(pos_mask, 1)
-          wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
-          ft_compare = tf.nn.l2_normalize(ft_compare, -1)
-          pos_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], -1), (-1, 2*dim_embed))
-          pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
-          pos_sim = tf.nn.relu(pos_sim)
-          pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          pos_sim = tf.nn.tanh(pos_sim)
-          pos_sim = tf.reshape(pos_sim, (num_pos,))
+          # pos_mask = tf.expand_dims(pos_mask, 2)
+          # wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 1) / tf.reduce_sum(pos_mask, 1)
+          # wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+          # ft_compare = tf.nn.l2_normalize(ft_compare, -1)
+          # pos_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], -1), (-1, 2*dim_embed))
+          # pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
+          # pos_sim = tf.nn.relu(pos_sim)
+          # pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
+          # pos_sim = tf.nn.tanh(pos_sim)
+          # pos_sim = tf.reshape(pos_sim, (num_pos,))
 
           return pos_sim
 
