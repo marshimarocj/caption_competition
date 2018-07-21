@@ -305,7 +305,7 @@ class Model(framework.model.module.AbstractModel):
           ft_compare = tf.nn.l2_normalize(ft_compare, -1)
           # neg_sim = tf.reduce_sum(wvec_aggregate * ft_compare, -1)
           # neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
-          neg_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare]), (-1, 2*dim_embed))
+          neg_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], -1), (-1, 2*dim_embed))
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
           neg_sim = tf.nn.relu(neg_sim)
           neg_sim = tf.nn.xw_plus_b(neg_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
