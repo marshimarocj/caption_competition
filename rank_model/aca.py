@@ -167,6 +167,7 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
+        fts = tf.nn.l2_normalize(fts, -1)
         pos_fts = fts[:num_pos]
         neg_fts = fts[num_pos:]
         pos_wvecs = wvecs[:num_pos]
