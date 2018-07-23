@@ -94,9 +94,12 @@ def trecvid17_val_track_ft():
   vid_file = os.path.join(root_dir, '17', 'testing.2.subsets', 'tv17.vtt.url.list')
   out_root_dir = '/home/jiac/data/trecvid2018'
 
-  ft_name = 'i3d_rgb'
-  out_ft_name = 'i3d'
-  dim_ft = 1024
+  # ft_name = 'i3d_rgb'
+  # out_ft_name = 'i3d'
+  # dim_ft = 1024
+  ft_name = 'resnet200'
+  out_ft_name = 'resnet200'
+  dim_ft = 2048
   max_num_track = 10
 
   vids = []
