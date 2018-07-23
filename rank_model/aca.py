@@ -51,6 +51,7 @@ def gen_cfg(**kwargs):
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
   # cfg.tanh_scale = kwargs['tanh_scale']
+  cfg.att = kwargs['att']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
 
