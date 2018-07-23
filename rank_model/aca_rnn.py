@@ -307,7 +307,7 @@ class Model(framework.model.module.AbstractModel):
         neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
 
-        return pos_sim, neg_word_dim, neg_ft_sim
+        return pos_sim, neg_word_sim, neg_ft_sim
 
     def tst(wvecs, fts, mask, is_trn):
       with tf.variable_scope(self.name_scope):
