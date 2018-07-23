@@ -293,11 +293,12 @@ def prepare_aca():
     'dim_ft': 1024 + 2048,
     # 'tanh_scale': 1.,
     'dim_joint_embed': 300,
+    'att': True,
 
     'max_words_in_caption': 30,
   }
 
-  outprefix = '%s.%d.%.1f'%(
+  outprefix = '%s.%d.%.1f.att'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
     params['alpha'])
