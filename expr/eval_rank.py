@@ -66,7 +66,9 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.max.0.5', 'log')
 
-  log_dir = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm', 'log')
+  # log_dir = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm', 'log')
+
+  log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5', 'log')
 
   best_epoch, best_mir = select_best_epoch(log_dir)
   print best_epoch, best_mir
@@ -184,6 +186,6 @@ def predict_eval_vevd():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
+  report_best_epoch()
   # predict_eval_trecvid17_B()
-  predict_eval_vevd()
+  # predict_eval_vevd()
