@@ -89,5 +89,52 @@ def merge_tgif_trecvid16_trn_track_ft():
   np.savez_compressed(out_file, fts=out_fts, masks=out_masks)
 
 
+def trecvid17_val_track_ft():
+  root_dir = '/home/jiac/data/trecvid' # gpu8
+  vid_file = os.path.join(root_dir, '17', 'testing.2.subsets', 'tv17.vtt.url.list')
+  out_root_dir = '/home/jiac/data/trecvid2018'
+
+  ft_name = 'i3d_rgb'
+  out_ft_name = 'i3d'
+  dim_ft = 1024
+  max_num_track = 10
+
+  vids = []
+  with open(vid_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      vids.append(line[:pos])
+
+  out_fts = []
+  out_masks = []
+  for vid in vids:
+    ft_file = os.path.join(root_dir, '17_track_ft', vid + '.npy')
+    if os.path.exists(ft_file):
+      fts = np.load(ft_file)
+      num_ft = fts.shape[0]
+      if num_ft == 0:
+        fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
+        mask = np.zeros((max_num_track,), dtype=np.float32)
+      else:
+        mask = np.ones((max_num_track,), dtype=np.float32)
+        if num_ft > max_num_track:
+          fts = fts[:max_num_track]
+        elif num_ft < max_num_track:
+          fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
+          mask[num_ft:] = 0.
+    else:
+      fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
+      mask = np.zeros((max_num_track,), dtype=np.float32)
+    out_fts.append(fts)
+    out_masks.append(mask)
+  out_fts = np.array(out_fts, dtype=np.float32)
+  out_masks = np.array(out_masks, dtype=np.float32)
+  print out_fts.shape
+  out_file = os.path.join(out_root_dir, 'sa_feature', out_ft_name, 'val_ft.npz')
+  np.savez_compressed(out_file, fts=out_fts, masks=out_masks)
+
+
 if __name__ == '__main__':
-  merge_tgif_trecvid16_trn_track_ft()
+  # merge_tgif_trecvid16_trn_track_ft()
+  trecvid17_val_track_ft()
