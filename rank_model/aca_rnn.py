@@ -61,7 +61,6 @@ def gen_cfg(**kwargs):
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
-  cfg.pool = kwargs['pool']
 
   we_cfg = cfg.subcfgs[WE]
   we_cfg.lr_mult = 1e-2
