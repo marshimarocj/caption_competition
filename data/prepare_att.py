@@ -51,6 +51,7 @@ def merge_tgif_trecvid16_trn_track_ft():
       else:
         fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
         mask = np.zeros((max_num_track,), dtype=np.float32)
+      print fts.shape
       out_fts.append(fts)
       out_masks.append(mask)
   # print np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 90)
@@ -68,6 +69,7 @@ def merge_tgif_trecvid16_trn_track_ft():
     else:
       fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
       mask = np.zeros((max_num_track,), dtype=np.float32)
+    print fts.shape
     out_fts.append(fts)
     out_masks.append(mask)
   out_fts = np.array(out_fts, dtype=np.float32)
