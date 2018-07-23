@@ -31,7 +31,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.margin = 0.1
     self.alpha = 0.5
     self.num_neg = 1
-    self.reduce = 'softmax'
+    # self.reduce = 'softmax'
     self.att = False
 
 
