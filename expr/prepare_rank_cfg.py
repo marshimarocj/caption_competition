@@ -346,7 +346,7 @@ def prepare_aca_rnn():
   ]
 
   params = {
-    'num_epoch': 50,
+    'num_epoch': 100,
 
     'margin': 0.1,
     'alpha': 0.5,
@@ -356,6 +356,7 @@ def prepare_aca_rnn():
 
     'max_words_in_caption': 30,
     'cell': 'gru',
+    'cell_dim_hidden': 150,
   }
 
   outprefix = '%s.%d.%.1f.att'%(
