@@ -23,7 +23,7 @@ def merge_tgif_trecvid16_trn_track_ft():
     os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
     os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
   ]
-  tgif_ft_file = os.path.join(tgif_root_dir, 'track_ft')
+  tgif_ft_file = os.path.join(tgif_root_dir, 'track_ft', 'i3d_rgb')
 
   num_tracks = []
   for vid_file in vid_files:
