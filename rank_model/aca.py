@@ -102,8 +102,26 @@ class Model(framework.model.module.AbstractModel):
 
   def _build_parameter_graph(self):
     with tf.variable_scope(self.name_scope):
-      self.word_att_W = tf.contrib.framework.model_variable('word_att_W',
+      self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
+        shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
+        initializer=tf.contrib.layers.xavier_initializer())
+      self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
+        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.ft_pca_W)
+      self._weights.append(self.ft_pca_B)
+
+      self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
         shape=(self._config.subcfgs[WE].dim_embed, self._config.dim_joint_embed), dtype=tf.float32,
+        initializer=tf.contrib.layers.xavier_initializer())
+      self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
+        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.caption_pca_W)
+      self._weights.append(self.caption_pca_B)
+
+      self.word_att_W = tf.contrib.framework.model_variable('word_att_W',
+        shape=(self._config.dim_joint_embed, self._config.dim_joint_embed), dtype=tf.float32,
         initializer=tf.contrib.layers.xavier_initializer())
       self.word_att_B = tf.contrib.framework.model_variable('word_att_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
@@ -112,7 +130,7 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.word_att_B)
 
       self.ft_att_W = tf.contrib.framework.model_variable('ft_att_W',
-        shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
+        shape=(self._config.dim_joint_embed, self._config.dim_joint_embed), dtype=tf.float32,
         initializer=tf.contrib.layers.xavier_initializer())
       self.ft_att_B = tf.contrib.framework.model_variable('ft_att_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
@@ -121,7 +139,7 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.ft_att_B)
 
       self.compare_W = tf.contrib.framework.model_variable('compare_W',
-        shape=(self._config.subcfgs[WE].dim_embed + self._config.dim_ft, self._config.dim_joint_embed), 
+        shape=(2*self._config.dim_joint_embed, self._config.dim_joint_embed), 
         dtype=tf.float32, initializer=tf.contrib.layers.xavier_initializer())
       self.compare_B = tf.contrib.framework.model_variable('compare_B',
         shape=(self._config.dim_joint_embed), dtype=tf.float32,
@@ -167,16 +185,23 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
-        # fts = tf.nn.l2_normalize(fts, -1)
+        fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
+        fts = tf.nn.tanh(fts)
         pos_fts = fts[:num_pos]
         neg_fts = fts[num_pos:]
+
+        wvecs = tf.reshape(wvecs, (-1, dim_word))
+        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
+        wvecs = tf.nn.tanh(wvecs)
+        wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
         pos_wvecs = wvecs[:num_pos]
         neg_wvecs = wvecs[num_pos:]
+
         mask = tf.to_float(mask)
         pos_mask = mask[:num_pos]
         neg_mask = mask[num_pos:]
 
-        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
         alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
@@ -194,33 +219,33 @@ class Model(framework.model.module.AbstractModel):
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
           att /= tf.reduce_sum(att, 1, True)
-          wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_word)
+          wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_embed)
 
           # compare
-          # expanded_fts = tf.tile(tf.expand_dims(pos_fts, 1), [1, num_word, 1]) # (num_pos, num_word, dim_ft)
-          # wvec_ft = tf.concat([
-          #   tf.reshape(pos_wvecs, (-1, dim_word)), # (num_pos*num_word, dim_word)
-          #   tf.reshape(expanded_fts, (-1, dim_ft)) # (num_pos*num_word, dim_ft)
-          #   ], 1)
-          # wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
-          # wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
-          # wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
+          expanded_fts = tf.tile(tf.expand_dims(pos_fts, 1), [1, num_word, 1]) # (num_pos, num_word, dim_embed)
+          wvec_ft = tf.concat([
+            tf.reshape(pos_wvecs, (-1, dim_embed)), # (num_pos*num_word, dim_embed)
+            tf.reshape(expanded_fts, (-1, dim_embed)) # (num_pos*num_word, dim_embed)
+            ], 1)
+          wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
+          wvec_compare = tf.nn.relu(wvec_compare) # (num_pos*num_word, dim_embed)
+          wvec_compare = tf.reshape(wvec_compare, (-1, num_word, dim_embed))
 
-          # wvec_ft = tf.concat([wvec_bar, pos_fts], 1)
-          # ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
-          # ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
+          wvec_ft = tf.concat([wvec_bar, pos_fts], 1)
+          ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
+          ft_compare = tf.nn.relu(ft_compare) # (num_pos, dim_embed)
 
           # aggregate
-          # pos_mask = tf.expand_dims(pos_mask, 2)
-          # wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 1) / tf.reduce_sum(pos_mask, 1)
-          # wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
-          # ft_compare = tf.nn.l2_normalize(ft_compare, -1)
-          # pos_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], -1), (-1, 2*dim_embed))
-          # pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
-          # pos_sim = tf.nn.relu(pos_sim)
-          # pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
-          # pos_sim = tf.nn.tanh(pos_sim)
-          # pos_sim = tf.reshape(pos_sim, (num_pos,))
+          pos_mask = tf.expand_dims(pos_mask, 2)
+          wvec_aggregate = tf.reduce_sum(wvec_compare * pos_mask, 1) / tf.reduce_sum(pos_mask, 1)
+          wvec_aggregate = tf.nn.l2_normalize(wvec_aggregate, -1)
+          ft_compare = tf.nn.l2_normalize(ft_compare, -1)
+          pos_sim = tf.reshape(tf.concat([wvec_aggregate, ft_compare], -1), (-1, 2*dim_embed))
+          pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[0], self.aggregate_Bs[0])
+          pos_sim = tf.nn.relu(pos_sim)
+          pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
+          pos_sim = tf.nn.tanh(pos_sim)
+          pos_sim = tf.reshape(pos_sim, (num_pos,))
 
           return pos_sim
 
@@ -235,21 +260,21 @@ class Model(framework.model.module.AbstractModel):
           att /= tf.reduce_sum(att, 1, True)
           att = tf.Print(att, [tf.reduce_max(att, 1), tf.shape(att)])
           wvecs_bar = tf.reduce_sum(
-            tf.expand_dims(neg_wvecs, 2) * tf.expand_dims(att, 3), 1) # (num_neg, num_pos, dim_word)
+            tf.expand_dims(neg_wvecs, 2) * tf.expand_dims(att, 3), 1) # (num_neg, num_pos, dim_embed)
 
           # compare
           expanded_fts = tf.tile(
-            tf.reshape(pos_fts, (1, -1, 1, dim_ft)), 
-            [num_neg, 1, num_word, 1]) # (num_neg, num_pos, num_word, dim_ft)
+            tf.reshape(pos_fts, (1, -1, 1, dim_embed)), 
+            [num_neg, 1, num_word, 1]) # (num_neg, num_pos, num_word, dim_embed)
           expanded_wvecs = tf.tile(
-            tf.expand_dims(neg_wvecs, 1), [1, num_pos, 1, 1]) # (num_neg, num_pos, num_word, dim_word)
-          wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, dim_word + dim_ft))
+            tf.expand_dims(neg_wvecs, 1), [1, num_pos, 1, 1]) # (num_neg, num_pos, num_word, dim_embed)
+          wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, 2*dim_embed))
           wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           wvec_compare = tf.nn.relu(wvec_compare)
           wvec_compare = tf.reshape(wvec_compare, (num_neg, num_pos, num_word, dim_embed))
 
           expanded_fts = tf.tile(tf.expand_dims(pos_fts, 0), [num_neg, 1, 1]) # (num_neg, num_pos, dim_ft)
-          wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, dim_word + dim_ft))
+          wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, 2*dim_embed))
           ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           ft_compare = tf.nn.relu(ft_compare)
           ft_compare = tf.reshape(ft_compare, (num_neg, num_pos, dim_embed))
@@ -278,23 +303,23 @@ class Model(framework.model.module.AbstractModel):
           att *= tf.expand_dims(pos_mask, 0)
           att /= tf.reduce_sum(att, 2, True)
           wvecs_bar = tf.reduce_sum(
-            tf.expand_dims(pos_wvecs, 0) * tf.expand_dims(att, 3), 2) # (num_neg, num_pos, dim_word)
+            tf.expand_dims(pos_wvecs, 0) * tf.expand_dims(att, 3), 2) # (num_neg, num_pos, dim_embed)
 
           # compare
           expanded_fts = tf.tile(
-            tf.reshape(neg_fts, (-1, 1, 1, dim_ft)),
-            [1, num_pos, num_word, 1]) # (num_neg, num_pos, num_word, dim_ft)
+            tf.reshape(neg_fts, (-1, 1, 1, dim_embed)),
+            [1, num_pos, num_word, 1]) # (num_neg, num_pos, num_word, dim_embed)
           expanded_wvecs = tf.tile(
-            tf.expand_dims(pos_wvecs, 0), [num_neg, 1, 1, 1]) # (num_neg, num_pos, num_word, dim_word)
-          wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, dim_word + dim_ft))
+            tf.expand_dims(pos_wvecs, 0), [num_neg, 1, 1, 1]) # (num_neg, num_pos, num_word, dim_embed)
+          wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, 2*dim_embed))
           wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           wvec_compare = tf.nn.relu(wvec_compare)
           wvec_compare = tf.reshape(wvec_compare, (num_neg, num_pos, num_word, dim_embed))
 
           expanded_fts = tf.tile(
-            tf.reshape(neg_fts, (-1, 1, dim_ft)),
-            [1, num_pos, 1]) # (num_neg, num_pos, dim_ft)
-          wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, dim_word + dim_ft))
+            tf.reshape(neg_fts, (-1, 1, dim_embed)),
+            [1, num_pos, 1]) # (num_neg, num_pos, dim_embed)
+          wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, 2*dim_embed))
           ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
           ft_compare = tf.nn.relu(ft_compare)
           ft_compare = tf.reshape(ft_compare, (num_neg, num_pos, dim_embed))
