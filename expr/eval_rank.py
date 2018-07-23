@@ -125,7 +125,7 @@ def predict_eval_trecvid17_B():
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/aca.py'
-  gpuid = 1
+  gpuid = 0
 
   best_epoch, mir_A = select_best_epoch(log_dir)
 
