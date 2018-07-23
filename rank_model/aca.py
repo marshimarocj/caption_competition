@@ -258,7 +258,7 @@ class Model(framework.model.module.AbstractModel):
           att = tf.nn.softmax(att, 1)
           att *= tf.expand_dims(neg_mask, 2)
           att /= tf.reduce_sum(att, 1, True)
-          att = tf.Print(att, [tf.reduce_max(att, 1), tf.shape(att)])
+          # att = tf.Print(att, [tf.reduce_max(att, 1), tf.shape(att)])
           wvecs_bar = tf.reduce_sum(
             tf.expand_dims(neg_wvecs, 2) * tf.expand_dims(att, 3), 1) # (num_neg, num_pos, dim_embed)
 
