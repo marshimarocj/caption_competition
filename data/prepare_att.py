@@ -84,7 +84,7 @@ def merge_tgif_trecvid16_trn_track_ft():
   out_masks = np.array(out_masks, dtype=np.float32)
   print out_fts.shape
   out_file = os.path.join(out_root_dir, 'sa_feature', ft_name, 'trn_ft.npz')
-  np.savez_compressed(out_file, fts=fts, masks=masks)
+  np.savez_compressed(out_file, fts=out_fts, masks=out_masks)
 
 
 if __name__ == '__main__':
