@@ -359,7 +359,7 @@ def prepare_aca_rnn():
     'cell_dim_hidden': 150,
   }
 
-  outprefix = '%s.%d.%.1f.att'%(
+  outprefix = '%s.%d.%.1f'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
     params['alpha'])
