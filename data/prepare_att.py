@@ -23,9 +23,9 @@ def merge_tgif_trecvid16_trn_track_ft():
   tgif_video_name_file = os.path.join(tgif_root_dir, 'aux', 'int2video.npy')
   video_names = np.load(tgif_video_name_file)
   vid_files = [
-    # os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
+    os.path.join(tgif_root_dir, 'split', 'trn_videoids.npy'),
     os.path.join(tgif_root_dir, 'split', 'val_videoids.npy'),
-    # os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
+    os.path.join(tgif_root_dir, 'split', 'tst_videoids.npy'),
   ]
   tgif_ft_dir = os.path.join(tgif_root_dir, 'track_ft', ft_name)
 
