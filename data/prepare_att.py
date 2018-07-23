@@ -42,12 +42,16 @@ def merge_tgif_trecvid16_trn_track_ft():
         fts = np.load(ft_file)
         # num_tracks.append(fts.shape[0])
         num_ft = fts.shape[0]
-        mask = np.ones((max_num_track,), dtype=np.float32)
-        if num_ft > max_num_track:
-          fts = fts[:max_num_track]
-        elif num_ft < max_num_track:
-          fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
-          mask[num_ft:] = 0.
+        if num_ft == 0:
+          fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
+          mask = np.zeros((max_num_track,), dtype=np.float32)
+        else:
+          mask = np.ones((max_num_track,), dtype=np.float32)
+          if num_ft > max_num_track:
+            fts = fts[:max_num_track]
+          elif num_ft < max_num_track:
+            fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
+            mask[num_ft:] = 0.
       else:
         fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
         mask = np.zeros((max_num_track,), dtype=np.float32)
@@ -61,12 +65,16 @@ def merge_tgif_trecvid16_trn_track_ft():
     if os.path.exists(ft_file):
       fts = np.load(ft_file)
       num_ft = fts.shape[0]
-      mask = np.ones((max_num_track,), dtype=np.float32)
-      if num_ft > max_num_track:
-        fts = fts[:max_num_track]
-      elif num_ft < max_num_track:
-        fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
-        mask[num_ft:] = 0.
+      if num_ft == 0:
+        fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
+        mask = np.zeros((max_num_track,), dtype=np.float32)
+      else:
+        mask = np.ones((max_num_track,), dtype=np.float32)
+        if num_ft > max_num_track:
+          fts = fts[:max_num_track]
+        elif num_ft < max_num_track:
+          fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
+          mask[num_ft:] = 0.
     else:
       fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
       mask = np.zeros((max_num_track,), dtype=np.float32)
