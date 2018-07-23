@@ -355,6 +355,7 @@ def prepare_aca_rnn():
     'dim_joint_embed': 300,
 
     'max_words_in_caption': 30,
+    'cell': 'gru',
   }
 
   outprefix = '%s.%d.%.1f.att'%(

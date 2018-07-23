@@ -129,7 +129,7 @@ class Model(framework.model.module.AbstractModel):
       self._weights.append(self.ft_pca_B)
 
       self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
-        shape=(self._config.subcfgs[WE].dim_embed, self._config.dim_joint_embed), dtype=tf.float32,
+        shape=(2*self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
         initializer=tf.contrib.layers.xavier_initializer())
       self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
