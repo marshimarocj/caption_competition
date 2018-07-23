@@ -31,7 +31,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.margin = 0.1
     self.alpha = 0.5
     self.num_neg = 1
-    self.reduce = 'mean'
+    self.reduce = 'softmax'
 
 
 def gen_cfg(**kwargs):
@@ -363,14 +363,14 @@ class Model(framework.model.module.AbstractModel):
         pos_sim = calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask)
         neg_word_sim = calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, neg_mask)
         neg_ft_sim = calc_neg_ft_sim(neg_fts, pos_wvecs, pos_alpha, neg_beta, pos_mask)
-        # if self._config.reduce == 'mean':
-        #   neg_word_sim = tf.reduce_mean(neg_word_sim, 0)
-        #   neg_ft_sim = tf.reduce_mean(neg_ft_sim, 0)
-        # elif self._config.reduce == 'softmax':
-        #   neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
-        #   neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
-        neg_word_sim = tf.reduce_max(neg_word_sim, 0)
-        neg_ft_sim = tf.reduce_max(neg_ft_sim, 0)
+        if self._config.reduce == 'mean':
+          neg_word_sim = tf.reduce_mean(neg_word_sim, 0)
+          neg_ft_sim = tf.reduce_mean(neg_ft_sim, 0)
+        elif self._config.reduce == 'softmax':
+          neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
+          neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
+        # neg_word_sim = tf.reduce_max(neg_word_sim, 0)
+        # neg_ft_sim = tf.reduce_max(neg_ft_sim, 0)
 
         return pos_sim, neg_word_sim, neg_ft_sim
 
