@@ -79,10 +79,10 @@ def predict_eval_trecvid17_B():
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
-  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
-  # out_name = 'val.B'
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A'
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  out_name = 'val.B'
+  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  # out_name = 'val.A'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
@@ -113,11 +113,18 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/rnnve.py'
   # gpuid = 0
 
-  expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
+  # expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/vevd_score.py'
+  # gpuid = 1
+
+  expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/vevd_score.py'
+  python_file = '../rank_driver/aca.py'
   gpuid = 1
 
   best_epoch, mir_A = select_best_epoch(log_dir)
@@ -132,7 +139,7 @@ def predict_eval_trecvid17_B():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[1])
+      gid = int(data[2])
       vid2gt[vid] = gid
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
@@ -186,6 +193,6 @@ def predict_eval_vevd():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
