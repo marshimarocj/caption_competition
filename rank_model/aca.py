@@ -373,7 +373,7 @@ class Model(framework.model.module.AbstractModel):
         wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
 
         # attend
-        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
         alpha = tf.nn.relu(alpha) # (num_caption*num_word, dim_embed)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
         beta = tf.nn.relu(beta) # (num_ft, dim_embed)
@@ -384,23 +384,23 @@ class Model(framework.model.module.AbstractModel):
         att *= tf.expand_dims(mask, 0)
         att /= tf.reduce_sum(att, 2, True)
         wvecs_bar = tf.reduce_sum(
-          tf.expand_dims(wvecs, 0) * tf.expand_dims(att, 3), 2) # (num_ft, num_caption, dim_word)
+          tf.expand_dims(wvecs, 0) * tf.expand_dims(att, 3), 2) # (num_ft, num_caption, dim_embed)
 
         # compare
         expanded_fts = tf.tile(
-          tf.reshape(fts, (-1, 1, 1, dim_ft)),
-          [1, num_caption, num_word, 1]) # (num_ft, num_caption, num_word, dim_ft)
+          tf.reshape(fts, (-1, 1, 1, dim_embed)),
+          [1, num_caption, num_word, 1]) # (num_ft, num_caption, num_word, dim_embed)
         expanded_wvecs = tf.tile(
-          tf.expand_dims(wvecs, 0), [num_ft, 1, 1, 1]) # (num_ft, num_caption, num_word, dim_word)
-        wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, dim_word + dim_ft))
+          tf.expand_dims(wvecs, 0), [num_ft, 1, 1, 1]) # (num_ft, num_caption, num_word, dim_embed)
+        wvec_ft = tf.reshape(tf.concat([expanded_wvecs, expanded_fts], 3), (-1, 2*dim_embed))
         wvec_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
         wvec_compare = tf.nn.relu(wvec_compare)
         wvec_compare = tf.reshape(wvec_compare, (num_ft, num_caption, num_word, dim_embed))
 
         expanded_fts = tf.tile(
-          tf.reshape(fts, (-1, 1, dim_ft)),
-          [1, num_caption, 1]) # (num_ft, num_caption, dim_ft)
-        wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, dim_word + dim_ft))
+          tf.reshape(fts, (-1, 1, dim_embed)),
+          [1, num_caption, 1]) # (num_ft, num_caption, dim_embed)
+        wvec_ft = tf.reshape(tf.concat([wvecs_bar, expanded_fts], 2), (-1, 2*dim_embed))
         ft_compare = tf.nn.xw_plus_b(wvec_ft, self.compare_W, self.compare_B)
         ft_compare = tf.nn.relu(ft_compare)
         ft_compare = tf.reshape(ft_compare, (num_ft, num_caption, dim_embed))
