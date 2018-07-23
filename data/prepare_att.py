@@ -46,7 +46,7 @@ def merge_tgif_trecvid16_trn_track_ft():
         if num_ft > max_num_track:
           fts = fts[:max_num_track]
         elif num_ft < max_num_track:
-          fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)])
+          fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
           mask[num_ft:] = 0.
       else:
         fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
@@ -63,7 +63,7 @@ def merge_tgif_trecvid16_trn_track_ft():
       if num_ft > max_num_track:
         fts = fts[:max_num_track]
       elif num_ft < max_num_track:
-        fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)])
+        fts = np.concatenate([fts, np.zeros((max_num_track-num_ft,) + fts.shape[1:], dtype=np.float32)], 0)
         mask[num_ft:] = 0.
     else:
       fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
