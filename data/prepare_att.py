@@ -55,7 +55,7 @@ def merge_tgif_trecvid16_trn_track_ft():
       out_masks.append(mask)
   # print np.mean(num_tracks), np.median(num_tracks), np.percentile(num_tracks, 90)
   for vid in range(1915):
-    ft_file = os.path.join(trecvid_root_dir, '16_track_ft', ft_name)
+    ft_file = os.path.join(trecvid_root_dir, '16_track_ft', ft_name, '%d.npy'%vid)
     if os.path.exists(ft_file):
       fts = np.load(ft_file)
       num_ft = fts.shape[0]
