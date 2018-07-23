@@ -236,6 +236,7 @@ def extract_missing_tgif():
       continue
 
     imgs = load_video(video_file)
+    print name, len(imgs)
     with open(track_file) as f:
       paths = json.load(f)
     out_fts = []
