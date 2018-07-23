@@ -30,7 +30,6 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.subcfgs[RNN] = encoder.birnn.Config()
 
     self.max_words_in_caption = 30
-    self.pool = 'mean'
 
     self.dim_ft = 1024
     self.dim_joint_embed = 512
