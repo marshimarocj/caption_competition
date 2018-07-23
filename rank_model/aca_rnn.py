@@ -242,7 +242,7 @@ class Model(framework.model.module.AbstractModel):
 
           return pos_sim
 
-        def calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, pos_beta, neg_mask):
+        def calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, neg_mask):
           # attend
           neg_alpha = tf.reshape(neg_alpha, (-1, dim_embed)) # (num_neg*num_word, dim_embed)
           pos_beta = tf.reshape(pos_beta, (-1, dim_embed)) # (num_pos, dim_embed)
