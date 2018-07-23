@@ -16,9 +16,12 @@ def merge_tgif_trecvid16_trn_track_ft():
   tgif_root_dir = '/home/jiac/data/tgif/'
   out_root_dir = '/home/jiac/data/trecvid2018'
 
-  ft_name = 'i3d_rgb'
-  out_ft_name = 'i3d'
-  dim_ft = 1024
+  # ft_name = 'i3d_rgb'
+  # out_ft_name = 'i3d'
+  # dim_ft = 1024
+  ft_name = 'resnet200'
+  out_ft_name = 'resnet200'
+  dim_ft = 2048
 
   tgif_video_name_file = os.path.join(tgif_root_dir, 'aux', 'int2video.npy')
   video_names = np.load(tgif_video_name_file)
