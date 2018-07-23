@@ -11,6 +11,9 @@ import rank_model.aca_rnn
 import common
 
 WE = rank_model.aca_rnn.WE
+RNN = rank_model.aca_rnn.RNN
+CELL = rank_model.aca_rnn.CELL
+RCELL = rank_model.aca_rnn.RCELL
 
 def build_parser():
   parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
