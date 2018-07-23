@@ -51,7 +51,7 @@ def merge_tgif_trecvid16_trn_track_ft():
       else:
         fts = np.zeros((max_num_track, dim_ft), dtype=np.float32)
         mask = np.zeros((max_num_track,), dtype=np.float32)
-      if len(fts.shape) == 0:
+      if len(fts.shape) == 1:
         print video
       out_fts.append(fts)
       out_masks.append(mask)
