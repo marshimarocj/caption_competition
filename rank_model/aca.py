@@ -252,7 +252,8 @@ class Model(framework.model.module.AbstractModel):
           # pos_sim = tf.nn.xw_plus_b(pos_sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
           # pos_sim = tf.nn.tanh(pos_sim)
           # pos_sim = tf.reshape(pos_sim, (num_pos,))
-          pos_sim = (tf.reduce_sum(wvec_compare * pos_mask, -1) / tf.reduce_sum(pos_mask, 1) + ft_compare) / 2.
+          # pos_sim = (tf.reduce_sum(wvec_compare * pos_mask, -1) / tf.reduce_sum(pos_mask, 1) + ft_compare) / 2.
+          pos_sim = ft_compare
 
           return pos_sim
 
@@ -300,7 +301,8 @@ class Model(framework.model.module.AbstractModel):
           # neg_sim = tf.nn.tanh(neg_sim)
           # neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
           neg_mask = tf.reshape(neg_mask, (num_neg, 1, num_word))
-          neg_sim = (tf.reduce_sum(wvec_compare * neg_mask, -1) / tf.reduce_sum(neg_mask, -1) + ft_compare) / 2.
+          # neg_sim = (tf.reduce_sum(wvec_compare * neg_mask, -1) / tf.reduce_sum(neg_mask, -1) + ft_compare) / 2.
+          neg_sim = ft_compare
 
           return neg_sim
 
@@ -350,7 +352,8 @@ class Model(framework.model.module.AbstractModel):
           # neg_sim = tf.nn.tanh(neg_sim)
           # neg_sim = tf.reshape(neg_sim, (num_neg, num_pos))
           pos_mask = tf.reshape(pos_mask, (1, num_pos, num_word))
-          neg_sim = (tf.reduce_sum(wvec_compare * pos_mask, -1) / tf.reduce_sum(pos_mask, -1) + ft_compare) / 2.
+          # neg_sim = (tf.reduce_sum(wvec_compare * pos_mask, -1) / tf.reduce_sum(pos_mask, -1) + ft_compare) / 2.
+          neg_sim = ft_compare
 
           return neg_sim
 
@@ -436,7 +439,8 @@ class Model(framework.model.module.AbstractModel):
         # sim = tf.nn.xw_plus_b(sim, self.aggregate_Ws[1], self.aggregate_Bs[1])
         # sim = tf.reshape(sim, (num_ft, num_caption))
         mask = tf.reshape(mask, (1, num_caption, num_word))
-        sim = (tf.reduce_sum(wvec_compare * mask, -1) / tf.reduce_sum(mask, -1) + ft_compare) / 2.
+        # sim = (tf.reduce_sum(wvec_compare * mask, -1) / tf.reduce_sum(mask, -1) + ft_compare) / 2.
+        sim = ft_compare
 
         return sim
 
