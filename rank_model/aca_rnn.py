@@ -57,7 +57,6 @@ def gen_cfg(**kwargs):
   cfg.margin = .1
   cfg.alpha = kwargs['alpha']
   cfg.num_neg = kwargs['num_neg']
-  cfg.l2norm = kwargs['l2norm']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
 
