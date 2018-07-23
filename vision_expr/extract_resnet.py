@@ -203,7 +203,7 @@ def extract_missing_tgif():
   # lst_file = os.path.join(data_root_dir, 'split.0.lst')
   root_dir = '/home/jiac/data/tgif' # gpu8
   data_root_dir = root_dir
-  lst_file = os.path.join(data_root_dir, 'split.2.lst')
+  lst_file = os.path.join(data_root_dir, 'split.3.lst')
   valid_video_lst_file = os.path.join(root_dir, 'aux', 'int2video.npy')
   video_dir = os.path.join(data_root_dir, 'mp4')
   track_dir = os.path.join(data_root_dir, 'kcf_track')
