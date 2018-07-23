@@ -185,6 +185,7 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
+        # embed
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
         fts = tf.nn.tanh(fts)
         pos_fts = fts[:num_pos]
@@ -361,6 +362,15 @@ class Model(framework.model.module.AbstractModel):
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
         mask = tf.to_float(mask)
+
+        # embed
+        fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
+        fts = tf.nn.tanh(fts)
+
+        wvecs = tf.reshape(wvecs, (-1, dim_word))
+        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
+        wvecs = tf.nn.tanh(wvecs)
+        wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
 
         # attend
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_W, self.word_att_B)
