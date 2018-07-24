@@ -40,6 +40,14 @@ class ScorePathCfg(PathCfg):
     self.groundtruth_file = ''
 
 
+class AttPathCfg(PathCfg):
+  def __init__(self):
+    super(AttPathCfg, self).__init__()
+    self.trn_att_ftfiles = []
+    self.val_att_ftfiles = []
+    self.tst_att_ftfiles = []
+
+
 class TrnTst(framework.model.trntst.TrnTst):
   def _construct_feed_dict_in_trn(self, data):
     return {
@@ -96,6 +104,56 @@ class ScoreTrnTst(TrnTst):
       self.model.inputs[self.model.InKey.DELTA]: data['deltas'],
       self.model.inputs[self.model.InKey.IS_TRN]: True,
     }
+
+
+class AttTrnTst(framework.model.trntst.TrnTst):
+  def _construct_feed_dict_in_trn(self, data):
+    return {
+      self.model.inputs[self.model.InKey.FT]: data['fts'],
+      self.model.inputs[self.model.InKey.FT_MASK]: data['ft_masks'],
+      self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+      self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+      self.model.inputs[self.model.InKey.IS_TRN]: True,
+    }
+
+  def predict_and_eval_in_val(self, sess, tst_reader, metrics):
+    batch_size = self.model_cfg.tst_batch_size
+    op_dict = self.model.op_in_val()
+    mir = 0.
+    num = 0
+    for data in tst_reader.yield_val_batch(batch_size):
+      feed_dict= {
+        self.model.inputs[self.model.InKey.FT]: data['fts'],
+        self.model.inputs[self.model.InKey.FT_MASK]: data['ft_masks'],
+        self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+        self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+        self.model.inputs[self.model.InKey.IS_TRN]: False,
+      }
+      sims = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
+      idxs = np.argsort(-sims[0])
+      rank = np.where(idxs == data['gt'])[0][0]
+      rank += 1
+      mir += 1. / rank
+      num += 1
+    mir /= num
+    metrics['mir'] = mir
+
+  def predict_in_tst(self, sess, tst_reader, predict_file):
+    batch_size = self.model_cfg.tst_batch_size
+    op_dict = self.model.op_in_val()
+    sims = []
+    for data in tst_reader.yield_tst_batch(batch_size):
+      feed_dict = {
+        self.model.inputs[self.model.InKey.FT]: data['fts'],
+        self.model.inputs[self.model.InKey.FT_MASK]: data['ft_masks'],
+        self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+        self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+        self.model.inputs[self.model.InKey.IS_TRN]: False,
+      }
+      sim = sess.run(op_dict[self.model.OutKey.SIM], feed_dict=feed_dict)
+      sims.append(sim)
+    sims = np.concatenate(sims, 0)
+    np.save(predict_file, sims)
 
 
 class TrnReader(framework.model.data.Reader):
@@ -528,7 +586,7 @@ class ValAttReader(framework.model.data.Reader):
 
 
 class TstAttReader(framework.model.data.Reader):
-  def __init__(self, ft_files, annotation_file):
+  def __init__(self, ft_files, att_ft_files, annotation_file):
     self.fts = np.empty(0)
     self.ft_masks = np.empty(0)
     self.ft_idxs = np.empty(0)

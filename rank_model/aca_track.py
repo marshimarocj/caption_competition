@@ -365,3 +365,11 @@ class Model(framework.model.module.AbstractModel):
       return {
         self.OutKey.SIM: sim,
       }
+
+
+PathCfg = trntst_util.AttPathCfg
+TrnTst = trntst_util.AttTrnTst
+
+TrnReader = trntst_util.TrnAttReader
+ValReader = trntst_util.ValAttReader
+TstReader = trntst_util.TstAttReader
