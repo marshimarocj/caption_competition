@@ -304,6 +304,7 @@ def prepare_vead():
     'cell_keepout_prob': 0.5,
     'dim_fts': dim_fts,
     'dim_attention': 512,
+    'dim_ft': sum(dim_fts),
 
     'num_ft': 11,
   }
