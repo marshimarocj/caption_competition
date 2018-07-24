@@ -146,7 +146,7 @@ class Model(framework.model.module.AbstractModel):
     ft_embed = out_ops[self.submods[VE].OutKey.EMBED]
 
     with tf.variable_scope(self.name_scope):
-      batch_size = tf.shape(ft_embed)[0]
+      batch_size = tf.shape(fts)[0]
       init_wid = tf.zeros((batch_size,), dtype=tf.int32)
 
     ad_inputs = {
