@@ -97,12 +97,12 @@ def trecvid17_val_track_ft():
   postfix = 'val_ft.npz'
   out_root_dir = '/home/jiac/data/trecvid2018'
 
-  # ft_name = 'i3d_rgb'
-  # out_ft_name = 'i3d'
-  # dim_ft = 1024
-  ft_name = 'resnet200'
-  out_ft_name = 'resnet200'
-  dim_ft = 2048
+  ft_name = 'i3d_rgb'
+  out_ft_name = 'i3d'
+  dim_ft = 1024
+  # ft_name = 'resnet200'
+  # out_ft_name = 'resnet200'
+  # dim_ft = 2048
   max_num_track = 10
 
   vids = []
@@ -137,7 +137,7 @@ def trecvid17_val_track_ft():
   out_fts = np.array(out_fts, dtype=np.float32)
   out_masks = np.array(out_masks, dtype=np.float32)
   print out_fts.shape
-  out_file = os.path.join(out_root_dir, 'sa_feature', out_ft_name, 'val_ft.2.npz')
+  out_file = os.path.join(out_root_dir, 'sa_feature', out_ft_name, postfix)
   np.savez_compressed(out_file, fts=out_fts, masks=out_masks)
 
 
