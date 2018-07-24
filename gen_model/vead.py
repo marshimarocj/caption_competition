@@ -77,7 +77,6 @@ class Model(framework.model.module.AbstractModel):
     FT_MASK = 'ft_masks' # (None, num_ft)
     CAPTIONID = 'captionids' # (None, max_caption_len)
     CAPTION_MASK = 'caption_masks' # (None, max_caption_len)
-    INIT_WID = 'init_wid'
     IS_TRN = 'is_training'
 
   class OutKey(enum.Enum):
@@ -109,16 +108,12 @@ class Model(framework.model.module.AbstractModel):
           tf.int32, shape=(None, decoder_cfg.num_step), name=self.InKey.CAPTIONID.value)
         caption_masks = tf.placeholder(
           tf.float32, shape=(None, decoder_cfg.num_step), name=self.InKey.CAPTION_MASK.value)
-        # tst only
-        init_wordids = tf.placeholder(
-          tf.int32, shape=(None,), name=self.InKey.INIT_WID.value)
 
         return {
           self.InKey.FT: fts,
           self.InKey.FT_MASK: ft_masks,
           self.InKey.CAPTIONID: captionids,
           self.InKey.CAPTION_MASK: caption_masks,
-          self.InKey.INIT_WID: init_wordids,
           self.InKey.IS_TRN: is_training,
         }
     else:
@@ -127,15 +122,12 @@ class Model(framework.model.module.AbstractModel):
           tf.float32, shape=(None, decoder_cfg.num_ft, sum(encoder_cfg.dim_fts)), name=self.InKey.FT.value)
         ft_masks = tf.placeholder(
           tf.float32, shape=(None, decoder_cfg.num_ft), name=self.InKey.FT_MASK.value)
-        init_wordids = tf.placeholder(
-          tf.int32, shape=(None, ), name=self.InKey.INIT_WID.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
 
         return {
           self.InKey.FT: fts,
           self.InKey.FT_MASK: ft_masks,
-          self.InKey.INIT_WID: init_wordids,
           self.InKey.IS_TRN: is_training,
         }
 
@@ -153,11 +145,15 @@ class Model(framework.model.module.AbstractModel):
     }, mode)
     ft_embed = out_ops[self.submods[VE].OutKey.EMBED]
 
+    with tf.variable_scope(self.name_scope):
+      batch_size = tf.shape(ft_embed)[0]
+      init_wid = tf.zeros((batch_size,), dtype=tf.int32)
+
     ad_inputs = {
       self.submods[AD].InKey.INIT_FT: ft_embed,
       self.submods[AD].InKey.FT: fts,
       self.submods[AD].InKey.FT_MASK: ft_masks,
-      self.submods[AD].InKey.INIT_WID: in_ops[self.InKey.INIT_WID],
+      self.submods[AD].InKey.INIT_WID: init_wid,
     }
     if mode == framework.model.module.Mode.TRN_VAL:
       ad_inputs.update({
