@@ -368,6 +368,38 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.SIM: sim,
       }
 
+  def _add_loss(self):
+    with tf.variable_scope(self.name_scope):
+      pos_sim = self._outputs[self.OutKey.P_SIM]
+      neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
+      neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
+      self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
+      self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
+      self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
+
+      contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
+      contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
+      # self.op2monitor['contrast_caption_loss'] = tf.reduce_sum(contrast_caption_loss)
+
+      contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
+      contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
+      # self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
+
+      loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
+      loss = tf.reduce_sum(loss)
+      self.op2monitor['loss'] = loss
+    return loss
+
+  def op_in_val(self, **kwargs):
+    return {
+      self.OutKey.SIM: self._outputs[self.OutKey.SIM],
+    }
+
+  def op_in_tst(self, **kwargs):
+    return {
+      self.OutKey.SIM: self._outputs[self.OutKey.SIM],
+    }
+
 
 PathCfg = trntst_util.AttPathCfg
 TrnTst = trntst_util.AttTrnTst
