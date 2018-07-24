@@ -309,7 +309,7 @@ def prepare_vead():
     'num_ft': 11,
   }
 
-  model_cfg = gen_model.vevd.gen_cfg(**params)
+  model_cfg = gen_model.vead.gen_cfg(**params)
   outprefix = '%s.%d.%d'%(
     os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'])
