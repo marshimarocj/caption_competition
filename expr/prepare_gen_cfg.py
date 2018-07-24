@@ -39,6 +39,9 @@ def get_att_ft_files(root_dir, model_feature_names, splits, dir_name='sa_feature
     ft_files = []
     for name in model_feature_names:
       ft_file = os.path.join(root_dir, dir_name, name, '%s_ft.npz'%split)
+      ft_files.append(ft_file)
+
+  return split_ft_files
 
 
 '''expr
@@ -288,10 +291,53 @@ def prepare_vead():
   ]
 
   dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
+  att_split_ftfiles = get_att_ft_files(root_dir, ft_names, splits)
+
+  params = {
+    'num_step': 30,
+    'dim_input': 512,
+    'dim_hidden': 512,
+    'num_epoch': 100,
+    'content_keepin_prob': 1.,
+    'cell_keepin_prob': 0.5,
+    'cell_keepout_prob': 0.5,
+    'dim_fts': dim_fts,
+    'dim_attention': 512,
+
+    'num_ft': 11,
+  }
+
+  model_cfg = gen_model.vevd.gen_cfg(**params)
+  outprefix = '%s.%d.%d.%s'%(
+    os.path.join(out_dir, '_'.join(ft_names)),
+    params['dim_hidden'], params['dim_input'],
+    model_spec)
+  model_cfg_file = '%s.model.json'%outprefix
+  model_cfg.save(model_cfg_file)
+
+  output_dir = outprefix
+  path_cfg = {
+    'trn_ftfiles': split_ftfiles[0],
+    'val_ftfiles': split_ftfiles[1],
+    'tst_ftfiles': split_ftfiles[2],
+    'trn_att_ftfiles': att_split_ftfiles[0],
+    'val_att_ftfiles': att_split_ftfiles[1],
+    'tst_att_ftfiles': att_split_ftfiles[2],
+    'split_dir': split_dir,
+    'annotation_dir': annotation_dir,
+    'output_dir': output_dir,
+  }
+  path_cfg_file = '%s.path.json'%outprefix
+
+  if not os.path.exists(path_cfg['output_dir']):
+    os.mkdir(path_cfg['output_dir'])
+
+  json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
 
 
 if __name__ == '__main__':
   # prepare_vevd()
   # prepare_self_critique()
-  prepare_diversity()
+  # prepare_diversity()
   # prepare_margin()
+  prepare_vead()
