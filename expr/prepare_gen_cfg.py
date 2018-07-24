@@ -40,6 +40,7 @@ def get_att_ft_files(root_dir, model_feature_names, splits, dir_name='sa_feature
     for name in model_feature_names:
       ft_file = os.path.join(root_dir, dir_name, name, '%s_ft.npz'%split)
       ft_files.append(ft_file)
+    split_ft_files.append(ft_files)
 
   return split_ft_files
 
