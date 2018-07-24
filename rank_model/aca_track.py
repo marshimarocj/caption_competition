@@ -355,7 +355,7 @@ class Model(framework.model.module.AbstractModel):
 
     if mode == framework.model.module.Mode.TRN_VAL:
       pos_sim, neg_word_sim, neg_ft_sim = trn(wvecs, fts, word_mask, ft_mask, is_trn)
-      sim = tst(wvecs, fts, mask, is_trn)
+      sim = tst(wvecs, fts, word_mask, ft_mask, is_trn)
       return {
         self.OutKey.SIM: sim,
         self.OutKey.P_SIM: pos_sim,
