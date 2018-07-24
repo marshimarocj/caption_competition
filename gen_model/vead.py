@@ -106,9 +106,9 @@ class Model(framework.model.module.AbstractModel):
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
         # trn only
         captionids = tf.placeholder(
-          tf.int32, shape=(None, decoder_cfg.max_words_in_caption), name=self.InKey.CAPTIONID.value)
+          tf.int32, shape=(None, decoder_cfg.num_step), name=self.InKey.CAPTIONID.value)
         caption_masks = tf.placeholder(
-          tf.float32, shape=(None, decoder_cfg.max_words_in_caption), name=self.InKey.CAPTION_MASK.value)
+          tf.float32, shape=(None, decoder_cfg.num_step), name=self.InKey.CAPTION_MASK.value)
         # tst only
         init_wordids = tf.placeholder(
           tf.int32, shape=(None,), name=self.InKey.INIT_WID.value)
