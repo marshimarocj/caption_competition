@@ -68,8 +68,8 @@ def report_best_epoch():
 
   # log_dir = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm', 'log')
 
-  log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5', 'log')
-  # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att', 'log')
+  # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5', 'log')
+  log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att', 'log')
 
   best_epoch, best_mir = select_best_epoch(log_dir)
   print best_epoch, best_mir
