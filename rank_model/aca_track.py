@@ -211,7 +211,7 @@ class Model(framework.model.module.AbstractModel):
           ft_att = tf.nn.softmax(att, 2)
           ft_att *= tf.expand_dims(pos_ft_mask, 1)
           ft_att /= tf.reduce_sum(ft_att, 2, True)
-          ft_bar = tf.reduce_sum(tf.expand_dims(fts, 1) * tf.expand_dims(ft_att, 3), 1) # (num_pos, num_word, dim_embed)
+          ft_bar = tf.reduce_sum(tf.expand_dims(pos_fts, 1) * tf.expand_dims(ft_att, 3), 1) # (num_pos, num_word, dim_embed)
           ft_bar = tf.nn.l2_normalize(ft_bar, -1)
 
           # compare
