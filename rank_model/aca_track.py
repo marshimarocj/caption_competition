@@ -188,7 +188,7 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_mask = ft_mask[num_pos:]
 
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
-        alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
+        alpha = tf.nn.tanh(alpha)
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
         beta = tf.nn.xw_plus_b(tf.reshape(fts, (-1, dim_embed)), self.ft_att_W, self.ft_att_B)
         beta = tf.nn.tanh(beta)
@@ -211,7 +211,7 @@ class Model(framework.model.module.AbstractModel):
           ft_att = tf.nn.softmax(att, 2)
           ft_att *= tf.expand_dims(pos_ft_mask, 1)
           ft_att /= tf.reduce_sum(ft_att, 2, True)
-          ft_bar = tf.reduce_sum(tf.expand_dims(pos_fts, 1) * tf.expand_dims(ft_att, 3), 1) # (num_pos, num_word, dim_embed)
+          ft_bar = tf.reduce_sum(tf.expand_dims(pos_fts, 1) * tf.expand_dims(ft_att, 3), 2) # (num_pos, num_word, dim_embed)
           ft_bar = tf.nn.l2_normalize(ft_bar, -1)
 
           # compare
