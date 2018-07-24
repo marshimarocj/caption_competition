@@ -332,14 +332,14 @@ class Model(framework.model.module.AbstractModel):
         word_att *= tf.reshape(word_mask, (1, 1, num_caption, num_word))
         word_att /= tf.reduce_sum(word_att, 3, True)
         wvecs_bar = tf.reduce_sum(
-          tf.reshape(wvecs, (1, 1, num_caption, num_word, dim_word)) * tf.expand_dims(word_att, 4), 3)
+          tf.reshape(wvecs, (1, 1, num_caption, num_word, dim_embed)) * tf.expand_dims(word_att, 4), 3)
         wvecs_bar = tf.nn.l2_normalize(wvecs_bar, -1) # (num_ft, num_track, num_caption, dim_embed)
 
         ft_att = tf.nn.softmax(att, 1)
         ft_att *= tf.reshape(ft_mask, (num_ft, num_track, 1, 1))
         ft_att /= tf.reduce_sum(ft_att, 1, True)
         ft_bar = tf.reduce_sum(
-          tf.reshape(fts, (num_ft, num_track, 1, 1)) * tf.expand_dims(ft_att, 4), 1)
+          tf.reshape(fts, (num_ft, num_track, 1, 1, dim_embed)) * tf.expand_dims(ft_att, 4), 1)
         ft_bar = tf.nn.l2_normalize(ft_bar, -1) # (num_ft, num_caption, num_word, dim_embed)
 
         # compare
