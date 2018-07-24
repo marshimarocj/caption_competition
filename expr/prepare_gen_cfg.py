@@ -296,7 +296,7 @@ def prepare_vead():
 
   params = {
     'num_step': 30,
-    'dim_input': 512,
+    'dim_input': 512 + sum(dim_fts),
     'dim_hidden': 512,
     'num_epoch': 100,
     'content_keepin_prob': 1.,
