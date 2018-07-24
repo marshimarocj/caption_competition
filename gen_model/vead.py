@@ -34,7 +34,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.search_strategy = 'beam'
 
   def _assert(self):
-    assert self.subcfgs[VE].dim_output == self.subcfgs[VD].subcfgs[CELL].dim_hidden
+    assert self.subcfgs[VE].dim_output == self.subcfgs[AD].subcfgs[CELL].dim_hidden
 
 
 def gen_cfg(**kwargs):
@@ -52,7 +52,7 @@ def gen_cfg(**kwargs):
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
-  dec = cfg.subcfgs[VD]
+  dec = cfg.subcfgs[AD]
   dec.num_step = kwargs['num_step']
   dec.dim_input = kwargs['dim_input']
   dec.dim_hidden = kwargs['dim_hidden']
