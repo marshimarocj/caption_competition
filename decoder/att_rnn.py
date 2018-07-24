@@ -122,7 +122,7 @@ class Decoder(framework.model.module.AbstractModule):
     row_idxs = tf.range(batch_size) # (None,)
     Uav_plus_ba = self._gen_Uav_plus_ba_op(fts)
     output = init_ft
-    for i in xrange(self._config.max_words_in_caption-1):
+    for i in xrange(self._config.num_step-1):
       input = tf.nn.embedding_lookup(self.word_embedding_W, captionids[:, i])
      
       output, state, alpha = self._attention_on_recurrent(
@@ -137,10 +137,10 @@ class Decoder(framework.model.module.AbstractModule):
 
       outputs.append(output)
       log_probs.append(log_prob)
-    log_probs = tf.stack(log_probs, axis=1) # (None, max_words_in_caption-1)
+    log_probs = tf.stack(log_probs, axis=1) # (None, num_step-1)
 
-    outputs = tf.concat(outputs, 0) # ((max_words_in_caption-1)*None, dim_hidden)
-    logit_ops = tf.nn.xw_plus_b(outputs, self.softmax_W, self.softmax_B) # ((max_words_in_caption-1)*None, num_words)
+    outputs = tf.concat(outputs, 0) # ((num_step-1)*None, dim_hidden)
+    logit_ops = tf.nn.xw_plus_b(outputs, self.softmax_W, self.softmax_B) # ((num_step-1)*None, num_words)
 
     return logit_ops, log_probs
 
@@ -148,7 +148,7 @@ class Decoder(framework.model.module.AbstractModule):
     out_wids = []
     Uav_plus_ba = self._gen_Uav_plus_ba_op(fts)
     outputs = init_ft
-    for i in xrange(self._config.max_words_in_caption):
+    for i in xrange(self._config.num_step):
       input = tf.nn.embedding_lookup(self.word_embedding_W, wordids)
 
       outputs, states, alphas = self._attention_on_recurrent(
@@ -160,7 +160,7 @@ class Decoder(framework.model.module.AbstractModule):
       wordids = tf.argmax(logits, axis=1)
 
       out_wids.append(wordids)
-    out_wids = tf.stack(out_wids, axis=1) # (None, max_words_in_caption)
+    out_wids = tf.stack(out_wids, axis=1) # (None, num_step)
 
     return out_wids
 
@@ -192,7 +192,7 @@ class Decoder(framework.model.module.AbstractModule):
     op_groups = framework.util.expanded_op.beam_decode(
       next_step_func,
       wordids, state,
-      self.submods[CELL].state_size, self._config.beam_width, self._config.max_words_in_caption,
+      self.submods[CELL].state_size, self._config.beam_width, self._config.num_step,
       init_output=init_ft)
     return {
       self.OutKey.OUT_WID: op_groups[0],
