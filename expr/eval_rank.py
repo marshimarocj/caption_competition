@@ -80,10 +80,10 @@ def predict_eval_trecvid17_B():
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
-  out_name = 'val.B'
-  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  # out_name = 'val.A'
+  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  # out_name = 'val.B'
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  out_name = 'val.A'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
@@ -141,7 +141,7 @@ def predict_eval_trecvid17_B():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[2])
+      gid = int(data[1])
       vid2gt[vid] = gid
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
