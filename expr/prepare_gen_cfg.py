@@ -308,10 +308,9 @@ def prepare_vead():
   }
 
   model_cfg = gen_model.vevd.gen_cfg(**params)
-  outprefix = '%s.%d.%d.%s'%(
+  outprefix = '%s.%d.%d'%(
     os.path.join(out_dir, '_'.join(ft_names)),
-    params['dim_hidden'], params['dim_input'],
-    model_spec)
+    params['dim_hidden'], params['dim_input'])
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
 
