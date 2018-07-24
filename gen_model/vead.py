@@ -191,7 +191,7 @@ class Model(framework.model.module.AbstractModel):
 
     return loss_op
 
-  def op_in_tst(self):
+  def op_in_tst(self, **kwargs):
     op_dict = {
       self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
     }
@@ -203,7 +203,7 @@ class Model(framework.model.module.AbstractModel):
       })
     return op_dict
 
-  def op_in_val(self):
+  def op_in_val(self, **kwargs):
     op_dict = framework.model.module.AbstractModel.op_in_val(self)
     op_dict.update({
       self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
