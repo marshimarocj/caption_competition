@@ -89,7 +89,7 @@ class Model(framework.model.module.AbstractModel):
 
   def _set_submods(self):
     return {
-      VE: encoder.vanilla.Encoder(self._config.subcfgs[VE]),
+      VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
       AD: decoder.attention.Decoder(self._config.subcfgs[AD]),
     }
 
