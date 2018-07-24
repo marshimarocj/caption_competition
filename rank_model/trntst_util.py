@@ -112,7 +112,7 @@ class TrnReader(framework.model.data.Reader):
     for ft_file in ft_files:
       ft = np.load(ft_file)
       fts.append(ft)
-    self.fts = np.concatenate(tuple(fts), axis=1)
+    self.fts = np.concatenate(fts, axis=1)
     self.fts = self.fts.astype(np.float32)
 
     data = cPickle.load(file(annotation_file))
@@ -382,3 +382,189 @@ def get_scores(neg_captions, pos_vids, cider_scorer):
 #   deltas = np.maximum(deltas, np.zeros(deltas.shape))
 
 #   return deltas
+
+
+class TrnAttReader(framework.model.data.Reader):
+  def __init__(self, num_neg, ft_files, att_ft_files, annotation_file):
+    self.num_neg = num_neg
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.idxs = []
+    self.num_caption = 0
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=1)
+    fts = []
+    for att_ft_file in att_ft_files:
+      data = np.load(att_ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    fts = np.concatenate(fts, axis=2)
+    self.fts = np.expand_dims(self.fts, 1)
+    self.fts = np.concatenate([self.fts, fts], axis=1)
+    self.fts = self.fts.astype(np.float32)
+    mask = np.ones((self.fts.shape[0], 1), dtype=np.float32)
+    self.ft_masks = np.concatenate([mask, self.ft_masks], 1)
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
+
+    self.num_caption = self.captionids.shape[0]
+    self.idxs = range(self.num_caption)
+
+  def num_record(self):
+    return self.num_caption
+
+  def reset(self):
+    random.shuffle(self.idxs)
+
+  def yield_trn_batch(self, batch_size):
+    for i in range(0, self.num_caption, batch_size):
+      pos_idxs = self.idxs[i:i+batch_size]
+      pos_ft_idxs = set(self.ft_idxs[pos_idxs].tolist())
+
+      pos_fts = self.fts[self.ft_idxs[pos_idxs]]
+      pos_ft_masks = self.ft_masks[self.ft_idxs[pos_idxs]]
+      pos_captionids = self.captionids[pos_idxs]
+      pos_caption_masks = self.caption_masks[pos_idxs]
+
+      idxs = range(self.num_caption)
+      random.shuffle(idxs)
+
+      neg_fts = []
+      neg_ft_masks = []
+      neg_captionids= []
+      neg_caption_masks = []
+      for idx in idxs:
+        ft_idx = self.ft_idxs[idx]
+        if ft_idx not in pos_ft_idxs:
+          neg_fts.append(self.fts[ft_idx])
+          neg_ft_masks.append(self.ft_masks[ft_idx])
+          neg_captionids.append(self.captionids[idx])
+          neg_caption_masks.append(self.caption_masks[idx])
+          if len(neg_fts) == self.num_neg:
+            break
+      neg_fts = np.array(neg_fts, dtype=np.float32)
+      neg_ft_masks = np.array(neg_ft_masks, dtype=np.float32)
+      neg_captionids = np.array(neg_captionids, dtype=np.int32)
+      neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
+
+      fts = np.concatenate([pos_fts, neg_fts], 0)
+      ft_masks = np.concatenate([pos_ft_masks, neg_ft_masks], 0)
+      captionids = np.concatenate([pos_captionids, neg_captionids], 0)
+      caption_masks = np.concatenate([pos_caption_masks, neg_caption_masks], 0)
+
+      yield {
+        'fts': fts,
+        'ft_masks': ft_masks,
+        'captionids': captionids,
+        'caption_masks': caption_masks,
+      }
+
+
+class ValAttReader(framework.model.data.Reader):
+  def __init__(self, ft_files, att_ft_files, annotation_file, label_file):
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.gts = []
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=1)
+    fts = []
+    for att_ft_file in att_ft_files:
+      data = np.load(att_ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    fts = np.concatenate(fts, axis=2)
+    self.fts = np.expand_dims(self.fts, 1)
+    self.fts = np.concatenate([self.fts, fts], axis=1)
+    self.fts = self.fts.astype(np.float32)
+    mask = np.ones((self.fts.shape[0], 1), dtype=np.float32)
+    self.ft_masks = np.concatenate([mask, self.ft_masks], 1)
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
+
+    with open(label_file) as f:
+      vid2gid = {}
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        vid = int(data[0])
+        gid = int(data[1])
+        vid2gid[vid] = gid
+    for vid in range(len(vid2gid)):
+      self.gts.append(vid2gid[vid])
+
+  def yield_val_batch(self, batch_size):
+    for ft, ft_mask, gt in zip(self.fts, self.ft_masks, self.gts):
+      fts = np.expand_dims(ft, 0)
+      ft_masks = np.expand_dims(ft_mask, 0)
+      yield {
+        'fts': fts,
+        'ft_masks': ft_masks,
+        'captionids': self.captionids,
+        'caption_masks': self.caption_masks,
+        'gt': gt,
+      }
+
+
+class TstAttReader(framework.model.data.Reader):
+  def __init__(self, ft_files, annotation_file):
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=1)
+    fts = []
+    for att_ft_file in att_ft_files:
+      data = np.load(att_ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    fts = np.concatenate(fts, axis=2)
+    self.fts = np.expand_dims(self.fts, 1)
+    self.fts = np.concatenate([self.fts, fts], axis=1)
+    self.fts = self.fts.astype(np.float32)
+    mask = np.ones((self.fts.shape[0], 1), dtype=np.float32)
+    self.ft_masks = np.concatenate([mask, self.ft_masks], 1)
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
+
+  def yield_tst_batch(self, batch_size):
+    for ft, ft_mask in zip(self.fts, self.ft_masks):
+      fts = np.expand_dims(ft, 0)
+      ft_masks = np.expand_dims(ft_mask, 0)
+      yield {
+        'fts': fts,
+        'ft_masks': ft_masks,
+        'captionids': self.captionids,
+        'caption_masks': self.caption_masks,
+      }
