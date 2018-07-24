@@ -235,6 +235,7 @@ class Decoder(framework.model.module.AbstractModule):
     _alphas = alphas
     _alphas = tf.reshape(_alphas, (-1, self._config.num_ft, 1))
     phi_V = tf.reduce_sum(_alphas * fts, 1)
+    print phi_V.get_shape(), x.get_shape()
 
     inputs = tf.concat([x, phi_V], 1)
     out_ops = self.submods[CELL].get_out_ops_in_mode({
