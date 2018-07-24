@@ -90,7 +90,7 @@ class Model(framework.model.module.AbstractModel):
   def _set_submods(self):
     return {
       VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
-      AD: decoder.attention.Decoder(self._config.subcfgs[AD]),
+      AD: decoder.att_rnn.Decoder(self._config.subcfgs[AD]),
     }
 
   def _add_input_in_mode(self, mode):
