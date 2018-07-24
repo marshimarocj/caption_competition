@@ -314,7 +314,7 @@ class Model(framework.model.module.AbstractModel):
         fts = tf.nn.l2_normalize(fts, -1)
 
         wvecs = tf.reshape(wvecs, (-1, dim_word))
-        wvecs = tf.nn.xw_plus_b(wvecs, self._caption_pca_W, self.caption_pca_B)
+        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
         wvecs = tf.nn.tanh(wvecs)
         wvecs = tf.reshape(wvecs, (-1, num_word, dim_word))
         wvecs = tf.nn.l2_normalize(wvecs, -1)
