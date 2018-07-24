@@ -16,7 +16,6 @@ import framework.model.data
 import framework.util.caption.utility
 import framework.impl.encoder.dnn
 import decoder.att_rnn
-import common
 
 
 VE = 'encoder'
