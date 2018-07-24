@@ -555,7 +555,7 @@ class ValAttReader(framework.model.data.Reader):
     self.fts = self.fts.astype(np.float32)
     mask = np.ones((self.fts.shape[0], 1), dtype=np.float32)
     self.ft_masks = np.concatenate([mask, self.ft_masks], 1)
-    print self.fts.shape
+    # print self.fts.shape
 
     data = cPickle.load(file(annotation_file))
     self.ft_idxs = data[0]

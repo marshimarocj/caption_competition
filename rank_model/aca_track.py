@@ -244,6 +244,7 @@ class Model(framework.model.module.AbstractModel):
           ft_att /= tf.reduce_sum(ft_att, 3, True)
           ft_bar = tf.reduce_sum(
             tf.reshape(pos_fts, (1, 1, num_pos, num_ft, dim_embed)) * tf.expand_dims(ft_att, 4), 3) # (num_neg, num_word, num_pos, dim_embed)
+          ft_bar = tf.nn.l2_normalize(ft_bar, -1)
 
           # compare
           wvec_compare = tf.reduce_sum(ft_bar * tf.expand_dims(neg_wvecs, 2), -1) # (num_neg, num_word, num_pos)
@@ -275,6 +276,7 @@ class Model(framework.model.module.AbstractModel):
           ft_att /= tf.reduce_sum(ft_att, 1, True)
           ft_bar = tf.reduce_sum(
             tf.reshape(neg_fts, (num_neg, num_ft, 1, 1, dim_embed)) * tf.expand_dims(ft_att, 4), 1) # (num_neg, num_pos, num_word, dim_embed)
+          ft_bar = tf.nn.l2_normalize(ft_bar, -1)
 
           # compare
           wvec_compare = tf.reduce_sum(ft_bar * tf.expand_dims(pos_wvecs, 0), -1) # (num_neg, num_pos, num_word)
