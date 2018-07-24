@@ -9,6 +9,7 @@ import gen_model.vevd
 import gen_model.self_critique
 import gen_model.diversity
 import gen_model.margin
+import gen_model.vead
 
 
 '''func
@@ -30,6 +31,14 @@ def get_mean_ft_files(root_dir, modal_feature_names, splits, dir_name='mp_featur
     split_ftfiles.append(ftfiles)
 
   return dim_fts, split_ftfiles
+
+
+def get_att_ft_files(root_dir, model_feature_names, splits, dir_name='sa_feature'):
+  split_ft_files = []
+  for split in splits:
+    ft_files = []
+    for name in model_feature_names:
+      ft_file = os.path.join(root_dir, dir_name, name, '%s_ft.npz'%split)
 
 
 '''expr
@@ -264,6 +273,21 @@ def prepare_margin():
     os.mkdir(path_cfg['output_dir'])
 
   json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
+def prepare_vead():
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  annotation_dir = os.path.join(root_dir, 'annotation')
+  split_dir = os.path.join(root_dir, 'split')
+  splits = ['trn', 'val', 'tst']
+  out_dir = os.path.join(root_dir, 'vead_expr')
+
+  ft_names = [
+    'i3d',
+    'resnet200',
+  ]
+
+  dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
 
 
 if __name__ == '__main__':
