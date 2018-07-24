@@ -191,7 +191,7 @@ class Model(framework.model.module.AbstractModel):
         alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
         beta = tf.nn.xw_plus_b(tf.reshape(fts, (-1, dim_embed)), self.ft_att_W, self.ft_att_B)
-        beta = tf.nn.tanh(beta, 1)
+        beta = tf.nn.tanh(beta)
         beta = tf.reshape(beta, (-1, num_ft, dim_embed))
         pos_alpha = alpha[:num_pos]
         neg_alpha = alpha[num_pos:]
