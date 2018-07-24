@@ -281,8 +281,8 @@ class Model(framework.model.module.AbstractModel):
           ft_compare = tf.reduce_sum(wvecs_bar * tf.expand_dims(neg_fts, 2), -1) # (num_neg, num_ft, num_pos)
 
           # aggregate
-          neg_sim = tf.reduce_sum(wvec_compare * tf.expand_dims(pos_word_mask, 0), 2) / tf.reduce_sum(pos_word_mask, 1, True)
-          neg_sim += tf.reduce_sum(ft_compare * tf.expand_dims(neg_ft_mask, 2), 1) / tf.reduce_sum(neg_ft_mask, 1, True)
+          neg_sim = tf.reduce_sum(wvec_compare * tf.expand_dims(pos_word_mask, 0), 2) / tf.expand_dims(tf.reduce_sum(pos_word_mask, 1), 0)
+          neg_sim += tf.reduce_sum(ft_compare * tf.expand_dims(neg_ft_mask, 2), 1) / tf.expand_dims(tf.reduce_sum(neg_ft_mask, 1), 1)
           neg_sim /= 2.
 
           return neg_sim
