@@ -61,8 +61,8 @@ if __name__ == '__main__':
     trntst = rank_model.aca_track.TrnTst(model_cfg, path_cfg, m)
 
     trn_reader = rank_model.aca_track.TrnReader(
-      # model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg, trn_att_ftfiles, path_cfg.trn_annotation_file)
-      model_cfg.num_neg, path_cfg.val_ftfiles, path_cfg.val_att_ftfiles, path_cfg.val_annotation_file)
+      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg, trn_att_ftfiles, path_cfg.trn_annotation_file)
+      # model_cfg.num_neg, path_cfg.val_ftfiles, path_cfg.val_att_ftfiles, path_cfg.val_annotation_file)
     val_reader = rank_model.aca_track.ValReader(
       path_cfg.val_ftfiles, path_cfg.val_att_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file)
     if path_cfg.model_file != '':
