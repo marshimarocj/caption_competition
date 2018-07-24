@@ -13,7 +13,7 @@ import framework.model.trntst
 
 VD = 'decoder'
 
-def predict_and_eval_in_val(trntst, sess, tst_reader, metrics):
+def predict_and_eval_in_val(trntst, sess, tst_reader, metrics, att=False):
   videoid2caption = {}
   base = 0
   op_dict = trntst.model.op_in_val(task='generation')
@@ -24,6 +24,10 @@ def predict_and_eval_in_val(trntst, sess, tst_reader, metrics):
       trntst.model.inputs[trntst.model.InKey.FT]: data['fts'],
       trntst.model.inputs[trntst.model.InKey.IS_TRN]: False,
     }
+    if att:
+      feed_dict.update({
+        trntst.model.inputs[trntst.model.InKey.FT_MASK]: data['ft_masks'], 
+      })
     sent_pool = sess.run(
       op_dict[trntst.model.OutKey.OUT_WID], feed_dict=feed_dict)
     sent_pool = np.array(sent_pool)
@@ -43,7 +47,7 @@ def predict_and_eval_in_val(trntst, sess, tst_reader, metrics):
   metrics['cider'] = cider_score
 
 
-def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy):
+def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy, att=False):
   videoid2caption = {}
   base = 0
   op_dict = trntst.model.op_in_tst()
@@ -52,6 +56,10 @@ def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy):
       trntst.model.inputs[trntst.model.InKey.FT]: data['fts'],
       trntst.model.inputs[trntst.model.InKey.IS_TRN]: False,
     }
+    if att:
+      feed_dict.update({
+        trntst.model.inputs[trntst.model.InKey.FT_MASK]: data['ft_masks'],
+      })
     if search_strategy == 'greedy':
       sent_pool = sess.run(
         op_dict[trntst.model.OutKey.OUT_WID], feed_dict=feed_dict)
@@ -142,6 +150,14 @@ class PathCfg(framework.model.trntst.PathCfg):
     self.val_annotation_file = ''
     self.groundtruth_file = ''
     self.word_file = ''
+
+
+class AttPathCfg(PathCfg):
+  def __init__(self):
+    super(AttPathCfg, self).__init__()
+    self.trn_att_ftfiles = []
+    self.val_att_ftfiles = []
+    self.tst_att_ftfiles = []
 
 
 def eval_cider_in_rollout(out_wids, vids, int2str, cider):
@@ -339,4 +355,84 @@ class Reader(framework.model.data.Reader):
 
       yield {
         'fts': self.fts[start:end],
+      }
+
+
+class AttReader(framework.model.data.Reader):
+  def __init__(self, ft_files, att_ft_files, videoid_file, 
+      shuffle=True, annotation_file=None, captionstr_file=None):
+    self.fts = np.empty(0) # (num_video, num_track, dim_ft)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0) # (num_caption,)
+    self.captionids = np.empty(0) # (num_caption, max_words_in_caption)
+    self.caption_masks = np.empty(0) # (num_caption, max_words_in_caption)
+    self.videoids = []
+    self.videoid2captions = {} # (numVideo, numGroundtruth)
+
+    self.shuffled_idxs = [] # (num_caption,)
+    self.num_caption = 0 # used in trn and val
+    self.num_ft = 0
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=1)
+    fts = []
+    for att_ft_file in att_ft_files:
+      data = np.load(att_ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    fts = np.concatenate(fts, axis=2)
+    self.fts = np.expand_dims(self.fts, 1)
+    self.fts = np.concatenate([self.fts, fts], axis=1)
+    self.fts = self.fts.astype(np.float32)
+    mask = np.ones((self.fts.shape[0], 1), dtype=np.float32)
+    self.ft_masks = np.concatenate([mask, self.ft_masks], 1)
+    self.num_ft = self.fts.shape[0]
+
+    self.videoids = np.load(videoid_file)
+
+    if annotation_file is not None:
+      data = cPickle.load(file(annotation_file))
+      self.ft_idxs = data[0]
+      self.captionids = data[1]
+      self.caption_masks = data[2]
+      self.num_caption = self.captionids.shape[0]
+    if captionstr_file is not None:
+      videoid2captions = cPickle.load(open(captionstr_file))
+      for videoid in self.videoids:
+        self.videoid2captions[videoid] = videoid2captions[videoid]
+
+    self.shuffled_idxs = range(self.num_caption)
+
+  def num_record(self):
+    return self.num_caption
+
+  def yield_trn_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_caption, batch_size):
+      start = i
+      end = i + batch_size
+      idxs = self.shuffled_idxs[start:end]
+
+      yield {
+        'fts': self.fts[self.ft_idxs[idxs]],
+        'ft_masks': self.ft_masks[self.ft_idxs[idxs]],
+        'captionids': self.captionids[idxs],
+        'caption_masks': self.caption_masks[idxs],
+        'vids': self.videoids[self.ft_idxs[idxs]],
+      }
+
+  def yield_val_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_caption, batch_size):
+      start = i
+      end = i + batch_size
+      idxs = self.shuffled_idxs[start:end]
+
+      yield {
+        'fts': self.fts[self.ft_idxs[idxs]],
+        'ft_masks': self.ft_masks[self.ft_idxs[idxs]],
+        'captionids': self.captionids[idxs],
+        'caption_masks': self.caption_masks[idxs],
       }

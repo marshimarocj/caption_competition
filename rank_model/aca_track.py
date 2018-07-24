@@ -323,7 +323,7 @@ class Model(framework.model.module.AbstractModel):
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
         alpha = tf.nn.tanh(alpha) # (num_caption * num_word, dim_embed)
         beta = tf.nn.xw_plus_b(tf.reshape(fts, (-1, dim_embed)), self.ft_att_W, self.ft_att_B)
-        beta = tf.nn.tanh(beta) # (num_ft * num_track)
+        beta = tf.nn.tanh(beta) # (num_ft * num_track, dim_embed)
 
         att = tf.matmul(beta, alpha, transpose_b=True) # (num_ft*num_track, num_caption*num_word)
         att = tf.reshape(att, (num_ft, num_track, num_caption, num_word))
