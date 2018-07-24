@@ -62,7 +62,7 @@ def gen_cfg(**kwargs):
 
   cell = dec.subcfgs[CELL]
   cell.dim_hidden = kwargs['dim_hidden']
-  cell.dim_input = kwargs['dim_input']
+  cell.dim_input = dec.dim_input + dec.dim_ft
   cell.keepout_prob = kwargs['cell_keepout_prob']
   cell.keepin_prob = kwargs['cell_keepin_prob']
 
