@@ -165,8 +165,10 @@ class Model(framework.model.module.AbstractModel):
         dim_embed = self._config.dim_joint_embed
 
         # embed
+        fts = tf.reshape(fts, (-1, dim_ft))
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
         fts = tf.nn.tanh(fts)
+        fts = tf.reshape(fts, (-1, num_ft, dim_embed))
         fts = tf.nn.l2_normalize(fts, -1)
         pos_fts = fts[:num_pos]
         neg_fts = fts[num_pos:]
