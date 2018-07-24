@@ -436,3 +436,13 @@ class AttReader(framework.model.data.Reader):
         'captionids': self.captionids[idxs],
         'caption_masks': self.caption_masks[idxs],
       }
+
+  def yield_tst_batch(self, batch_size, **kwargs):
+    for i in range(0, self.num_ft, batch_size):
+      start = i
+      end = i + batch_size
+
+      yield {
+        'fts': self.fts[start:end],
+        'ft_masks': self.ft_masks[self.ft_idxs[start:end]],
+      }
