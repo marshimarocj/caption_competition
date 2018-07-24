@@ -349,8 +349,8 @@ class Model(framework.model.module.AbstractModel):
         ft_compare = tf.reduce_sum(wvecs_bar * tf.expand_dims(fts, 2), -1) # (num_ft, num_track, num_caption)
 
         # aggregate
-        sim = tf.reduce_sum(wvec_compare * tf.expand_dims(word_mask, 0), 2)
-        sim += tf.reduce_sum(ft_compare * tf.expand_dims(ft_mask, 2), 1)
+        sim = tf.reduce_sum(wvec_compare * tf.expand_dims(word_mask, 0), 2) / tf.expand_dims(tf.reduce_sum(word_mask, 1), 0)
+        sim += tf.reduce_sum(ft_compare * tf.expand_dims(ft_mask, 2), 1) / tf.expand_dims(tf.reduce_sum(ft_mask, 1), 1)
         sim /= 2.
 
         return sim
