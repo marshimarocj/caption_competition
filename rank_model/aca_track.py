@@ -310,13 +310,13 @@ class Model(framework.model.module.AbstractModel):
         fts = tf.reshape(fts, (-1, dim_ft))
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
         fts = tf.nn.tanh(fts)
-        fts = tf.reshape(fts, (-1, num_track, dim_ft))
+        fts = tf.reshape(fts, (-1, num_track, dim_embed))
         fts = tf.nn.l2_normalize(fts, -1)
 
         wvecs = tf.reshape(wvecs, (-1, dim_word))
         wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
         wvecs = tf.nn.tanh(wvecs)
-        wvecs = tf.reshape(wvecs, (-1, num_word, dim_word))
+        wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
         wvecs = tf.nn.l2_normalize(wvecs, -1)
 
         # attend
