@@ -184,7 +184,8 @@ def prepare_rnnve():
     'cell_dim_hidden': 250,
   }
 
-  outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
+  # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'])
