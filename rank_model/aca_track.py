@@ -365,7 +365,7 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.NC_SIM: neg_word_sim,
       }
     else:
-      sim = tst(wvecs, fts, mask, is_trn)
+      sim = tst(wvecs, fts, word_mask, ft_mask, is_trn)
       return {
         self.OutKey.SIM: sim,
       }
