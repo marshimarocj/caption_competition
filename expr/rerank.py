@@ -149,7 +149,7 @@ def eval_rerank():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gt = int(data[1])
+      gt = int(data[2])
       vid2gt[vid] = gt
 
   predicts = np.load(pred_files[0])
