@@ -278,7 +278,7 @@ def prepare_aca():
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   # embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
-  embed_file = os.path.join(root_dir, 'annotation', 'E.sub.word2vec.npy') 
+  embed_file = os.path.join(root_dir, 'annotation', 'E.sbu.word2vec.npy')
   out_dir = os.path.join(root_dir, 'aca_expr')
   splits = ['trn', 'val', 'tst']
 
