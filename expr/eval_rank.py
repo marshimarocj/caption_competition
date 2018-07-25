@@ -70,7 +70,7 @@ def report_best_epoch():
 
   # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att', 'log')
-  log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.sbu', 'log')
+  log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.512.0.5.att.sbu', 'log')
 
   # log_dir = os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'log')
 
