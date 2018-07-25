@@ -477,7 +477,7 @@ def prepare_sbu_word2vec():
 def prepare_flickr30k_word2vec():
   root_dir = '/data1/jiac/trecvid2018' # mercurial
   voc_file = os.path.join(root_dir, 'rank', 'annotation', 'int2word.pkl')
-  flickr30m_dir = '/home/jiac/data/vec500flickr30m'
+  flickr30m_dir = '/home/qjin/data/word2vec/flickr/vec500flickr30m'
   out_file = os.path.join(root_dir, 'rank', 'annotation', 'E.flick30m.word2vec.npy')
 
   with open(voc_file) as f:
