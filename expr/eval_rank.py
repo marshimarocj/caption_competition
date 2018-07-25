@@ -155,7 +155,7 @@ def predict_eval_trecvid17_B():
 
   p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
     # ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
-    ft_files=','.join(ft_files), att_ft_files=track_ft_files, annotation_file=annotation_file, out_name=out_name)
+    ft_files=','.join(ft_files), att_ft_files=','.join(track_ft_files), annotation_file=annotation_file, out_name=out_name)
   p.wait()
 
   vid2gt = {}
