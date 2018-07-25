@@ -5,6 +5,8 @@ import re
 
 import numpy as np
 
+import bigfile
+
 
 '''func
 '''
@@ -472,6 +474,27 @@ def prepare_sbu_word2vec():
   np.save(out_file, wvecs)
 
 
+def prepare_flickr30k_word2vec():
+  root_dir = '/data1/jiac/trecvid2018' # mercurial
+  voc_file = os.path.join(root_dir, 'rank', 'annotation', 'int2word.pkl')
+  flickr30m_dir = '/home/jiac/data/vec500flickr30m'
+  out_file = os.path.join(root_dir, 'rank', 'annotation', 'E.flick30m.word2vec.npy')
+
+  with open(voc_file) as f:
+    words = cPickle.load(f)
+  num_word = len(words)
+
+  wvecs = np.zeros((num_word, 500), dtype=np.float32)
+
+  bf = bigfile.BigFile(flickr30m_dir)
+  for i, word in enumerate(words):
+    if word in bf.name2index:
+      vec = bf.read_one(word)
+      wvecs[i] = np.array(vec, dtype=np.float32)
+
+  np.save(out_file, wvecs)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
@@ -480,4 +503,5 @@ if __name__ == '__main__':
   # merge_tgif_trecvid17_gen_trn()
   # prepare_trecvid16_gen_val()
 
-  prepare_sbu_word2vec()
+  # prepare_sbu_word2vec()
+  prepare_flickr30k_word2vec()
