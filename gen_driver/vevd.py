@@ -68,10 +68,8 @@ if __name__ == '__main__':
     trntst = gen_model.vevd.TrnTst(model_cfg, path_cfg, m)
 
     trn_reader = gen_model.vevd.Reader(
-      # path_cfg.trn_ftfiles, path_cfg.trn_videoid_file,
-      # shuffle=True, annotation_file=path_cfg.trn_annotation_file)
-      path_cfg.val_ftfiles, path_cfg.val_videoid_file,
-      shuffle=True, annotation_file=path_cfg.val_annotation_file)
+      path_cfg.trn_ftfiles, path_cfg.trn_videoid_file,
+      shuffle=True, annotation_file=path_cfg.trn_annotation_file)
     val_reader = gen_model.vevd.Reader(
       path_cfg.val_ftfiles, path_cfg.val_videoid_file,
       shuffle=False, annotation_file=path_cfg.val_annotation_file, captionstr_file=path_cfg.groundtruth_file)
