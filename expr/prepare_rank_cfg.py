@@ -277,7 +277,8 @@ def prepare_aca():
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
-  embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
+  # embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
+  embed_file = os.path.join(root_dir, 'annotation', 'E.sub.word2vec.npy') 
   out_dir = os.path.join(root_dir, 'aca_expr')
   splits = ['trn', 'val', 'tst']
 
@@ -293,14 +294,14 @@ def prepare_aca():
     'alpha': 0.5,
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
-    # 'tanh_scale': 1.,
-    'dim_joint_embed': 300,
+    # 'dim_joint_embed': 300,
+    'dim_joint_embed': 512,
     'att': True,
 
     'max_words_in_caption': 30,
   }
 
-  outprefix = '%s.%d.%.1f.att'%(
+  outprefix = '%s.%d.%.1f.att.sbu'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
     params['alpha'])
@@ -459,6 +460,6 @@ if __name__ == '__main__':
   # prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
-  # prepare_aca()
+  prepare_aca()
   # prepare_aca_rnn()
-  prepare_aca_track()
+  # prepare_aca_track()
