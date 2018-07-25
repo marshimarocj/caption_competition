@@ -152,7 +152,8 @@ def prepare_rnnve():
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   # embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
-  embed_file = os.path.join(root_dir, 'annotation', 'E.sbu.word2vec.npy') 
+  # embed_file = os.path.join(root_dir, 'annotation', 'E.sbu.word2vec.npy') 
+  embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy') 
   out_dir = os.path.join(root_dir, 'rnnve_expr')
   splits = ['trn', 'val', 'tst']
   
@@ -169,7 +170,8 @@ def prepare_rnnve():
     'l2norm': True,
     'dim_ft': 1024 + 2048,
     # 'dim_joint_embed': 300,
-    'dim_joint_embed': 512,
+    # 'dim_joint_embed': 512,
+    'dim_joint_embed': 500,
 
     'max_words_in_caption': 30,
     # 'pool': 'mean',
@@ -178,7 +180,8 @@ def prepare_rnnve():
     'cell': 'gru',
     # 'cell': 'lstm',
     # 'cell_dim_hidden': 150,
-    'cell_dim_hidden': 256,
+    # 'cell_dim_hidden': 256,
+    'cell_dim_hidden': 250,
   }
 
   outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
@@ -465,9 +468,9 @@ def prepare_aca_track():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
+  prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
-  prepare_aca()
+  # prepare_aca()
   # prepare_aca_rnn()
   # prepare_aca_track()
