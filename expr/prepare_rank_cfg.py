@@ -276,13 +276,14 @@ def prepare_vevd_score():
 
 
 def prepare_aca():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
-  embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
+  # embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
   # embed_file = os.path.join(root_dir, 'annotation', 'E.sbu.word2vec.npy')
+  embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy')
   out_dir = os.path.join(root_dir, 'aca_expr')
   splits = ['trn', 'val', 'tst']
 
@@ -298,15 +299,17 @@ def prepare_aca():
     'alpha': 0.5,
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
-    'dim_joint_embed': 300,
+    # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
+    'dim_joint_embed': 500,
     'att': True,
 
     'max_words_in_caption': 30,
   }
 
   # outprefix = '%s.%d.%.1f.att.sbu'%(
-  outprefix = '%s.%d.%.1f.att.feedforward'%(
+  # outprefix = '%s.%d.%.1f.att.feedforward'%(
+  outprefix = '%s.%d.%.1f.att.flickr30m.feedforward'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
     params['alpha'])
