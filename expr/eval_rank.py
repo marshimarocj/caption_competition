@@ -111,15 +111,16 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/ceve_score.py'
   # gpuid = 0
 
-  # # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.mean.0.5')
-  # # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5')
-  # # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.mean.0.5')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.mean.0.5')
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.max.0.5')
-  # log_dir = os.path.join(expr_name, 'log')
-  # model_cfg_file = '%s.model.json'%expr_name
-  # path_cfg_file = '%s.path.json'%expr_name
-  # python_file = '../rank_driver/rnnve.py'
-  # gpuid = 0
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512.256.gru.max.0.5.sbu')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/rnnve.py'
+  gpuid = 0
 
   # expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
   # log_dir = os.path.join(expr_name, 'log')
@@ -145,12 +146,12 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/aca_rnn.py'
   # gpuid = 0
 
-  expr_name = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5')
-  log_dir = os.path.join(expr_name, 'log')
-  model_cfg_file = '%s.model.json'%expr_name
-  path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/aca_track.py'
-  gpuid = 0
+  # expr_name = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/aca_track.py'
+  # gpuid = 0
 
   best_epoch, mir_A = select_best_epoch(log_dir)
 
@@ -219,6 +220,6 @@ def predict_eval_vevd():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
