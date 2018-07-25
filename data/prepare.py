@@ -448,10 +448,36 @@ def prepare_trecvid16_gen_val():
   np.save(out_file, vids)
 
 
+def prepare_sbu_word2vec():
+  root_dir = '/data1/jiac/trecvid2018' # mercurial
+  voc_file = os.path.join(root_dir, 'rank', 'annotation', 'int2word.pkl')
+  sbu_wvec_file = '/data1/syq/image-retrieval/vsepp/sbu_vocab.json'
+  out_file = os.path.join(root_dir, 'rank', 'annotation', 'E.sbu.word2vec.npy')
+
+  with open(voc_file) as f:
+    words = cPickle.load(f)
+  num_word = len(words)
+
+  wvecs = np.zeros((num_word, 512), dtype=np.float32)
+
+  with open(sbu_wvec_file) as f:
+    word2vec = json.load(f)
+  hit = 0
+  for i, word in enumerate(words):
+    if word in word2vec:
+      wvecs[i] = np.array(word2vec[word], dtype=np.float32)
+      hit += 1
+  print hit, num_word
+
+  np.save(out_file, wvecs)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
 
   # merge_tgif_trecvid17_gen_trn()
-  prepare_trecvid16_gen_val()
+  # prepare_trecvid16_gen_val()
+
+  prepare_sbu_word2vec()
