@@ -444,5 +444,5 @@ class AttReader(framework.model.data.Reader):
 
       yield {
         'fts': self.fts[start:end],
-        'ft_masks': self.ft_masks[self.ft_idxs[start:end]],
+        'ft_masks': self.ft_masks[start:end],
       }
