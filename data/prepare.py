@@ -534,7 +534,7 @@ def prepare_flow_ft():
         # ft = np.mean(fts, 0)
         abs_fts = np.abs(fts)
         print abs_fts.shape
-        idx = (abs_fts == np.max(abs_fts, 0, True))
+        idx = (abs_fts == np.max(abs_fts, 0, keepdims=True))
         ft = np.sign(fts)[idx] * np.max(abs_fts, 0)
       out_fts.append(ft)
     out_fts = np.array(out_fts, dtype=np.float32)
