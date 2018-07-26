@@ -513,7 +513,7 @@ def prepare_rnnve_feedforward():
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'], params['lr_mult'])
 
-  model_cfg = rank_model.rnnve.gen_cfg(**params)
+  model_cfg = rank_model.rnnve_feedforward.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
