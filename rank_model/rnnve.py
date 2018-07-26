@@ -65,7 +65,7 @@ def gen_cfg(**kwargs):
   cfg.pool = kwargs['pool']
 
   we_cfg = cfg.subcfgs[WE]
-  we_cfg.lr_mult = 1e-2
+  we_cfg.lr_mult = kwargs['lr_mult']
 
   rnn_cfg = cfg.subcfgs[RNN]
   rnn_cfg.num_step = kwargs['max_words_in_caption']
