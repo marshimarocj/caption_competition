@@ -515,7 +515,7 @@ def prepare_flow_ft():
   for s in range(3):
     split_file = split_files[s]
     out_file = out_files[s]
-    vids = np.load(split_files)
+    vids = np.load(split_file)
     print s
 
     out_fts = []
@@ -526,7 +526,7 @@ def prepare_flow_ft():
       fts = np.max(fts, 0)
       out_fts.append(fts)
     out_fts = np.array(out_fts, dtype=np.float32)
-    np.save(out_files, out_fts)
+    np.save(out_file, out_fts)
 
 
 if __name__ == '__main__':
