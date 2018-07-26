@@ -47,9 +47,9 @@ class ModelConfig(framework.model.module.ModelConfig):
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
     assert self.subcfgs[WE].dim_embed == self.subcfgs[RNN].subcfgs[CELL].dim_input
-    assert self.subcfgs[FT_DNN].dim_hiddens[-1] == self.dim_joint_embed
+    assert self.subcfgs[FT_DNN].dim_output == self.dim_joint_embed
     assert sum(self.subcfgs[FT_DNN].dim_fts) == self.dim_ft
-    assert self.subcfgs[CAPTION_DNN].dim_hiddens[-1] == self.dim_joint_embed
+    assert self.subcfgs[CAPTION_DNN].dim_output == self.dim_joint_embed
     assert sum(self.subcfgs[CAPTION_DNN].dim_fts) == self.subcfgs[RNN].subcfgs[CELL].dim_hidden + self.subcfgs[RNN].subcfgs[RCELL].dim_hidden
 
 
