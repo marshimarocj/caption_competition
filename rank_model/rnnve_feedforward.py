@@ -179,7 +179,7 @@ class Model(framework.model.module.AbstractModel):
       caption_dnn.InKey.FT: caption,
       caption_dnn.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
     }, mode)
-    caption_embed = out_ops[caption_dnn.EMBED]
+    caption_embed = out_ops[caption_dnn.OutKey.EMBED]
     with tf.variable_scope(self.name_scope):
       caption_embed = tf.reshape(caption_embed, (-1, self._config.max_words_in_caption, dim_input))
       mask = in_ops[self.InKey.CAPTION_MASK]
