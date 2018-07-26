@@ -548,7 +548,7 @@ def prepare_trecvid_flow_ft():
   out_fts = []
   for vid in range(1915):
     ft_file = os.path.join(raw_ft_dir, '%d.mp4.npy'%vid)
-    if not os.path.esits(ft_file):
+    if not os.path.exists(ft_file):
       ft = np.zeros((dim_ft,), dtype=np.float32)
     else:
       fts = np.load(ft_file)
