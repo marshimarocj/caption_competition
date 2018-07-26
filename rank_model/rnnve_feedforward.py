@@ -119,11 +119,15 @@ class Model(framework.model.module.AbstractModel):
     NC_SIM = 'neg_caption_sim'
 
   def _set_submods(self):
+    ft_dnn = dnn.Encoder(self._config.subcfgs[FT_DNN])
+    ft_dnn.name_scope = 'ft_dnn'
+    caption_dnn = dnn.Encoder(self._config.subcfgs[CAPTION_DNN])
+    caption_dnn.name_scope = 'caption_dnn'
     return {
       WE: encoder.word.Encoder(self._config.subcfgs[WE]),
       RNN: encoder.birnn.Encoder(self._config.subcfgs[RNN]),
-      FT_DNN: dnn.Encoder(self._config.subcfgs[FT_DNN]),
-      CAPTION_DNN: dnn.Encoder(self._config.subcfgs[CAPTION_DNN]),
+      FT_DNN: ft_dnn,
+      CAPTION_DNN: caption_dnn,
     }
 
   def _add_input_in_mode(self, mode):
