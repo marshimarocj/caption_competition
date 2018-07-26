@@ -95,7 +95,7 @@ def gen_cfg(**kwargs):
   ft_pca_cfg.keepin_prob = kwargs['keepin_prob']
 
   caption_pca_cfg = cfg.subcfgs[CAPTION_DNN]
-  caption_pca_cfg.dim_fts = [kwargs['cell_dim_hidden']]
+  caption_pca_cfg.dim_fts = [kwargs['cell_dim_hidden']*2]
   caption_pca_cfg.dim_hiddens = kwargs['dim_caption_hiddens']
   caption_pca_cfg.dim_output = cfg.dim_joint_embed
   caption_pca_cfg.keepin_prob = kwargs['keepin_prob']
