@@ -181,7 +181,7 @@ class Model(framework.model.module.AbstractModel):
     }, mode)
     caption_embed = out_ops[caption_dnn.OutKey.EMBED]
     with tf.variable_scope(self.name_scope):
-      caption_embed = tf.reshape(caption_embed, (-1, self._config.max_words_in_caption, dim_input))
+      caption_embed = tf.reshape(caption_embed, (-1, self._config.max_words_in_caption, self._config.dim_joint_embed))
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
       if self._config.pool == 'mean':
@@ -203,7 +203,7 @@ class Model(framework.model.module.AbstractModel):
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
         ft_embed = tf.nn.l2_normalize(ft_embed, 1)
-    print ft_embed.get_shape(), caption_embed.get_shape()
+    # print ft_embed.get_shape(), caption_embed.get_shape()
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
