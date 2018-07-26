@@ -496,6 +496,7 @@ def prepare_rnnve_feedforward():
 
     'max_words_in_caption': 30,
     'pool': 'max',
+    'dim_word': 500,
 
     'cell': 'gru',
     'cell_dim_hidden': 512,

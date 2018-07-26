@@ -75,6 +75,7 @@ def gen_cfg(**kwargs):
 
   we_cfg = cfg.subcfgs[WE]
   we_cfg.lr_mult = kwargs['lr_mult']
+  we_cfg.dim_embed = kwargs['dim_word']
 
   rnn_cfg = cfg.subcfgs[RNN]
   rnn_cfg.num_step = kwargs['max_words_in_caption']
@@ -83,7 +84,7 @@ def gen_cfg(**kwargs):
   for cell in [CELL, RCELL]:
     cell_cfg = rnn_cfg.subcfgs[cell]
     cell_cfg.dim_hidden = kwargs['cell_dim_hidden']
-    cell_cfg.dim_input = 300
+    cell_cfg.dim_input = kwargs['dim_word']
     cell_cfg.keepout_prob = 0.5
     cell_cfg.keepin_prob = 0.5
 
