@@ -232,26 +232,20 @@ class Model(framework.model.module.AbstractModel):
           word_att *= tf.expand_dims(pos_word_mask, 2)
           word_att /= tf.reduce_sum(word_att, 1, True)
           wvec_bar = tf.reduce_sum(tf.expand_dims(pos_wvecs, 2) * tf.expand_dims(word_att, 3), 1) # (num_pos, num_ft, dim_embed)
-          # wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
-          # wvec_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 2]), (num_pos, 1, 1))
 
           ft_att = tf.nn.softmax(att, 2)
           ft_att *= tf.expand_dims(pos_ft_mask, 1)
           ft_att /= tf.reduce_sum(ft_att, 2, True)
           ft_bar = tf.reduce_sum(tf.expand_dims(pos_fts, 1) * tf.expand_dims(ft_att, 3), 2) # (num_pos, num_word, dim_embed)
-          # ft_bar = tf.nn.l2_normalize(ft_bar, -1)
-          # ft_bar /= tf.reshape(tf.reduce_sum(ft_att, [1, 2]), (num_pos, 1, 1))
 
           # compare
           wvec_compare = tf.reduce_sum(ft_bar * pos_wvecs, -1) # (num_pos, num_word)
           ft_compare = tf.reduce_sum(wvec_bar * pos_fts, -1) # (num_pos, num_ft)
 
           # aggregate
-          # norm = tf.reduce_sum(pos_word_mask, 1) * tf.reduce_sum(pos_ft_mask, 1)
           pos_sim = tf.reduce_sum(wvec_compare * pos_word_mask, -1) / tf.reduce_sum(pos_word_mask, 1)
           pos_sim += tf.reduce_sum(ft_compare * pos_ft_mask, -1) / tf.reduce_sum(pos_ft_mask, 1)
           pos_sim /= 2.
-          # pos_sim *= 10.
 
           return pos_sim
 
@@ -267,27 +261,21 @@ class Model(framework.model.module.AbstractModel):
           word_att /= tf.reduce_sum(word_att, 1, True)
           wvecs_bar = tf.reduce_sum(
             tf.reshape(neg_wvecs, (num_neg, num_word, 1, 1, dim_embed)) * tf.expand_dims(word_att, 4), 1) # (num_neg, num_pos, num_ft, dim_embed)
-          # wvecs_bar = tf.nn.l2_normalize(wvecs_bar, -1)
-          # wvecs_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 3]), (num_neg, num_pos, 1, 1))
 
           ft_att = tf.nn.softmax(att, 3)
           ft_att *= tf.reshape(pos_ft_mask, (1, 1, num_pos, num_ft))
           ft_att /= tf.reduce_sum(ft_att, 3, True)
           ft_bar = tf.reduce_sum(
             tf.reshape(pos_fts, (1, 1, num_pos, num_ft, dim_embed)) * tf.expand_dims(ft_att, 4), 3) # (num_neg, num_word, num_pos, dim_embed)
-          # ft_bar = tf.nn.l2_normalize(ft_bar, -1)
-          # ft_bar /= tf.reshape(tf.reduce_sum(ft_att, [1, 3]), (num_neg, 1, num_pos, 1))
 
           # compare
           wvec_compare = tf.reduce_sum(ft_bar * tf.expand_dims(neg_wvecs, 2), -1) # (num_neg, num_word, num_pos)
           ft_compare = tf.reduce_sum(wvecs_bar * tf.expand_dims(pos_fts, 0), -1) # (num_neg, num_pos, num_ft)
 
           # aggregate
-          # norm = tf.expand_dims(tf.reduce_sum(neg_word_mask, 1), 1) * tf.expand_dims(tf.reduce_sum(pos_ft_mask, 1), 0)
           neg_sim = tf.reduce_sum(wvec_compare * tf.expand_dims(neg_word_mask, 2), 1) / tf.expand_dims(tf.reduce_sum(neg_word_mask, 1), 1)
           neg_sim += tf.reduce_sum(ft_compare * tf.expand_dims(pos_ft_mask, 0), 2) / tf.expand_dims(tf.reduce_sum(pos_ft_mask, 1), 0)
           neg_sim /= 2.
-          # neg_sim *= 10.
 
           return neg_sim
 
@@ -303,27 +291,21 @@ class Model(framework.model.module.AbstractModel):
           word_att /= tf.reduce_sum(word_att, 3, True)
           wvecs_bar = tf.reduce_sum(
             tf.reshape(pos_wvecs, (1, 1, num_pos, num_word, dim_embed)) * tf.expand_dims(word_att, 4), 3) # (num_neg, num_ft, num_pos, dim_embed)
-          # wvecs_bar = tf.nn.l2_normalize(wvecs_bar, -1)
-          # wvecs_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 3]), (num_neg, 1, num_pos, 1))
 
           ft_att = tf.nn.softmax(att, 1)
           ft_att *= tf.reshape(neg_ft_mask, (num_neg, num_ft, 1, 1))
           ft_att /= tf.reduce_sum(ft_att, 1, True)
           ft_bar = tf.reduce_sum(
             tf.reshape(neg_fts, (num_neg, num_ft, 1, 1, dim_embed)) * tf.expand_dims(ft_att, 4), 1) # (num_neg, num_pos, num_word, dim_embed)
-          # ft_bar = tf.nn.l2_normalize(ft_bar, -1)
-          # ft_bar /= tf.reshape(tf.reduce_sum(ft_att, [1, 3]), (num_neg, num_pos, 1, 1))
 
           # compare
           wvec_compare = tf.reduce_sum(ft_bar * tf.expand_dims(pos_wvecs, 0), -1) # (num_neg, num_pos, num_word)
           ft_compare = tf.reduce_sum(wvecs_bar * tf.expand_dims(neg_fts, 2), -1) # (num_neg, num_ft, num_pos)
 
           # aggregate
-          # norm = tf.expand_dims(tf.reduce_sum(pos_word_mask, 1), 0) * tf.expand_dims(tf.reduce_sum(neg_ft_mask, 1), 1)
           neg_sim = tf.reduce_sum(wvec_compare * tf.expand_dims(pos_word_mask, 0), 2) / tf.expand_dims(tf.reduce_sum(pos_word_mask, 1), 0)
           neg_sim += tf.reduce_sum(ft_compare * tf.expand_dims(neg_ft_mask, 2), 1) / tf.expand_dims(tf.reduce_sum(neg_ft_mask, 1), 1)
           neg_sim /= 2.
-          # neg_sim *= 10.
 
           return neg_sim
 
@@ -377,27 +359,21 @@ class Model(framework.model.module.AbstractModel):
         word_att /= tf.reduce_sum(word_att, 3, True)
         wvecs_bar = tf.reduce_sum(
           tf.reshape(wvecs, (1, 1, num_caption, num_word, dim_embed)) * tf.expand_dims(word_att, 4), 3)
-        # wvecs_bar = tf.nn.l2_normalize(wvecs_bar, -1) # (num_ft, num_track, num_caption, dim_embed)
-        # wvecs_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 3]), (num_ft, 1, num_caption, 1))
 
         ft_att = tf.nn.softmax(att, 1)
         ft_att *= tf.reshape(ft_mask, (num_ft, num_track, 1, 1))
         ft_att /= tf.reduce_sum(ft_att, 1, True)
         ft_bar = tf.reduce_sum(
           tf.reshape(fts, (num_ft, num_track, 1, 1, dim_embed)) * tf.expand_dims(ft_att, 4), 1)
-        # ft_bar = tf.nn.l2_normalize(ft_bar, -1) # (num_ft, num_caption, num_word, dim_embed)
-        # ft_bar /= tf.reshape(tf.reduce_sum(ft_att, [1, 3]), (num_ft, num_caption, 1, 1))
 
         # compare
         wvec_compare = tf.reduce_sum(ft_bar * tf.expand_dims(wvecs, 0), -1) # (num_ft, num_caption, num_word)
         ft_compare = tf.reduce_sum(wvecs_bar * tf.expand_dims(fts, 2), -1) # (num_ft, num_track, num_caption)
 
         # aggregate
-        # norm = tf.expand_dims(tf.reduce_sum(word_mask, 1), 0) * tf.expand_dims(tf.reduce_sum(ft_mask, 1), 1)
         sim = tf.reduce_sum(wvec_compare * tf.expand_dims(word_mask, 0), 2) / tf.expand_dims(tf.reduce_sum(word_mask, 1), 0)
         sim += tf.reduce_sum(ft_compare * tf.expand_dims(ft_mask, 2), 1) / tf.expand_dims(tf.reduce_sum(ft_mask, 1), 1)
         sim /= 2.
-        # sim *= 10.
 
         return sim
 
