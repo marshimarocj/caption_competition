@@ -183,7 +183,7 @@ def prepare_rnnve():
     # 'cell_dim_hidden': 256,
     'cell_dim_hidden': 250,
 
-    'lr_mult': .1,
+    'lr_mult': 1,
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
