@@ -177,7 +177,7 @@ class Model(framework.model.module.AbstractModel):
     caption_dnn = self.submods[CAPTION_DNN]
     out_ops = caption_dnn.get_out_ops_in_mode({
       caption_dnn.InKey.FT: caption,
-      caption_dnn.IS_TRN: in_ops[self.InKey.IS_TRN],
+      caption_dnn.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
     }, mode)
     caption_embed = out_ops[caption_dnn.EMBED]
     with tf.variable_scope(self.name_scope):
