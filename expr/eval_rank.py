@@ -134,7 +134,7 @@ def predict_eval_trecvid17_B():
   # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att')
   # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.512.0.5.att.sbu')
   # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward')
-  expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.flickr30m.feedforward')
+  expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
