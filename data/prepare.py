@@ -510,6 +510,8 @@ def prepare_flow_ft():
     os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy'),
   ]
 
+  dim_fts = 1024
+
   videos = np.load(vid_file)
 
   for s in range(3):
@@ -522,9 +524,12 @@ def prepare_flow_ft():
     for vid in vids:
       video = videos[vid]
       ft_file = os.path.join(raw_ft_dir, video + '.gif.npy')
-      fts = np.load(ft_file)
-      fts = np.max(fts, 0)
-      out_fts.append(fts)
+      if not os.path.exists(ft_file):
+        ft = np.zeros((dim_ft,), dtype=np.float32)
+      else:
+        fts = np.load(ft_file)
+        ft = np.max(fts, 0)
+      out_fts.append(ft)
     out_fts = np.array(out_fts, dtype=np.float32)
     np.save(out_file, out_fts)
 
