@@ -233,7 +233,7 @@ class Model(framework.model.module.AbstractModel):
           word_att /= tf.reduce_sum(word_att, 1, True)
           wvec_bar = tf.reduce_sum(tf.expand_dims(pos_wvecs, 2) * tf.expand_dims(word_att, 3), 1) # (num_pos, num_ft, dim_embed)
           # wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
-          wvecs_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 2]), (num_pos, 1, 1))
+          wvec_bar /= tf.reshape(tf.reduce_sum(word_att, [1, 2]), (num_pos, 1, 1))
 
           ft_att = tf.nn.softmax(att, 2)
           ft_att *= tf.expand_dims(pos_ft_mask, 1)
