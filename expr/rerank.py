@@ -14,8 +14,8 @@ import eval_rank
 '''expr
 '''
 def graph_match_rerank():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   pred_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.npy'),
@@ -33,8 +33,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.B.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.A.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
   ]
   out_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
@@ -53,8 +55,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.A.rerank.20.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.B.rerank.20.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.A.rerank.20.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward', 'pred', 'val.A.rerank.20.npy'),
+    os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
   ]
 
   topk = 20
@@ -166,5 +170,5 @@ def eval_rerank():
 
 
 if __name__ == '__main__':
-  # graph_match_rerank()
-  eval_rerank()
+  graph_match_rerank()
+  # eval_rerank()
