@@ -179,7 +179,7 @@ class Model(framework.model.module.AbstractModel):
       caption_embed = tf.reshape(caption_embed, (-1, self._config.max_words_in_caption, dim_input))
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
-      if self._config.pool = 'mean':
+      if self._config.pool == 'mean':
         caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
       else:
         _mask = tf.cast(mask, tf.bool)
