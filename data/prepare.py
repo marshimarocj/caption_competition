@@ -569,7 +569,8 @@ def prepare_trecvid17_flow_ft():
   # out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.2.max.npy')
 
   lst_file = os.path.join(root_dir, 'VTT', 'description.generation.subtask', 'testing.URLs.video.description.subtask')
-  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
+  # out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
+  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.max.npy')
 
   dim_ft = 1024
 
@@ -584,8 +585,8 @@ def prepare_trecvid17_flow_ft():
         ft = np.zeros((dim_ft,), dtype=np.float32)
       else:
         fts = np.load(ft_file)
-        ft = np.mean(fts, 0)
-        # ft = np.max(fts, 0)
+        # ft = np.mean(fts, 0)
+        ft = np.max(fts, 0)
       out_fts.append(ft)
   out_fts = np.array(out_fts, dtype=np.float32)
   np.save(out_file, out_fts)
