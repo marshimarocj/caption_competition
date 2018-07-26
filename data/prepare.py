@@ -569,7 +569,7 @@ def prepare_trecvid17_flow_ft():
   # out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.2.max.npy')
 
   lst_file = os.path.join(root_dir, 'VTT', 'description.generation.subtask', 'testing.URLs.video.description.subtask')
-  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.2.npy')
+  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
 
   dim_ft = 1024
 
