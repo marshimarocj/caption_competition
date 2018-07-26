@@ -540,7 +540,7 @@ def prepare_tgif_flow_ft():
 
 def prepare_trecvid_flow_ft():
   root_dir = '/mnt/data1/jiac/trecvid2016' # neptune
-  raw_ft_dir = '/mnt/data3/trecvid/ordered_feature/i3d.flow'
+  raw_ft_dir = '/mnt/data3/trecvid/ordered_feature/i3d.flow/16'
   out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
 
   dim_ft = 1024
