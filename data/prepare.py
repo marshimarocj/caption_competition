@@ -510,7 +510,7 @@ def prepare_flow_ft():
     os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy'),
   ]
 
-  dim_fts = 1024
+  dim_ft = 1024
 
   videos = np.load(vid_file)
 
