@@ -495,7 +495,7 @@ def prepare_flickr30k_word2vec():
   np.save(out_file, wvecs)
 
 
-def prepare_flow_ft():
+def prepare_tgif_flow_ft():
   root_dir = '/mnt/data1/jiac/tgif' # neptune
   vid_file = os.path.join(root_dir, 'aux', 'int2video.npy')
   split_files = [
@@ -538,6 +538,26 @@ def prepare_flow_ft():
     np.save(out_file, out_fts)
 
 
+def prepare_trecvid_flow_ft():
+  root_dir = '/mnt/data1/jiac/trecvid2016' # neptune
+  raw_ft_dir = '/mnt/data3/trecvid/ordered_feature/i3d.flow'
+  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
+
+  dim_ft = 1024
+
+  out_fts = []
+  for vid in range(1915):
+    ft_file = os.path.join(raw_ft_dir, '%d.mp4.npy'%vid)
+    if not os.path.esits(ft_file):
+      ft = np.zeros((dim_ft,), dtype=np.float32)
+    else:
+      fts = np.load(ft_file)
+      ft = np.mean(fts, 0)
+    out_fts.append(ft)
+  out_fts = np.array(out_fts, dtype=np.float32)
+  np.save(out_file, out_fts)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
@@ -549,4 +569,5 @@ if __name__ == '__main__':
   # prepare_sbu_word2vec()
   # prepare_flickr30k_word2vec()
 
-  prepare_flow_ft()
+  # prepare_tgif_flow_ft()
+  prepare_trecvid_flow_ft()
