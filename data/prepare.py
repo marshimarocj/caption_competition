@@ -508,9 +508,9 @@ def prepare_flow_ft():
     # os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'trn_ft.npy'),
     # os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'val_ft.npy'),
     # os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy'),
-    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'trn_ft.absmax.npy'),
-    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'val_ft.absmax.npy'),
-    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.absmax.npy'),
+    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'trn_ft.max.npy'),
+    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'val_ft.max.npy'),
+    os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.max.npy'),
   ]
 
   dim_ft = 1024
@@ -532,10 +532,7 @@ def prepare_flow_ft():
       else:
         fts = np.load(ft_file)
         # ft = np.mean(fts, 0)
-        abs_fts = np.abs(fts)
-        print abs_fts.shape
-        idx = (abs_fts == np.max(abs_fts, 0, keepdims=True))
-        ft = np.sign(fts)[idx] * np.max(abs_fts, 0)
+        ft = np.max(ft, 0)
       out_fts.append(ft)
     out_fts = np.array(out_fts, dtype=np.float32)
     np.save(out_file, out_fts)
