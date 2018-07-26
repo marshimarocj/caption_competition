@@ -538,7 +538,7 @@ def prepare_tgif_flow_ft():
     np.save(out_file, out_fts)
 
 
-def prepare_trecvid_flow_ft():
+def prepare_trecvid16_flow_ft():
   root_dir = '/mnt/data1/jiac/trecvid2016' # neptune
   raw_ft_dir = '/mnt/data3/trecvid/ordered_feature/i3d.flow/16'
   # out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
@@ -560,6 +560,31 @@ def prepare_trecvid_flow_ft():
   np.save(out_file, out_fts)
 
 
+def prepare_trecvid17_flow_ft():
+  root_dir = '/mnt/data1/jiac/trecvid2017' # neptune
+  raw_ft_dir = '/mnt/data3/trecvid/ordered_feature/i3d.flow/17'
+  lst_file = os.path.join(root_dir, 'VTT', 'matching.ranking.subtask', 'testing.2.subsets', 'tv17.vtt.url.list')
+  out_file = os.path.join(root_dir, 'mp_feature', 'i3d_flow', 'tst_ft.npy')
+
+  dim_ft = 1024
+
+  out_fts = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      vid = line[:pos]
+      ft_file = os.path.join(raw_ft_dir, '%s.mp4.npy'%vid)
+      if not os.path.exists(ft_file):
+        ft = np.zeros((dim_ft,), dtype=np.float32)
+      else:
+        fts = np.load(ft_file)
+        ft = np.mean(fts, 0)
+      out_fts.append(ft)
+  out_fts = np.array(out_fts, dtype=np.float32)
+  np.save(out_file, out_fts)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
@@ -572,4 +597,5 @@ if __name__ == '__main__':
   # prepare_flickr30k_word2vec()
 
   # prepare_tgif_flow_ft()
-  prepare_trecvid_flow_ft()
+  # prepare_trecvid16_flow_ft()
+  prepare_trecvid17_flow_ft()
