@@ -80,8 +80,8 @@ def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy, att=
         ], feed_dict=feed_dict)
       sent_pool = framework.util.caption.utility.beamsearch_recover_captions(
         wordids, cum_log_probs, pres, ends, trntst.model_cfg.subcfgs[VD].sent_pool_size)
+      print sent_pool
 
-      print np.array(wordids).shape
       for b in xrange(len(sent_pool)):
         videoid = str(tst_reader.videoids[b+base])
         output_by_sent_mode(sent_pool[b], videoid, videoid2caption,
@@ -123,10 +123,8 @@ def output_by_sent_mode(sent_pool, videoid, videoid2caption,
       captionid = np.expand_dims(sent_pool[0][1], 0)
       videoid2caption[videoid] = int2str(captionid)[0]
   elif gen_sent_mode == 2:
-    # print sent_pool.shape
     videoid2caption[videoid] = []
-    # for k in xrange(sent_pool_size):
-    for k in xrange(len(sent_pool)):
+    for k in xrange(sent_pool_size):
       captionid = np.expand_dims(sent_pool[k][1], 0)
       out = (
         float(sent_pool[k][0]),
