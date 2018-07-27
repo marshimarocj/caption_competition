@@ -201,7 +201,7 @@ class Decoder(framework.model.module.AbstractModule):
       self.OutKey.BEAM_END: op_groups[3],
     }
 
-  def get_out_ops_in_mode(self, in_ops, mode):
+  def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     with tf.variable_scope(self.name_scope):
       if mode == framework.model.module.Mode.TRN_VAL:
         state = self._ft_step(in_ops[self.InKey.INIT_FT])
@@ -219,8 +219,17 @@ class Decoder(framework.model.module.AbstractModule):
         return out
       else:
         state = self._ft_step(in_ops[self.InKey.INIT_FT])
-        return self._beam_search_word_steps(
-          in_ops[self.InKey.INIT_FT], in_ops[self.InKey.FT], in_ops[self.InKey.FT_MASK], in_ops[self.InKey.INIT_WID], state)
+        assert 'strategy' in kwargs
+        if kwargs['strategy'] == 'greedy':
+          out_wids = self._greedy_word_steps(
+            in_ops[self.InKey.INIT_FT], in_ops[self.InKey.FT], in_ops[self.InKey.FT_MASK], in_ops[self.InKey.INIT_WID], state)
+          out = {
+            self.OutKey.OUT_WID: out_wids,
+          }
+          return out
+        else:
+          return self._beam_search_word_steps(
+            in_ops[self.InKey.INIT_FT], in_ops[self.InKey.FT], in_ops[self.InKey.FT_MASK], in_ops[self.InKey.INIT_WID], state)
 
   def _attention_on_recurrent(self, x, states, 
       Uav_plus_ba, h, fts, ft_masks, 

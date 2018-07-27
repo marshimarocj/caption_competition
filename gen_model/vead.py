@@ -160,7 +160,7 @@ class Model(framework.model.module.AbstractModel):
         self.submods[AD].InKey.CAPTIONID: in_ops[self.InKey.CAPTIONID],
       })
 
-    out_ops = self.submods[AD].get_out_ops_in_mode(ad_inputs, mode)
+    out_ops = self.submods[AD].get_out_ops_in_mode(ad_inputs, mode, strategy=self._config.search_strategy)
 
     out = {
       self.OutKey.OUT_WID: out_ops[self.submods[AD].OutKey.OUT_WID],
