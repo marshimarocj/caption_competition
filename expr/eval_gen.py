@@ -104,7 +104,8 @@ def predict_eval():
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
   # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
-  model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  # model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  model_name = 'vevd_expr/i3d_resnet200_i3d_flow_max.512.512.lstm'
   python_file = '../gen_driver/vevd.py'
   gpuid = 1
 
