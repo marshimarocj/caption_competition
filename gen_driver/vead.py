@@ -75,6 +75,8 @@ if __name__ == '__main__':
     else:
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction)
   else:
+    model_cfg.search_strategy = opts.tst_strategy
+
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
     path_cfg.log_file = None
     if opts.val:
@@ -86,8 +88,6 @@ if __name__ == '__main__':
       '%s-%d.%d.%d.%s.json'%(out_name,
         opts.best_epoch, opts.gen_sent_mode, model_cfg.subcfgs[gen_model.vead.AD].sent_pool_size, model_cfg.search_strategy))
     path_cfg.log_file = None
-
-    model_cfg.search_strategy = opts.tst_strategy
 
     m = gen_model.vead.Model(model_cfg)
 
