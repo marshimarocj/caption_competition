@@ -104,12 +104,13 @@ def predict_eval():
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
   # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
-  # python_file = '../gen_driver/vevd.py'
-  # gpuid = 0
+  model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  python_file = '../gen_driver/vevd.py'
+  gpuid = 0
 
-  model_name = 'vead_expr/i3d_resnet200.512.512'
-  python_file = '../gen_driver/vead.py'
-  gpuid = 1
+  # model_name = 'vead_expr/i3d_resnet200.512.512'
+  # python_file = '../gen_driver/vead.py'
+  # gpuid = 1
 
   # # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
   # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
@@ -134,17 +135,17 @@ def predict_eval():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
-    gpuid=gpuid, tst_strategy='greedy')
+    gpuid=gpuid)
   p.wait()
 
-  # predict_file = os.path.join(pred_dir, 'val-%d.1.5.greedy.json'%epoch)
-  # out = eval(predict_file, gt_file)
-  # with open('eval.%d.txt'%gpuid, 'w') as fout:
-  #   content = '%.2f\t%.2f\t%.2f'%(
-  #     out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
-  #   print epoch
-  #   print content
-  #   fout.write(str(epoch) + '\t' + content + '\n')
+  predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
+  out = eval(predict_file, gt_file)
+  with open('eval.%d.txt'%gpuid, 'w') as fout:
+    content = '%.2f\t%.2f\t%.2f'%(
+      out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
+    print epoch
+    print content
+    fout.write(str(epoch) + '\t' + content + '\n')
 
 
 def predict_sample():
