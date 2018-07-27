@@ -80,6 +80,7 @@ if __name__ == '__main__':
     if opts.val:
       path_cfg.tst_ftfiles = path_cfg.val_ftfiles
       path_cfg.tst_videoid_file = path_cfg.val_videoid_file
+      path_cfg.tst_att_ftfiles = path_cfg.val_att_ftfiles
       out_name = 'val'
     path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
       '%s-%d.%d.%d.%s.json'%(out_name,
