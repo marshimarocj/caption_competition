@@ -119,7 +119,7 @@ class Model(framework.model.module.AbstractModel):
     else:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, decoder_cfg.num_ft, encoder_cfg.dim_ft)), name=self.InKey.FT.value)
+          tf.float32, shape=(None, decoder_cfg.num_ft, encoder_cfg.dim_ft), name=self.InKey.FT.value)
         ft_masks = tf.placeholder(
           tf.float32, shape=(None, decoder_cfg.num_ft), name=self.InKey.FT_MASK.value)
         is_training = tf.placeholder(
