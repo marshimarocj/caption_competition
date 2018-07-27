@@ -191,11 +191,12 @@ class Model(framework.model.module.AbstractModel):
     op_dict = {
       self.OutKey.OUT_WID: self._outputs[self.OutKey.OUT_WID],
     }
-    op_dict.update({
-      self.OutKey.BEAM_CUM_LOG_PROB: self._outputs[self.OutKey.BEAM_CUM_LOG_PROB],
-      self.OutKey.BEAM_PRE: self._outputs[self.OutKey.BEAM_PRE],
-      self.OutKey.BEAM_END: self._outputs[self.OutKey.BEAM_END],
-    })
+    if self._config.search_strategy == 'beam':
+      op_dict.update({
+        self.OutKey.BEAM_CUM_LOG_PROB: self._outputs[self.OutKey.BEAM_CUM_LOG_PROB],
+        self.OutKey.BEAM_PRE: self._outputs[self.OutKey.BEAM_PRE],
+        self.OutKey.BEAM_END: self._outputs[self.OutKey.BEAM_END],
+      })
     return op_dict
 
   def op_in_val(self, **kwargs):

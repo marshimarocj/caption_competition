@@ -87,6 +87,8 @@ if __name__ == '__main__':
         opts.best_epoch, opts.gen_sent_mode, model_cfg.subcfgs[gen_model.vead.AD].sent_pool_size, model_cfg.search_strategy))
     path_cfg.log_file = None
 
+    model_cfg.search_strategy = opts.tst_strategy
+
     m = gen_model.vead.Model(model_cfg)
 
     trntst = gen_model.vead.TrnTst(model_cfg, path_cfg, m, gen_sent_mode=opts.gen_sent_mode)
