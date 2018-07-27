@@ -54,7 +54,7 @@ def merge_tgif_trecvid16_rank_trn():
   # trecvid_root_dir = '/data1/jiac/trecvid2017/rank' # mercurial
   # tgif_root_dir = '/data1/jiac/tgif'
   # out_root_dir = '/data1/jiac/trecvid2018/rank'
-  trecvid_root_dir = '/mnt/data1/jiac/trecvid2017' # neptune
+  trecvid_root_dir = '/mnt/data1/jiac/trecvid2016' # neptune
   tgif_root_dir = '/mnt/data1/jiac/tgif'
   out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
 
