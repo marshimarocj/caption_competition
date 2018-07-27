@@ -49,7 +49,8 @@ def get_att_ft_files(root_dir, model_feature_names, splits, dir_name='sa_feature
 '''
 def prepare_vevd():
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
+  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
@@ -59,6 +60,7 @@ def prepare_vevd():
   ft_names = [
     'i3d',
     'resnet200',
+    'i3d_flow',
   ]
 
   dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
@@ -337,8 +339,8 @@ def prepare_vead():
 
 
 if __name__ == '__main__':
-  # prepare_vevd()
+  prepare_vevd()
   # prepare_self_critique()
   # prepare_diversity()
   # prepare_margin()
-  prepare_vead()
+  # prepare_vead()
