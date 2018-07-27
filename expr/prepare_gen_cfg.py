@@ -60,7 +60,8 @@ def prepare_vevd():
   ft_names = [
     'i3d',
     'resnet200',
-    'i3d_flow',
+    # 'i3d_flow',
+    'i3d_flow_max',
   ]
 
   dim_fts, split_ftfiles = get_mean_ft_files(root_dir, ft_names, splits)
