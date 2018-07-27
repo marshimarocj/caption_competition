@@ -28,7 +28,7 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     framework.model.module.ModelConfig.__init__(self)
 
-    self.subcfgs[VE] = framework.impl.encoder.dnn.Config()
+    self.subcfgs[VE] = framework.impl.encoder.pca.Config()
     self.subcfgs[AD] = decoder.att_rnn.Config()
 
     self.search_strategy = 'beam'
@@ -88,7 +88,7 @@ class Model(framework.model.module.AbstractModel):
 
   def _set_submods(self):
     return {
-      VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
+      VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
       AD: decoder.att_rnn.Decoder(self._config.subcfgs[AD]),
     }
 

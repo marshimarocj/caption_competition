@@ -134,17 +134,17 @@ def predict_eval():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
-    gpuid=gpuid, gen_sent_mode=1, tst_strategy='greedy')
+    gpuid=gpuid, tst_strategy='greedy')
   p.wait()
 
-  predict_file = os.path.join(pred_dir, 'val-%d.1.5.greedy.json'%epoch)
-  out = eval(predict_file, gt_file)
-  with open('eval.%d.txt'%gpuid, 'w') as fout:
-    content = '%.2f\t%.2f\t%.2f'%(
-      out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
-    print epoch
-    print content
-    fout.write(str(epoch) + '\t' + content + '\n')
+  # predict_file = os.path.join(pred_dir, 'val-%d.1.5.greedy.json'%epoch)
+  # out = eval(predict_file, gt_file)
+  # with open('eval.%d.txt'%gpuid, 'w') as fout:
+  #   content = '%.2f\t%.2f\t%.2f'%(
+  #     out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
+  #   print epoch
+  #   print content
+  #   fout.write(str(epoch) + '\t' + content + '\n')
 
 
 def predict_sample():
