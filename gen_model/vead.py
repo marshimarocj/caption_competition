@@ -170,11 +170,12 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.LOGIT: out_ops[self.submods[AD].OutKey.LOGIT],
       })
     else:
-      out.update({
-        self.OutKey.BEAM_CUM_LOG_PROB: out_ops[self.submods[AD].OutKey.BEAM_CUM_LOG_PROB],
-        self.OutKey.BEAM_PRE: out_ops[self.submods[AD].OutKey.BEAM_PRE],
-        self.OutKey.BEAM_END: out_ops[self.submods[AD].OutKey.BEAM_END],
-      })
+      if self._config.search_strategy == 'beam':
+        out.update({
+          self.OutKey.BEAM_CUM_LOG_PROB: out_ops[self.submods[AD].OutKey.BEAM_CUM_LOG_PROB],
+          self.OutKey.BEAM_PRE: out_ops[self.submods[AD].OutKey.BEAM_PRE],
+          self.OutKey.BEAM_END: out_ops[self.submods[AD].OutKey.BEAM_END],
+        })
 
     return out
 
