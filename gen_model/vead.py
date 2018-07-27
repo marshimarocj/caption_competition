@@ -14,7 +14,7 @@ import framework.model.module
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
-import framework.impl.encoder.dnn
+import framework.impl.encoder.pca
 import decoder.att_rnn
 import trntst_util
 
