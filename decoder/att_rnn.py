@@ -60,18 +60,18 @@ class Decoder(framework.model.module.AbstractModule):
   def _build_parameter_graph(self):
     with tf.variable_scope(self.name_scope):
       scale = 1.0 / (self._config.num_words**0.5)
-      self.word_embedding_W = tf.get_variable('word_embedding_W',
+      self.word_embedding_W = tf.contrib.framework.model_variable('word_embedding_W',
         shape=(self._config.num_words, self._config.dim_input), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.word_embedding_W)
 
       scale = 1.0/ (self._config.dim_hidden**0.5)
-      self.softmax_W = tf.get_variable('softmax_W',
+      self.softmax_W = tf.contrib.framework.model_variable('softmax_W',
         shape=(self._config.dim_hidden, self._config.num_words), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.softmax_W)
 
-      self.softmax_B = tf.get_variable('softmax_B',
+      self.softmax_B = tf.contrib.framework.model_variable('softmax_B',
           shape=(self._config.num_words,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
       self._weights.append(self.softmax_B)
@@ -79,22 +79,22 @@ class Decoder(framework.model.module.AbstractModule):
       rows = self._config.dim_hidden
       cols = self._config.dim_attention
       scale = 1.0 / (rows**0.5)
-      self.W_a = tf.get_variable('W_a',
+      self.W_a = tf.contrib.framework.model_variable('W_a',
         shape=(rows, cols), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.W_a)
       rows = self._config.dim_ft
       scale = 1.0 / (rows**0.5)
-      self.U_a = tf.get_variable('U_a',
+      self.U_a = tf.contrib.framework.model_variable('U_a',
         shape=(rows, cols), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.U_a)
-      self.b_a = tf.get_variable('b_a',
+      self.b_a = tf.contrib.framework.model_variable('b_a',
         shape=(1, self._config.dim_attention), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-0.1, 0.1))
       self._weights.append(self.b_a)
       scale = 1.0 / (self._config.dim_attention**0.5)
-      self.w_a = tf.get_variable('w_a',
+      self.w_a = tf.contrib.framework.model_variable('w_a',
         shape=(self._config.dim_attention, 1), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.w_a)
