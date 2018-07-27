@@ -60,12 +60,16 @@ def merge_tgif_trecvid16_rank_trn():
 
   ##########ft#########
   tgif_ft_files = [
-    'trn_ft.npy',
-    'val_ft.npy',
-    'tst_ft.npy',
+    # 'trn_ft.npy',
+    # 'val_ft.npy',
+    # 'tst_ft.npy',
+    'trn_ft.max.npy',
+    'val_ft.max.npy',
+    'tst_ft.max.npy',
   ]
   trecvid_ft_files = [
-    'tst_ft.npy',
+    # 'tst_ft.npy',
+    'tst_ft.max.npy',
   ]
   # for ft_name in ['i3d', 'resnet200']:
   for ft_name in ['i3d_flow']:
@@ -80,7 +84,8 @@ def merge_tgif_trecvid16_rank_trn():
       ft = np.load(file)
       fts.append(ft)
     fts = np.concatenate(fts, 0)
-    out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
+    # out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.npy')
+    out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'trn_ft.max.npy')
     np.save(out_file, fts)
 
   #########caption mask ##########
