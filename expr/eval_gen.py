@@ -107,15 +107,19 @@ def predict_eval():
   # python_file = '../gen_driver/vevd.py'
   # gpuid = 0
 
+  model_name = 'vead_expr/i3d_resnet200.512.512'
+  python_file = '../gen_driver/vead.py'
+  gpuid = 1
+
   # # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
   # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
   # python_file = '../gen_driver/self_critique.py'
   # gpuid = 0
 
-  # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
-  model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
-  python_file = '../gen_driver/diversity.py'
-  gpuid = 1
+  # # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
+  # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
+  # python_file = '../gen_driver/diversity.py'
+  # gpuid = 1
 
   # model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
   # python_file = '../gen_driver/margin.py'
@@ -253,7 +257,7 @@ def eval_rerank_caption():
 
 
 if __name__ == '__main__':
-  # predict_eval()
+  predict_eval()
   # predict_sample()
   # rerank_sample()
-  eval_rerank_caption()
+  # eval_rerank_caption()
