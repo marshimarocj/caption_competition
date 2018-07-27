@@ -125,7 +125,7 @@ def output_by_sent_mode(sent_pool, videoid, videoid2caption,
     # print sent_pool.shape
     videoid2caption[videoid] = []
     # for k in xrange(sent_pool_size):
-    for k in xrange(sent_pool):
+    for k in xrange(len(sent_pool)):
       captionid = np.expand_dims(sent_pool[k][1], 0)
       out = (
         float(sent_pool[k][0]),
