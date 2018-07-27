@@ -78,9 +78,10 @@ def predict_in_tst(trntst, sess, tst_reader, predict_file, search_strategy, att=
           op_dict[trntst.model.OutKey.BEAM_PRE],
           op_dict[trntst.model.OutKey.BEAM_END],
         ], feed_dict=feed_dict)
+      print ends
       sent_pool = framework.util.caption.utility.beamsearch_recover_captions(
         wordids, cum_log_probs, pres, ends, trntst.model_cfg.subcfgs[VD].sent_pool_size)
-      print sent_pool
+      # print sent_pool
 
       for b in xrange(len(sent_pool)):
         videoid = str(tst_reader.videoids[b+base])
