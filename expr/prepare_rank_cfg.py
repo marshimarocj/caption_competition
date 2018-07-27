@@ -310,16 +310,18 @@ def prepare_aca():
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
     'att': True,
+    'lr_mult': .1,
 
     'max_words_in_caption': 30,
   }
 
   # outprefix = '%s.%d.%.1f.att.sbu'%(
   # outprefix = '%s.%d.%.1f.att.feedforward'%(
-  outprefix = '%s.%d.%.1f.att.flickr30m.feedforward'%(
+  # outprefix = '%s.%d.%.1f.att.flickr30m.feedforward'%(
+  outprefix = '%s.%d.%.1f.%.1f.att.flickr30m.feedforward'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
-    params['alpha'])
+    params['alpha'], params['lr_mult'])
 
   model_cfg = rank_model.aca.gen_cfg(**params)
 
@@ -545,7 +547,7 @@ if __name__ == '__main__':
   # prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
-  # prepare_aca()
+  prepare_aca()
   # prepare_aca_rnn()
   # prepare_aca_track()
-  prepare_rnnve_feedforward()
+  # prepare_rnnve_feedforward()
