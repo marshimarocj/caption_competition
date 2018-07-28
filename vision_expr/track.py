@@ -1018,10 +1018,10 @@ def refine_viterbi_path():
 
 def viz_viterbi_path_vtt():
   root_dir = '/mnt/data2/jiac/vtt_raw' # neptune
-  lst_file = os.path.join(root_dir, '16.lst')
-  video_dir = os.path.join(root_dir, '16')
-  track_root_dir = os.path.join(root_dir, '16_kcf_track')
-  viz_dir = os.path.join(root_dir, '16_kcf_viz')
+  lst_file = os.path.join(root_dir, '17.lst')
+  video_dir = os.path.join(root_dir, '17')
+  track_root_dir = os.path.join(root_dir, '17_kcf_track')
+  viz_dir = os.path.join(root_dir, '17_kcf_viz')
 
   gap = 8
 
@@ -1233,7 +1233,7 @@ if __name__ == '__main__':
   # build_association_graph()
   # refine_viterbi_path()
   # viz_viterbi_path()
-  # viz_viterbi_path_vtt()
+  viz_viterbi_path_vtt()
 
   # export_track()
-  export_missing_track()
+  # export_missing_track()
