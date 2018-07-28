@@ -109,7 +109,7 @@ def predict_eval():
 
   model_name = 'vead_expr/i3d_resnet200.512.512'
   python_file = '../gen_driver/vead.py'
-  gpuid = 1
+  gpuid = 2
 
   # # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
   # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
