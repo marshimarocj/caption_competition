@@ -20,6 +20,7 @@ import trntst_util
 
 
 VE = 'encoder'
+AE = 'attention_encoder'
 AD = 'decoder'
 CELL = decoder.att_rnn.CELL
 
@@ -29,6 +30,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     framework.model.module.ModelConfig.__init__(self)
 
     self.subcfgs[VE] = framework.impl.encoder.pca.Config()
+    self.subcfgs[AE] = framework.impl.encoder.pca.Config()
     self.subcfgs[AD] = decoder.att_rnn.Config()
 
     self.search_strategy = 'beam'
@@ -52,6 +54,10 @@ def gen_cfg(**kwargs):
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
+  att_enc = cfg.subcfgs[AE]
+  att_enc.dim_ft = kwargs['dim_ft']
+  att_enc.dim_output = kwargs['dim_hidden']
+
   dec = cfg.subcfgs[AD]
   dec.num_step = kwargs['num_step']
   dec.dim_input = kwargs['dim_input']
@@ -62,7 +68,7 @@ def gen_cfg(**kwargs):
 
   cell = dec.subcfgs[CELL]
   cell.dim_hidden = kwargs['dim_hidden']
-  cell.dim_input = dec.dim_input + dec.dim_ft
+  cell.dim_input = dec.dim_input + att_enc.dim_output
   cell.keepout_prob = kwargs['cell_keepout_prob']
   cell.keepin_prob = kwargs['cell_keepin_prob']
 
@@ -89,6 +95,7 @@ class Model(framework.model.module.AbstractModel):
   def _set_submods(self):
     return {
       VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
+      AE: framework.impl.encoder.pca.Encoder1D(self._config.subcfgs[AE]),
       AD: decoder.att_rnn.Decoder(self._config.subcfgs[AD]),
     }
 
@@ -145,13 +152,18 @@ class Model(framework.model.module.AbstractModel):
     }, mode)
     ft_embed = out_ops[self.submods[VE].OutKey.EMBED]
 
+    out_ops = self.submods[AE].get_out_ops_in_mode({
+      self.submods[AE].InKey.FT: fts,
+    }, mode)
+    att_ft_embeds = out_ops[self.submods[AE].OutKey.EMBED]
+
     with tf.variable_scope(self.name_scope):
       batch_size = tf.shape(fts)[0]
       init_wid = tf.zeros((batch_size,), dtype=tf.int32)
 
     ad_inputs = {
       self.submods[AD].InKey.INIT_FT: ft_embed,
-      self.submods[AD].InKey.FT: fts,
+      self.submods[AD].InKey.FT: att_ft_embeds,
       self.submods[AD].InKey.FT_MASK: ft_masks,
       self.submods[AD].InKey.INIT_WID: init_wid,
     }
