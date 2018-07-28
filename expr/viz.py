@@ -41,5 +41,72 @@ def viz_generation():
     json.dump(out, fout, indent=2)
 
 
+def viz_rank():
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  caption_files = [
+    '/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.descriptions.A',
+    '/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.descriptions.B',
+  ]
+  vid_file = '/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.url.list'
+  pred_files = [
+    [
+      os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'val.A.npy'),
+      os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'val.A.rerank.20.npy'),
+    ],
+    [
+      os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'val.B.npy'),
+      os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'val.B.rerank.20.npy'),
+    ],
+  ]
+  out_files = [
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'viz.A.json'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'pred', 'viz.B.json'),
+  ]
+
+  vids = []
+  with open(vid_file) as f:
+    for line in f:
+      line = line.strip()
+      pos = line.find(' ')
+      vid = int(line[:pos])
+      vids.append(vid)
+
+  caption_sets = []
+  for caption_file in caption_files:
+    captions = []
+    with open(caption_file) as f:
+      for line in f:
+        line = line.strip()
+        pos = line.find(' ')
+        captions.append(line[pos+1:])
+
+  for pred_file, out_file, captions in zip(pred_files, out_files, caption_sets):
+    preds = np.load(pred_file[0])
+    preds += np.load(pred_file[1])
+    sort_idxs = np.argsort(-preds, 1)
+    out = []
+    for vid, idxs, pred in zip(vids, sort_idxs, preds):
+      out.append({
+        'vid': vid,
+        'captions': [
+          {
+            'caption': captions[idxs[0]],
+            'score': float(pred[idx[0]]) / 2.
+          },
+          {
+            'caption': captions[idxs[1]],
+            'score': float(pred[idx[1]]) / 2.
+          },
+          {
+            'caption': captions[idxs[2]],
+            'score': float(pred[idx[2]]) / 2.
+          },
+        ]
+      })
+    with open(out_file, 'w') as fout:
+      json.dump(out, fout)
+
+
 if __name__ == '__main__':
-  viz_generation()
+  # viz_generation()
+  viz_rank()
