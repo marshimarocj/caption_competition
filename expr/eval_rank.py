@@ -88,15 +88,15 @@ def report_best_epoch():
 
 
 def predict_eval_trecvid17_B():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   track_ft_files = [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names]
-  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
-  # out_name = 'val.B'
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A'
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  out_name = 'val.B'
+  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  # out_name = 'val.A'
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
@@ -123,13 +123,14 @@ def predict_eval_trecvid17_B():
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.max.0.5')
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512.256.gru.max.0.5.sbu')
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.flickr30m')
-  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m')
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512.512.gru.max.0.5.1.0.flickr30m.feedforward')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/rnnve.py'
-  gpuid = 1
+  gpuid = 0
 
   # expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
   # log_dir = os.path.join(expr_name, 'log')
@@ -176,7 +177,7 @@ def predict_eval_trecvid17_B():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gid = int(data[1])
+      gid = int(data[2])
       vid2gt[vid] = gid
 
   predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
@@ -230,6 +231,6 @@ def predict_eval_vevd():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
