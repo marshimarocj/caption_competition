@@ -14,7 +14,7 @@ def viz_generation():
   # predict_file = os.path.join(root_dir, 'generation', 'vead_expr', 'i3d_resnet200.512.512', 'pred', 'val-180.1.5.beam.json')
   # out_file = os.path.join(root_dir, 'generation', 'vead_expr', 'i3d_resnet200.512.512', 'pred', 'viz.json')
 
-  predict_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'val-136.1.5.beam.json')
+  predict_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'epoch-136.1.5.beam.json')
   out_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'viz.json')
 
   with open(predict_file) as f:
