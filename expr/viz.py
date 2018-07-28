@@ -79,6 +79,7 @@ def viz_rank():
         line = line.strip()
         pos = line.find(' ')
         captions.append(line[pos+1:])
+    caption_sets.append(captions)
 
   for pred_file, out_file, captions in zip(pred_files, out_files, caption_sets):
     preds = np.load(pred_file[0])
