@@ -106,9 +106,8 @@ def viz_rank():
           },
         ]
       })
-    print out_file
     with open(out_file, 'w') as fout:
-      json.dump(out, fout)
+      json.dump(out, fout, indent=2)
 
 
 if __name__ == '__main__':
