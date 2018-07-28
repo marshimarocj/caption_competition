@@ -94,15 +94,15 @@ def viz_rank():
         'captions': [
           {
             'caption': captions[idxs[0]],
-            'score': float(pred[idx[0]]) / 2.
+            'score': float(pred[idxs[0]]) / 2.
           },
           {
             'caption': captions[idxs[1]],
-            'score': float(pred[idx[1]]) / 2.
+            'score': float(pred[idxs[1]]) / 2.
           },
           {
             'caption': captions[idxs[2]],
-            'score': float(pred[idx[2]]) / 2.
+            'score': float(pred[idxs[2]]) / 2.
           },
         ]
       })
