@@ -87,7 +87,7 @@ if __name__ == '__main__':
     if opts.tst_strategy == 'beam':
       path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
         '%s-%d.%d.%d.%s.json'%(out_name,
-          opts.best_epoch, opts.gen_sent_mode, model_cfg.subcfgs[gen_model.diversity.VD].sent_pool_size, opts.tst_strategy))
+          opts.best_epoch, opts.gen_sent_mode, model_cfg.subcfgs[gen_model.vevd.VD].sent_pool_size, opts.tst_strategy))
     elif opts.tst_strategy == 'sample':
       path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
         '%s-%d.%d.%d.%s.json'%(out_name,
