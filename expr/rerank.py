@@ -262,7 +262,7 @@ def rwr():
   row_sum = np.sum(W, 1)
   W /= np.expand_dims(row_sum, 1)
 
-  alphas = [0.01*d for d in range(10)]
+  alphas = [0.1*d for d in range(10)]
   for alpha in alphas:
     A = np.eye(num) - alpha*W # (num_txt*2, num_txt*2)
     b = (1.0 - alpha) * preds # (num_txt*2, num_img)
