@@ -252,7 +252,7 @@ def rwr():
 
   num = preds.shape[0]
   W = np.eye(num)
-  W[:num/2, num/2:] = sim, W[:num/2, num/2:]
+  W[:num/2, num/2:] = sim
   W[num/2:, :num/2] = sim.T
   # print W[:num/2, num/2:]
   # print W[num/2:, :num/2]
