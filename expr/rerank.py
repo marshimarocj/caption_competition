@@ -252,7 +252,7 @@ def rwr():
   row_threshold = -np.sort(-sim, 1)[:, 4:5]
   col_threshold = -np.sort(-sim, 0)[4:5, :]
   row_threshold = np.repeat(row_threshold, num/2, 1)
-  col_threshold = np.repeate(col_threshold, num/2, 0)
+  col_threshold = np.repeat(col_threshold, num/2, 0)
   threshold = np.maximum(row_threshold, col_threshold)
   sim[sim < threshold] = 0.
 
