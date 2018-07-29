@@ -20,6 +20,7 @@ def build_parser():
 
   parser.add_argument('model_cfg_file')
   parser.add_argument('path_cfg_file')
+  parser.add_argument('--is_train', dest='is_train', type=int, default=True)
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
   # only in tst
   parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
