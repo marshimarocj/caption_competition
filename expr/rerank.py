@@ -257,7 +257,7 @@ def rwr():
   for alpha in alphas:
     A = np.eye(num) - alpha*W # (num_txt*2, num_txt*2)
     b = (1.0 - alpha) * preds # (num_txt*2, num_img)
-    x = np.linalg.solve # (num_txt*2, num_img)
+    x = np.linalg.solve(A, b) # (num_txt*2, num_img)
 
     pred_A = x[:num/2].T
     pred_B = x[num/2:].T
