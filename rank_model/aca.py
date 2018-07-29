@@ -183,8 +183,6 @@ class Model(framework.model.module.AbstractModel):
         dim_embed = self._config.dim_joint_embed
 
         # embed
-        # fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
-        # fts = tf.nn.tanh(fts)
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
         fts = tf.nn.relu(fts)
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
@@ -193,8 +191,6 @@ class Model(framework.model.module.AbstractModel):
         neg_fts = fts[num_pos:]
 
         wvecs = tf.reshape(wvecs, (-1, dim_word))
-        # wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
-        # wvecs = tf.nn.tanh(wvecs)
         wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
         wvecs = tf.nn.relu(wvecs)
         wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
@@ -207,14 +203,10 @@ class Model(framework.model.module.AbstractModel):
         pos_mask = mask[:num_pos]
         neg_mask = mask[num_pos:]
 
-        # alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
-        # alpha = tf.nn.tanh(alpha) # (None, num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_Ws[0], self.word_att_Bs[0])
         alpha = tf.nn.relu(alpha) # (None, num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(alpha, self.word_att_Ws[1], self.word_att_Bs[1])
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
-        # beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
-        # beta = tf.nn.tanh(beta)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_Ws[0], self.ft_att_Bs[0])
         beta = tf.nn.relu(beta)
         beta = tf.nn.xw_plus_b(beta, self.ft_att_Ws[1], self.ft_att_Bs[1])
@@ -334,16 +326,12 @@ class Model(framework.model.module.AbstractModel):
         mask = tf.to_float(mask)
 
         # embed
-        # fts = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
-        # fts = tf.nn.tanh(fts)
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
         fts = tf.nn.relu(fts)
         fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
         fts = tf.nn.l2_normalize(fts, -1)
 
         wvecs = tf.reshape(wvecs, (-1, dim_word))
-        # wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_W, self.caption_pca_B)
-        # wvecs = tf.nn.tanh(wvecs)
         wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
         wvecs = tf.nn.relu(wvecs)
         wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
@@ -351,13 +339,9 @@ class Model(framework.model.module.AbstractModel):
         wvecs = tf.nn.l2_normalize(wvecs, -1)
 
         # attend
-        # alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_W, self.word_att_B)
-        # alpha = tf.nn.tanh(alpha) # (num_caption*num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_Ws[0], self.word_att_Bs[0])
         alpha = tf.nn.relu(alpha) # (num_caption*num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(alpha, self.word_att_Ws[1], self.word_att_Bs[1])
-        # beta = tf.nn.xw_plus_b(fts, self.ft_att_W, self.ft_att_B)
-        # beta = tf.nn.tanh(beta) # (num_ft, dim_embed)
         beta = tf.nn.xw_plus_b(fts, self.ft_att_Ws[0], self.ft_att_Bs[0])
         beta = tf.nn.relu(beta)
         beta = tf.nn.xw_plus_b(beta, self.ft_att_Ws[1], self.ft_att_Bs[1])

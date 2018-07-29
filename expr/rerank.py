@@ -278,5 +278,5 @@ def rwr():
 if __name__ == '__main__':
   # graph_match_rerank()
   # eval_rerank()
-  # gen_caption_sim_mat()
-  rwr()
+  gen_caption_sim_mat()
+  # rwr()
