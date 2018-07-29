@@ -91,7 +91,7 @@ PathCfg = rnnve.PathCfg
 class TrnTst(framework.model.trntst.TrnTst):
   def predict_in_tst(self, sess, tst_reader, predict_file):
     batch_size = self.model_cfg.tst_batch_size
-    op_dict = self.model.op_in_val()
+    op_dict = self.model.op_in_tst()
     caption_embeds = []
     ft_embeds = []
     for data in tst_reader.yield_tst_batch(batch_size):
