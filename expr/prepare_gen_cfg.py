@@ -309,10 +309,12 @@ def prepare_vead():
     'dim_ft': sum(dim_fts),
 
     'num_ft': 11,
+    'context_in_output': True,
   }
 
   model_cfg = gen_model.vead.gen_cfg(**params)
-  outprefix = '%s.%d.%d'%(
+  # outprefix = '%s.%d.%d'%(
+  outprefix = '%s.%d.%d.context_in_output'%(
     os.path.join(out_dir, '_'.join(ft_names)),
     params['dim_hidden'], params['dim_input'])
   model_cfg_file = '%s.model.json'%outprefix

@@ -16,6 +16,7 @@ import framework.model.data
 import framework.util.caption.utility
 import framework.impl.encoder.pca
 import decoder.att_rnn
+import decoder.att_rnn_full
 import trntst_util
 
 
@@ -34,6 +35,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.subcfgs[AD] = decoder.att_rnn.Config()
 
     self.search_strategy = 'beam'
+    self.context_in_output = False
 
   def _assert(self):
     assert self.subcfgs[VE].dim_output == self.subcfgs[AD].subcfgs[CELL].dim_hidden
@@ -48,6 +50,7 @@ def gen_cfg(**kwargs):
   cfg.tst_batch_size = 64
   cfg.base_lr = 1e-4
   cfg.num_epoch = kwargs['num_epoch']
+  cfg.context_in_output = kwargs['context_in_output']
 
   enc = cfg.subcfgs[VE]
   enc.dim_ft = kwargs['dim_ft']
@@ -93,10 +96,14 @@ class Model(framework.model.module.AbstractModel):
     BEAM_END = 'beam_end'
 
   def _set_submods(self):
+    if self._config.context_in_output:
+      decoder_mod = decoder.att.rnn_full.Decoder(self._config.subcfgs[AD])
+    else:
+      decoder_mod = decoder.att.rnn.Decoder(self._config.subcfgs[AD])
     return {
       VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
       AE: framework.impl.encoder.pca.Encoder1D(self._config.subcfgs[AE]),
-      AD: decoder.att_rnn.Decoder(self._config.subcfgs[AD]),
+      AD: decoder_mod,
     }
 
   def _add_input_in_mode(self, mode):
