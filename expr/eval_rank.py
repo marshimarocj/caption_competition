@@ -249,7 +249,7 @@ def get_embeds():
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
-  python = '../rank_driver/rnnve_embed.py'
+  python_file = '../rank_driver/rnnve_embed.py'
   gpuid = 0
 
   best_epoch, _ = select_best_epoch(log_dir)
