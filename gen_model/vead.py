@@ -97,9 +97,9 @@ class Model(framework.model.module.AbstractModel):
 
   def _set_submods(self):
     if self._config.context_in_output:
-      decoder_mod = decoder.att.rnn_full.Decoder(self._config.subcfgs[AD])
+      decoder_mod = decoder.att_rnn_full.Decoder(self._config.subcfgs[AD])
     else:
-      decoder_mod = decoder.att.rnn.Decoder(self._config.subcfgs[AD])
+      decoder_mod = decoder.att_rnn.Decoder(self._config.subcfgs[AD])
     return {
       VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
       AE: framework.impl.encoder.pca.Encoder1D(self._config.subcfgs[AE]),
