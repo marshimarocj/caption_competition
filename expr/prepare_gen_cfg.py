@@ -396,9 +396,9 @@ def prepare_vead():
 
 
 if __name__ == '__main__':
-  prepare_vevd()
+  # prepare_vevd()
   # prepare_devd()
   # prepare_self_critique()
   # prepare_diversity()
   # prepare_margin()
-  # prepare_vead()
+  prepare_vead()
