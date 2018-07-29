@@ -195,6 +195,24 @@ def eval_rerank():
     print alpha, combined_mir
 
 
+def gen_caption_sim_mat():
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  caption_embed_files = [
+    os.path.join(expr_name, 'pred', 'val.A.embed.npz'),
+    os.path.join(expr_name, 'pred', 'val.B.embed.npz'),
+  ]
+  out_file = os.path.join(expr_name, 'pred', 'sim_AB.npy')
+
+  caption_embeds = []
+  for caption_embed_file in caption_embed_files:
+    data = np.load(caption_embed_file)
+    caption_embed = data['caption_embeds']
+  sim_AB = np.matmul(caption_embeds[0], caption_embeds[1].T)
+  np.save(out_file, sim_AB)
+
+
 if __name__ == '__main__':
   # graph_match_rerank()
-  eval_rerank()
+  # eval_rerank()
+  gen_caption_sim_mat()
