@@ -241,7 +241,7 @@ def predict_eval_vevd():
 def get_embeds():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   ft_names = ['i3d', 'resnet200']
-  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy')]
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
   out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
 
