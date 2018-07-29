@@ -208,6 +208,7 @@ def gen_caption_sim_mat():
   for caption_embed_file in caption_embed_files:
     data = np.load(caption_embed_file)
     caption_embed = data['caption_embeds']
+    caption_embeds.append(caption_embed)
   sim_AB = np.matmul(caption_embeds[0], caption_embeds[1].T)
   np.save(out_file, sim_AB)
 
