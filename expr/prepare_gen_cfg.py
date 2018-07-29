@@ -128,7 +128,7 @@ def prepare_devd():
     'content_keepin_prob': 1.,
     'cell_keepin_prob': 0.5,
     'cell_keepout_prob': 0.5,
-    'dim_ft': dim_fts,
+    'dim_fts': dim_fts,
     'dim_ft_hiddens': [1024],
   }
 
