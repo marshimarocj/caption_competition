@@ -245,12 +245,17 @@ def rwr():
     preds.append(pred)
   preds = np.concatenate(preds, 1) # (num_img, num_txt*2)
   preds = preds.T # (num_txt*2, num_img)
+  num = preds.shape[0]
 
   sim = np.load(sim_file)
   sim = np.maximum(np.zeros(sim.shape), sim)
-  sim[sim < 0.5] = 0.
+  row_threshold = -np.sort(-sim, 1)[:, 5]
+  col_threshold = -np.sort(-sim, 0)[5, :]
+  row_threshold = np.repeat(row_threshold, num/2, 1)
+  col_threshold = np.repeate(col_threshold, num/2, 0)
+  threshold = np.maximum(row_threshold, col_threshold)
+  sim[sim < threshold] = 0.
 
-  num = preds.shape[0]
   W = np.eye(num)
   W[:num/2, num/2:] = sim
   W[num/2:, :num/2] = sim.T
