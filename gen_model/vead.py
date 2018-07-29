@@ -50,7 +50,7 @@ def gen_cfg(**kwargs):
   cfg.num_epoch = kwargs['num_epoch']
 
   enc = cfg.subcfgs[VE]
-  enc.dim_ft = sum(kwargs['dim_fts'])
+  enc.dim_ft = kwargs['dim_ft']
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
