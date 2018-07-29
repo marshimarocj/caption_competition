@@ -72,7 +72,7 @@ class Model(rnnve.Model):
       if self._config.l2norm:
         ft_embed = tf.nn.l2_normalize(ft_embed, 1)
 
-    if mode = framework.model.module.Mode.TST:
+    if mode == framework.model.module.Mode.TST:
       return {
         self.OutKey.FT_EMBED: ft_embed,
         self.OutKey.CAPTION_EMBED: caption_embed,
