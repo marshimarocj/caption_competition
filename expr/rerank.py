@@ -253,7 +253,7 @@ def rwr():
   W[:num/2, num/2:] = np.maximum(sim, W[:num/2, num/2:])
   W[num/2:, :num/2] = np.maximum(sim.T, W[num/2:, :num/2])
 
-  alphas = [0.1*d for d in range(10)]
+  alphas = [0.01*d for d in range(10)]
   for alpha in alphas:
     A = np.eye(num) - alpha*W # (num_txt*2, num_txt*2)
     b = (1.0 - alpha) * preds # (num_txt*2, num_img)
