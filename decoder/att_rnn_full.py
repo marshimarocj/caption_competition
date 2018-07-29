@@ -46,7 +46,7 @@ class Decoder(framework.model.module.AbstractModule):
 
       scale = 1.0/ (self._config.dim_hidden**0.5)
       self.softmax_W = tf.contrib.framework.model_variable('softmax_W',
-        shape=(self._config.dim_hidden*2, self._config.num_words), dtype=tf.float32,
+        shape=(self._config.dim_hidden, self._config.num_words), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-scale, scale))
       self._weights.append(self.softmax_W)
 
@@ -109,7 +109,7 @@ class Decoder(framework.model.module.AbstractModule):
         Uav_plus_ba, output, fts, ft_masks, 
         True, framework.model.module.Mode.TRN_VAL)
 
-      logit = tf.nn.xw_plus_b(tf.concat([output, phi_V], 1), self.softmax_W, self.softmax_B)
+      logit = tf.nn.xw_plus_b(output + phi_V, self.softmax_W, self.softmax_B)
       log_prob = tf.nn.log_softmax(logit)
       idxs = tf.stack([row_idxs, captionids[:, i+1]], axis=1)
       log_prob = tf.gather_nd(log_prob, idxs) # (None,)
@@ -118,8 +118,6 @@ class Decoder(framework.model.module.AbstractModule):
       log_probs.append(log_prob)
     log_probs = tf.stack(log_probs, axis=1) # (None, num_step-1)
 
-    # outputs = tf.concat(outputs, 0) # ((num_step-1)*None, dim_hidden)
-    # logit_ops = tf.nn.xw_plus_b(outputs, self.softmax_W, self.softmax_B) # ((num_step-1)*None, num_words)
     logits = tf.concat(logits, 0) # ((num_step-1)*None, dim_hidden)
 
     return logits, log_probs
@@ -136,7 +134,7 @@ class Decoder(framework.model.module.AbstractModule):
         Uav_plus_ba, outputs, fts, ft_masks,
         False, framework.model.module.Mode.TRN_VAL)
 
-      logits = tf.nn.xw_plus_b(tf.concat([outputs, phi_V], 1), self.softmax_W, self.softmax_B) # (batch_size, num_words)
+      logits = tf.nn.xw_plus_b(outputs + phi_V, self.softmax_W, self.softmax_B) # (batch_size, num_words)
       wordids = tf.argmax(logits, axis=1)
 
       out_wids.append(wordids)
@@ -244,7 +242,7 @@ def next_step_func_handle(model, Uav_plus_b, fts, ft_masks):
       x, states, 
       Uav_plus_b[idx], outputs, fts[idx], ft_masks[idx],
       False, framework.model.module.Mode.TST)
-    logit = tf.nn.xw_plus_b(tf.concat([outputs, phi_V], 1), model.softmax_W, model.softmax_B)
+    logit = tf.nn.xw_plus_b(outputs + phi_V, model.softmax_W, model.softmax_B)
     log_prob = tf.nn.log_softmax(logit)
     return log_prob, states, outputs
 
