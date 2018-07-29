@@ -135,7 +135,7 @@ class Decoder(framework.model.module.AbstractModule):
         Uav_plus_ba, outputs, fts, ft_masks,
         False, framework.model.module.Mode.TRN_VAL)
 
-      logits = tf.nn.xw_plus_b(tf.concat[outputs, phi_V], 1), self.softmax_W, self.softmax_B) # (batch_size, num_words)
+      logits = tf.nn.xw_plus_b(tf.concat([outputs, phi_V], 1), self.softmax_W, self.softmax_B) # (batch_size, num_words)
       wordids = tf.argmax(logits, axis=1)
 
       out_wids.append(wordids)
@@ -243,7 +243,7 @@ def next_step_func_handle(model, Uav_plus_b, fts, ft_masks):
       x, states, 
       Uav_plus_b[idx], outputs, fts[idx], ft_masks[idx],
       False, framework.model.module.Mode.TST)
-    logit = tf.nn.xw_plus_b(tf.concat[outputs, phi_V], 1), model.softmax_W, model.softmax_B)
+    logit = tf.nn.xw_plus_b(tf.concat([outputs, phi_V], 1), model.softmax_W, model.softmax_B)
     log_prob = tf.nn.log_softmax(logit)
     return log_prob, states, outputs
 
