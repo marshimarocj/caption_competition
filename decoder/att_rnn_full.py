@@ -95,7 +95,7 @@ class Decoder(framework.model.module.AbstractModule):
     return Uav_plus_ba
 
   def _word_steps(self, init_ft, fts, ft_masks, captionids, state):
-    outputs = []
+    logits = []
     log_probs = []
     batch_size = tf.shape(captionids)[0]
     row_idxs = tf.range(batch_size) # (None,)
@@ -109,19 +109,20 @@ class Decoder(framework.model.module.AbstractModule):
         Uav_plus_ba, output, fts, ft_masks, 
         True, framework.model.module.Mode.TRN_VAL)
 
-      logits = tf.nn.xw_plus_b(tf.concat([output, phi_V], 1), self.softmax_W, self.softmax_B)
-      log_prob = tf.nn.log_softmax(logits)
+      logit = tf.nn.xw_plus_b(tf.concat([output, phi_V], 1), self.softmax_W, self.softmax_B)
+      log_prob = tf.nn.log_softmax(logit)
       idxs = tf.stack([row_idxs, captionids[:, i+1]], axis=1)
       log_prob = tf.gather_nd(log_prob, idxs) # (None,)
 
-      outputs.append(output)
+      logits.append(logit)
       log_probs.append(log_prob)
     log_probs = tf.stack(log_probs, axis=1) # (None, num_step-1)
 
-    outputs = tf.concat(outputs, 0) # ((num_step-1)*None, dim_hidden)
-    logit_ops = tf.nn.xw_plus_b(outputs, self.softmax_W, self.softmax_B) # ((num_step-1)*None, num_words)
+    # outputs = tf.concat(outputs, 0) # ((num_step-1)*None, dim_hidden)
+    # logit_ops = tf.nn.xw_plus_b(outputs, self.softmax_W, self.softmax_B) # ((num_step-1)*None, num_words)
+    logits = tf.concat(logits, 0) # ((num_step-1)*None, dim_hidden)
 
-    return logit_ops, log_probs
+    return logits, log_probs
 
   def _greedy_word_steps(self, init_ft, fts, ft_masks, wordids, states):
     out_wids = []
