@@ -601,10 +601,58 @@ def prepare_trecvid17_flow_ft():
   np.save(out_file, out_fts)
 
 
+def prepare_trecvid18_rank_tst():
+  root_dir = '/data1/jiac/trecvid2018' # mercurial
+  out_root_dir = '/data1/jiac/trecvid2018/rank'
+  word_file = os.path.join(out_root_dir, 'annotation', 'int2word.pkl')
+  caption_files = [
+    os.path.join(root_dir, 'VTT', 'ranking', 'tv18.vtt.descriptions.A'),
+    os.path.join(root_dir, 'VTT', 'ranking', 'tv18.vtt.descriptions.B'),
+    os.path.join(root_dir, 'VTT', 'ranking', 'tv18.vtt.descriptions.C'),
+    os.path.join(root_dir, 'VTT', 'ranking', 'tv18.vtt.descriptions.D'),
+    os.path.join(root_dir, 'VTT', 'ranking', 'tv18.vtt.descriptions.E'),
+  ]
+
+  max_words_in_caption = 30
+
+  word2int = {}
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  for i, word in enumerate(words):
+    word2int[word] = i
+
+  out_names = [
+    'tst_id_caption_mask.A.pkl',
+    'tst_id_caption_mask.B.pkl',
+    'tst_id_caption_mask.C.pkl',
+    'tst_id_caption_mask.D.pkl',
+    'tst_id_caption_mask.E.pkl',
+  ]
+  for caption_file, out_name in zip(caption_files, out_names):
+    idxs = []
+    captionids = []
+    caption_masks = []
+    with open(caption_file) as f:
+      for i, line in enumerate(f):
+        line = line.strip()
+        caption = process_sent(line)
+        captionid, caption_mask = caption2id_mask(caption, max_words_in_caption, word2int)
+        idxs.append(i)
+        captionids.append(captionid)
+        caption_masks.append(caption_mask)
+    idxs = np.array(idxs, dtype=np.int32)
+    captionids = np.array(captionids, dtype=np.int32)
+    caption_masks = np.array(caption_masks, dtype=np.int32)
+    out_file = os.path.join(out_root_dir, 'split', out_name)
+    with open(out_file, 'w') as fout:
+      cPickle.dump([idxs, captionids, caption_masks], fout)
+
+
 if __name__ == '__main__':
-  merge_tgif_trecvid16_rank_trn()
+  # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
+  prepare_trecvid18_rank_tst()
 
   # merge_tgif_trecvid17_gen_trn()
   # prepare_trecvid16_gen_val()
