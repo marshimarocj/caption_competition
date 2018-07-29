@@ -238,7 +238,30 @@ def predict_eval_vevd():
   #   json.dump(out, fout, indent=2)
 
 
+def get_embeds():
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  ft_names = ['i3d', 'resnet200']
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy')]
+  annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
+  out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
+
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python = '../rank_driver/rnnve_embed.py'
+  gpuid = 0
+
+  best_epoch, _ = select_best_epoch(log_dir)
+
+  for out_name, annotation_file in zip(out_names, annotation_files):
+    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+      ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+    p.wait()
+
+
 if __name__ == '__main__':
   # report_best_epoch()
-  predict_eval_trecvid17_B()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
+  get_embeds()
