@@ -107,7 +107,8 @@ def predict_eval():
   # python_file = '../gen_driver/vevd.py'
   # gpuid = 0
 
-  model_name = 'vead_expr/i3d_resnet200.512.512'
+  # model_name = 'vead_expr/i3d_resnet200.512.512'
+  model_name = 'vead_expr/i3d_resnet200.512.512.context_in_output'
   python_file = '../gen_driver/vead.py'
   gpuid = 2
 
