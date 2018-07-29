@@ -95,7 +95,7 @@ class Model(framework.model.module.AbstractModel):
     if mode == framework.model.module.Mode.TRN_VAL:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, self._config.subcfgs[VE].dim_ft), name=self.InKey.FT.value)
+          tf.float32, shape=(None, sum(self._config.subcfgs[VE].dim_fts)), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
         # trn only
@@ -114,7 +114,7 @@ class Model(framework.model.module.AbstractModel):
     else:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, self._config.subcfgs[VE].dim_ft), name=self.InKey.FT.value)
+          tf.float32, shape=(None, sum(self._config.subcfgs[VE].dim_fts)), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
 
