@@ -213,7 +213,61 @@ def gen_caption_sim_mat():
   np.save(out_file, sim_AB)
 
 
+def rwr():
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  pred_files = [
+    [
+      os.path.join(expr_name, 'pred', 'val.A.npy'),
+      os.path.join(expr_name, 'pred', 'val.A.rerank.20.npy'),
+    ],
+    [
+      os.path.join(expr_name, 'pred', 'val.B.npy'),
+      os.path.join(expr_name, 'pred', 'val.B.rerank.20.npy'),
+    ]
+  ]
+  sim_file = os.path.join(expr_name, 'pred', 'sim_AB.npy')
+  label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+
+  vid2gts = [{}, {}]
+  with open(label_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      vid = int(data[0])
+      gts = [int(d) for d in data[1:]]
+      vid2gts[0][vid] = gts[0]
+      vid2gts[1][vid] = gts[1]
+
+  preds = []
+  for pred_file in pred_files:
+    pred = (np.load(pred_file[0]) + np.load(pred_file[1])) / 2.
+    preds.append(pred)
+  preds = np.concatenate(preds, 1) # (num_img, num_txt*2)
+  preds = preds.T # (num_txt*2, num_img)
+
+  sim = np.load(sim_file)
+
+  num = preds.shape[0]
+  W = np.eye(num)
+  W[:num/2, num/2:] = np.maximum(sim, W[:num/2, num/2:])
+  W[num/2:, :num/2] = np.maximum(sim.T, W[num/2:, :num/2])
+
+  alphas = [0.1*d for d in range(10)]
+  for alpha in alphas:
+    A = np.eye(num) - alpha*W # (num_txt*2, num_txt*2)
+    b = (1.0 - alpha) * preds # (num_txt*2, num_img)
+    x = np.linalg.solve # (num_txt*2, num_img)
+
+    pred_A = x[:num/2].T
+    pred_B = x[num/2:].T
+    mir_A = eval_rank.calc_mir(pred_A, vid2gts[0])
+    mir_B = eval_rank.calc_mir(pred_B, vid2gts[1])
+    print alpha, mir_A, mir_B
+
+
 if __name__ == '__main__':
   # graph_match_rerank()
   # eval_rerank()
-  gen_caption_sim_mat()
+  # gen_caption_sim_mat()
+  rwr()
