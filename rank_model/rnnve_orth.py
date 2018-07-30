@@ -209,27 +209,31 @@ class Model(framework.model.module.AbstractModel):
           ft_corr = tf.square(tf.matmul(tf.transpose(ft_embed), ft_embed))
           # diag = tf.matrix_diag(tf.diag_part(ft_corr))
           # ft_corr = tf.reduce_sum(ft_corr - diag) / dim_embed / (dim_embed-1)
+          ft_corr_sum = 0.
           base = 0
           total = 0
           for dim_joint_embed in self._config.dim_joint_embeds:
-            ft_corr[base:base+dim_joint_embed, base:base+dim_joint_embed] = 0.
+            # ft_corr[base:base+dim_joint_embed, base:base+dim_joint_embed] = 0.
+            ft_corr_sum += tf.reduce_sum(ft_corr[base:base+dim_joint_embed, base+dim_joint_embed:])
             base += dim_joint_embed
             total += dim_joint_embed * dim_joint_embed
-          ft_corr = tf.reduce_sum(ft_corr) / (dim_embed * dim_embed - total)
+          ft_corr_sum /= dim_embed * dim_embed - total
 
           caption_embed = tf.concat(caption_embeds, 1)
           caption_corr = tf.square(tf.matmul(tf.transpose(caption_embed), caption_embed))
           # diag = tf.matrix_diag(tf.diag_part(caption_corr))
           # caption_corr = tf.reduce_sum(caption_corr - diag) / dim_embed / (dim_embed-1)
+          caption_corr_sum = 0.
           base = 0
           total = 0
           for dim_joint_embed in self._config.dim_joint_embeds:
-            caption_corr[base:base+dim_joint_embed, base:base+dim_joint_embed] = 0.
+            # caption_corr[base:base+dim_joint_embed, base:base+dim_joint_embed] = 0.
+            caption_corr_sum += tf.reduce_sum(caption_corr[base:base+dim_joint_embed, base+dim_joint_embed:])
             base += dim_joint_embed
             total += dim_joint_embed * dim_joint_embed
-          ft_corr = tf.reduce_sum(ft_corr) / (dim_embed * dim_embed - total)
+          caption_corr_sum /= dim_embed * dim_embed - total
 
-          corr = ft_corr + caption_corr
+          corr = ft_corr_sum + caption_corr_sum
 
           return corr
         else:
