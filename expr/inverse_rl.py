@@ -52,6 +52,7 @@ def calc_metric_fts():
   cider_scorer.init_refs(vid2captions)
 
   outs = []
+  cnt = 0
   for tst_vid in tst_vids:
     captions = vid2captions[tst_vid]
 
@@ -107,6 +108,10 @@ def calc_metric_fts():
           'cider': res_cider,
           'label': 0,
         })
+
+    cnt += 1
+    if cnt % 500 == 0:
+      print cnt
 
   with open(out_file, 'w') as fout:
     json.dump(out, fout, indent=2)
