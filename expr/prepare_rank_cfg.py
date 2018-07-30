@@ -544,7 +544,8 @@ def prepare_rnnve_feedforward():
 
 
 def prepare_rnnve_orth():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -576,8 +577,8 @@ def prepare_rnnve_orth():
     'loss': 'lifted',
   }
 
-  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m'%(
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
+  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['cell_dim_hidden'], params['cell'],
