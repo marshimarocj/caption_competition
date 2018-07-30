@@ -254,7 +254,7 @@ class Model(framework.model.module.AbstractModel):
 
           caption_corr = tf.square(tf.matmul(tf.transpose(caption_embed), caption_embed))
           diag = tf.matrix_diag(tf.diag_part(caption_corr))
-          caption_corr = tf.reduce_sum(capiton_corr - diag) / dim_embed / (dim_embed-1)
+          caption_corr = tf.reduce_sum(caption_corr - diag) / dim_embed / (dim_embed-1)
 
           corr = ft_corr + caption_corr
           return corr
