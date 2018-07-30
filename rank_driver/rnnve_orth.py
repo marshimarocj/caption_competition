@@ -24,7 +24,7 @@ def build_parser():
   parser.add_argument('--memory_fraction', dest='memory_fraction', type=float, default=1.0)
   parser.add_argument('--loss', dest='loss', default='lift')
   # only in tst
-  parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=True)
+  parser.add_argument('--best_epoch', dest='best_epoch', type=int, default=-1)
   parser.add_argument('--annotation_file', dest='annotation_file')
   parser.add_argument('--out_name', dest='out_name')
   parser.add_argument('--ft_files', dest='ft_files')
@@ -77,7 +77,8 @@ if __name__ == '__main__':
       val_reader = rank_model.rnnve_orth.OrthReader(
         model_cfg.num_neg, path_cfg.val_ftfiles, path_cfg.val_annotation_file)
     else:
-      path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
+      if opts.best_epoch >= 0:
+        path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
       trntst = rank_model.rnnve_orth.TrnTst(model_cfg, path_cfg, m)
       trn_reader = rank_model.rnnve_orth.TrnReader(
         model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
