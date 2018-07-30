@@ -179,7 +179,7 @@ class Model(framework.model.module.AbstractModel):
       mask = tf.expand_dims(tf.to_float(mask), 2)
       caption_embeds = []
       for caption_pca_W, caption_pca_B in zip(self.caption_pca_Ws, self.caption_pca_Bs):
-        caption_embed = tf.nn.conv1d(caption_embed, tf.expand_dims(caption_pca_W, 0), 1, 'VALID')
+        caption_embed = tf.nn.conv1d(caption, tf.expand_dims(caption_pca_W, 0), 1, 'VALID')
         caption_embed = tf.nn.tanh(caption_embed)
         if self._config.pool == 'mean':
           caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
