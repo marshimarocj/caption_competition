@@ -42,9 +42,7 @@ def calc_metric_fts():
   tst_vids = np.load(tst_lst_file)
   trn_vids = np.load(trn_lst_file)
 
-  bleu_scorer = Bleu(4)
-  meteor_scorer = Meteor()
-  rouge_scorer = Rouge()
+  
   cider_scorer = CiderScorer()
 
   with open(caption_file) as f:
@@ -63,11 +61,14 @@ def calc_metric_fts():
       for j in range(num):
         if j == i:
           continue
+        bleu_scorer = Bleu(4)
+        meteor_scorer = Meteor()
+        rouge_scorer = Rouge()
+
         pred = {0:[captions[j]]}
 
         res_bleu, _ = bleu_scorer.compute_score(gt, pred)
         res_meteor, _ = meteor_scorer.compute_score(gt, pred)
-        meteor_scorer.meteor_p.kill()
         res_rouge, _ = rouge_scorer.compute_score(gt, pred)
 
         pred_vec, pred_norm, pred_length = cider_scorer._counts2vec(cook_test(pred[0][0]))
