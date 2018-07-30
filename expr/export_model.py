@@ -5,7 +5,7 @@ sys.path.append('../')
 import numpy as np
 
 import framework.util.graph_ckpt
-import rnnve_orth
+import model.rnnve_orth
 
 
 '''func
