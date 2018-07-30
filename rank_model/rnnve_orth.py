@@ -129,7 +129,7 @@ class Model(framework.model.module.AbstractModel):
       self.caption_pca_Bs = []
       for g, dim_joint_embed in enumerate(self._config.dim_joint_embeds):
         caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W_%d'%g,
-          shape=(2*dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
+          shape=(2*dim_hidden, dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B_%d'%g,
           shape=(self._config.dim_joint_embed,), dtype=tf.float32,
@@ -143,7 +143,7 @@ class Model(framework.model.module.AbstractModel):
       self.ft_pca_Bs = []
       for g, dim_joint_embed in enumerate(self._config.dim_joint_embeds):
         ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W_%d'%g,
-          shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
+          shape=(self._config.dim_ft, dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
           shape=(self._config.dim_joint_embed,), dtype=tf.float32,
