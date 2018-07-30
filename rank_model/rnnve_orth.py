@@ -364,6 +364,7 @@ class OrthTrnTst(framework.model.trntst.TrnTst):
 
 class OrthReader(framework.model.data.Reader):
   def __init__(self, num_neg, ft_files, annotation_file):
+    self.num_neg = num_neg
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
     self.captionids = np.empty(0)
@@ -393,7 +394,7 @@ class OrthReader(framework.model.data.Reader):
     random.shuffle(self.idxs)
 
   def yield_trn_batch(self, batch_size):
-    for i in range(0, self.num_caption, batch_size + num_neg):
+    for i in range(0, self.num_caption, batch_size + self.num_neg):
       idxs = self.idxs[i:i+batch_size]
       ft_idxs = set(self.ft_idxs[idxs].tolist())
 
