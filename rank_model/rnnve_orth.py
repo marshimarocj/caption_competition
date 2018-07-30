@@ -247,6 +247,7 @@ class Model(framework.model.module.AbstractModel):
         ft_embed = tf.concat(ft_embeds, 1)
         caption_embed = tf.concat(caption_embeds, 1)
         if self._config.loss == 'orth':
+          dim_embed = sum(self._config.dim_joint_embeds)
           ft_corr = tf.square(tf.matmul(tf.transpose(ft_embed), ft_embed))
           diag = tf.matrix_diag(tf.diag_part(ft_corr))
           ft_corr = tf.reduce_sum(ft_corr - diag) / dim_embed / (dim_embed-1)
