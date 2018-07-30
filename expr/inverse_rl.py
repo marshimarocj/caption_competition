@@ -69,6 +69,7 @@ def calc_metric_fts():
 
         res_bleu, _ = bleu_scorer.compute_score(gt, pred)
         res_meteor, _ = meteor_scorer.compute_score(gt, pred)
+        meteor_scorer.meteor_p.kill()
         res_rouge, _ = rouge_scorer.compute_score(gt, pred)
 
         pred_vec, pred_norm, pred_length = cider_scorer._counts2vec(cook_test(pred[0][0]))
@@ -85,6 +86,10 @@ def calc_metric_fts():
           'cider': res_cider,
           'label': 1,
         })
+
+        bleu_scorer = Bleu(4)
+        meteor_scorer = Meteor()
+        rouge_scorer = Rouge()
 
         idx =random.randint(0, len(trn_vids-1))
         trn_vid = trn_vids[idx]
