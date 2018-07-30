@@ -573,6 +573,7 @@ def prepare_rnnve_orth():
     'cell_dim_hidden': 250,
 
     'lr_mult': .1,
+    'loss': 'orth',
   }
 
   outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m'%(
@@ -581,7 +582,7 @@ def prepare_rnnve_orth():
     params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'], params['lr_mult'])
 
-  model_cfg = rank_model.rnnve.gen_cfg(**params)
+  model_cfg = rank_model.rnnve_orth.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
