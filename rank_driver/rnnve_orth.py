@@ -59,17 +59,18 @@ if __name__ == '__main__':
   path_cfg = gen_dir_struct_info(opts.path_cfg_file)
   model_cfg = load_and_fill_model_cfg(opts.model_cfg_file, path_cfg)
 
+  model_cfg.loss = opts.loss
+  if opts.is_train and model_cfg.loss == 'orth' : 
+    model_cfg.num_epoch = 5
+    model_cfg.subcfgs[WE].freeze = True
+    model_cfg.subcfgs[RNN].freeze = True
+    model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
+    model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
+
   m = rank_model.rnnve_orth.Model(model_cfg)
 
   if opts.is_train:
-    model_cfg.loss = opts.loss
     if model_cfg.loss == 'orth':
-      model_cfg.num_epoch = 5
-      model_cfg.subcfgs[WE].freeze = True
-      model_cfg.subcfgs[RNN].freeze = True
-      model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
-      model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
-
       trntst = rank_model.rnnve_orth.OrthTrnTst(model_cfg, path_cfg, m)
       trn_reader = rank_model.rnnve_orth.OrthReader(
         model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
