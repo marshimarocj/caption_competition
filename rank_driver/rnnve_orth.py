@@ -65,8 +65,8 @@ if __name__ == '__main__':
     model_cfg.loss = opts.loss
     model_cfg.subcfgs[WE].freeze = True
     model_cfg.subcfgs[RNN].freeze = True
-    model_cfg.subcfgs[RNN].subcfgs[CELL] = True
-    model_cfg.subcfgs[RNN].subcfgs[RCELL] = True
+    model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
+    model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
     if model_cfg.loss == 'orth':
       model_cfg.num_epoch = 10
       trntst = rank_model.rnnve_orth.OrthTrnTst(model_cfg, path_cfg, m)
