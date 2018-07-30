@@ -564,7 +564,7 @@ def prepare_rnnve_orth():
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
-    'dim_joint_embed': 500,
+    'dim_joint_embeds': [133, 133, 134],
 
     'max_words_in_caption': 30,
     'pool': 'max',
@@ -577,7 +577,8 @@ def prepare_rnnve_orth():
 
   outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
-    params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
+    '_'.join([str(d) for d in params['dim_joint_embeds']]),
+    params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'], params['lr_mult'])
 
   model_cfg = rank_model.rnnve.gen_cfg(**params)

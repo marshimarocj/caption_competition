@@ -3,6 +3,7 @@ import sys
 sys.path.append('../')
 
 import numpy as np
+import tensorflow as tf
 
 import framework.util.graph_ckpt
 import rank_model.rnnve_orth
