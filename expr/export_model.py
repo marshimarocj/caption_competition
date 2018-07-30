@@ -6,6 +6,7 @@ import numpy as np
 
 import framework.util.graph_ckpt
 import rank_model.rnnve_orth
+import rank_driver.rnnve_orth
 
 
 '''func
@@ -29,5 +30,40 @@ def export_rank_video_embed():
   # np.savez_compressed(out_file, ft_pca_W=ft_pca_W, ft_pca_B=ft_pca_B)
 
 
+def init_orth_model():
+  root_dir = '/data1/jiac/trecvid2018' # uranus
+  model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'model', 'epoch-41')
+  expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  out_file = os.path.join(expr_name, 'model', 'pretrain')
+
+  path_cfg = rank_driver.rnnve_orth.gen_dir_struct_info(path_cfg_file)
+  path_cfg.model_file = ''
+  model_cfg = rank_driver.rnnve_orth.load_and_fill_model_cfg(model_cfg_file, path_cfg)
+
+  key_map = {
+    'rnn.GRUCell/candidate_b': 'rnn.GRUCell/candidate_b',
+    'rnn.GRUCell/candidate_W': 'rnn.GRUCell/candidate_W',
+    'rnn.GRUCell/gate_b': 'rnn.GRUCell/gate_b',
+    'rnn.GRUCell/gate_W': 'rnn.GRUCell/gate_W',
+    'rnn.GRUCell.reverse/candidate_b': 'rnn.GRUCell.reverse/candidate_b',
+    'rnn.GRUCell.reverse/candidate_W': 'rnn.GRUCell.reverse/candidate_W',
+    'rnn.GRUCell.reverse/gate_b': 'rnn.GRUCell.reverse/gate_b',
+    'rnn.GRUCell.reverse/gate_W': 'rnn.GRUCell.reverse/gate_W',
+    'word.Encoder/word_embedding_W': 'word.Encoder/word_embedding_W',
+  }
+  assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
+
+  m = rank_model.rnnve_orth.Model(model_cfg)
+  trn_tst_graph = m.build_trn_tst_graph(decay_boundarys=[])
+
+  with tf.Session(graph=trn_tst_graph) as sess:
+    sess.run(m.init_op)
+    sess.run(assign_op, feed_dict=feed_dict)
+    m.saver.save(sess, out_file)
+
+
 if __name__ == '__main__':
-  export_rank_video_embed()
+  # export_rank_video_embed()
+  init_orth_model()
