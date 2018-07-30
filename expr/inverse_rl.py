@@ -70,7 +70,7 @@ def calc_metric_fts():
         meteor_scorer.meteor_p.kill()
         res_rouge, _ = rouge_scorer.compute_score(gt, pred)
 
-        pred_vec, pred_norm, pred_length = cider_scorer._counts2vec(pred[0][0])
+        pred_vec, pred_norm, pred_length = cider_scorer._counts2vec(cook_test(pred[0][0]))
         res_cider = cider_scorer._sim(pred_vec, gt_vec, pred_norm, gt_norm, pred_length, gt_length)        
         res_cider = np.mean(score)
         res_cider *= 10.0
