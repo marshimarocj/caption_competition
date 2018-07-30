@@ -311,7 +311,7 @@ class Model(framework.model.module.AbstractModel):
           losses.append(loss)
 
           g += 1
-        loss = tf.reduce_sum(tf.concat(losses, 0))
+        loss = tf.reduce_sum(tf.tile(losses))
         self.op2monitor['loss'] = loss
       return loss
 
