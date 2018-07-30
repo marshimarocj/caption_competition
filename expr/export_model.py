@@ -53,13 +53,13 @@ def init_orth_model():
     'rnn.GRUCell.reverse/gate_W': 'rnn.GRUCell.reverse/gate_W',
     'word.Encoder/word_embedding_W': 'word.Encoder/word_embedding_W',
   }
-  assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
 
   m = rank_model.rnnve_orth.Model(model_cfg)
   trn_tst_graph = m.build_trn_tst_graph(decay_boundarys=[])
   with trn_tst_graph.as_default():
     var_names = [v.op.name for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
     print var_names
+    assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
 
   with tf.Session(graph=trn_tst_graph) as sess:
     sess.run(m.init_op)
