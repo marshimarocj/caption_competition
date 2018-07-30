@@ -75,7 +75,7 @@ def calc_metric_fts():
         res_cider = np.mean(res_cider)
         res_cider *= 10.0
 
-        out.append({
+        outs.append({
           'pred_id': (tst_vid, j),
           'gt_id': (tst_vid, i),
           'bleu': res_bleu,
@@ -99,7 +99,7 @@ def calc_metric_fts():
         res_cider = np.mean(res_cider)
         res_cider *= 10.0
 
-        out.append({
+        outs.append({
           'pred_id': (trn_vid, 0),
           'gt_id': (tst_vid, i),
           'bleu': res_bleu,
@@ -114,7 +114,7 @@ def calc_metric_fts():
       print cnt
 
   with open(out_file, 'w') as fout:
-    json.dump(out, fout, indent=2)
+    json.dump(outs, fout, indent=2)
 
 
 if __name__ == '__main__':
