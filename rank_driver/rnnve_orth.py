@@ -63,12 +63,13 @@ if __name__ == '__main__':
 
   if opts.is_train:
     model_cfg.loss = opts.loss
-    model_cfg.subcfgs[WE].freeze = True
-    model_cfg.subcfgs[RNN].freeze = True
-    model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
-    model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
     if model_cfg.loss == 'orth':
       model_cfg.num_epoch = 5
+      model_cfg.subcfgs[WE].freeze = True
+      model_cfg.subcfgs[RNN].freeze = True
+      model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
+      model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
+
       trntst = rank_model.rnnve_orth.OrthTrnTst(model_cfg, path_cfg, m)
       trn_reader = rank_model.rnnve_orth.OrthReader(
         model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
