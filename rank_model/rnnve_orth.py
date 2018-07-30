@@ -275,9 +275,9 @@ class Model(framework.model.module.AbstractModel):
         sim = tst(ft_embeds, caption_embeds)
         return {
           self.OutKey.SIM: sim,
-          self.OutKey.P_SIM: pos_sim,
-          self.OutKey.NF_SIM: neg_ft_sim,
-          self.OutKey.NC_SIM: neg_caption_sim,
+          self.OutKey.P_SIM: pos_sims,
+          self.OutKey.NF_SIM: neg_ft_sims,
+          self.OutKey.NC_SIM: neg_caption_sims,
         }
     else:
       sim = tst(ft_embeds, caption_embeds)
