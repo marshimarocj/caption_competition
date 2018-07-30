@@ -395,7 +395,7 @@ class OrthReader(framework.model.data.Reader):
 
   def yield_trn_batch(self, batch_size):
     for i in range(0, self.num_caption, batch_size + self.num_neg):
-      idxs = self.idxs[i:i+batch_size]
+      idxs = self.idxs[i:i+batch_size + self.num_neg]
       ft_idxs = set(self.ft_idxs[idxs].tolist())
 
       fts = self.fts[self.ft_idxs[idxs]]
