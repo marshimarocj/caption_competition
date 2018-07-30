@@ -406,3 +406,7 @@ class OrthReader(framework.model.data.Reader):
         'captionids': captionids,
         'caption_masks': caption_masks,
       }
+
+  def yield_val_batch(self, batch_size):
+    for data in self.yield_trn_batch(batch_size):
+      yield data
