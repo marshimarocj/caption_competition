@@ -65,7 +65,6 @@ def calc_metric_fts():
         if j == i:
           continue
         bleu_scorer = Bleu(4)
-        meteor_scorer = Meteor()
         rouge_scorer = Rouge()
 
         pred = {0:[captions[j]]}
