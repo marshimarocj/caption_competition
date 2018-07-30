@@ -57,6 +57,9 @@ def init_orth_model():
 
   m = rank_model.rnnve_orth.Model(model_cfg)
   trn_tst_graph = m.build_trn_tst_graph(decay_boundarys=[])
+  with trn_tst_graph.as_default():
+    var_names = [v.op.name for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
+    print var_names
 
   with tf.Session(graph=trn_tst_graph) as sess:
     sess.run(m.init_op)
