@@ -15,8 +15,8 @@ import rnnve_orth
 '''expr
 '''
 def export_rank_video_embed():
-  # root_dir = '/data1/jiac/trecvid2018' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  root_dir = '/data1/jiac/trecvid2018' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   # model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'model', 'epoch-77')
   # out_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.300.150.gru.max.0.5', 'model', 'ft_embed_weight.npz')
   # model_file = os.path.join(root_dir, 'generation', 'vead_expr', 'i3d_resnet200.512.512', 'model', 'epoch-173')
