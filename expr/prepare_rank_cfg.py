@@ -544,7 +544,7 @@ def prepare_rnnve_feedforward():
 
 
 def prepare_rnnve_orth():
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -572,7 +572,7 @@ def prepare_rnnve_orth():
     'cell': 'gru',
     'cell_dim_hidden': 250,
 
-    'lr_mult': 1,
+    'lr_mult': .1,
   }
 
   outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
