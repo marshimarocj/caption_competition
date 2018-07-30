@@ -222,7 +222,7 @@ class Model(framework.model.module.AbstractModel):
           pos_ft_embeds = [ft_embed[:-self._config.num_neg] for ft_embed in ft_embeds]
           pos_caption_embeds = [caption_embed[:-self._config.num_neg] for caption_embed in caption_embeds]
           neg_ft_embeds = [ft_embed[-self._config.num_neg:] for ft_embed in ft_embeds]
-          neg_caption_embeds = [caption_embed[-self._config.num_neg:] for caption_embed in capiton_embeds]
+          neg_caption_embeds = [caption_embed[-self._config.num_neg:] for caption_embed in caption_embeds]
 
           pos_sims = []
           for pos_ft_embed, pos_caption_embed in zip(pos_ft_embeds, pos_caption_embeds):
