@@ -132,7 +132,7 @@ class Model(framework.model.module.AbstractModel):
           shape=(2*dim_hidden, dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B_%d'%g,
-          shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+          shape=(dim_joint_embed,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
         self._weights.append(caption_pca_W)
         self._weights.append(caption_pca_B)
@@ -145,8 +145,8 @@ class Model(framework.model.module.AbstractModel):
         ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W_%d'%g,
           shape=(self._config.dim_ft, dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
-        ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
-          shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B_%d'%g,
+          shape=(dim_joint_embed,), dtype=tf.float32,
           initializer=tf.random_uniform_initializer(-0.1, 0.1))
         self._weights.append(ft_pca_W)
         self._weights.append(ft_pca_B)
