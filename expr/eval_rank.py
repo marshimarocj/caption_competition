@@ -241,9 +241,14 @@ def predict_eval_vevd():
 def get_embeds():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   ft_names = ['i3d', 'resnet200']
-  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
-  annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
-  out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
+
+  # ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
+  # annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
+  # out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
+
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names]
+  annotation_files = [os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl')]
+  out_names = ['trn']
 
   expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
