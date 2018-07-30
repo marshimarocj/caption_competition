@@ -239,6 +239,7 @@ class Model(framework.model.module.AbstractModel):
           for neg_ft_embed, pos_caption_embed in zip(neg_ft_embeds, pos_caption_embeds):
             neg_ft_sim = tf.matmul(pos_caption_embed, neg_ft_embed, transpose_b=True)
             neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100.
+            neg_ft_sims.append(neg_ft_sim)
 
           return pos_sims, neg_caption_sims, neg_ft_sims
 
