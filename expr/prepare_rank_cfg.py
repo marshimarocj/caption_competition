@@ -575,7 +575,7 @@ def prepare_rnnve_orth():
     'lr_mult': .1,
   }
 
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['cell_dim_hidden'], params['cell'],
