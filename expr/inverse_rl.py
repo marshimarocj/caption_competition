@@ -82,7 +82,7 @@ def calc_metric_fts():
           'hyp': pred[0][0],
           'ref': gt[0],
           'id': '0',
-        }])
+        }]) + '\n'
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
         line = f.readline()
@@ -121,7 +121,7 @@ def calc_metric_fts():
           'hyp': pred[0][0],
           'ref': gt[0],
           'id': '0',
-        }])
+        }]) + '\n'
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
         line = f.readline()
