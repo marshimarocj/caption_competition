@@ -87,7 +87,7 @@ def calc_metric_fts():
         f = sock.makefile()
         line = f.readline()
         line = line.strip()
-        id_scores = json.load(line)
+        id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
         print res_meteor
 
@@ -126,7 +126,7 @@ def calc_metric_fts():
         f = sock.makefile()
         line = f.readline()
         line = line.strip()
-        id_scores = json.load(line)
+        id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
         print res_meteor
 
