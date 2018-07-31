@@ -32,10 +32,10 @@ def export_rank_video_embed():
 
 
 def init_orth_model():
-  # root_dir = '/data1/jiac/trecvid2018' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  root_dir = '/data1/jiac/trecvid2018' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'model', 'epoch-41')
-  expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze')
+  expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   out_file = os.path.join(expr_name, 'model', 'pretrain')
