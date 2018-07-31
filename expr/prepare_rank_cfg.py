@@ -565,7 +565,8 @@ def prepare_rnnve_orth():
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
-    'dim_joint_embeds': [133, 133, 134],
+    # 'dim_joint_embeds': [133, 133, 134],
+    'dim_joint_embeds': [512, 512, 512],
 
     'max_words_in_caption': 30,
     'pool': 'max',
