@@ -88,6 +88,7 @@ def calc_metric_fts():
         line = line.strip()
         id_scores = json.load(line)
         res_meteor = id_scores[0]['score']
+        print res_meteor
 
         outs.append({
           'pred_id': (tst_vid, j),
@@ -125,6 +126,7 @@ def calc_metric_fts():
         line = line.strip()
         id_scores = json.load(line)
         res_meteor = id_scores[0]['score']
+        print res_meteor
 
         outs.append({
           'pred_id': (trn_vid, 0),
