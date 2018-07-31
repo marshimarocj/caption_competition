@@ -74,7 +74,7 @@ def calc_metric_fts():
         res_cider = cider_scorer._sim(pred_vec, gt_vec, pred_norm, gt_norm, pred_length, gt_length)        
         res_cider = np.mean(res_cider)
         res_cider *= 10.0
-        print res_bleu, res_rouge, res_cider
+        # print res_bleu, res_rouge, res_cider
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(('127.0.0.1', 10000))
@@ -89,7 +89,7 @@ def calc_metric_fts():
         line = line.strip()
         id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
-        print res_meteor
+        # print res_meteor
         sock.close()
 
         outs.append({
@@ -116,7 +116,7 @@ def calc_metric_fts():
         res_cider = cider_scorer._sim(pred_vec, gt_vec, pred_norm, gt_norm, pred_length, gt_length)        
         res_cider = np.mean(res_cider)
         res_cider *= 10.0
-        print res_bleu, res_rouge, res_cider
+        # print res_bleu, res_rouge, res_cider
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect(('127.0.0.1', 10000))
@@ -125,15 +125,13 @@ def calc_metric_fts():
           'ref': gt[0],
           'id': '0',
         }]) + '\n'
-        # print msg
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
         line = f.readline()
         line = line.strip()
-        # print line
         id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
-        print res_meteor
+        # print res_meteor
         sock.close()
 
         outs.append({
