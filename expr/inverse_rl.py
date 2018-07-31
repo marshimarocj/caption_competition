@@ -79,8 +79,8 @@ def calc_metric_fts():
 
         msg = json.dumps([{
           'hyp': pred[0][0],
-          'ref': [gt[0][0]],
-          'id': 0,
+          'ref': gt[0],
+          'id': '0',
         }])
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
@@ -118,7 +118,7 @@ def calc_metric_fts():
         msg = json.dumps([{
           'hyp': pred[0][0],
           'ref': gt[0],
-          'id': 0,
+          'id': '0',
         }])
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
