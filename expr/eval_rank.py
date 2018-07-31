@@ -7,7 +7,7 @@ import numpy as np
 
 '''func
 '''
-def select_best_epoch(log_dir):
+def select_best_epoch(log_dir, start=0, end=1000):
   names = os.listdir(log_dir)
   best_mir = 0.
   best_epoch = -1
@@ -16,8 +16,10 @@ def select_best_epoch(log_dir):
       file = os.path.join(log_dir, name)
       with open(file) as f:
         data = json.load(f)
-      mir = data['mir']
       epoch = data['epoch']
+      if epoch < start or epoch >= end:
+        continue
+      mir = data['mir']
       if mir > best_mir:
         best_mir = mir
         best_epoch = epoch
@@ -87,7 +89,7 @@ def report_best_epoch():
 
   # log_dir = os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'log')
 
-  best_epoch, best_mir = select_best_epoch(log_dir)
+  best_epoch, best_mir = select_best_epoch(log_dir, start=5)
   print best_epoch, best_mir
 
 
