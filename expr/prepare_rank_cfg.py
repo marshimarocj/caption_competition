@@ -614,7 +614,7 @@ def prepare_rnnve_orth():
     json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
 
 
-def prepare_rnnve_orth():
+def prepare_rnnve_boost():
   root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
