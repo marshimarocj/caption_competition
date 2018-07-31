@@ -122,6 +122,7 @@ def calc_metric_fts():
           'ref': gt[0],
           'id': '0',
         }]) + '\n'
+        print msg
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
         line = f.readline()
