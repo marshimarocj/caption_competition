@@ -186,7 +186,7 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/aca_track.py'
   # gpuid = 0
 
-  best_epoch, mir_A = select_best_epoch(log_dir)
+  best_epoch, mir_A = select_best_epoch(log_dir, start=5)
 
   p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
     ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
