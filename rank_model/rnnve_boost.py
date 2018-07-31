@@ -195,7 +195,7 @@ class Model(rnnve_orth.Model):
         neg_caption_sims = self._outputs[self.OutKey.NC_SIM]
         neg_ft_sims = self._outputs[self.OutKey.NF_SIM]
 
-        w = tf.ones((pos_sims.shape[0],))
+        w = tf.ones((tf.shape(pos_sims)[0],))
 
         loss = 0.
         for g in range(len(pos_sims)):
