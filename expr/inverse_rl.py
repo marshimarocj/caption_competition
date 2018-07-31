@@ -49,8 +49,6 @@ def calc_metric_fts():
     vid2captions = cPickle.load(f)
   cider_scorer.init_refs(vid2captions)
 
-  sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  sock.connect(('127.0.0.1', 10000))
 
   outs = []
   cnt = 0
@@ -78,6 +76,8 @@ def calc_metric_fts():
         res_cider *= 10.0
         print res_bleu, res_rouge, res_cider
 
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect(('127.0.0.1', 10000))
         msg = json.dumps([{
           'hyp': pred[0][0],
           'ref': gt[0],
@@ -90,6 +90,7 @@ def calc_metric_fts():
         id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
         print res_meteor
+        sock.close()
 
         outs.append({
           'pred_id': (tst_vid, j),
@@ -117,20 +118,23 @@ def calc_metric_fts():
         res_cider *= 10.0
         print res_bleu, res_rouge, res_cider
 
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect(('127.0.0.1', 10000))
         msg = json.dumps([{
           'hyp': pred[0][0],
           'ref': gt[0],
           'id': '0',
         }]) + '\n'
-        print msg
+        # print msg
         sock.sendall(msg.encode('utf8'))
         f = sock.makefile()
         line = f.readline()
         line = line.strip()
-        print line
+        # print line
         id_scores = json.loads(line)
         res_meteor = id_scores[0]['score']
         print res_meteor
+        sock.close()
 
         outs.append({
           'pred_id': (trn_vid, 0),
@@ -145,7 +149,6 @@ def calc_metric_fts():
     cnt += 1
     if cnt % 50 == 0:
       print cnt
-  sock.close()
 
   with open(out_file, 'w') as fout:
     json.dump(outs, fout, indent=2)
