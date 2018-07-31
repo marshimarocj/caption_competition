@@ -223,7 +223,7 @@ class Model(rnnve_orth.Model):
           loss += tf.reduce_sum(w * group_loss)
           self.op2monitor['loss_%d'] = tf.reduce_sum(group_loss)
 
-          w = self._config.alpha * tf.to_float(contrast_caption_loss > 0) + (1. - alpha) * tf.to_float(contrast_ft_loss > 0)
+          w = self._config.alpha * tf.to_float(contrast_caption_loss > 0) + (1. - self._config.alpha) * tf.to_float(contrast_ft_loss > 0)
           w = tf.stop_gradient(w)
         self.op2monitor['loss'] = loss
 
