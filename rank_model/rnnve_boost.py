@@ -205,9 +205,9 @@ class Model(rnnve_orth.Model):
             neg_caption_sim = neg_caption_sims[g]
             neg_ft_sim = neg_ft_sims[g]
           else:
-            pos_sim = tf.stop_gradient(pos_sim)
-            neg_caption_sim = tf.stop_gradient(neg_caption_sim)
-            neg_ft_sim = tf.stop_gradient(neg_ft_sim)
+            # pos_sim = tf.stop_gradient(pos_sim)
+            # neg_caption_sim = tf.stop_gradient(neg_caption_sim)
+            # neg_ft_sim = tf.stop_gradient(neg_ft_sim)
 
             pos_sim = (1.-nu) * pos_sim + nu * pos_sims[g]
             neg_caption_sim = (1.-nu) * neg_caption_sim + nu * neg_caption_sims[g]
