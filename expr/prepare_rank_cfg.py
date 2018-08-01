@@ -615,8 +615,8 @@ def prepare_rnnve_orth():
 
 
 def prepare_rnnve_boost():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -636,7 +636,8 @@ def prepare_rnnve_boost():
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
-    'dim_joint_embeds': [512, 512, 512],
+    # 'dim_joint_embeds': [512, 512, 512],
+    'dim_joint_embeds': [256, 512, 768],
 
     'max_words_in_caption': 30,
     'pool': 'max',
@@ -648,8 +649,8 @@ def prepare_rnnve_boost():
     'loss': 'lifted',
   }
 
-  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.boost'%(
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.boost'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.boost'%(
+  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.boost'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['cell_dim_hidden'], params['cell'],
