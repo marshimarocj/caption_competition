@@ -208,17 +208,18 @@ class Model(rnnve_orth.Model):
             pos_sim = tf.stop_gradient(pos_sim)
             neg_caption_sim = tf.stop_gradient(neg_caption_sim)
             neg_ft_sim = tf.stop_gradient(neg_ft_sim)
+
             pos_sim = (1.-nu) * pos_sim + nu * pos_sims[g]
             neg_caption_sim = (1.-nu) * neg_caption_sim + nu * neg_caption_sims[g]
             neg_ft_sim = (1.-nu) * neg_ft_sim + nu * neg_ft_sims[g]
-          neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1)/100.
-          neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1)/100.
+          max_neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1)/100.
+          max_neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1)/100.
 
-          contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
+          contrast_caption_loss = max_neg_caption_sim + self._config.margin - pos_sim
           contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
           self.op2monitor['contrast_caption_loss_%d'%g] = tf.reduce_sum(contrast_caption_loss)
 
-          contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
+          contrast_ft_loss = max_neg_ft_sim + self._config.margin - pos_sim
           contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
           self.op2monitor['contrast_ft_loss_%d'%g] = tf.reduce_sum(contrast_ft_loss)
 
