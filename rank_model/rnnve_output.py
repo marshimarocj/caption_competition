@@ -41,7 +41,7 @@ class Model(rnnve.Model):
       batch_size = tf.shape(wvecs)[0]
       dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
       init_state = tf.zeros((batch_size, dim_hidden))
-      
+
     rnn = self.submods[RNN]
     out_ops = rnn.get_out_ops_in_mode({
       rnn.InKey.FT: wvecs,
@@ -86,8 +86,8 @@ class TrnTst(framework.model.trntst.TrnTst):
     caption_outputs = np.concatenate(caption_outputs, 0)
     caption_masks = np.concatenate(caption_masks, 0)
     ft_idxs = np.concatenate(ft_idxs, 0)
-    with open(predict_file, 'w') as fout:
-      cPickle.dump([ft_idxs, caption_outputs, caption_masks], fout)
+    np.savez_compressed(predict_file, 
+      ft_idxs=ft_idxs, caption_outputs=caption_outputs, caption_masks=caption_masks)
 
 
 class TstReader(framework.model.data.Reader):
