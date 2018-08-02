@@ -280,8 +280,31 @@ def get_embeds():
     p.wait()
 
 
+def get_rnn_output():
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  ft_names = ['i3d', 'resnet200']
+
+  ft_files = [os.path.join(root_dir, 'mp_feeature', ft_name, 'trn_ft.npy') for ft_name in ft_names]
+  annotation_file = os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl')
+  out_name = 'trn'
+
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/rnnve_output.py'
+  gpuid = 3
+
+  best_epoch = 41
+
+  p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+    annotation_file=annotation_file, out_name=out_name)
+  p.wait()
+
+
 if __name__ == '__main__':
   # report_best_epoch()
   # predict_eval_trecvid17_B()
   # predict_eval_vevd()
-  get_embeds()
+  # get_embeds()
+  get_rnn_output()
