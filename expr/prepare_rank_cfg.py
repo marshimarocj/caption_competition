@@ -438,7 +438,7 @@ def prepare_aca_freeze():
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
     'dim_caption': 500,
-    'dim_joint_embed': 300,
+    'dim_joint_embed': 500,
 
     'max_words_in_caption': 30,
   }
@@ -818,8 +818,8 @@ if __name__ == '__main__':
   # prepare_aca()
   # prepare_aca_rnn()
   # prepare_aca_track()
-  # prepare_aca_freeze()
+  prepare_aca_freeze()
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
   # prepare_rnnve_boost()
-  prepare_align()
+  # prepare_align()
