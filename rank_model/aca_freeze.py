@@ -366,6 +366,6 @@ class Model(framework.model.module.AbstractModel):
 PathCfg = trntst_util.PathCfg
 TrnTst = trntst_util.TrnTst
 
-TrnReader = FreezeTrnReader
-ValReader = FreezeValReader
-TstReader = FreezeTstReader
+TrnReader = trntst_util.FreezeTrnReader
+ValReader = trntst_util.FreezeValReader
+TstReader = trntst_util.FreezeTstReader
