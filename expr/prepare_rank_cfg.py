@@ -150,8 +150,9 @@ def prepare_ceve_score():
 
 
 def prepare_rnnve():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/home/jiac/data/trecvid2018' # gpu9
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -163,6 +164,7 @@ def prepare_rnnve():
   
   ft_names = [
     'i3d',
+    'i3d_flow',
     'resnet200',
   ]
 
@@ -187,7 +189,7 @@ def prepare_rnnve():
     # 'cell_dim_hidden': 256,
     'cell_dim_hidden': 250,
 
-    'lr_mult': 1,
+    'lr_mult': .1,
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
@@ -691,7 +693,7 @@ def prepare_align():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
+  prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
   # prepare_aca()
@@ -699,4 +701,4 @@ if __name__ == '__main__':
   # prepare_aca_track()
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
-  prepare_rnnve_boost()
+  # prepare_rnnve_boost()
