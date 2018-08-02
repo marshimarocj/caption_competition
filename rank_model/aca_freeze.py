@@ -140,7 +140,7 @@ class Model(framework.model.module.AbstractModel):
         num_pos = batch_size - self._config.num_neg
         num_neg = self._config.num_neg
         num_word = self._config.max_words_in_caption
-        dim_word = self._config.subcfgs[WE].dim_embed
+        dim_word = self._config.dim_caption
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
 
