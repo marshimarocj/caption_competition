@@ -277,7 +277,8 @@ def get_embeds():
   python_file = '../rank_driver/rnnve_embed.py'
   gpuid = 3
 
-  best_epoch, _ = select_best_epoch(log_dir)
+  # best_epoch, _ = select_best_epoch(log_dir)
+  best_epoch = 41
 
   for out_name, annotation_file in zip(out_names, annotation_files):
     p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
