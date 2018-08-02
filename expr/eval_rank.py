@@ -286,8 +286,8 @@ def get_rnn_output():
 
   # annotation_file = os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl')
   # out_name = 'trn'
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A'
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  out_name = 'val.B'
 
   expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
