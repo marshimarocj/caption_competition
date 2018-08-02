@@ -268,7 +268,7 @@ class Model(framework.model.module.AbstractModel):
         num_ft = tf.shape(fts)[0]
         num_caption = tf.shape(wvecs)[0]
         num_word = self._config.max_words_in_caption
-        dim_word = self._config.subcfgs[WE].dim_embed
+        dim_word = self._config.dim_caption
         dim_ft = self._config.dim_ft
         dim_embed = self._config.dim_joint_embed
         mask = tf.to_float(mask)
