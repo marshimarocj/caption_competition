@@ -266,9 +266,9 @@ def get_embeds():
   # annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
   # out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
 
-  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names]
-  annotation_files = [os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl')]
-  out_names = ['trn']
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
+  annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.pkl')]
+  out_names = ['val']
 
   expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
