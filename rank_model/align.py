@@ -31,6 +31,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.margin = 0.1
     self.alpha = 0.5
     self.num_neg = 1
+    self.num_track = 11
 
 
 def gen_cfg(**kwargs):
@@ -48,6 +49,7 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
+  cfg.num_track = kwargs['num_track']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
 

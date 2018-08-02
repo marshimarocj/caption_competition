@@ -767,6 +767,7 @@ def prepare_align():
     'alpha': 0.5,
     'num_neg': 32,
     'dim_ft': 1024 + 2048,
+    'num_track': 11,
     'dim_joint_embed': 500,
     'margin': .1,
 
