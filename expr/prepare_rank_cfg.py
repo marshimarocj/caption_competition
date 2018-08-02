@@ -10,6 +10,7 @@ import rank_model.vevd_score
 import rank_model.aca
 import rank_model.aca_rnn
 import rank_model.aca_track
+import rank_model.aca_freeze
 import rank_model.rnnve_feedforward
 import rank_model.rnnve_orth
 import rank_model.rnnve_boost
@@ -447,7 +448,7 @@ def prepare_aca_freeze():
     params['dim_joint_embed'], 
     params['alpha'])
 
-  model_cfg = rank_model.aca_rnn.gen_cfg(**params)
+  model_cfg = rank_model.aca_freeze.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
