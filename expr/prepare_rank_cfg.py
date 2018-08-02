@@ -789,6 +789,29 @@ def prepare_align():
     'trn_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names],
     'val_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names],
     'tst_ftfiles': [],
+    'trn_att_ftfiles': [os.path.join(root_dir, 'sa_feature', ft_name, 'trn_ft.npz') for ft_name in ft_names],
+    'val_att_ftfiles': [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names],
+    'tst_att_ftfiles': [],
+    'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
+    'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
+    'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
+    'tst_annotation_file': '',
+    'word_file': word_file,
+    'embed_file': embed_file,
+    'output_dir': output_dir,
+  }
+  path_cfg_file = '%s.path.json'%outprefix
+
+  if not os.path.exists(path_cfg['output_dir']):
+    os.mkdir(path_cfg['output_dir'])
+
+  with open(path_cfg_file, 'w') as fout:
+    json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
+def prepare_rnnve_feedforward():
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
     'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
     'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
     'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
