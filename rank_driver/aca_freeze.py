@@ -10,11 +10,6 @@ import numpy as np
 import rank_model.aca_freeze
 import common
 
-WE = rank_model.aca_freeze.WE
-RNN = rank_model.aca_freeze.RNN
-CELL = rank_model.aca_freeze.CELL
-RCELL = rank_model.aca_freeze.RCELL
-
 def build_parser():
   parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
@@ -39,15 +34,6 @@ def gen_dir_struct_info(path_cfg_file):
 def load_and_fill_model_cfg(model_cfg_file, path_cfg):
   model_cfg = rank_model.aca_freeze.ModelConfig()
   model_cfg.load(model_cfg_file)
-
-  if path_cfg.embed_file != '':
-    E = np.load(path_cfg.embed_file)
-    E = E.astype(np.float32)
-    model_cfg.subcfgs[WE].E = E
-    model_cfg.subcfgs[WE].num_words = E.shape[0]
-    model_cfg.subcfgs[WE].dim_embed = E.shape[1]
-    model_cfg.subcfgs[RNN].subcfgs[CELL].dim_input = E.shape[1]
-    model_cfg.subcfgs[RNN].subcfgs[RCELL].dim_input = E.shape[1]
 
   return model_cfg
 
