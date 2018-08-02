@@ -284,9 +284,9 @@ def get_rnn_output():
   root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
 
-  ft_files = [os.path.join(root_dir, 'mp_feeature', ft_name, 'trn_ft.npy') for ft_name in ft_names]
-  annotation_file = os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl')
-  out_name = 'trn'
+  ft_files = [os.path.join(root_dir, 'mp_feeature', ft_name, 'val_ft.npy') for ft_name in ft_names]
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.pkl')
+  out_name = 'val'
 
   expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
