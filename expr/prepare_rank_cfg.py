@@ -13,6 +13,7 @@ import rank_model.aca_track
 import rank_model.rnnve_feedforward
 import rank_model.rnnve_orth
 import rank_model.rnnve_boost
+import rank_model.align
 
 
 '''func
@@ -682,6 +683,10 @@ def prepare_rnnve_boost():
 
   with open(path_cfg_file, 'w') as fout:
     json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
+def prepare_align():
+  root_dir = '' # neptune
 
 
 if __name__ == '__main__':
