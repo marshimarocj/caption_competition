@@ -197,7 +197,7 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_sim = tf.reduce_sum(expand_neg_fts * expand_pos_wvecs, -1) # (num_neg, num_ft, num_pos, num_word)
         neg_ft_sim = tf.transpose(neg_ft_sim, (0, 2, 1, 3)) # (num_neg, num_pos, num_ft, num_word)
         neg_ft_sim = tf.reduce_sum(
-          neg_ft_sim * tf.reshape(neg_ft_masks, (num_neg, 1, num_ft, 1)) * tf.reshape(pos_ft_masks, (1, num_pos, 1, num_word)), [2, 3])
+          neg_ft_sim * tf.reshape(neg_ft_masks, (num_neg, 1, num_ft, 1)) * tf.reshape(pos_word_masks, (1, num_pos, 1, num_word)), [2, 3])
         neg_ft_sim /= tf.expand_dims(tf.reduce_sum(neg_ft_masks, 1), 1)
         neg_ft_sim /= tf.expand_dims(tf.reduce_sum(pos_word_masks, 1), 0)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
