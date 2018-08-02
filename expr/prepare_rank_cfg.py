@@ -174,7 +174,7 @@ def prepare_rnnve():
     'alpha': 0.5,
     'num_neg': 32,
     'l2norm': True,
-    'dim_ft': 1024 + 2048,
+    'dim_ft': 1024 + 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
