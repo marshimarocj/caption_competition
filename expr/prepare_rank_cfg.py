@@ -687,10 +687,6 @@ def prepare_rnnve_boost():
     json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
 
 
-def prepare_align():
-  root_dir = ''
-
-
 if __name__ == '__main__':
   # prepare_ceve()
   prepare_rnnve()
