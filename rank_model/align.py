@@ -144,6 +144,15 @@ class Model(framework.model.module.AbstractModel):
     ft_masks = in_ops[self.InKey.FT_MASK]
 
     with tf.variable_scope(self.name_scope):
+      batch_size = tf.shape(wvecs)[0]
+      num_pos = batch_size - self._config.num_neg
+      num_neg = self._config.num_neg
+      num_word = self._config.max_words_in_caption
+      dim_word = self._config.subcfgs[WE].dim_embed
+      dim_ft = self._config.dim_ft
+      num_ft = self._config.num_track
+      dim_embed = self._config.dim_joint_embed
+
       fts = tf.reshape(fts, (-1, dim_ft))
       fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
       fts = tf.nn.relu(fts)
@@ -157,15 +166,6 @@ class Model(framework.model.module.AbstractModel):
       wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
       wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
       wvecs = tf.nn.l2_normalize(wvecs, -1)
-
-      batch_size = tf.shape(wvecs)[0]
-      num_pos = batch_size - self._config.num_neg
-      num_neg = self._config.num_neg
-      num_word = self._config.max_words_in_caption
-      dim_word = self._config.subcfgs[WE].dim_embed
-      dim_ft = self._config.dim_ft
-      num_ft = self._config.num_track
-      dim_embed = self._config.dim_joint_embed
 
     def trn(wvecs, fts, word_masks, ft_masks, is_trn):
       with tf.variable_scope(self.name_scope):
