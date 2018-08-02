@@ -179,7 +179,7 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_masks = ft_masks[num_pos:]
 
         pos_sim = tf.reduce_sum(tf.expand_dims(pos_fts, 2) * tf.expand_dims(pos_wvecs, 1), -1) # (num_pos, num_ft, num_word)
-        pos_sim = tf.reduce_sum(pos_sim, tf.expand_dims(pos_word_masks, 1) * tf.expand_dims(pos_ft_masks, 2), [1, 2])
+        pos_sim = tf.reduce_sum(pos_sim * tf.expand_dims(pos_word_masks, 1) * tf.expand_dims(pos_ft_masks, 2), [1, 2])
         pos_sim /= tf.reduce_sum(pos_word_masks, 1) * tf.reduce_sum(pos_ft_masks, 1)
 
         expand_pos_fts = tf.reshape(pos_fts, (num_pos, num_ft, 1, 1, dim_embed))
