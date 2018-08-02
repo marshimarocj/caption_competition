@@ -627,3 +627,81 @@ class TstAttReader(framework.model.data.Reader):
         'captionids': self.captionids,
         'caption_masks': self.caption_masks,
       }
+
+
+class FreezeTrnReader(TrnReader):
+  def __init__(self, num_neg, ft_files, annotation_file):
+    self.num_neg = num_neg
+    self.fts = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.idxs = []
+    self.num_caption = 0
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=1)
+    self.fts = self.fts.astype(np.float32)
+
+    data = np.load(annotation_file)
+    self.ft_idxs = data['ft_idxs']
+    self.captionids = data['caption_outputs']
+    self.caption_masks = data['caption_masks']
+
+    self.num_caption = self.captionids.shape[0]
+    self.idxs = range(self.num_caption)
+
+
+class FreezeValReader(ValReader):
+  def __init__(self, ft_files, annotation_file, label_file):
+    self.fts = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.gts = []
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(tuple(fts), axis=1)
+    self.fts = self.fts.astype(np.float32)
+
+    data = np.load(annotation_file)
+    self.ft_idxs = data['ft_idxs']
+    self.captionids = data['caption_outputs']
+    self.caption_masks = data['caption_masks']
+
+    with open(label_file) as f:
+      vid2gid = {}
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        vid = int(data[0])
+        gid = int(data[1])
+        vid2gid[vid] = gid
+    for vid in range(len(vid2gid)):
+      self.gts.append(vid2gid[vid])
+
+
+class FreezeTstReader(TstReader):
+  def __init__(self, ft_files, annotation_file):
+    self.fts = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+
+    fts = []
+    for ft_file in ft_files:
+      ft = np.load(ft_file)
+      fts.append(ft)
+    self.fts = np.concatenate(tuple(fts), axis=1)
+    self.fts = self.fts.astype(np.float32)
+
+    data = np.load(annotation_file)
+    self.ft_idxs = data['ft_idxs']
+    self.captionids = data['caption_outputs']
+    self.caption_masks = data['caption_masks']
