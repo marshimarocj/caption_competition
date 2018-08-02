@@ -417,7 +417,7 @@ def prepare_aca_rnn():
 
 
 def prepare_aca_freeze():
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
