@@ -286,6 +286,6 @@ def get_embeds():
 
 if __name__ == '__main__':
   # report_best_epoch()
-  predict_eval_trecvid17_B()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
-  # get_embeds()
+  get_embeds()

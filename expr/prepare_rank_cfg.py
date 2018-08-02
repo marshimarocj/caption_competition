@@ -158,14 +158,14 @@ def prepare_rnnve():
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   # embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
   # embed_file = os.path.join(root_dir, 'annotation', 'E.sbu.word2vec.npy') 
-  embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy') 
+  embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy')
   out_dir = os.path.join(root_dir, 'rnnve_expr')
   splits = ['trn', 'val', 'tst']
   
   ft_names = [
     'i3d',
     'i3d_flow',
-    'resnet200',
+    # 'resnet200',
   ]
 
   params = {
@@ -174,7 +174,7 @@ def prepare_rnnve():
     'alpha': 0.5,
     'num_neg': 32,
     'l2norm': True,
-    'dim_ft': 1024 + 1024 + 2048,
+    'dim_ft': 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
