@@ -675,6 +675,6 @@ def max_match(sim, row_mask, col_mask, env):
 
   return align
 
-TrnReader = trntst_util.TrnReader
-ValReader = trntst_util.ValReader
-TstReader = trntst_util.TstReader
+TrnReader = trntst_util.AttTrnReader
+ValReader = trntst_util.AttValReader
+TstReader = trntst_util.AttTstReader
