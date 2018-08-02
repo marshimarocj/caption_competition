@@ -258,17 +258,12 @@ def predict_eval_vevd():
 
 
 def get_embeds():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   ft_names = ['i3d', 'resnet200']
 
-  # ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
-  # annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
-  # out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
-
-  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
-  annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.pkl')]
-  out_names = ['val']
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
+  annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
+  out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
 
   expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
@@ -277,8 +272,7 @@ def get_embeds():
   python_file = '../rank_driver/rnnve_embed.py'
   gpuid = 3
 
-  # best_epoch, _ = select_best_epoch(log_dir)
-  best_epoch = 41
+  best_epoch, _ = select_best_epoch(log_dir)
 
   for out_name, annotation_file in zip(out_names, annotation_files):
     p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
