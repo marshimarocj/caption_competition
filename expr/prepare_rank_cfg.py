@@ -686,7 +686,7 @@ def prepare_rnnve_boost():
 
 
 def prepare_align():
-  root_dir = '' # neptune
+  root_dir = ''
 
 
 if __name__ == '__main__':
