@@ -78,7 +78,7 @@ class Model(framework.model.module.AbstractModel):
       fts = tf.placeholder(
         tf.float32, shape=(None, self._config.dim_ft), name='fts')
       captions = tf.placeholder(
-        tf.int32, shape=(None, self._config.max_words_in_caption, self._config.dim_caption), name='captions')
+        tf.float32, shape=(None, self._config.max_words_in_caption, self._config.dim_caption), name='captions')
       caption_masks = tf.placeholder(
         tf.int32, shape=(None, self._config.max_words_in_caption), name='caption_masks')
       is_trn = tf.placeholder(tf.bool, shape=(), name='is_trn')
