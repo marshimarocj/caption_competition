@@ -31,6 +31,17 @@ class Model(rnnve.Model):
     CAPTION_OUTPUT = 'caption_output'
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
+    encoder = self.submods[WE]
+    out_ops = encoder.get_out_ops_in_mode({
+      encoder.InKey.CAPTION: in_ops[self.InKey.CAPTIONID],
+      }, mode)
+    wvecs = out_ops[encoder.OutKey.EMBED] # (None, max_words_in_caption, dim_embed)
+
+    with tf.variable_scope(self.name_scope):
+      batch_size = tf.shape(wvecs)[0]
+      dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
+      init_state = tf.zeros((batch_size, dim_hidden))
+      
     rnn = self.submods[RNN]
     out_ops = rnn.get_out_ops_in_mode({
       rnn.InKey.FT: wvecs,
