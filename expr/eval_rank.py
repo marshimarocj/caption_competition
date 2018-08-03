@@ -57,7 +57,8 @@ def calc_mir(predicts, vid2gt):
 def report_best_epoch():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   # log_dir = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0', 'log')
   # log_dir = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'log')
@@ -95,10 +96,11 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'log')
+  log_dir = os.path.join(root_dir, 'aca_freeze_expr', 'i3d_resnet200.500.0.5', 'log')
 
   # log_dir = os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'log')
 
-  log_dir = os.path.join(root_dir, 'align_expr', 'i3d_resnet200.500.0.5.0.1.flickr30m', 'log')
+  # log_dir = os.path.join(root_dir, 'align_expr', 'i3d_resnet200.500.0.5.0.1.flickr30m', 'log')
 
   best_epoch, best_mir = select_best_epoch(log_dir, start=5)
   print best_epoch, best_mir
@@ -333,8 +335,8 @@ def get_rnn_output():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
-  predict_eval_trecvid17_B()
+  report_best_epoch()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
