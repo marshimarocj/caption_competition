@@ -765,9 +765,9 @@ def prepare_rnnve_mm_freeze():
     'alpha': 0.5,
     'num_neg': 32,
     'l2norm': True,
-    'dim_fts': [1024, 1024, 2048],
+    'dim_fts': [1024 + 1024, 2048],
     'dim_caption': 500,
-    'dim_joint_embeds': [512, 512, 512],
+    'dim_joint_embeds': [512, 512],
 
     'max_words_in_caption': 30,
     'pool': 'max',
