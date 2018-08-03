@@ -160,12 +160,14 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/rnnve_orth.py'
   # gpuid = 0
 
-  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.boost')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/rnnve_boost.py'
-  gpuid = 0
+  # gpuid = 0
+  gpuid = 1
 
   # expr_name = os.path.join(root_dir, 'vevd_expr', 'i3d_resnet200.512.512.16.0.5.lstm')
   # log_dir = os.path.join(expr_name, 'log')
