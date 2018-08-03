@@ -63,9 +63,9 @@ def gen_cfg(**kwargs):
 
 
 class Model(framework.model.module.AbstractModel):
-	name_scope = 'rnnve.Model'
+  name_scope = 'rnnve.Model'
 
-	class InKey(enum.Enum):
+  class InKey(enum.Enum):
     FT = 'ft'
     CAPTIONID = 'captionid'
     CAPTION_MASK = 'caption_mask'
