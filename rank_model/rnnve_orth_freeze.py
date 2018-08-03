@@ -36,6 +36,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.num_neg = 1
     self.l2norm = True
     self.beta = 100.
+    self.pool = 'max'
 
 
 def gen_cfg(**kwargs):
