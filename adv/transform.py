@@ -38,10 +38,10 @@ class Discriminator(framework.model.module.AbstractModule):
         dim_outputs = [self._config.dim_hidden, self._config.dim_inputs[j]]
         for l in range(2):
           fc_W = tf.contrib.framework.model_variable('fc_W_%d_%d_%d'%(i, j, l),
-            shape=(dim_input, dim_output), dtype=tf.float32,
+            shape=(dim_inputs[l], dim_outputs[l]), dtype=tf.float32,
             initializer=tf.contrib.layers.xavier_initializer())
           fc_B = tf.contrib.framework.model_variable('fc_B_%d_%d_%d'%(i, j, l),
-            shape=(dim_output,), dtype=tf.float32,
+            shape=(dim_outputs[l],), dtype=tf.float32,
             initializer=tf.random_uniform_initializer(-0.1, 0.1))
           fc_Ws.append(fc_W)
           fc_Bs.append(fc_B)
