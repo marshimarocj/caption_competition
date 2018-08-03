@@ -706,12 +706,13 @@ def prepare_rnnve_orth_freeze():
     'dim_joint_embeds': [512, 512, 512],
 
     'max_words_in_caption': 30,
+    'pool': 'mean',
   }
 
-  outprefix = '%s.%s.%.1f.%.1f.flickr30m.freeze'%(
+  outprefix = '%s.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
-    params['alpha'], params['beta'])
+    params['pool'], params['alpha'], params['beta'])
 
   model_cfg = rank_model.rnnve_orth_freeze.gen_cfg(**params)
 
