@@ -708,11 +708,10 @@ def prepare_rnnve_orth_freeze():
     'max_words_in_caption': 30,
   }
 
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
+  outprefix = '%s.%s.%.1f.%.1f.flickr30m.freeze'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
-    params['cell_dim_hidden'], params['cell'],
-    params['pool'], params['alpha'], params['beta'])
+    params['alpha'], params['beta'])
 
   model_cfg = rank_model.rnnve_orth_freeze.gen_cfg(**params)
 
