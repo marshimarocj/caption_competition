@@ -706,7 +706,7 @@ def prepare_rnnve_orth_freeze():
     'dim_joint_embeds': [512, 512, 512],
 
     'max_words_in_caption': 30,
-    'pool': 'mean',
+    'pool': 'max',
   }
 
   outprefix = '%s.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
