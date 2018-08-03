@@ -246,7 +246,7 @@ class Model(rnnve_orth.Model):
 
 PathCfg = trntst_util.PathCfg
 TrnTst = trntst_util.TrnTst
-OrthTrnTst = rnnve_orth.OrthTrnTst
+# OrthTrnTst = rnnve_orth.OrthTrnTst
 
 
 TrnReader = trntst_util.TrnReader
