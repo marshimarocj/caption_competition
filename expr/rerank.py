@@ -174,8 +174,8 @@ def eval_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.rerank.20.npy'),
   ]
   label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
@@ -185,7 +185,7 @@ def eval_rerank():
       line = line.strip()
       data = line.split(' ')
       vid = int(data[0])
-      gt = int(data[2])
+      gt = int(data[1])
       vid2gt[vid] = gt
 
   predicts = np.load(pred_files[0])
