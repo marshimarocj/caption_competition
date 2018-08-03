@@ -755,7 +755,7 @@ def prepare_rnnve_mm_freeze():
   
   ft_names = [
     'i3d',
-    'i3d_flow'
+    'i3d_flow',
     'resnet200',
   ]
 
