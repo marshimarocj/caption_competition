@@ -149,10 +149,8 @@ class Model(framework.model.module.AbstractModel):
           # _mask = tf.tile(_mask, [1, 1, tf.shape(caption_embed)[-1]])
           # caption_embed = tf.where(_mask, caption_embed, -10*tf.ones_like(caption_embed, dtype=tf.float32))
           # caption_embed = tf.reduce_max(caption_embed, 1)
-          _mask = tf.cast(mask, tf.bool)
           caption_embed += 1.
-          caption_embed *= tf.expand_dims(_mask, 1)
-          caption_embed = tf.reduce_max(caption_embed, 1)
+          caption_embed = tf.reduce_max(caption_embed * mask, 1)
           caption_embed -= 1.
         if self._config.l2norm:
           caption_embed = tf.nn.l2_normalize(caption_embed, 1)
