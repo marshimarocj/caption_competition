@@ -12,14 +12,7 @@ import numpy as np
 import framework.model.module
 import framework.model.trntst
 import framework.model.data
-import encoder.word
-import encoder.birnn
 import trntst_util
-
-WE = 'word'
-RNN = 'rnn'
-CELL = encoder.birnn.CELL
-RCELL = encoder.birnn.RCELL
 
 
 class ModelConfig(framework.model.module.ModelConfig):
