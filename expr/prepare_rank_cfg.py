@@ -13,6 +13,7 @@ import rank_model.rnnve_orth
 import rank_model.rnnve_boost
 import rank_model.rnnve_orth_freeze
 import rank_model.rnnve_mm_freeze
+import rank_model.rnnve_adv_freeze
 
 import rank_model.aca
 import rank_model.aca_rnn
@@ -938,18 +939,85 @@ def prepare_align():
     json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
 
 
+def prepare_rnnve_adv_freeze():
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  split_dir = os.path.join(root_dir, 'split')
+  label_dir = os.path.join(root_dir, 'label')
+  word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
+  embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy') 
+  out_dir = os.path.join(root_dir, 'rnnve_adv_expr')
+  splits = ['trn', 'val', 'tst']
+  
+  ft_names = [
+    'i3d',
+    'resnet200',
+  ]
+
+  params = {
+    'num_epoch': 100,
+
+    'alpha': 0.5,
+    'beat': 100.,
+    'num_neg': 32,
+    'l2norm': True,
+    'dim_ft': 1024 + 2048,
+    'dim_caption': 500,
+    'dim_joint_embeds': [512, 512, 512],
+
+    'max_words_in_caption': 30,
+    'pool': 'max',
+
+    'dim_hidden': 512,
+  }
+
+  outprefix = '%s.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
+    os.path.join(out_dir, '_'.join(ft_names)), 
+    '_'.join([str(d) for d in params['dim_joint_embeds']]),
+    params['pool'], params['alpha'], params['beta'])
+
+  model_cfg = rank_model.rnnve_mm_freeze.gen_cfg(**params)
+
+  model_cfg_file = '%s.model.json'%outprefix
+  model_cfg.save(model_cfg_file)
+
+  output_dir = outprefix
+  path_cfg = {
+    'trn_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names],
+    'val_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names],
+    'tst_ftfiles': [],
+    'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
+    'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.npz'),
+    'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.npz'),
+    'tst_annotation_file': '',
+    'word_file': word_file,
+    'embed_file': embed_file,
+    'output_dir': output_dir,
+  }
+  path_cfg_file = '%s.path.json'%outprefix
+
+  if not os.path.exists(path_cfg['output_dir']):
+    os.mkdir(path_cfg['output_dir'])
+
+  with open(path_cfg_file, 'w') as fout:
+    json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
 if __name__ == '__main__':
   # prepare_ceve()
   # prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
+
   # prepare_aca()
   # prepare_aca_rnn()
   # prepare_aca_track()
   # prepare_aca_freeze()
+
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
   # prepare_rnnve_orth_freeze()
-  prepare_rnnve_mm_freeze()
+  # prepare_rnnve_mm_freeze()
   # prepare_rnnve_boost()
+  prepare_rnnve_adv_freeze()
+
   # prepare_align()
