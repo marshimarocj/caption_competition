@@ -29,7 +29,7 @@ class Discriminator(framework.model.module.AbstractModule):
   def _build_parameter_graph(self):
     self.inter_fc_Ws = []
     self.inter_fc_Bs = []
-    num_group = len(self.dim_inputs)
+    num_group = len(self._config.dim_inputs)
     for i in range(num_group):
       for j in range(i+1, num_group):
         fc_Ws = []
