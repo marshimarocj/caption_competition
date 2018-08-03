@@ -109,7 +109,8 @@ def report_best_epoch():
 def predict_eval_trecvid17_B():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   track_ft_files = [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names]
@@ -208,6 +209,13 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/aca_rnn.py'
   # gpuid = 0
 
+  expr_name = os.path.join(root_dir, 'aca_freeze_expr', 'i3d_resnet200.500.0.5')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/aca_freeze.py'
+  gpuid = 0
+
   # expr_name = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5')
   # log_dir = os.path.join(expr_name, 'log')
   # model_cfg_file = '%s.model.json'%expr_name
@@ -215,18 +223,18 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/aca_track.py'
   # gpuid = 0
 
-  expr_name = os.path.join(root_dir, 'align_expr', 'i3d_resnet200.500.0.5.0.1.flickr30m')
-  log_dir = os.path.join(expr_name, 'log')
-  model_cfg_file = '%s.model.json'%expr_name
-  path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/align_pretrain.py'
-  gpuid = 0
+  # expr_name = os.path.join(root_dir, 'align_expr', 'i3d_resnet200.500.0.5.0.1.flickr30m')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/align_pretrain.py'
+  # gpuid = 0
 
   best_epoch, mir_A = select_best_epoch(log_dir, start=5)
 
   p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
-    # ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
-    ft_files=','.join(ft_files), att_ft_files=','.join(track_ft_files), annotation_file=annotation_file, out_name=out_name)
+    ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+    # ft_files=','.join(ft_files), att_ft_files=','.join(track_ft_files), annotation_file=annotation_file, out_name=out_name)
   p.wait()
 
   vid2gt = {}
@@ -335,8 +343,8 @@ def get_rnn_output():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
