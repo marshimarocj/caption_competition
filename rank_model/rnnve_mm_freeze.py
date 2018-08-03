@@ -191,7 +191,7 @@ class Model(framework.model.module.AbstractModel):
         return sim
 
     if mode == framework.model.module.Mode.TRN_VAL:
-      pos_sims, neg_capiton_sims, neg_ft_sims = trn(ft_embeds, caption_embeds)
+      pos_sims, neg_caption_sims, neg_ft_sims = trn(ft_embeds, caption_embeds)
       sim = tst(ft_embeds, caption_embeds)
       return {
         self.OutKey.SIM: sim,
