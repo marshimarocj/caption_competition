@@ -54,7 +54,7 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.l2norm = kwargs['l2norm']
   cfg.dim_ft = kwargs['dim_ft']
-  cfg.dim_caption = kwargs['caption']
+  cfg.dim_caption = kwargs['dim_caption']
   cfg.dim_joint_embeds = kwargs['dim_joint_embeds']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
