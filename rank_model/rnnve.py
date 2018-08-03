@@ -169,9 +169,9 @@ class Model(framework.model.module.AbstractModel):
       if self._config.pool == 'mean':
         caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
       else:
-        caption_embed -= 1.
-        caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed += 1.
+        caption_embed = tf.reduce_max(caption_embed * mask, 1)
+        caption_embed -= 1.
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
 
