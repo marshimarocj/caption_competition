@@ -975,7 +975,7 @@ def prepare_rnnve_adv_freeze():
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['pool'], params['alpha'], params['beta'])
 
-  model_cfg = rank_model.rnnve_mm_freeze.gen_cfg(**params)
+  model_cfg = rank_model.rnnve_adv_freeze.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
