@@ -181,7 +181,8 @@ def prepare_rnnve():
     'dim_ft': 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
-    'dim_joint_embed': 500,
+    # 'dim_joint_embed': 500,
+    'dim_joint_embed': 1000,
 
     'max_words_in_caption': 30,
     # 'pool': 'mean',
@@ -191,7 +192,8 @@ def prepare_rnnve():
     # 'cell': 'lstm',
     # 'cell_dim_hidden': 150,
     # 'cell_dim_hidden': 256,
-    'cell_dim_hidden': 250,
+    # 'cell_dim_hidden': 250,
+    'cell_dim_hidden': 500,
 
     'lr_mult': .1,
   }
@@ -876,7 +878,7 @@ def prepare_align():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
+  prepare_rnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
   # prepare_aca()
@@ -885,6 +887,6 @@ if __name__ == '__main__':
   # prepare_aca_freeze()
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
-  prepare_rnnve_orth_freeze()
+  # prepare_rnnve_orth_freeze()
   # prepare_rnnve_boost()
   # prepare_align()
