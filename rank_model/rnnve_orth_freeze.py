@@ -26,23 +26,16 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     super(ModelConfig, self).__init__()
 
-    self.subcfgs[WE] = encoder.word.Config()
-    self.subcfgs[RNN] = encoder.birnn.Config()
-
     self.max_words_in_caption = 30
-    self.pool = 'mean'
 
     self.dim_ft = 1024
     self.dim_joint_embeds = [170, 171, 171]
+    self.dim_caption = 500
     self.margin = 0.1
     self.alpha = 0.5
     self.num_neg = 1
     self.l2norm = True
     self.beta = 100.
-
-  def _assert(self):
-    assert self.max_words_in_caption == self.subcfgs[RNN].num_step
-    assert self.subcfgs[WE].dim_embed == self.subcfgs[RNN].subcfgs[CELL].dim_input
 
 
 def gen_cfg(**kwargs):
@@ -57,36 +50,22 @@ def gen_cfg(**kwargs):
 
   cfg.margin = .1
   cfg.alpha = kwargs['alpha']
+  cfg.beta = kwargs['beta']
   cfg.num_neg = kwargs['num_neg']
   cfg.l2norm = kwargs['l2norm']
   cfg.dim_ft = kwargs['dim_ft']
+  cfg.dim_caption = kwargs['caption']
   cfg.dim_joint_embeds = kwargs['dim_joint_embeds']
-  cfg.beta = kwargs['beta']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
-  cfg.pool = kwargs['pool']
-
-  we_cfg = cfg.subcfgs[WE]
-  we_cfg.lr_mult = kwargs['lr_mult']
-
-  rnn_cfg = cfg.subcfgs[RNN]
-  rnn_cfg.num_step = kwargs['max_words_in_caption']
-  rnn_cfg.cell_type = kwargs['cell']
-
-  for cell in [CELL, RCELL]:
-    cell_cfg = rnn_cfg.subcfgs[cell]
-    cell_cfg.dim_hidden = kwargs['cell_dim_hidden']
-    cell_cfg.dim_input = 300
-    cell_cfg.keepout_prob = 0.5
-    cell_cfg.keepin_prob = 0.5
 
   return cfg
 
 
 class Model(framework.model.module.AbstractModel):
-  name_scope = 'rnnve.Model'
+	name_scope = 'rnnve.Model'
 
-  class InKey(enum.Enum):
+	class InKey(enum.Enum):
     FT = 'ft'
     CAPTIONID = 'captionid'
     CAPTION_MASK = 'caption_mask'
@@ -100,17 +79,14 @@ class Model(framework.model.module.AbstractModel):
     CORR = 'corr'
 
   def _set_submods(self):
-    return {
-      WE: encoder.word.Encoder(self._config.subcfgs[WE]),
-      RNN: encoder.birnn.Encoder(self._config.subcfgs[RNN]),
-    }
+   	return {}
 
   def _add_input_in_mode(self, mode):
     with tf.variable_scope(self.name_scope):
       fts = tf.placeholder(
         tf.float32, shape=(None, self._config.dim_ft), name='fts')
       captionids = tf.placeholder(
-        tf.int32, shape=(None, self._config.max_words_in_caption), name='captionids')
+        tf.float32, shape=(None, self._config.max_words_in_caption, self._config.dim_caption), name='captionids')
       caption_masks = tf.placeholder(
         tf.int32, shape=(None, self._config.max_words_in_caption), name='caption_masks')
       is_trn = tf.placeholder(tf.bool, shape=(), name='is_trn')
@@ -124,12 +100,11 @@ class Model(framework.model.module.AbstractModel):
 
   def _build_parameter_graph(self):
     with tf.variable_scope(self.name_scope):
-      dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
       self.caption_pca_Ws = []
       self.caption_pca_Bs = []
       for g, dim_joint_embed in enumerate(self._config.dim_joint_embeds):
         caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W_%d'%g,
-          shape=(2*dim_hidden, dim_joint_embed), dtype=tf.float32,
+          shape=(self._config.dim_caption, dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B_%d'%g,
           shape=(dim_joint_embed,), dtype=tf.float32,
@@ -154,27 +129,8 @@ class Model(framework.model.module.AbstractModel):
         self.ft_pca_Bs.append(ft_pca_B)
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
-    encoder = self.submods[WE]
-    out_ops = encoder.get_out_ops_in_mode({
-      encoder.InKey.CAPTION: in_ops[self.InKey.CAPTIONID],
-      }, mode)
-    wvecs = out_ops[encoder.OutKey.EMBED] # (None, max_words_in_caption, dim_embed)
-
     with tf.variable_scope(self.name_scope):
-      batch_size = tf.shape(wvecs)[0]
-      dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
-      init_state = tf.zeros((batch_size, dim_hidden))
-
-    rnn = self.submods[RNN]
-    out_ops = rnn.get_out_ops_in_mode({
-      rnn.InKey.FT: wvecs,
-      rnn.InKey.MASK: in_ops[self.InKey.CAPTION_MASK],
-      rnn.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
-      rnn.InKey.INIT_STATE: init_state,
-    }, mode)
-
-    with tf.variable_scope(self.name_scope):
-      caption = out_ops[rnn.OutKey.OUTPUT]
+      caption = in_ops[self.InKey.CAPTIONID]
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
       caption_embeds = []
@@ -321,6 +277,6 @@ class Model(framework.model.module.AbstractModel):
 PathCfg = trntst_util.PathCfg
 TrnTst = trntst_util.TrnTst
 
-TrnReader = trntst_util.TrnReader
-ValReader = trntst_util.ValReader
-TstReader = trntst_util.TstReader
+TrnReader = trntst_util.FreezeTrnReader
+ValReader = trntst_util.FreezeValReader
+TstReader = trntst_util.FreezeTstReader
