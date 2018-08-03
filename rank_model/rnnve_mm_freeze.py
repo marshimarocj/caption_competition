@@ -23,6 +23,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.pool = 'mean'
 
     self.dim_fts = [1024, 1024, 2048]
+    self.dim_caption = 500
     self.dim_joint_embeds = [512, 512, 512]
     self.margin = 0.1
     self.alpha = 0.5
