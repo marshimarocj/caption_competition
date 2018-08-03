@@ -30,7 +30,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.l2norm = True
 
   def _assert(self):
-    assert len(self.dim_fts) == len(dim_joint_embeds)
+    assert len(self.dim_fts) == len(self.dim_joint_embeds)
 
 
 def gen_cfg(**kwargs):
