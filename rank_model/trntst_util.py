@@ -654,6 +654,43 @@ class FreezeTrnReader(TrnReader):
     self.num_caption = self.captionids.shape[0]
     self.idxs = range(self.num_caption)
 
+  def yield_trn_batch(self, batch_size):
+    for i in range(0, self.num_caption, batch_size):
+      pos_idxs = self.idxs[i:i+batch_size]
+      pos_ft_idxs = set(self.ft_idxs[pos_idxs].tolist())
+
+      pos_fts = self.fts[self.ft_idxs[pos_idxs]]
+      pos_captionids = self.captionids[pos_idxs]
+      pos_caption_masks = self.caption_masks[pos_idxs]
+
+      idxs = range(self.num_caption)
+      random.shuffle(idxs)
+
+      neg_fts = []
+      neg_captionids= []
+      neg_caption_masks = []
+      for idx in idxs:
+        ft_idx = self.ft_idxs[idx]
+        if ft_idx not in pos_ft_idxs:
+          neg_fts.append(self.fts[ft_idx])
+          neg_captionids.append(self.captionids[idx])
+          neg_caption_masks.append(self.caption_masks[idx])
+          if len(neg_fts) == self.num_neg:
+            break
+      neg_fts = np.array(neg_fts, dtype=np.float32)
+      neg_captionids = np.array(neg_captionids, dtype=np.float32)
+      neg_caption_masks = np.array(neg_caption_masks, dtype=np.int32)
+
+      fts = np.concatenate([pos_fts, neg_fts], 0)
+      captionids = np.concatenate([pos_captionids, neg_captionids], 0)
+      caption_masks = np.concatenate([pos_caption_masks, neg_caption_masks], 0)
+
+      yield {
+        'fts': fts,
+        'captionids': captionids,
+        'caption_masks': caption_masks,
+      }
+
 
 class FreezeValReader(ValReader):
   def __init__(self, ft_files, annotation_file, label_file):
