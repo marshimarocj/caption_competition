@@ -64,7 +64,7 @@ class Discriminator(framework.model.module.AbstractModule):
           ft_j = fts[j]
 
           ft_i = tf.nn.xw_plus_b(ft_i, self.inter_fc_Ws[cnt][0], self.inter_fc_Bs[cnt][0])
-          ft_i = tf.relu(ft_i)
+          ft_i = tf.nn.relu(ft_i)
           ft_i = tf.nn.xw_plus_b(ft_i, self.inter_fc_Ws[cnt][1], self.inter_fc_Bs[cnt][1])
           ft_i = tf.nn.l2_normalize(ft_i, 1)
           corr_ij = tf.reduce_mean(tf.reduce_sum(ft_i*ft_j, -1))
