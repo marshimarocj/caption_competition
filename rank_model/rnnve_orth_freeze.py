@@ -138,7 +138,7 @@ class Model(framework.model.module.AbstractModel):
       for caption_pca_W, caption_pca_B, dim_joint_embed in zip(self.caption_pca_Ws, self.caption_pca_Bs, self._config.dim_joint_embeds):
         # caption_embed = tf.nn.conv1d(caption, tf.expand_dims(caption_pca_W, 0), 1, 'VALID')
         caption = tf.reshape(caption, (-1, self._config.dim_caption))
-        caption_embed = tf.nn.xw_plus_b(caption, self.caption_pca_W, self.caption_pca_B)
+        caption_embed = tf.nn.xw_plus_b(caption, caption_pca_W, caption_pca_B)
         caption_embed = tf.reshape(caption_embed, (-1, self._config.max_words_in_caption, dim_joint_embed))
         caption_embed = tf.nn.tanh(caption_embed)
         if self._config.pool == 'mean':
