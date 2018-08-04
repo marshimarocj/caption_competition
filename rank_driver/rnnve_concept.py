@@ -63,7 +63,7 @@ if __name__ == '__main__':
   if opts.is_train:
     trntst = rank_model.rnnve_concept.TrnTst(model_cfg, path_cfg, m)
     trn_reader = rank_model.rnnve_concept.TrnReader(
-      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
+      model_cfg.num_neg, model_cfg.num_concept, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file, path_cfg.concept_wid_file)
     val_reader = rank_model.rnnve_concept.ValReader(
       path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file)
 
