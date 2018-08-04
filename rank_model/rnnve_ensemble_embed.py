@@ -26,7 +26,7 @@ ModelConfig = rnnve_orth.ModelConfig
 gen_cfg = rnnve_orth.gen_cfg
 
 
-class Model(rnnve.Model):
+class Model(rnnve_orth.Model):
   class OutKey(enum.Enum):
     CAPTION_EMBED = 'caption_embed'
     FT_EMBED = 'ft_embed'
