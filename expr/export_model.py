@@ -67,7 +67,7 @@ def init_orth_model():
   m = rank_model.rnn_attwv.Model(model_cfg)
   trn_tst_graph = m.build_trn_tst_graph(decay_boundarys=[])
   with trn_tst_graph.as_default():
-    var_names = [v.op.name for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
+    var_names = [(v.op.name, v.get_shape()) for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
     print var_names
     assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
 
