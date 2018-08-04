@@ -321,7 +321,7 @@ class Model(framework.model.module.AbstractModel):
         neg_caption_sim += tf.reduce_sum(tf.expand_dims(pos_ft_embed, 0) * neg_word_attwv, 2) # (num_neg, num_pos)
         neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 0) / 100.
         neg_ft_sim = tf.matmul(neg_ft_embed, pos_caption_embed, transpose_b=True)
-        neg_ft_sim += tf.reduce_sum(tf.expand_dims(neg_ft_embed, 1) * pos_caption_embed, 2) # (num_neg, num_pos)
+        neg_ft_sim += tf.reduce_sum(tf.expand_dims(neg_ft_embed, 1) * neg_ft_attwv, 2) # (num_neg, num_pos)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
 
         return pos_sim, neg_caption_sim, neg_ft_sim
