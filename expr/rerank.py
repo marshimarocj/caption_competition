@@ -311,7 +311,8 @@ def corr():
   total = 0.
   for i in range(3):
     c = np.abs(corr[i*512:(i+1)*512, (i+1)*512:])
-    avg_corr /= np.expand_dims(self_corr[i*512:(i+1)*512], 1) / np.expand_dims(self_corr[(i+1)*512:], 0)
+    c /= np.expand_dims(self_corr[i*512:(i+1)*512], 1) * np.expand_dims(self_corr[(i+1)*512:], 0)
+    avg_corr = np.sum(c)
     total += c.size
 
   print avg_corr / total
