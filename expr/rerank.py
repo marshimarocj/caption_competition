@@ -244,8 +244,8 @@ def rwr():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
-  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m')
-  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m')
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
   pred_files = [
     [
       os.path.join(expr_name, 'pred', 'val.A.npy'),
@@ -275,6 +275,7 @@ def rwr():
     preds.append(pred)
   preds = np.concatenate(preds, 1) # (num_img, num_txt*2)
   preds = preds.T # (num_txt*2, num_img)
+  preds /= 3.
   num = preds.shape[0]
 
   sim = np.load(sim_file)
@@ -334,7 +335,7 @@ def corr():
 
 if __name__ == '__main__':
   # graph_match_rerank()
-  eval_rerank()
+  # eval_rerank()
   # gen_caption_sim_mat()
-  # rwr()
+  rwr()
   # corr()
