@@ -157,7 +157,7 @@ class Model(framework.model.module.AbstractModel):
 
         ft_embed = tf.concat(ft_embeds, 1)
         ft_corr = tf.abs(tf.matmul(tf.transpose(ft_embed), ft_embed))
-        ft_self_corr = tf.diag_part(ft_corr)
+        ft_self_corr = tf.sqrt(tf.diag_part(ft_corr))
         ft_corr_sum = 0.
         base = 0
         total = 0
@@ -173,7 +173,7 @@ class Model(framework.model.module.AbstractModel):
 
         caption_embed = tf.concat(caption_embeds, 1)
         caption_corr = tf.abs(tf.matmul(tf.transpose(caption_embed), caption_embed))
-        caption_self_corr = tf.diag_part(caption_corr)
+        caption_self_corr = tf.sqrt(tf.diag_part(caption_corr))
         caption_corr_sum = 0.
         base = 0
         total = 0

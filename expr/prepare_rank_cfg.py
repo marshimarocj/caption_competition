@@ -686,7 +686,8 @@ def prepare_rnnve_orth():
 
 def prepare_rnnve_orth_freeze():
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
-  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
+  # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
+  root_dir = '/home/jiac/data/trecvid2018/rank' # neptune
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -703,7 +704,7 @@ def prepare_rnnve_orth_freeze():
     'num_epoch': 100,
 
     'alpha': 0.5,
-    'beta': 0.1,
+    'beta': 0.0,
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
