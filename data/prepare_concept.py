@@ -43,6 +43,8 @@ def gen_concept_wid():
     if cnt >= threshold:
       valid_wids.append(wid)
 
+  print len(valid_wids)
+
   with open(out_file, 'w') as fout:
     json.dump(valid_wids, fout)
 
