@@ -1098,7 +1098,7 @@ def prepare_rnnve_concept_cfg():
     'pool': 'max',
 
     'num_concept': 823,
-    'beta': 0.5,
+    'beta': 1.0,
 
     'cell': 'gru',
     'cell_dim_hidden': 250,
