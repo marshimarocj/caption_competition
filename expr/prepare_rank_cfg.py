@@ -957,7 +957,7 @@ def prepare_rnnve_adv_freeze():
     'num_epoch': 100,
 
     'alpha': 0.5,
-    'beta': 1e-2,
+    'beta': 0.1,
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
@@ -1015,9 +1015,9 @@ if __name__ == '__main__':
 
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
-  prepare_rnnve_orth_freeze()
+  # prepare_rnnve_orth_freeze()
   # prepare_rnnve_mm_freeze()
   # prepare_rnnve_boost()
-  # prepare_rnnve_adv_freeze()
+  prepare_rnnve_adv_freeze()
 
   # prepare_align()
