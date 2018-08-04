@@ -10,6 +10,11 @@ import numpy as np
 import rank_model.rnn_attwv
 import common
 
+WE = rank_model.rnnve.WE
+RNN = rank_model.rnnve.RNN
+CELL = rank_model.rnnve.CELL
+RCELL = rank_model.rnnve.RCELL
+
 def build_parser():
   parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
