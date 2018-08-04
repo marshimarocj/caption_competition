@@ -265,15 +265,11 @@ class Model(framework.model.module.AbstractModel):
         neg_beta = beta[num_pos:]
 
         def calc_pos_attwv(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask):
-          print pos_alpha.get_shape()
-          print pos_beta.get_shape()
           # attend
           att = tf.matmul(pos_alpha, pos_beta, transpose_b=True) # (num_pos, num_word, 1)
           att = att[:, :, 0] # (num_pos, num_word)
-          print att.get_shape()
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
-          print pos_mask.get_shape()
           att /= tf.reduce_sum(att, 1, True)
           wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_embed)
           wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
@@ -371,6 +367,7 @@ class Model(framework.model.module.AbstractModel):
 
     is_trn = in_ops[self.InKey.IS_TRN]
     fts = in_ops[self.InKey.FT]
+    mask = in_ops[self.InKey.CAPTION_MASK]
     if mode == framework.model.module.Mode.TRN_VAL:
       pos_sim, neg_caption_sim, neg_ft_sim = trn(wvecs, fts, caption_embed, ft_embed, mask, is_trn)
       sim = tst(wvecs, fts, caption_embed, ft_embed, mask, is_trn)
