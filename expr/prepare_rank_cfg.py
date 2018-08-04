@@ -1015,9 +1015,9 @@ if __name__ == '__main__':
 
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
-  # prepare_rnnve_orth_freeze()
+  prepare_rnnve_orth_freeze()
   # prepare_rnnve_mm_freeze()
   # prepare_rnnve_boost()
-  prepare_rnnve_adv_freeze()
+  # prepare_rnnve_adv_freeze()
 
   # prepare_align()
