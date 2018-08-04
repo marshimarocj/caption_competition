@@ -165,25 +165,25 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/rnnve_feedforward.py'
   # gpuid = 0
 
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze')
-  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.100.0.flickr30m.freeze')
-  # log_dir = os.path.join(expr_name, 'log')
-  # model_cfg_file = '%s.model.json'%expr_name
-  # path_cfg_file = '%s.path.json'%expr_name
-  # # python_file = '../rank_driver/rnnve_orth.py'
-  # python_file = '../rank_driver/rnnve_orth_freeze.py'
-  # gpuid = 1
-
-  expr_name = os.path.join(root_dir, 'rnnve_mm_expr', 'i3d_i3d_flow_resnet200.512_512.max.0.5.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze')
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.0.1.flickr30m.freeze')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/rnnve_mm_freeze.py'
+  # python_file = '../rank_driver/rnnve_orth.py'
+  python_file = '../rank_driver/rnnve_orth_freeze.py'
   gpuid = 0
+
+  # expr_name = os.path.join(root_dir, 'rnnve_mm_expr', 'i3d_i3d_flow_resnet200.512_512.max.0.5.flickr30m.freeze')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/rnnve_mm_freeze.py'
+  # gpuid = 0
 
   # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
   # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.boost')
@@ -363,8 +363,8 @@ def get_rnn_output():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
