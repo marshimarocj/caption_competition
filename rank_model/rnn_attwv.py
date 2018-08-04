@@ -263,16 +263,17 @@ class Model(framework.model.module.AbstractModel):
         neg_alpha = alpha[num_pos:]
         pos_beta = beta[:num_pos]
         neg_beta = beta[num_pos:]
-        print pos_alpha.get_shape()
-        print pos_beta.get_shape()
 
         def calc_pos_attwv(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask):
+          print pos_alpha.get_shape()
+          print pos_beta.get_shape()
           # attend
           att = tf.matmul(pos_alpha, pos_beta, transpose_b=True) # (num_pos, num_word, 1)
           att = att[:, :, 0] # (num_pos, num_word)
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
           att /= tf.reduce_sum(att, 1, True)
+          print att.get_shape()
           wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_embed)
           wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
 
