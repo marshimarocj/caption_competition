@@ -651,8 +651,8 @@ def prepare_rnnve_orth():
     'loss': 'lifted',
   }
 
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
-  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
+  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['cell_dim_hidden'], params['cell'],
@@ -1082,11 +1082,11 @@ if __name__ == '__main__':
   # prepare_aca_freeze()
 
   # prepare_rnnve_feedforward()
-  # prepare_rnnve_orth()
+  prepare_rnnve_orth()
   # prepare_rnnve_orth_freeze()
   # prepare_rnnve_mm_freeze()
   # prepare_rnnve_boost()
   # prepare_rnnve_adv_freeze()
-  prepare_rnn_attwv()
+  # prepare_rnn_attwv()
 
   # prepare_align()
