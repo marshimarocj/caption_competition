@@ -273,7 +273,7 @@ class Model(framework.model.module.AbstractModel):
           print att.get_shape()
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
-          print att.get_shape()
+          print pos_mask.get_shape()
           att /= tf.reduce_sum(att, 1, True)
           wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_embed)
           wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
