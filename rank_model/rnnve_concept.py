@@ -67,6 +67,7 @@ def gen_cfg(**kwargs):
   cfg.pool = kwargs['pool']
 
   cfg.num_concept = kwargs['num_concept']
+  cfg.beta = kwargs['beta']
 
   we_cfg = cfg.subcfgs[WE]
   we_cfg.lr_mult = kwargs['lr_mult']
