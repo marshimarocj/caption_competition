@@ -275,7 +275,6 @@ def rwr():
     preds.append(pred)
   preds = np.concatenate(preds, 1) # (num_img, num_txt*2)
   preds = preds.T # (num_txt*2, num_img)
-  preds /= 3.
   num = preds.shape[0]
 
   sim = np.load(sim_file)
