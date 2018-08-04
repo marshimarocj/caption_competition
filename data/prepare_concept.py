@@ -23,6 +23,8 @@ def gen_concept_wid():
   stopword_set = set(stopwords.words('english'))
   wid2cnt = {}
   for i, word in enumerate(words):
+    if i < 3:
+      continue
     if word not in stopword_set:
       wid2cnt[i] = 0
 
