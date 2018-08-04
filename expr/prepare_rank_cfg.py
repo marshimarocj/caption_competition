@@ -1059,6 +1059,7 @@ def prepare_rnn_attwv():
     'word_file': word_file,
     'embed_file': embed_file,
     'output_dir': output_dir,
+    'model_file': os.path.join(output_dir, 'model', 'pretrain'),
   }
   path_cfg_file = '%s.path.json'%outprefix
 
