@@ -291,8 +291,35 @@ def rwr():
     print alpha, mir_A, mir_B
 
 
+def corr():
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
+  caption_embed_files = [
+    os.path.join(expr_name, 'pred', 'val.A.embed.npz'),
+    os.path.join(expr_name, 'pred', 'val.B.embed.npz'),
+  ]
+  
+  caption_embeds = []
+  for caption_embed_file in caption_embed_files:
+    data = np.load(caption_embed_file)  
+    caption_embed = data['caption_embeds']
+    caption_embeds.append(caption_embed)
+  caption_embeds = np.concatenate(caption_embeds, 0)
+  corr = np.matmul(caption_embeds.T, caption_embeds)
+  self_corr = np.power(np.diag(corr), 0.5)
+  avg_corr = 0.
+  total = 0.
+  for i in range(3):
+    c = np.abs(corr[i*512:(i+1)*512, (i+1)*512:])
+    avg_corr /= np.expand_dims(self_corr[i*512:(i+1)*512], 1) / np.expand_dims(self_corr[(i+1)*512:], 0)
+    total += c.size
+
+  print avg_corr / total
+
+
 if __name__ == '__main__':
   # graph_match_rerank()
   # eval_rerank()
   # gen_caption_sim_mat()
-  rwr()
+  # rwr()
+  corr()
