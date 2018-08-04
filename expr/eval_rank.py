@@ -297,19 +297,27 @@ def predict_eval_vevd():
 
 
 def get_embeds():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
 
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   annotation_files = [os.path.join(root_dir, 'split', 'val_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B']]
   out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
 
-  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/rnnve_embed.py'
+  # gpuid = 3
+
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/rnnve_embed.py'
-  gpuid = 3
+  python_file = '../rank_driver/rnnve_ensemble_embed.py'
+  gpuid = 1
 
   best_epoch, _ = select_best_epoch(log_dir)
 
@@ -344,7 +352,7 @@ def get_rnn_output():
 
 if __name__ == '__main__':
   # report_best_epoch()
-  predict_eval_trecvid17_B()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
-  # get_embeds()
+  get_embeds()
   # get_rnn_output()
