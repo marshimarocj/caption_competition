@@ -270,10 +270,11 @@ class Model(framework.model.module.AbstractModel):
           # attend
           att = tf.matmul(pos_alpha, pos_beta, transpose_b=True) # (num_pos, num_word, 1)
           att = att[:, :, 0] # (num_pos, num_word)
+          print att.get_shape()
           att = tf.nn.softmax(att, 1)
           att *= pos_mask
-          att /= tf.reduce_sum(att, 1, True)
           print att.get_shape()
+          att /= tf.reduce_sum(att, 1, True)
           wvec_bar = tf.reduce_sum(pos_wvecs * tf.expand_dims(att, 2), 1) # (num_pos, dim_embed)
           wvec_bar = tf.nn.l2_normalize(wvec_bar, -1)
 
