@@ -47,8 +47,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.npy'),
+    # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.npy'),
+    # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.A.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.B.npy'),
   ]
   out_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
@@ -81,8 +83,10 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.rerank.20.npy'),
-    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.rerank.20.npy'),
+    # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.rerank.20.npy'),
+    # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.A.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.B.rerank.20.npy'),
   ]
 
   topk = 20
@@ -319,8 +323,8 @@ def corr():
 
 
 if __name__ == '__main__':
-  # graph_match_rerank()
+  graph_match_rerank()
   # eval_rerank()
   # gen_caption_sim_mat()
   # rwr()
-  corr()
+  # corr()
