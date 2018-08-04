@@ -228,8 +228,10 @@ def gen_caption_sim_mat():
 
 
 def rwr():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
   pred_files = [
     [
       os.path.join(expr_name, 'pred', 'val.A.npy'),
@@ -292,5 +294,5 @@ def rwr():
 if __name__ == '__main__':
   # graph_match_rerank()
   # eval_rerank()
-  gen_caption_sim_mat()
-  # rwr()
+  # gen_caption_sim_mat()
+  rwr()
