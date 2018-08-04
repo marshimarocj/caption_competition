@@ -1037,7 +1037,7 @@ def prepare_rnn_attwv():
     'lr_mult': .1,
   }
 
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m.freeze'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'], params['lr_mult'])
