@@ -957,7 +957,7 @@ def prepare_rnnve_adv_freeze():
     'num_epoch': 100,
 
     'alpha': 0.5,
-    'beta': 1e-1,
+    'beta': 1e-2,
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
