@@ -35,7 +35,7 @@ class Encoder(framework.model.module.AbstractModule):
           initializer=tf.constant_initializer(self._config.E))
       else:
         self.word_embedding_W = tf.contrib.framework.model_variable('word_embedding_W',
-          shape=(self._config.num_words, self._config.dim_embed), dtype=tf.flaot32,
+          shape=(self._config.num_words, self._config.dim_embed), dtype=tf.float32,
           initializer=tf.random_uniform_initializer())
       self._weights.append(self.word_embedding_W)
 
