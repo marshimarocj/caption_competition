@@ -1034,7 +1034,7 @@ def prepare_rnn_attwv():
     'pool': 'max',
 
     'cell': 'gru',
-    'cell_dim_hidden': 500,
+    'cell_dim_hidden': 250,
     'lr_mult': .1,
   }
 
