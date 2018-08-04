@@ -183,7 +183,7 @@ class Model(framework.model.module.AbstractModel):
         for dim_joint_embed in self._config.dim_joint_embeds:
           corr = caption_corr[base:base+dim_joint_embed, base+dim_joint_embed:]
           row_corr = tf.expand_dims(caption_self_corr[base:base+dim_joint_embed], 1)
-          col_corr = tf.expand_dims(capiton_self_corr[base+dim_joint_embed:], 0)
+          col_corr = tf.expand_dims(caption_self_corr[base+dim_joint_embed:], 0)
           corr /= row_corr * col_corr
           caption_corr_sum += tf.reduce_sum(corr)
           base += dim_joint_embed
