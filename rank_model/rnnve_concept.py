@@ -339,7 +339,7 @@ class TrnReader(framework.model.data.Reader):
     for i, wid in enumerate(wids):
       wid2lid[wid] = i
     self.labels = []
-    for captionid in captionids:
+    for captionid in self.captionids:
       label = np.zeros((num_concept,), dtype=np.float32)
       for wid in captionid:
         if wid == 1:
