@@ -365,9 +365,11 @@ class Model(framework.model.module.AbstractModel):
 
         return sim
 
+    is_trn = in_ops[self.InKey.IS_TRN]
+    fts = in_ops[self.InKey.FT]
     if mode == framework.model.module.Mode.TRN_VAL:
-      pos_sim, neg_caption_sim, neg_ft_sim = trn(wvecs, fts, ft_embed, caption_embed, mask, in_ops[self.InKey.IS_TRN])
-      sim = tst(wvecs, fts, ft_embed, caption_embed, mask, in_ops[self.InKey.IS_TRN])
+      pos_sim, neg_caption_sim, neg_ft_sim = trn(wvecs, fts, ft_embed, caption_embed, mask, is_trn)
+      sim = tst(wvecs, fts, ft_embed, caption_embed, mask, is_trn)
       return {
         self.OutKey.SIM: sim,
         self.OutKey.P_SIM: pos_sim,
@@ -375,7 +377,7 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.NC_SIM: neg_caption_sim,
       }
     else:
-      sim = tst(wvecs, fts, ft_embed, caption_embed, mask, in_ops[self.InKey.IS_TRN])
+      sim = tst(wvecs, fts, ft_embed, caption_embed, mask, is_trn)
       return {
         self.OutKey.SIM: sim,
       }
