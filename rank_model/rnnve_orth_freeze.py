@@ -159,26 +159,36 @@ class Model(framework.model.module.AbstractModel):
         dim_embed = sum(self._config.dim_joint_embeds)
 
         ft_embed = tf.concat(ft_embeds, 1)
-        ft_corr = tf.square(tf.matmul(tf.transpose(ft_embed), ft_embed))
+        ft_corr = tf.abs(tf.matmul(tf.transpose(ft_embed), ft_embed))
+        ft_self_corr = tf.diag_part(ft_corr)
         ft_corr_sum = 0.
         base = 0
         total = 0
         for dim_joint_embed in self._config.dim_joint_embeds:
-          ft_corr_sum += tf.reduce_sum(ft_corr[base:base+dim_joint_embed, base+dim_joint_embed:])
+          corr = ft_corr[base:base+dim_joint_embed, base+dim_joint_embed:]
+          row_corr = tf.expand_dims(ft_self_corr[base:base+dim_joint_embed], 1)
+          col_corr = tf.expand_dims(ft_self_corr[base+dim_joint_embed:], 0)
+          corr /= row_corr * col_corr
+          ft_corr_sum += tf.reduce_sum(corr)
           base += dim_joint_embed
           total += dim_joint_embed * dim_joint_embed
-        ft_corr_sum /= dim_embed * dim_embed - total
+        ft_corr_sum /= (dim_embed * dim_embed - total) / 2
 
         caption_embed = tf.concat(caption_embeds, 1)
-        caption_corr = tf.square(tf.matmul(tf.transpose(caption_embed), caption_embed))
+        caption_corr = tf.abs(tf.matmul(tf.transpose(caption_embed), caption_embed))
+        caption_self_corr = tf.diag_part(caption_corr)
         caption_corr_sum = 0.
         base = 0
         total = 0
         for dim_joint_embed in self._config.dim_joint_embeds:
-          caption_corr_sum += tf.reduce_sum(caption_corr[base:base+dim_joint_embed, base+dim_joint_embed:])
+          corr = caption_corr[base:base+dim_joint_embed, base+dim_joint_embed:]
+          row_corr = tf.expand_dims(caption_self_corr[base:base+dim_joint_embed], 1)
+          col_corr = tf.expand_dims(capiton_self_corr[base+dim_joint_embed:], 0)
+          corr /= row_corr * col_corr
+          caption_corr_sum += tf.reduce_sum(corr)
           base += dim_joint_embed
           total += dim_joint_embed * dim_joint_embed
-        caption_corr_sum /= dim_embed * dim_embed - total
+        caption_corr_sum /= (dim_embed * dim_embed - total) / 2
 
         corr = ft_corr_sum + caption_corr_sum
 
