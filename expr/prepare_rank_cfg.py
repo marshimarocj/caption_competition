@@ -1027,7 +1027,6 @@ def prepare_rnn_attwv():
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
-    'dim_caption': 500,
     'dim_joint_embed': 512,
 
     'max_words_in_caption': 30,

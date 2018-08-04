@@ -34,6 +34,15 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
   model_cfg = rank_model.rnn_attwv.ModelConfig()
   model_cfg.load(model_cfg_file)
 
+  if path_cfg.embed_file != '':
+    E = np.load(path_cfg.embed_file)
+    E = E.astype(np.float32)
+    model_cfg.subcfgs[WE].E = E
+    model_cfg.subcfgs[WE].num_words = E.shape[0]
+    model_cfg.subcfgs[WE].dim_embed = E.shape[1]
+    model_cfg.subcfgs[RNN].subcfgs[CELL].dim_input = E.shape[1]
+    model_cfg.subcfgs[RNN].subcfgs[RCELL].dim_input = E.shape[1]
+
   return model_cfg
 
 
