@@ -255,10 +255,10 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
+      loss = tf.reduce_sum(loss)
       concept_loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=labels, logits=logit), -1)
       self.op2monitor['concept_loss'] = tf.reduce_sum(concept_loss)
-      loss += self._config.beta * concept_loss
-      loss = tf.reduce_sum(loss)
+      loss += self._config.beta * tf.reduce_sum(concept_loss)
       self.op2monitor['loss'] = loss
     return loss
 
