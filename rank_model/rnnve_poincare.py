@@ -244,6 +244,9 @@ class Model(framework.model.module.AbstractModel):
       pos_sim = self._outputs[self.OutKey.P_SIM]
       neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
       neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
+      self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
+      self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
+      self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
 
       contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
       contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
