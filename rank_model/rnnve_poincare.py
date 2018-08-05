@@ -191,7 +191,7 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
-      euclidean_dist = tf.norm(ft_embed - caption_embed, axis=-1)
+      euclidean_dist = tf.norm(ft_embed_poincare - caption_embed_poincare, axis=-1)
       # euclidean_dist /= tf.maximum(tf.norm(ft_embed, axis=-1), tf.norm(caption_embed, axis=-1))
 
     def trn(ft_embed, caption_embed):
