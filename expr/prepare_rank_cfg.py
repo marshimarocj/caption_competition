@@ -1145,7 +1145,7 @@ def prepare_rnnve_poincare_cfg():
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
   embed_file = os.path.join(root_dir, 'annotation', 'E.flickr30m.word2vec.npy')
-  out_dir = os.path.join(root_dir, 'rnnve_expr')
+  out_dir = os.path.join(root_dir, 'rnnve_poincare_expr')
   splits = ['trn', 'val', 'tst']
 
   ft_names = [
