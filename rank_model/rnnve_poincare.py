@@ -123,19 +123,21 @@ class Model(framework.model.module.AbstractModel):
       dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
       self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
         shape=(2*dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
-        initializer=tf.contrib.layers.xavier_initializer())
+        # initializer=tf.contrib.layers.xavier_initializer())
+        initializer=tf.truncated_normal_initializer(stdev=1./2/dim_hidden))
       self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+        initializer=tf.constant_initializer(0.))
       self._weights.append(self.caption_pca_W)
       self._weights.append(self.caption_pca_B)
 
       self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
         shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
-        initializer=tf.contrib.layers.xavier_initializer())
+        # initializer=tf.contrib.layers.xavier_initializer())
+        initializer=tf.truncated_normal_initializer(stdev=1./self._config.dim_ft))
       self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+        initializer=tf.constant_initializer(0.))
       self._weights.append(self.ft_pca_W)
       self._weights.append(self.ft_pca_B)
 
@@ -178,7 +180,6 @@ class Model(framework.model.module.AbstractModel):
       caption_embed = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       fts = in_ops[self.InKey.FT]
-      fts = tf.layers.batch_normalization(fts, training=in_ops[self.InKey.IS_TRN])
       ft_embed = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
       ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
