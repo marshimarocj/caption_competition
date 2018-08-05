@@ -38,6 +38,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.margin = 1.
     self.alpha = 0.5
     self.num_neg = 1
+    self.beta = 0.5
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
@@ -59,6 +60,7 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
+  cfg.beta = kwargs['beta']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
   cfg.pool = kwargs['pool']
@@ -94,6 +96,7 @@ class Model(framework.model.module.AbstractModel):
     P_SIM = 'pos_sim'
     NF_SIM = 'neg_ft_sim'
     NC_SIM = 'neg_caption_sim'
+    DIST = 'dist'
 
   def _set_submods(self):
     return {
@@ -177,7 +180,7 @@ class Model(framework.model.module.AbstractModel):
       caption_embed /= self._config.dim_joint_embed**0.5
       caption_embed = tf.clip_by_norm(caption_embed, 1.0, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
-      caption_embed = framework.util.expanded_op.poincareball_gradient(caption_embed)
+      caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       fts = in_ops[self.InKey.FT]
       ft_embed = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
@@ -186,7 +189,9 @@ class Model(framework.model.module.AbstractModel):
       ft_embed /= self._config.dim_joint_embed**0.5
       ft_embed = tf.clip_by_norm(ft_embed, 1.0, 1)
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
-      ft_embed = framework.util.expanded_op.poincareball_gradient(ft_embed)
+      ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
+
+      euclidean_dist = tf.norm(ft_embed - caption_embed, -1)
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
@@ -230,7 +235,7 @@ class Model(framework.model.module.AbstractModel):
       return sim
 
     if mode == framework.model.module.Mode.TRN_VAL:
-      pos_sim, neg_caption_sim, neg_ft_sim = trn(ft_embed, caption_embed)
+      pos_sim, neg_caption_sim, neg_ft_sim = trn(ft_embed_poincare, caption_embed_poincare)
       sim = tst(ft_embed, caption_embed)
       return {
         self.OutKey.SIM: sim,
@@ -249,9 +254,11 @@ class Model(framework.model.module.AbstractModel):
       pos_sim = self._outputs[self.OutKey.P_SIM]
       neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
       neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
+      eu_dist = self._outputs[self.OutKey.DIST]
       self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
       self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
       self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
+      self.op2monitor['euclidean_dist'] = tf.reduce_mean(eu_dist)
 
       contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
       contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
@@ -263,6 +270,7 @@ class Model(framework.model.module.AbstractModel):
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
       loss = tf.reduce_mean(loss)
+      loss += self._config.beta * tf.reduce_mean(eu_dist)
       self.op2monitor['loss'] = loss
     return loss
 
