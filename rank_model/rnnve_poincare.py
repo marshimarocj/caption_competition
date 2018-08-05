@@ -191,7 +191,7 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
-      euclidean_dist = tf.norm(ft_embed - caption_embed, -1)
+      euclidean_dist = tf.norm(ft_embed - caption_embed, axis=-1)
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
@@ -242,6 +242,7 @@ class Model(framework.model.module.AbstractModel):
         self.OutKey.P_SIM: pos_sim,
         self.OutKey.NF_SIM: neg_ft_sim,
         self.OutKey.NC_SIM: neg_caption_sim,
+        self.OutKey.DIST: euclidean_dist,
       }
     else:
       sim = tst(ft_embed, caption_embed)
