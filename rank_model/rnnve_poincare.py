@@ -124,7 +124,7 @@ class Model(framework.model.module.AbstractModel):
       self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
         shape=(2*dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
         # initializer=tf.contrib.layers.xavier_initializer())
-        initializer=tf.truncated_normal_initializer(stdev=1./2/dim_hidden))
+        initializer=tf.truncated_normal_initializer(stddev=1./2/dim_hidden))
       self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
         initializer=tf.constant_initializer(0.))
@@ -134,7 +134,7 @@ class Model(framework.model.module.AbstractModel):
       self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
         shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
         # initializer=tf.contrib.layers.xavier_initializer())
-        initializer=tf.truncated_normal_initializer(stdev=1./self._config.dim_ft))
+        initializer=tf.truncated_normal_initializer(stddev=1./self._config.dim_ft))
       self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
         initializer=tf.constant_initializer(0.))
