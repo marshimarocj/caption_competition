@@ -174,6 +174,7 @@ class Model(framework.model.module.AbstractModel):
       # unit ball
       caption_embed /= self._config.dim_joint_embed**0.5
       caption_embed = tf.clip_by_norm(caption_embed, 1.0, 1)
+      self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       ft_embed = tf.nn.xw_plus_b(in_ops[self.InKey.FT], self.ft_pca_W, self.ft_pca_B)
@@ -181,6 +182,7 @@ class Model(framework.model.module.AbstractModel):
       # unit ball
       ft_embed /= self._config.dim_joint_embed**0.5
       ft_embed = tf.clip_by_norm(ft_embed, 1.0, 1)
+      self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
     def trn(ft_embed, caption_embed):
