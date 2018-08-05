@@ -54,7 +54,7 @@ def gen_cfg(**kwargs):
   cfg.base_lr = 1e-4
   cfg.num_epoch = kwargs['num_epoch']
 
-  cfg.margin = .1
+  cfg.margin = 1.
   cfg.alpha = kwargs['alpha']
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
@@ -247,14 +247,14 @@ class Model(framework.model.module.AbstractModel):
 
       contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
       contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
-      self.op2monitor['contrast_caption_loss'] = tf.reduce_sum(contrast_caption_loss)
+      self.op2monitor['contrast_caption_loss'] = tf.reduce_mean(contrast_caption_loss)
 
       contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
       contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
-      self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
+      self.op2monitor['contrast_ft_loss'] = tf.reduce_mean(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
-      loss = tf.reduce_sum(loss)
+      loss = tf.reduce_mean(loss)
       self.op2monitor['loss'] = loss
     return loss
 
