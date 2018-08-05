@@ -192,6 +192,7 @@ class Model(framework.model.module.AbstractModel):
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
       euclidean_dist = tf.norm(ft_embed - caption_embed, axis=-1)
+      euclidean_dist /= tf.maximum(tf.norm(ft_embed, axis=-1), tf.norm(caption_embed, -1))
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
