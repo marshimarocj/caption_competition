@@ -186,7 +186,7 @@ class Model(framework.model.module.AbstractModel):
         caption_embed -= 1.
       # unit ball
       # caption_embed /= self._config.dim_joint_embed**0.5
-      norm = tf.norm(caption_embed, -1)
+      norm = tf.norm(caption_embed, axis=-1)
       caption_embed /= tf.expand_dims(norm, 1)
       norm = tf.sigmoid(norm)
       caption_embed *= tf.expand_dims(norm, 1)
@@ -197,7 +197,7 @@ class Model(framework.model.module.AbstractModel):
       ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
       # ft_embed /= self._config.dim_joint_embed**0.5
-      norm = tf.norm(ft_embed, -1)
+      norm = tf.norm(ft_embed, axis=-1)
       ft_embed /= tf.expand_dims(norm, 1)
       norm = tf.sigmoid(norm)
       ft_embed *= tf.expand_dims(norm, 1)
