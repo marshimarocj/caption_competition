@@ -118,8 +118,8 @@ def report_best_epoch():
 
 def predict_eval_trecvid17_B():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
@@ -212,7 +212,7 @@ def predict_eval_trecvid17_B():
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/rnnve_concept.py'
-  gpuid = 0
+  gpuid = 1
 
   # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
   # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.boost')
