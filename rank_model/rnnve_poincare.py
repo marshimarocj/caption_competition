@@ -13,7 +13,7 @@ import framework.model.module
 import framework.model.trntst
 import framework.model.data
 import framework.impl.encoder.pca
-import framework.util.expanded_op
+import framework.impl.gradient.poincare
 import encoder.word
 import encoder.birnn
 import trntst_util
@@ -186,6 +186,7 @@ class Model(framework.model.module.AbstractModel):
         caption_embed += 1.
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed -= 1.
+      caption_embed = tf.layers.batch_normalization(caption_embed, training=in_ops[self.InKey.IS_TRN])
       # unit ball
       caption_embed /= self._config.dim_joint_embed**0.5
       caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
@@ -193,6 +194,7 @@ class Model(framework.model.module.AbstractModel):
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       ft_embed = tf.nn.tanh(ft_embed)
+      ft_embed = tf.layers.batch_normalization(ft_embed, training=in_ops[self.InKey.IS_TRN])
       # unit ball
       ft_embed /= self._config.dim_joint_embed**0.5
       ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-6, 1)
