@@ -215,7 +215,7 @@ class Model(framework.model.module.AbstractModel):
 
         neg_ft_dist = tf.matmul(tf.matmul(neg_ft_embed, lorentz_g), pos_caption_embed, transpose_b=True)
         neg_ft_dist = tf.acosh(-neg_ft_dist)
-        neg_ft_sim = -neg_ft_sim # (num_neg, num_pos)
+        neg_ft_sim = -neg_ft_dist # (num_neg, num_pos)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
 
       return pos_sim, neg_caption_sim, neg_ft_sim
