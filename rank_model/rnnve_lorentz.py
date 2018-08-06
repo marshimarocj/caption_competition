@@ -193,7 +193,7 @@ class Model(framework.model.module.AbstractModel):
       ft_embed = tf.concat([ft_embed0, ft_embed], 1)
       ft_embed_lorentz = framework.util.expanded_op.lorentz_gradient(ft_embed, self._config.base_lr)
 
-      lorentz_g = tf.concat([-tf.ones((1,)), tf.ones((self._config.dim_joint_embed,))])
+      lorentz_g = tf.concat([-tf.ones((1,)), tf.ones((self._config.dim_joint_embed,))], 0)
       lorentz_g = tf.diag(lorentz_g)
 
     def trn(ft_embed, caption_embed):
