@@ -1163,7 +1163,7 @@ def prepare_rnnve_poincare_cfg():
     'dim_joint_embed': 500,
     'beta': 0.1,
     # 'beta': 1.0,
-    # 'exp': True,
+    'exp': False,
 
     'max_words_in_caption': 30,
     'pool': 'max',
