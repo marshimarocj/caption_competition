@@ -203,7 +203,6 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_embed = ft_embed[-self._config.num_neg:]
         neg_caption_embed = caption_embed[-self._config.num_neg:]
 
-
         pos_dist = tf.reduce_sum(tf.matmul(pos_ft_embed, lorentz_g) * pos_caption_embed, 1)
         pos_dist = tf.acosh(-pos_dist)
         pos_sim = -pos_dist # (num_pos,)
@@ -259,7 +258,6 @@ class Model(framework.model.module.AbstractModel):
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
       loss = tf.reduce_mean(loss)
-      loss += self._config.beta * tf.reduce_mean(regularization)
       self.op2monitor['loss'] = loss
     return loss
 
