@@ -185,28 +185,20 @@ class Model(framework.model.module.AbstractModel):
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed -= 1.
       # unit ball
-      # caption_embed /= self._config.dim_joint_embed**0.5
-      norm = tf.norm(caption_embed, axis=-1)
-      caption_embed /= tf.expand_dims(norm, 1)
-      norm = tf.sigmoid(norm)
-      caption_embed *= tf.expand_dims(norm, 1)
+      caption_embed /= self._config.dim_joint_embed**0.5
       caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
-      # ft_embed /= self._config.dim_joint_embed**0.5
-      norm = tf.norm(ft_embed, axis=-1)
-      ft_embed /= tf.expand_dims(norm, 1)
-      norm = tf.sigmoid(norm)
-      ft_embed *= tf.expand_dims(norm, 1)
+      ft_embed /= self._config.dim_joint_embed**0.5
       ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-6, 1)
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
       # euclidean_dist = tf.norm(ft_embed_poincare - caption_embed_poincare, axis=-1)
-      regularization = tf.norm(ft_embed_poincare, axis=-1) + tf.norm(caption_embed_poincare, axis=-1)
+      regularization = tf.norm(ft_embed, axis=-1) + tf.norm(caption_embed, axis=-1)
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
