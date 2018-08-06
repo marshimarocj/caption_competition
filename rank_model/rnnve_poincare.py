@@ -39,6 +39,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.alpha = 0.5
     self.num_neg = 1
     self.beta = 0.5
+    self.exp = False
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
@@ -61,6 +62,7 @@ def gen_cfg(**kwargs):
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
   cfg.beta = kwargs['beta']
+  cfg.exp = kwargs['exp']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
   cfg.pool = kwargs['pool']
@@ -178,7 +180,7 @@ class Model(framework.model.module.AbstractModel):
         caption_embed -= 1.
       # unit ball
       caption_embed /= self._config.dim_joint_embed**0.5
-      caption_embed = tf.clip_by_norm(caption_embed, 1.0, 1)
+      caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
@@ -187,7 +189,7 @@ class Model(framework.model.module.AbstractModel):
       ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
       ft_embed /= self._config.dim_joint_embed**0.5
-      ft_embed = tf.clip_by_norm(ft_embed, 1.0, 1)
+      ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-6, 1)
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
@@ -205,14 +207,20 @@ class Model(framework.model.module.AbstractModel):
         pos_dist /= (1. - tf.square(tf.norm(pos_ft_embed, axis=-1))) * (1. - tf.square(tf.norm(pos_caption_embed, axis=-1)))
         pos_dist = 1 + 2 * pos_dist + 1e-6
         pos_dist = tf.acosh(pos_dist)
-        pos_sim = -pos_dist
+        if self._config.exp:
+          pos_sim = tf.exp(-pos_dist)
+        else:
+          pos_sim = -pos_dist
 
         neg_caption_dist = tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1) - tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist = 1 + 2 * neg_caption_dist + 1e-6
         neg_caption_dist = tf.acosh(neg_caption_dist)
-        neg_caption_sim = -neg_caption_dist
+        if self._config.exp:
+          neg_caption_sim = tf.exp(-neg_caption_dist)
+        else:
+          neg_caption_sim = -neg_caption_dist
         neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100.
 
         neg_ft_dist = tf.square(tf.norm(tf.expand_dims(pos_caption_embed, 1) - tf.expand_dims(neg_ft_embed, 0), axis=-1))
@@ -220,7 +228,10 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_dist /= 1. - tf.square(tf.norm(tf.expand_dims(neg_ft_embed, 0), axis=-1))
         neg_ft_dist = 1 + 2 * neg_ft_dist + 1e-6
         neg_ft_dist = tf.acosh(neg_ft_dist)
-        neg_ft_sim = -neg_ft_dist
+        if self._config.exp:
+          neg_ft_sim = tf.exp(-neg_ft_dist)
+        else:
+          neg_ft_sim = -neg_ft_dist
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100.
 
       return pos_sim, neg_caption_sim, neg_ft_sim
@@ -232,7 +243,10 @@ class Model(framework.model.module.AbstractModel):
         dist /= 1. - tf.square(tf.norm(tf.expand_dims(caption_embed, 0), axis=-1))
         dist = 1 + 2 * dist + 1e-6
         dist = tf.acosh(dist)
-        sim = -dist
+        if self._config.exp:
+          sim = tf.exp(-dist)
+        else:
+          sim = -dist
       return sim
 
     if mode == framework.model.module.Mode.TRN_VAL:
