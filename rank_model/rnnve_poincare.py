@@ -13,7 +13,6 @@ import framework.model.module
 import framework.model.trntst
 import framework.model.data
 import framework.impl.encoder.pca
-import framework.impl.gradient.poincare
 import encoder.word
 import encoder.birnn
 import trntst_util
