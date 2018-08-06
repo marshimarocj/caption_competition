@@ -260,15 +260,13 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
       self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
       self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
-      self.op2monitor['euclidean_dist'] = tf.reduce_mean(regularization)
+      self.op2monitor['regularization'] = tf.reduce_mean(regularization)
 
       contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
       contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
-      # self.op2monitor['contrast_caption_loss'] = tf.reduce_mean(contrast_caption_loss)
 
       contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
       contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
-      # self.op2monitor['contrast_ft_loss'] = tf.reduce_mean(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
       loss = tf.reduce_mean(loss)

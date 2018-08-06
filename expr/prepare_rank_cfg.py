@@ -1161,7 +1161,8 @@ def prepare_rnnve_poincare_cfg():
     'l2norm': True,
     'dim_ft': 1024 + 2048,
     'dim_joint_embed': 500,
-    'beta': 0.1,
+    # 'beta': 0.1,
+    'beta': 0.5,
 
     'max_words_in_caption': 30,
     'pool': 'max',
