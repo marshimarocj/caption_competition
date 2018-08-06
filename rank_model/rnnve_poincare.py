@@ -12,15 +12,18 @@ import numpy as np
 import framework.model.module
 import framework.model.trntst
 import framework.model.data
+import framework.impl.encoder.pca
+import framework.util.expanded_op
 import encoder.word
 import encoder.birnn
 import trntst_util
-import framework.util.expanded_op
 
 WE = 'word'
 RNN = 'rnn'
 CELL = encoder.birnn.CELL
 RCELL = encoder.birnn.RCELL
+TXT_EMBED = 'caption_embed'
+FT_EMBED = 'ft_embed'
 
 
 class ModelConfig(framework.model.module.ModelConfig):
@@ -29,6 +32,8 @@ class ModelConfig(framework.model.module.ModelConfig):
 
     self.subcfgs[WE] = encoder.word.Config()
     self.subcfgs[RNN] = encoder.birnn.Config()
+    self.subcfgs[TXT_EMBED] = framework.impl.encoder.pca.Config()
+    self.subcfgs[FT_EMBED] = framework.impl.encoder.pca.Config()
 
     self.max_words_in_caption = 30
     self.pool = 'mean'
@@ -44,6 +49,8 @@ class ModelConfig(framework.model.module.ModelConfig):
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
     assert self.subcfgs[WE].dim_embed == self.subcfgs[RNN].subcfgs[CELL].dim_input
+    assert self.subcfgs[TXT_EMBED].dim_ft == self.subcfgs[RNN].subcfgs[CELL].dim_hidden + self.subcfgs[RNN].subcfgs[RCELL].dim_hidden
+    assert self.subcfgs[FT_EMBED].dim_ft == self.dim_ft
 
 
 def gen_cfg(**kwargs):
@@ -55,6 +62,7 @@ def gen_cfg(**kwargs):
   cfg.tst_batch_size = 64
   cfg.base_lr = 1e-4
   cfg.num_epoch = kwargs['num_epoch']
+  cfg.opt_alg = 'SGD'
 
   cfg.margin = 1.
   cfg.alpha = kwargs['alpha']
@@ -81,6 +89,14 @@ def gen_cfg(**kwargs):
     cell_cfg.keepout_prob = 0.5
     cell_cfg.keepin_prob = 0.5
 
+  txt_embed_cfg = cfg.subcfgs[TXT_EMBED]
+  txt_embed_cfg.dim_ft = 2*kwargs['cell_dim_hidden']
+  txt_embed_cfg.dim_output = kwargs['dim_joint_embed']
+
+  ft_embed_cfg = cfg.subcfgs[FT_EMBED]
+  ft_embed_cfg.dim_ft = kwargs['dim_ft']
+  ft_embed_cfg.dim_output = kwargs['dim_joint_embed']
+
   return cfg
 
 
@@ -104,6 +120,8 @@ class Model(framework.model.module.AbstractModel):
     return {
       WE: encoder.word.Encoder(self._config.subcfgs[WE]),
       RNN: encoder.birnn.Encoder(self._config.subcfgs[RNN]),
+      TXT_EMBED: framework.impl.encoder.pca.Encoder1D(self._config.subcfgs[TXT_EMBED]),
+      FT_EMBED: framework.impl.encoder.pca.Encoder(self._config.subcfgs[FT_EMBED]),
     }
 
   def _add_input_in_mode(self, mode):
@@ -124,27 +142,7 @@ class Model(framework.model.module.AbstractModel):
     }
 
   def _build_parameter_graph(self):
-    with tf.variable_scope(self.name_scope):
-      dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
-      self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
-        shape=(2*dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
-        # initializer=tf.contrib.layers.xavier_initializer())
-        initializer=tf.truncated_normal_initializer(stddev=1./2/dim_hidden))
-      self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
-        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-        initializer=tf.constant_initializer(0.))
-      self._weights.append(self.caption_pca_W)
-      self._weights.append(self.caption_pca_B)
-
-      self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
-        shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
-        # initializer=tf.contrib.layers.xavier_initializer())
-        initializer=tf.truncated_normal_initializer(stddev=1./self._config.dim_ft))
-      self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
-        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
-        initializer=tf.constant_initializer(0.))
-      self._weights.append(self.ft_pca_W)
-      self._weights.append(self.ft_pca_B)
+    pass
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     encoder = self.submods[WE]
@@ -166,11 +164,21 @@ class Model(framework.model.module.AbstractModel):
       rnn.InKey.INIT_STATE: init_state,
     }, mode)
 
+    txt_pca = self.submods[TXT_EMBED]
+    out_ops = txt_pca.get_out_ops_in_mode({
+      txt_pca.InKey.FT: out_ops[rnn.OutKey.OUTPUT],
+    }, mode)
+    caption_embed = out_ops[txt_pca.OutKey.EMBED]
+
+    ft_pca = self.submods[FT_EMBED]
+    out_ops = ft_pca.get_out_ops_in_mode({
+      ft_pca.InKey.FT: in_ops[self.InKey.FT]
+    }, mode)
+    ft_embed = out_ops[ft_pca.OutKey.EMBED]
+
     with tf.variable_scope(self.name_scope):
-      caption_embed = out_ops[rnn.OutKey.OUTPUT]
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
-      caption_embed = tf.nn.conv1d(caption_embed, tf.expand_dims(self.caption_pca_W, 0), 1, 'VALID')
       caption_embed = tf.nn.tanh(caption_embed)
       if self._config.pool == 'mean':
         caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
@@ -184,8 +192,6 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
-      fts = in_ops[self.InKey.FT]
-      ft_embed = tf.nn.xw_plus_b(fts, self.ft_pca_W, self.ft_pca_B)
       ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
       ft_embed /= self._config.dim_joint_embed**0.5
