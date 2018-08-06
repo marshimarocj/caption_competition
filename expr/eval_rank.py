@@ -121,8 +121,8 @@ def predict_eval_trecvid17_B():
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   track_ft_files = [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names]
-  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.npz')
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.npz')
   out_name = 'val.B'
   # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
   # out_name = 'val.A'
