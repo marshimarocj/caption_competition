@@ -236,14 +236,14 @@ class Model(framework.model.module.AbstractModel):
       return sim
 
     if mode == framework.model.module.Mode.TRN_VAL:
-      pos_sim, neg_caption_sim, neg_ft_sim, regularization = trn(ft_embed_poincare, caption_embed_poincare)
+      pos_sim, neg_caption_sim, neg_ft_sim = trn(ft_embed_poincare, caption_embed_poincare)
       sim = tst(ft_embed, caption_embed)
       return {
         self.OutKey.SIM: sim,
         self.OutKey.P_SIM: pos_sim,
         self.OutKey.NF_SIM: neg_ft_sim,
         self.OutKey.NC_SIM: neg_caption_sim,
-        self.OutKey.DIST: regularization,
+        self.OutKey.REGULAR: regularization,
       }
     else:
       sim = tst(ft_embed, caption_embed)
@@ -256,7 +256,7 @@ class Model(framework.model.module.AbstractModel):
       pos_sim = self._outputs[self.OutKey.P_SIM]
       neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
       neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
-      regularization = self._outputs[self.OutKey.DIST]
+      regularization = self._outputs[self.OutKey.REGULAR]
       self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
       self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
       self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
