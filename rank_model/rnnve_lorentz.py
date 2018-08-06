@@ -180,14 +180,14 @@ class Model(framework.model.module.AbstractModel):
         caption_embed += 1.
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed -= 1.
-      norm = tf.norm(caption_embed, -1)
+      norm = tf.norm(caption_embed, axis=-1)
       caption_embed0 = tf.sqrt(norm + 1.)
       caption_embed0 = tf.expand_dims(caption_embed0, 1)
       caption_embed = tf.concat([caption_embed0, caption_embed], 1)
       caption_embed_lorentz = framework.util.expanded_op.lorentz_gradient(caption_embed, self._config.base_lr)
 
       ft_embed = tf.nn.tanh(ft_embed)
-      norm = tf.norm(ft_embed, -1)
+      norm = tf.norm(ft_embed, axis=-1)
       ft_embed0 = tf.sqrt(norm + 1.)
       ft_embed0 = tf.expand_dims(ft_embed0, 1)
       ft_embed = tf.concat([ft_embed0, ft_embed], 1)
