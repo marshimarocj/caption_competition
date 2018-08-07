@@ -203,8 +203,8 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_embed = ft_embed[-self._config.num_neg:]
         neg_caption_embed = caption_embed[-self._config.num_neg:]
 
-        ft_embed = tf.Print(ft_embed, [ft_embed], 'ft_embed')
-        caption_embed = tf.Print(caption_embed, [caption_embed], 'caption_embed')
+        pos_ft_embed = tf.Print(pos_ft_embed, [pos_ft_embed], 'ft_embed')
+        pos_caption_embed = tf.Print(pos_caption_embed, [pos_caption_embed], 'caption_embed')
         pos_dist = tf.reduce_sum(tf.matmul(pos_ft_embed, lorentz_g) * pos_caption_embed, 1)
         pos_dist = tf.acosh(-pos_dist)
         pos_sim = -pos_dist # (num_pos,)
