@@ -14,6 +14,7 @@ import framework.model.trntst
 import framework.model.data
 import framework.impl.encoder.pca
 import framework.util.expanded_op
+import framework.impl.gradient.lorentz
 import encoder.word
 import encoder.birnn
 import trntst_util
@@ -24,6 +25,7 @@ CELL = encoder.birnn.CELL
 RCELL = encoder.birnn.RCELL
 TXT_EMBED = 'caption_embed'
 FT_EMBED = 'ft_embed'
+LORENTZ = 'lorentz'
 
 
 class ModelConfig(framework.model.module.ModelConfig):
@@ -34,6 +36,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.subcfgs[RNN] = encoder.birnn.Config()
     self.subcfgs[TXT_EMBED] = framework.impl.encoder.pca.Config()
     self.subcfgs[FT_EMBED] = framework.impl.encoder.pca.Config()
+    self.subcfgs[LORENTZ] = framework.impl.gradient.lorentz.Config()
 
     self.max_words_in_caption = 30
     self.pool = 'mean'
@@ -116,6 +119,7 @@ class Model(framework.model.module.AbstractModel):
       RNN: encoder.birnn.Encoder(self._config.subcfgs[RNN]),
       TXT_EMBED: framework.impl.encoder.pca.Encoder1D(self._config.subcfgs[TXT_EMBED]),
       FT_EMBED: framework.impl.encoder.pca.Encoder(self._config.subcfgs[FT_EMBED]),
+      LORENTZ: framework.impl.gradient.lorentz.Module(self._config.subcfgs[LORENTZ]),
     }
 
   def _add_input_in_mode(self, mode):
@@ -184,17 +188,27 @@ class Model(framework.model.module.AbstractModel):
       caption_embed0 = tf.sqrt(norm + 1.)
       caption_embed0 = tf.expand_dims(caption_embed0, 1)
       caption_embed = tf.concat([caption_embed0, caption_embed], 1)
-      caption_embed_lorentz = framework.util.expanded_op.lorentz_gradient(caption_embed, self._config.base_lr)
+      # caption_embed_lorentz = framework.util.expanded_op.lorentz_gradient(caption_embed, self._config.base_lr)
 
       ft_embed = tf.nn.tanh(ft_embed)
       norm = tf.norm(ft_embed, axis=-1)
       ft_embed0 = tf.sqrt(norm + 1.)
       ft_embed0 = tf.expand_dims(ft_embed0, 1)
       ft_embed = tf.concat([ft_embed0, ft_embed], 1)
-      ft_embed_lorentz = framework.util.expanded_op.lorentz_gradient(ft_embed, self._config.base_lr)
-
+      # ft_embed_lorentz = framework.util.expanded_op.lorentz_gradient(ft_embed, self._config.base_lr)
       lorentz_g = tf.concat([-tf.ones((1,)), tf.ones((self._config.dim_joint_embed,))], 0)
+
       lorentz_g = tf.diag(lorentz_g)
+
+    lorentz = self.submods[LORENTZ]
+    out_ops = lorentz.get_out_ops_in_mode({
+      lorentz.InKey.INPUT: caption_embed,
+    }, mode)
+    caption_embed_lorentz = out_ops[lorentz.OutKey.OUTPUT]
+    out_ops = lorentz.get_out_ops_in_mode({
+      lorentz.InKey.INPUT: ft_embed,
+    }, mode)
+    ft_embed_lorentz = out_ops[lorentz.OutKey.OUTPUT]
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
