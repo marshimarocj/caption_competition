@@ -1226,8 +1226,7 @@ def prepare_rnnve_poincare_cfg():
     'l2norm': True,
     'dim_ft': 1024 + 2048,
     'dim_joint_embed': 500,
-    'beta': 0.1,
-    # 'beta': 1.0,
+    'beta': 0.5,
     'exp': False,
 
     'max_words_in_caption': 30,
@@ -1340,7 +1339,7 @@ def prepare_rnnve_lorentz_cfg():
 if __name__ == '__main__':
   # prepare_ceve()
   # prepare_rnnve()
-  prepare_srnnve()
+  # prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
 
@@ -1357,7 +1356,7 @@ if __name__ == '__main__':
   # prepare_rnnve_adv_freeze()
   # prepare_rnn_attwv()
   # prepare_rnnve_concept_cfg()
-  # prepare_rnnve_poincare_cfg()
+  prepare_rnnve_poincare_cfg()
   # prepare_rnnve_lorentz_cfg()
 
   # prepare_align()

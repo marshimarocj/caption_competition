@@ -39,7 +39,7 @@ class ModelConfig(framework.model.module.ModelConfig):
 
     self.dim_ft = 1024
     self.dim_joint_embed = 512
-    self.margin = 1.
+    self.margin = .1
     self.alpha = 0.5
     self.num_neg = 1
     self.beta = 0.5
@@ -63,7 +63,7 @@ def gen_cfg(**kwargs):
   cfg.base_lr = 1e-4
   cfg.num_epoch = kwargs['num_epoch']
 
-  cfg.margin = 1.
+  cfg.margin = .1
   cfg.alpha = kwargs['alpha']
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
