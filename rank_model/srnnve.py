@@ -120,7 +120,7 @@ class Model(rnnve.Model):
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
 
-       ft_embed = tf.nn.xw_plus_b(in_ops[self.InKey.FT], self.ft_pca_W, self.ft_pca_B)
+      ft_embed = tf.nn.xw_plus_b(in_ops[self.InKey.FT], self.ft_pca_W, self.ft_pca_B)
       ft_embed = tf.nn.tanh(ft_embed)
       if self._config.l2norm:
         ft_embed = tf.nn.l2_normalize(ft_embed, 1)
