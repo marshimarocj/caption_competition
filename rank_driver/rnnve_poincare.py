@@ -77,9 +77,9 @@ if __name__ == '__main__':
       trntst = rank_model.rnnve_poincare.TrnTst(model_cfg, path_cfg, m)
 
     trn_reader = rank_model.rnnve_poincare.TrnReader(
-      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file, l2norm=model_cfg.l2norm)
+      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file, l2norm=True)
     val_reader = rank_model.rnnve_poincare.ValReader(
-      path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file, l2norm=model_cfg.l2norm)
+      path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file, l2norm=True)
     if path_cfg.model_file != '':
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction, resume=True)
     else:
@@ -94,5 +94,5 @@ if __name__ == '__main__':
     trntst = rank_model.rnnve_poincare.TrnTst(model_cfg, path_cfg, m)
 
     tst_reader = rank_model.rnnve_poincare.TstReader(
-      opts.ft_files.split(','), opts.annotation_file, l2norm=model_cfg.l2norm)
+      opts.ft_files.split(','), opts.annotation_file, l2norm=True)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
