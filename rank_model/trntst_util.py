@@ -177,7 +177,7 @@ class NormTrnTst(TrnTst):
 
 
 class TrnReader(framework.model.data.Reader):
-  def __init__(self, num_neg, ft_files, annotation_file):
+  def __init__(self, num_neg, ft_files, annotation_file, l2norm=False):
     self.num_neg = num_neg
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
@@ -189,6 +189,8 @@ class TrnReader(framework.model.data.Reader):
     fts = []
     for ft_file in ft_files:
       ft = np.load(ft_file)
+      if l2norm:
+        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
       fts.append(ft)
     self.fts = np.concatenate(fts, axis=1)
     self.fts = self.fts.astype(np.float32)
@@ -246,7 +248,7 @@ class TrnReader(framework.model.data.Reader):
 
 
 class ValReader(framework.model.data.Reader):
-  def __init__(self, ft_files, annotation_file, label_file):
+  def __init__(self, ft_files, annotation_file, label_file, l2norm=False):
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
     self.captionids = np.empty(0)
@@ -256,6 +258,8 @@ class ValReader(framework.model.data.Reader):
     fts = []
     for ft_file in ft_files:
       ft = np.load(ft_file)
+      if l2norm:
+        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
       fts.append(ft)
     self.fts = np.concatenate(tuple(fts), axis=1)
     self.fts = self.fts.astype(np.float32)
@@ -288,7 +292,7 @@ class ValReader(framework.model.data.Reader):
 
 
 class TstReader(framework.model.data.Reader):
-  def __init__(self, ft_files, annotation_file):
+  def __init__(self, ft_files, annotation_file, l2norm=False):
     self.fts = np.empty(0)
     self.ft_idxs = np.empty(0)
     self.captionids = np.empty(0)
@@ -297,6 +301,8 @@ class TstReader(framework.model.data.Reader):
     fts = []
     for ft_file in ft_files:
       ft = np.load(ft_file)
+      if l2norm:
+        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
       fts.append(ft)
     self.fts = np.concatenate(tuple(fts), axis=1)
     self.fts = self.fts.astype(np.float32)

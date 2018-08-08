@@ -185,6 +185,7 @@ class Model(framework.model.module.AbstractModel):
         caption_embed -= tf.expand_dims(base, 1)
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed += base
+
       if self._config.loss == 'norm':
         caption_norm = tf.norm(caption_embed, axis=-1)
         ft_norm = tf.norm(ft_embed, axis=-1)
