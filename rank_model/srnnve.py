@@ -87,6 +87,27 @@ class Model(rnnve.Model):
       RNN: framework.impl.encoder.rnn.Encoder(self._config.subcfgs[RNN]),
     }
 
+  def _build_parameter_graph(self):
+    with tf.variable_scope(self.name_scope):
+      dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
+      self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
+        shape=(dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
+        initializer=tf.contrib.layers.xavier_initializer())
+      self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
+        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.caption_pca_W)
+      self._weights.append(self.caption_pca_B)
+
+      self.ft_pca_W = tf.contrib.framework.model_variable('ft_pca_W',
+        shape=(self._config.dim_ft, self._config.dim_joint_embed), dtype=tf.float32,
+        initializer=tf.contrib.layers.xavier_initializer())
+      self.ft_pca_B = tf.contrib.framework.model_variable('ft_pca_B',
+        shape=(self._config.dim_joint_embed,), dtype=tf.float32,
+        initializer=tf.random_uniform_initializer(-0.1, 0.1))
+      self._weights.append(self.ft_pca_W)
+      self._weights.append(self.ft_pca_B)
+
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     encoder = self.submods[WE]
     out_ops = encoder.get_out_ops_in_mode({
