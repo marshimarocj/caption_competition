@@ -275,7 +275,7 @@ def prepare_srnnve():
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
     params['alpha'], params['lr_mult'])
 
-  model_cfg = rank_model.rnnve.gen_cfg(**params)
+  model_cfg = rank_model.srnnve.gen_cfg(**params)
 
   model_cfg_file = '%s.model.json'%outprefix
   model_cfg.save(model_cfg_file)
