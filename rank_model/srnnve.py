@@ -102,7 +102,6 @@ class Model(rnnve.Model):
     rnn = self.submods[RNN]
     out_ops = rnn.get_out_ops_in_mode({
       rnn.InKey.FT: wvecs,
-      rnn.InKey.MASK: in_ops[self.InKey.CAPTION_MASK],
       rnn.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
       rnn.InKey.INIT_STATE: init_state,
     }, mode)
