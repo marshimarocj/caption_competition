@@ -6,7 +6,7 @@ from Queue import Queue
 import json
 
 import numpy as np
-import skearn.preprocessing
+import sklearn.preprocessing
 
 import framework.model.trntst
 import framework.util.caption.utility
