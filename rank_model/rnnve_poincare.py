@@ -185,6 +185,11 @@ class Model(framework.model.module.AbstractModel):
         caption_embed -= tf.expand_dims(base, 1)
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed += base
+      if self._config.loss == 'norm':
+        caption_norm = tf.norm(caption_embed, axis=-1)
+        ft_norm = tf.norm(ft_embed, axis=-1)
+        regularization = tf.abs(ft_norm - 0.01*tf.ones_like(ft_norm)) + tf.abs(caption_norm - 0.01*tf.ones_like(caption_norm))
+
       # unit ball
       caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
@@ -195,11 +200,7 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
-      if self._config.loss == 'norm':
-        ft_norm = tf.norm(ft_embed, axis=-1)
-        caption_norm = tf.norm(caption_embed, axis=-1)
-        regularization = tf.abs(ft_norm - 0.01*tf.ones_like(ft_norm)) + tf.abs(caption_norm - 0.01*tf.ones_like(caption_norm))
-      else:
+      if self._config.loss != 'norm':
         regularization = tf.norm(ft_embed_poincare, axis=-1) + tf.norm(caption_embed_poincare, axis=-1)
 
     def trn(ft_embed, caption_embed):
