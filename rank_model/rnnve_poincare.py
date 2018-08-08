@@ -44,6 +44,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.num_neg = 1
     self.beta = 0.5
     self.exp = False
+    self.loss = 'norm'
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
@@ -197,8 +198,12 @@ class Model(framework.model.module.AbstractModel):
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
-      # euclidean_dist = tf.norm(ft_embed_poincare - caption_embed_poincare, axis=-1)
-      regularization = tf.norm(ft_embed_poincare, axis=-1) + tf.norm(caption_embed_poincare, axis=-1)
+      if self._config.loss == 'norm':
+        ft_norm = tf.norm(ft_embed, axis=-1)
+        caption_norm = tf.norm(caption_embed, axis=-1)
+        regularization = tf.abs(ft_norm - 0.01*tf.ones_like(ft_norm)) + tf.abs(caption_norm - 0.01*tf.ones_like(caption_norm))
+      else:
+        regularization = tf.norm(ft_embed_poincare, axis=-1) + tf.norm(caption_embed_poincare, axis=-1)
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
@@ -254,15 +259,20 @@ class Model(framework.model.module.AbstractModel):
       return sim
 
     if mode == framework.model.module.Mode.TRN_VAL:
-      pos_sim, neg_caption_sim, neg_ft_sim = trn(ft_embed_poincare, caption_embed_poincare)
-      sim = tst(ft_embed, caption_embed)
-      return {
-        self.OutKey.SIM: sim,
-        self.OutKey.P_SIM: pos_sim,
-        self.OutKey.NF_SIM: neg_ft_sim,
-        self.OutKey.NC_SIM: neg_caption_sim,
-        self.OutKey.REGULAR: regularization,
-      }
+      if self._config.loss == 'norm':
+        return {
+          self.OutKey.REGULAR: regularization,
+        }
+      else:
+        pos_sim, neg_caption_sim, neg_ft_sim = trn(ft_embed_poincare, caption_embed_poincare)
+        sim = tst(ft_embed, caption_embed)
+        return {
+          self.OutKey.SIM: sim,
+          self.OutKey.P_SIM: pos_sim,
+          self.OutKey.NF_SIM: neg_ft_sim,
+          self.OutKey.NC_SIM: neg_caption_sim,
+          self.OutKey.REGULAR: regularization,
+        }
     else:
       sim = tst(ft_embed, caption_embed)
       return {
@@ -271,31 +281,40 @@ class Model(framework.model.module.AbstractModel):
 
   def _add_loss(self):
     with tf.variable_scope(self.name_scope):
-      pos_sim = self._outputs[self.OutKey.P_SIM]
-      neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
-      neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
-      regularization = self._outputs[self.OutKey.REGULAR]
-      self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
-      self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
-      self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
-      self.op2monitor['regularization'] = tf.reduce_mean(regularization)
+      if self._config.loss == 'norm':
+        regularization = self._outputs[self.OutKey.REGULAR]
+        self.op2monitor['loss'] = tf.reduce_mean(regularization)
+      else:
+        pos_sim = self._outputs[self.OutKey.P_SIM]
+        neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
+        neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
+        regularization = self._outputs[self.OutKey.REGULAR]
+        self.op2monitor['pos_sim'] = tf.reduce_mean(pos_sim)
+        self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
+        self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
+        self.op2monitor['regularization'] = tf.reduce_mean(regularization)
 
-      contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
-      contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
+        contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
+        contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
 
-      contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
-      contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
+        contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
+        contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
 
-      loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
-      loss = tf.reduce_mean(loss)
-      loss += self._config.beta * tf.reduce_mean(regularization)
-      self.op2monitor['loss'] = loss
+        loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
+        loss = tf.reduce_mean(loss)
+        loss += self._config.beta * tf.reduce_mean(regularization)
+        self.op2monitor['loss'] = loss
     return loss
 
   def op_in_val(self, **kwargs):
-    return {
-      self.OutKey.SIM: self._outputs[self.OutKey.SIM],
-    }
+    if self._config.loss == 'norm':
+      return {
+        self.OutKey.REGULAR: self._outputs[self.OutKey.REGULAR],
+      }
+    else:
+      return {
+        self.OutKey.SIM: self._outputs[self.OutKey.SIM],
+      }
 
   def op_in_tst(self, **kwargs):
     return {
@@ -305,6 +324,8 @@ class Model(framework.model.module.AbstractModel):
 
 PathCfg = trntst_util.PathCfg
 TrnTst = trntst_util.TrnTst
+NormTrnTst = trntst_util.NormTrnTst
+
 
 TrnReader = trntst_util.TrnReader
 ValReader = trntst_util.ValReader

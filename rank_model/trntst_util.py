@@ -156,6 +156,26 @@ class AttTrnTst(framework.model.trntst.TrnTst):
     np.save(predict_file, sims)
 
 
+class NormTrnTst(TrnTst):
+  def predict_and_eval_in_val(self, sess, tst_reader, metrics):
+    batch_size = self.model_cfg.tst_batch_size
+    op_dict = self.model.op_in_val()
+
+    regularization = 0.
+    num = 0.
+    for data in tst_reader.yield_val_batch(batch_size):
+      feed_dict = {
+        self.model.inputs[self.model.InKey.FT]: data['fts'],
+        self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
+        self.model.inputs[self.model.InKey.CAPTION_MASK]: data['caption_masks'],
+        self.model.inputs[self.model.InKey.IS_TRN]: False,
+      }
+      regularization += sess.run(op_dict[self.model.OutKey.REGULAR], feed_dict=feed_dict)
+      num += 1
+    regularization /= num
+    metrics['regularization'] = regularization
+
+
 class TrnReader(framework.model.data.Reader):
   def __init__(self, num_neg, ft_files, annotation_file):
     self.num_neg = num_neg

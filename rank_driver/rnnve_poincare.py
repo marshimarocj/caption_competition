@@ -27,6 +27,7 @@ def build_parser():
   parser.add_argument('--annotation_file', dest='annotation_file')
   parser.add_argument('--out_name', dest='out_name')
   parser.add_argument('--ft_files', dest='ft_files')
+  parser.add_argument('--loss', dest='loss', default='poincare')
 
   return parser
 
@@ -59,10 +60,17 @@ if __name__ == '__main__':
   path_cfg = gen_dir_struct_info(opts.path_cfg_file)
   model_cfg = load_and_fill_model_cfg(opts.model_cfg_file, path_cfg)
 
-  m = rank_model.rnnve_poincare.Model(model_cfg)
-
   if opts.is_train:
-    trntst = rank_model.rnnve_poincare.TrnTst(model_cfg, path_cfg, m)
+    model_cfg.loss = opts.loss
+    if model_cfg.loss == 'norm':
+      model_cfg.num_epoch = 1
+    else:
+      path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-0')
+    m = rank_model.rnnve_poincare.Model(model_cfg)
+    if model_cfg.loss == 'norm':
+      trntst = rank_model.rnnve_poincare.NormTrnTst(model_cfg, path_cfg, m)
+    else:
+      trntst = rank_model.rnnve_poincare.TrnTst(model_cfg, path_cfg, m)
 
     trn_reader = rank_model.rnnve_poincare.TrnReader(
       model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
@@ -73,6 +81,8 @@ if __name__ == '__main__':
     else:
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction)
   else:
+    m = rank_model.rnnve_poincare.Model(model_cfg)
+
     path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-%d'%opts.best_epoch)
     path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred', '%s.npy'%opts.out_name)
     path_cfg.log_file = None
