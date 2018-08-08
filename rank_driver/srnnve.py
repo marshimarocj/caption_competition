@@ -46,7 +46,6 @@ def load_and_fill_model_cfg(model_cfg_file, path_cfg):
     model_cfg.subcfgs[WE].num_words = E.shape[0]
     model_cfg.subcfgs[WE].dim_embed = E.shape[1]
     model_cfg.subcfgs[RNN].subcfgs[CELL].dim_input = E.shape[1]
-    model_cfg.subcfgs[RNN].subcfgs[RCELL].dim_input = E.shape[1]
 
   return model_cfg
 
