@@ -284,7 +284,7 @@ class Model(framework.model.module.AbstractModel):
       if self._config.loss == 'norm':
         regularization = self._outputs[self.OutKey.REGULAR]
         self.op2monitor['loss'] = tf.reduce_mean(regularization)
-        loss = regularization
+        loss = tf.reduce_mean(regularization)
       else:
         pos_sim = self._outputs[self.OutKey.P_SIM]
         neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
