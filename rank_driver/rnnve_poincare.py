@@ -63,9 +63,9 @@ if __name__ == '__main__':
   if opts.is_train:
     model_cfg.loss = opts.loss
     if model_cfg.loss == 'norm':
-      model_cfg.num_epoch = 1
+      model_cfg.num_epoch = 5
     else:
-      path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-0')
+      path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-4')
     m = rank_model.rnnve_poincare.Model(model_cfg)
     if model_cfg.loss == 'norm':
       trntst = rank_model.rnnve_poincare.NormTrnTst(model_cfg, path_cfg, m)
