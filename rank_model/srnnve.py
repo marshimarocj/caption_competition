@@ -84,7 +84,7 @@ class Model(rnnve.Model):
   def _set_submods(self):
     return {
       WE: encoder.word.Encoder(self._config.subcfgs[WE]),
-      RNN: framework.impl.encoder.rnn.Encoder(self._confib.subcfgs[RNN]),    
+      RNN: framework.impl.encoder.rnn.Encoder(self._config.subcfgs[RNN]),
     }
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
