@@ -68,6 +68,7 @@ if __name__ == '__main__':
       model_cfg.subcfgs[RNN].freeze = True
       model_cfg.subcfgs[RNN].subcfgs[CELL].freeze = True
       model_cfg.subcfgs[RNN].subcfgs[RCELL].freeze = True
+      model_cfg.base_lr = 1e-1
     else:
       path_cfg.model_file = os.path.join(path_cfg.model_dir, 'epoch-4')
     m = rank_model.rnnve_poincare.Model(model_cfg)
