@@ -178,22 +178,19 @@ class Model(framework.model.module.AbstractModel):
     with tf.variable_scope(self.name_scope):
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
-      caption_embed = tf.nn.tanh(caption_embed)
       if self._config.pool == 'mean':
         caption_embed = tf.reduce_sum(caption_embed*mask, 1) / tf.reduce_sum(mask, 1)
       else:
-        caption_embed += 1.
+        base = tf.reduce_min(caption_embed, 1)
+        caption_embed -= base
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
-        caption_embed -= 1.
+        caption_embed += base
       # unit ball
-      caption_embed /= self._config.dim_joint_embed**0.5
       caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
-      ft_embed = tf.nn.tanh(ft_embed)
       # unit ball
-      ft_embed /= self._config.dim_joint_embed**0.5
       ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-6, 1)
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
