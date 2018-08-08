@@ -173,7 +173,7 @@ class NormTrnTst(TrnTst):
       regularization += sess.run(op_dict[self.model.OutKey.REGULAR], feed_dict=feed_dict)
       num += 1
     regularization /= num
-    metrics['regularization'] = regularization
+    metrics['regularization'] = np.mean(regularization)
 
 
 class TrnReader(framework.model.data.Reader):
