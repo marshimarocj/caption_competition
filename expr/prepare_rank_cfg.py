@@ -1168,6 +1168,7 @@ def prepare_rnnve_poincare_cfg():
 
     'max_words_in_caption': 30,
     'pool': 'max',
+    'loss': 'norm',
 
     'cell': 'gru',
     'cell_dim_hidden': 250,
