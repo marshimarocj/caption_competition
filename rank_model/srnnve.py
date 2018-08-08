@@ -107,7 +107,7 @@ class Model(rnnve.Model):
     }, mode)
 
     with tf.variable_scope(self.name_scope):
-      caption_embed = out_ops[rnn.OutKey.OUTPUT]
+      outputs = out_ops[rnn.OutKey.OUTPUT]
       mask = in_ops[self.InKey.CAPTION_MASK]
       row_idxs = tf.range(batch_size)
       col_idxs = tf.to_int32(tf.reduce_sum(mask, 1))-1
