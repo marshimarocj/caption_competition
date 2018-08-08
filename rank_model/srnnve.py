@@ -27,7 +27,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     super(ModelConfig, self).__init__()
 
     self.subcfgs[WE] = encoder.word.Config()
-    self.subcfgs[RNN] = framework.impl.encoder.rnn.Config()
+    self.subcfgs[RNN] = framework.impl.encoder.rnn.RNNConfig()
 
     self.max_words_in_caption = 30
 
