@@ -6,6 +6,7 @@ from Queue import Queue
 import json
 
 import numpy as np
+import scipy.preprocessing
 
 import framework.model.trntst
 import framework.util.caption.utility
@@ -190,7 +191,7 @@ class TrnReader(framework.model.data.Reader):
     for ft_file in ft_files:
       ft = np.load(ft_file)
       if l2norm:
-        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
+        ft = scipy.preprocessing.normalize(ft)
       fts.append(ft)
     self.fts = np.concatenate(fts, axis=1)
     self.fts = self.fts.astype(np.float32)
@@ -259,7 +260,7 @@ class ValReader(framework.model.data.Reader):
     for ft_file in ft_files:
       ft = np.load(ft_file)
       if l2norm:
-        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
+        ft = scipy.preprocessing.normalize(ft)
       fts.append(ft)
     self.fts = np.concatenate(tuple(fts), axis=1)
     self.fts = self.fts.astype(np.float32)
@@ -302,7 +303,7 @@ class TstReader(framework.model.data.Reader):
     for ft_file in ft_files:
       ft = np.load(ft_file)
       if l2norm:
-        ft /= np.expand_dims(np.linalg.norm(ft, axis=1), 1)
+        ft = scipy.preprocessing.normalize(ft)
       fts.append(ft)
     self.fts = np.concatenate(tuple(fts), axis=1)
     self.fts = self.fts.astype(np.float32)
