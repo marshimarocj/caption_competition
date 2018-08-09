@@ -188,7 +188,7 @@ def prepare_rnnve():
     'l2norm': True,
     # 'l2norm_input': True,
     'l2norm_input': False,
-    'dim_ft': 1024 + 1024 + 2048,
+    'dim_ft': 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
