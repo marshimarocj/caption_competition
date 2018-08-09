@@ -197,6 +197,9 @@ class Model(framework.model.module.AbstractModel):
           neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100. # (trn_batch_size,)
           neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100. # (trn_batch_size,)
         else:
+          pos_sim *= 10.
+          neg_caption_sim *= 10.
+          neg_ft_sim *= 10.
           neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
           neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
