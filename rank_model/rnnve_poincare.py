@@ -215,6 +215,8 @@ class Model(framework.model.module.AbstractModel):
         pos_dist = 1 + 2 * pos_dist
         pos_dist = tf.acosh(pos_dist)
         pos_sim = -pos_dist
+        if self._config.loss != 'lifted':
+          pos_sim *= 10.
 
         neg_caption_dist = tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1) - tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1), axis=-1))
@@ -226,6 +228,7 @@ class Model(framework.model.module.AbstractModel):
           neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100.
         else:
           neg_caption_sim = -neg_caption_dist
+          neg_caption_sim *= 10.
           neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
 
@@ -239,6 +242,7 @@ class Model(framework.model.module.AbstractModel):
           neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100.
         else:
           neg_ft_sim = -neg_ft_dist
+          neg_ft_sim *= 10.
           neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_ft_sim = tf.reduce_logsumexp(neg_ft_sim, 1)
 
