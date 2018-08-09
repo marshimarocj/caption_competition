@@ -207,7 +207,8 @@ def prepare_rnnve():
     'cell_dim_hidden': 250,
     # 'cell_dim_hidden': 500,
 
-    'margin': .3,
+    # 'margin': .3,
+    'margin': .5,
 
     'lr_mult': .1,
   }
