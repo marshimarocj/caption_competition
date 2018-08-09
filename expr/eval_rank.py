@@ -87,7 +87,9 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.256_512_768.250.gru.max.0.5.0.1.flickr30m.freeze.boost', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.1.flickr30m.freeze', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.0.flickr30m.freeze', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.0.flickr30m.freeze', 'log')
+
+  log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m', 'log')
 
   # log_dir = os.path.join(root_dir, 'rnnve_mm_expr', 'i3d_i3d_flow_resnet200.512_512.max.0.5.flickr30m.freeze', 'log')
 
