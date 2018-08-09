@@ -216,9 +216,7 @@ class Model(framework.model.module.AbstractModel):
         pos_dist = 1 + 2 * pos_dist
         pos_dist = tf.acosh(pos_dist)
         pos_sim = -pos_dist
-        # if self._config.loss != 'lifted':
-        #   pos_sim *= 10.
-        pos_sim *= self.scale
+        # pos_sim *= self.scale
 
         neg_caption_dist = tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1) - tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1), axis=-1))
@@ -227,12 +225,11 @@ class Model(framework.model.module.AbstractModel):
         neg_caption_dist = tf.acosh(neg_caption_dist)
         if self._config.loss == 'lifted':
           neg_caption_sim = -neg_caption_dist
-          neg_caption_sim *= self.scale
+          # neg_caption_sim *= self.scale
           neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100.
         else:
           neg_caption_sim = -neg_caption_dist
-          # neg_caption_sim *= 10.
-          neg_caption_sim *= self.scale
+          # neg_caption_sim *= self.scale
           neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
 
@@ -243,12 +240,11 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_dist = tf.acosh(neg_ft_dist)
         if self._config.loss == 'lifted':
           neg_ft_sim = -neg_ft_dist
-          neg_ft_sim *= self.scale
+          # neg_ft_sim *= self.scale
           neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100.
         else:
           neg_ft_sim = -neg_ft_dist
-          # neg_ft_sim *= 10.
-          neg_ft_sim *= self.scale
+          # neg_ft_sim *= self.scale
           neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_ft_sim = tf.reduce_logsumexp(neg_ft_sim, 1)
 
@@ -303,16 +299,16 @@ class Model(framework.model.module.AbstractModel):
         self.op2monitor['scale'] = self.scale
 
         if self._config.loss == 'lifted':
-          contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
+          contrast_caption_loss = self.scale*neg_caption_sim + self._config.margin - self.scale*pos_sim
           contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
         else:
-          contrast_caption_loss = neg_caption_sim - pos_sim
+          contrast_caption_loss = self.scale*(neg_caption_sim - pos_sim)
 
         if self._config.loss == 'lifted':
-          contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
+          contrast_ft_loss = self.scale*neg_ft_sim + self._config.margin - self.scale*pos_sim
           contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
         else:
-          contrast_ft_loss = neg_ft_sim - pos_sim
+          contrast_ft_loss = self.scale*(neg_ft_sim - pos_sim)
 
         loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
         loss = tf.reduce_mean(loss)
