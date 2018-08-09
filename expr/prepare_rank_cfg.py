@@ -1227,11 +1227,10 @@ def prepare_rnnve_poincare_cfg():
     'dim_ft': 1024 + 2048,
     'dim_joint_embed': 500,
     'beta': 0.5,
-    'exp': False,
 
     'max_words_in_caption': 30,
     'pool': 'max',
-    'loss': 'norm',
+    'loss': 'lifted',
 
     'cell': 'gru',
     'cell_dim_hidden': 250,
@@ -1239,11 +1238,10 @@ def prepare_rnnve_poincare_cfg():
     'lr_mult': .1,
   }
 
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%.1f.flickr30m'%(
-  # outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%.1f.exp.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%.1f.%s.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
-    params['pool'], params['alpha'], params['beta'], params['lr_mult'])
+    params['pool'], params['alpha'], params['beta'], params['lr_mult'], params['loss'])
 
   model_cfg = rank_model.rnnve_poincare.gen_cfg(**params)
 
