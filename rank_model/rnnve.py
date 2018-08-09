@@ -38,6 +38,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.alpha = 0.5
     self.num_neg = 1
     self.l2norm = True
+    self.l2norm_input = False
     self.loss = 'lifted'
 
   def _assert(self):
@@ -59,6 +60,7 @@ def gen_cfg(**kwargs):
   cfg.alpha = kwargs['alpha']
   cfg.num_neg = kwargs['num_neg']
   cfg.l2norm = kwargs['l2norm']
+  cfg.l2norm_input = kwargs['l2norm_input']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
 

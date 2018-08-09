@@ -176,7 +176,7 @@ def prepare_rnnve():
   
   ft_names = [
     'i3d',
-    # 'i3d_flow',
+    'i3d_flow',
     'resnet200',
   ]
 
@@ -186,7 +186,8 @@ def prepare_rnnve():
     'alpha': 0.5,
     'num_neg': 32,
     'l2norm': True,
-    'dim_ft': 1024 + 2048,
+    'l2norm_input': True,
+    'dim_ft': 1024 + 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
@@ -195,7 +196,8 @@ def prepare_rnnve():
     'max_words_in_caption': 30,
     # 'pool': 'mean',
     'pool': 'max',
-    'loss': 'softmax',
+    # 'loss': 'softmax',
+    'loss': 'lifted',
 
     'cell': 'gru',
     # 'cell': 'lstm',
@@ -208,7 +210,7 @@ def prepare_rnnve():
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m.l2norm_input'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
     params['pool'], params['alpha'], params['lr_mult'], params['loss'])
@@ -1339,8 +1341,8 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
-  prepare_srnnve()
+  prepare_rnnve()
+  # prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
 
