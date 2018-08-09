@@ -38,6 +38,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.num_neg = 1
     self.l2norm = True
     self.pool = 'final'
+    self.loss = 'lifted'
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
