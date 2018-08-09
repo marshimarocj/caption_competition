@@ -71,6 +71,7 @@ def gen_cfg(**kwargs):
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
   cfg.pool = kwargs['pool']
+  cfg.loss = kwargs['loss']
 
   we_cfg = cfg.subcfgs[WE]
   we_cfg.lr_mult = kwargs['lr_mult']
