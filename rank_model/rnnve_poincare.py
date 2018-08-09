@@ -300,6 +300,7 @@ class Model(framework.model.module.AbstractModel):
         self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
         self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
         self.op2monitor['regularization'] = tf.reduce_mean(regularization)
+        self.op2monitor['scale'] = self.scale
 
         if self._config.loss == 'lifted':
           contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
