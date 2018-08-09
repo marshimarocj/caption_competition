@@ -212,14 +212,14 @@ class Model(framework.model.module.AbstractModel):
 
         pos_dist = tf.square(tf.norm(pos_ft_embed - pos_caption_embed, axis=-1))
         pos_dist /= (1. - tf.square(tf.norm(pos_ft_embed, axis=-1))) * (1. - tf.square(tf.norm(pos_caption_embed, axis=-1)))
-        pos_dist = 1 + 2 * pos_dist + 1e-6
+        pos_dist = 1 + 2 * pos_dist
         pos_dist = tf.acosh(pos_dist)
         pos_sim = -pos_dist
 
         neg_caption_dist = tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1) - tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(neg_caption_embed, 0), axis=-1))
-        neg_caption_dist = 1 + 2 * neg_caption_dist + 1e-6
+        neg_caption_dist = 1 + 2 * neg_caption_dist
         neg_caption_dist = tf.acosh(neg_caption_dist)
         if self._config.loss == 'lifted':
           neg_caption_sim = -neg_caption_dist
@@ -232,7 +232,7 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_dist = tf.square(tf.norm(tf.expand_dims(pos_caption_embed, 1) - tf.expand_dims(neg_ft_embed, 0), axis=-1))
         neg_ft_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_caption_embed, 1), axis=-1))
         neg_ft_dist /= 1. - tf.square(tf.norm(tf.expand_dims(neg_ft_embed, 0), axis=-1))
-        neg_ft_dist = 1 + 2 * neg_ft_dist + 1e-6
+        neg_ft_dist = 1 + 2 * neg_ft_dist
         neg_ft_dist = tf.acosh(neg_ft_dist)
         if self._config.loss == 'lifted':
           neg_ft_sim = -neg_ft_dist
@@ -249,7 +249,7 @@ class Model(framework.model.module.AbstractModel):
         dist = tf.square(tf.norm(tf.expand_dims(ft_embed, 1) - tf.expand_dims(caption_embed, 0), axis=-1))
         dist /= 1. - tf.square(tf.norm(tf.expand_dims(ft_embed, 1), axis=-1))
         dist /= 1. - tf.square(tf.norm(tf.expand_dims(caption_embed, 0), axis=-1))
-        dist = 1 + 2 * dist + 1e-6
+        dist = 1 + 2 * dist
         dist = tf.acosh(dist)
         sim = -dist
       return sim
