@@ -162,8 +162,8 @@ def prepare_ceve_score():
 
 
 def prepare_rnnve():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/home/jiac/data/trecvid2018' # gpu9
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
@@ -186,7 +186,8 @@ def prepare_rnnve():
     'alpha': 0.5,
     'num_neg': 32,
     'l2norm': True,
-    'l2norm_input': True,
+    # 'l2norm_input': True,
+    'l2norm_input': False,
     'dim_ft': 1024 + 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
@@ -206,14 +207,17 @@ def prepare_rnnve():
     'cell_dim_hidden': 250,
     # 'cell_dim_hidden': 500,
 
+    'margin': .3,
+
     'lr_mult': .1,
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m.l2norm_input'%(
+  # outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m.l2norm_input'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.%.1f.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
-    params['pool'], params['alpha'], params['lr_mult'], params['loss'])
+    params['pool'], params['alpha'], params['lr_mult'], params['loss'], params['margin'])
 
   model_cfg = rank_model.rnnve.gen_cfg(**params)
 

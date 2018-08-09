@@ -203,7 +203,6 @@ class Model(framework.model.module.AbstractModel):
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
         ft_embed = tf.nn.l2_normalize(ft_embed, 1)
-    # print ft_embed.get_shape(), caption_embed.get_shape()
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
