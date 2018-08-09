@@ -176,7 +176,7 @@ def prepare_rnnve():
   
   ft_names = [
     'i3d',
-    'i3d_flow',
+    # 'i3d_flow',
     'resnet200',
   ]
 
