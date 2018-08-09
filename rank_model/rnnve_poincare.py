@@ -201,7 +201,7 @@ class Model(framework.model.module.AbstractModel):
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 
       if self._config.loss != 'norm':
-        regularization = tf.norm(ft_embed_poincare, axis=-1) + tf.norm(caption_embed_poincare, axis=-1)
+        regularization = tf.norm(ft_embed, axis=-1) + tf.norm(caption_embed, axis=-1)
 
     def trn(ft_embed, caption_embed):
       with tf.variable_scope(self.name_scope):
