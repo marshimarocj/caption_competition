@@ -140,8 +140,9 @@ class Model(framework.model.module.AbstractModel):
     }
 
   def _build_parameter_graph(self):
-    self.scale = tf.contrib.framework.model_variable('scale',
-      shape=(), dtype=tf.float32, initializer=tf.constant_initializer(1.))
+    # self.scale = tf.contrib.framework.model_variable('scale',
+    #   shape=(), dtype=tf.float32, initializer=tf.constant_initializer(1.))
+    pass
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     encoder = self.submods[WE]
@@ -296,19 +297,23 @@ class Model(framework.model.module.AbstractModel):
         self.op2monitor['neg_caption_sim'] = tf.reduce_mean(neg_caption_sim)
         self.op2monitor['neg_ft_sim'] = tf.reduce_mean(neg_ft_sim)
         self.op2monitor['regularization'] = tf.reduce_mean(regularization)
-        self.op2monitor['scale'] = self.scale
+        # self.op2monitor['scale'] = self.scale
 
         if self._config.loss == 'lifted':
-          contrast_caption_loss = self.scale*neg_caption_sim + self._config.margin - self.scale*pos_sim
+          # contrast_caption_loss = self.scale*neg_caption_sim + self._config.margin - self.scale*pos_sim
+          contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
           contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
         else:
-          contrast_caption_loss = self.scale*(neg_caption_sim - pos_sim)
+          # contrast_caption_loss = self.scale*(neg_caption_sim - pos_sim)
+          contrast_caption_loss = neg_caption_sim - pos_sim
 
         if self._config.loss == 'lifted':
-          contrast_ft_loss = self.scale*neg_ft_sim + self._config.margin - self.scale*pos_sim
+          # contrast_ft_loss = self.scale*neg_ft_sim + self._config.margin - self.scale*pos_sim
+          contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
           contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
         else:
-          contrast_ft_loss = self.scale*(neg_ft_sim - pos_sim)
+          # contrast_ft_loss = self.scale*(neg_ft_sim - pos_sim)
+          contrast_ft_loss = neg_ft_sim - pos_sim
 
         loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
         loss = tf.reduce_mean(loss)
