@@ -27,7 +27,7 @@ def build_parser():
   parser.add_argument('--annotation_file', dest='annotation_file')
   parser.add_argument('--out_name', dest='out_name')
   parser.add_argument('--ft_files', dest='ft_files')
-  parser.add_argument('--loss', dest='loss', default='poincare')
+  parser.add_argument('--loss', dest='loss', default='')
 
   return parser
 
@@ -61,7 +61,8 @@ if __name__ == '__main__':
   model_cfg = load_and_fill_model_cfg(opts.model_cfg_file, path_cfg)
 
   if opts.is_train:
-    model_cfg.loss = opts.loss
+    if opts.loss != '':
+      model_cfg.loss = opts.loss
     if model_cfg.loss == 'norm':
       model_cfg.num_epoch = 5
       model_cfg.subcfgs[WE].freeze = True
