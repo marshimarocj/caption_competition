@@ -189,28 +189,29 @@ def prepare_rnnve():
     'dim_ft': 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
-    # 'dim_joint_embed': 500,
-    'dim_joint_embed': 1000,
+    'dim_joint_embed': 500,
+    # 'dim_joint_embed': 1000,
 
     'max_words_in_caption': 30,
     # 'pool': 'mean',
     'pool': 'max',
+    'loss': 'softmax',
 
     'cell': 'gru',
     # 'cell': 'lstm',
     # 'cell_dim_hidden': 150,
     # 'cell_dim_hidden': 256,
-    # 'cell_dim_hidden': 250,
-    'cell_dim_hidden': 500,
+    'cell_dim_hidden': 250,
+    # 'cell_dim_hidden': 500,
 
     'lr_mult': .1,
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
-    params['pool'], params['alpha'], params['lr_mult'])
+    params['pool'], params['alpha'], params['lr_mult'], params['loss'])
 
   model_cfg = rank_model.rnnve.gen_cfg(**params)
 
@@ -1226,12 +1227,12 @@ def prepare_rnnve_poincare_cfg():
     'l2norm': True,
     'dim_ft': 1024 + 2048,
     'dim_joint_embed': 500,
-    'beta': 0.5,
+    'beta': 0.1,
 
     'max_words_in_caption': 30,
     'pool': 'max',
-    # 'loss': 'lifted',
-    'loss': 'exp',
+    'loss': 'lifted',
+    # 'loss': 'exp',
 
     'cell': 'gru',
     'cell_dim_hidden': 250,
@@ -1337,7 +1338,7 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
+  prepare_rnnve()
   # prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
@@ -1355,7 +1356,7 @@ if __name__ == '__main__':
   # prepare_rnnve_adv_freeze()
   # prepare_rnn_attwv()
   # prepare_rnnve_concept_cfg()
-  prepare_rnnve_poincare_cfg()
+  # prepare_rnnve_poincare_cfg()
   # prepare_rnnve_lorentz_cfg()
 
   # prepare_align()

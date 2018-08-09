@@ -191,12 +191,12 @@ class Model(framework.model.module.AbstractModel):
         regularization = tf.abs(ft_norm - 0.01*tf.ones_like(ft_norm)) + tf.abs(caption_norm - 0.01*tf.ones_like(caption_norm))
 
       # unit ball
-      caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-6, 1)
+      caption_embed = tf.clip_by_norm(caption_embed, 1.0-1e-5, 1)
       self.op2monitor['caption_embed_norm'] = tf.reduce_mean(tf.norm(caption_embed, axis=-1))
       caption_embed_poincare = framework.util.expanded_op.poincareball_gradient(caption_embed)
 
       # unit ball
-      ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-6, 1)
+      ft_embed = tf.clip_by_norm(ft_embed, 1.0-1e-5, 1)
       self.op2monitor['ft_embed_norm'] = tf.reduce_mean(tf.norm(ft_embed, axis=-1))
       ft_embed_poincare = framework.util.expanded_op.poincareball_gradient(ft_embed)
 

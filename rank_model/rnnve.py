@@ -38,6 +38,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.alpha = 0.5
     self.num_neg = 1
     self.l2norm = True
+    self.loss = 'lifted'
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
@@ -191,8 +192,14 @@ class Model(framework.model.module.AbstractModel):
         neg_caption_sim = tf.matmul(pos_ft_embed, neg_caption_embed, transpose_b=True) # (trn_batch_size, neg)
         neg_ft_sim = tf.matmul(pos_caption_embed, neg_ft_embed, transpose_b=True) # (trn_batch_size, neg)
 
-        neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100. # (trn_batch_size,)
-        neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100. # (trn_batch_size,)
+        if self._config.loss == 'lifted':
+          neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100. # (trn_batch_size,)
+          neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100. # (trn_batch_size,)
+        else:
+          neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
+          neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
+          neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
+          neg_ft_sim = tf.reduce_logsumexp(neg_ft_sim, 1)
 
       return pos_sim, neg_caption_sim, neg_ft_sim
 
@@ -222,12 +229,18 @@ class Model(framework.model.module.AbstractModel):
       neg_caption_sim = self._outputs[self.OutKey.NC_SIM]
       neg_ft_sim = self._outputs[self.OutKey.NF_SIM]
 
-      contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
-      contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
+      if self._config.loss == 'lifted':
+        contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
+        contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
+      else:
+        contrast_caption_loss = neg_caption_sim - pos_sim
       self.op2monitor['contrast_caption_loss'] = tf.reduce_sum(contrast_caption_loss)
 
-      contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
-      contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
+      if self._config.loss == 'lifted':
+        contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
+        contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
+      else:
+        contrast_ft_loss = neg_ft_sim - pos_sim
       self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
