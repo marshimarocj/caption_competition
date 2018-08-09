@@ -140,7 +140,8 @@ class Model(framework.model.module.AbstractModel):
     }
 
   def _build_parameter_graph(self):
-    pass
+    self.scale = tf.contrib.framework.model_variable('scale',
+      shape=(), dtype=tf.float32, initializer=tf.constant_initializer(1.))
 
   def get_out_ops_in_mode(self, in_ops, mode, **kwargs):
     encoder = self.submods[WE]
@@ -215,8 +216,9 @@ class Model(framework.model.module.AbstractModel):
         pos_dist = 1 + 2 * pos_dist
         pos_dist = tf.acosh(pos_dist)
         pos_sim = -pos_dist
-        if self._config.loss != 'lifted':
-          pos_sim *= 10.
+        # if self._config.loss != 'lifted':
+        #   pos_sim *= 10.
+        pos_sim *= self.scale
 
         neg_caption_dist = tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1) - tf.expand_dims(neg_caption_embed, 0), axis=-1))
         neg_caption_dist /= 1. - tf.square(tf.norm(tf.expand_dims(pos_ft_embed, 1), axis=-1))
@@ -225,10 +227,12 @@ class Model(framework.model.module.AbstractModel):
         neg_caption_dist = tf.acosh(neg_caption_dist)
         if self._config.loss == 'lifted':
           neg_caption_sim = -neg_caption_dist
+          neg_caption_sim *= self.scale
           neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100.
         else:
           neg_caption_sim = -neg_caption_dist
-          neg_caption_sim *= 10.
+          # neg_caption_sim *= 10.
+          neg_caption_sim *= self.scale
           neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
 
@@ -239,10 +243,12 @@ class Model(framework.model.module.AbstractModel):
         neg_ft_dist = tf.acosh(neg_ft_dist)
         if self._config.loss == 'lifted':
           neg_ft_sim = -neg_ft_dist
+          neg_ft_sim *= self.scale
           neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100.
         else:
           neg_ft_sim = -neg_ft_dist
-          neg_ft_sim *= 10.
+          # neg_ft_sim *= 10.
+          neg_ft_sim *= self.scale
           neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
           neg_ft_sim = tf.reduce_logsumexp(neg_ft_sim, 1)
 
