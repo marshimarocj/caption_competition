@@ -264,6 +264,7 @@ def prepare_srnnve():
     'dim_joint_embed': 512,
 
     'max_words_in_caption': 30,
+    'pool': 'max',
 
     'cell': 'gru',
     'cell_dim_hidden': 512,
@@ -271,10 +272,10 @@ def prepare_srnnve():
     'lr_mult': .1,
   }
 
-  outprefix = '%s.%d.%d.%s.%.1f.%.1f.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%.1f.%.1f.%s.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
-    params['alpha'], params['lr_mult'])
+    params['alpha'], params['lr_mult'], params['pool'])
 
   model_cfg = rank_model.srnnve.gen_cfg(**params)
 
@@ -1338,8 +1339,8 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  prepare_rnnve()
-  # prepare_srnnve()
+  # prepare_rnnve()
+  prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
 

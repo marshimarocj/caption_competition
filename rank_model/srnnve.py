@@ -37,6 +37,7 @@ class ModelConfig(framework.model.module.ModelConfig):
     self.alpha = 0.5
     self.num_neg = 1
     self.l2norm = True
+    self.pool = 'final'
 
   def _assert(self):
     assert self.max_words_in_caption == self.subcfgs[RNN].num_step
@@ -61,6 +62,7 @@ def gen_cfg(**kwargs):
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
+  cfg.pool = kwargs['pool']
 
   we_cfg = cfg.subcfgs[WE]
   we_cfg.lr_mult = kwargs['lr_mult']
@@ -130,13 +132,23 @@ class Model(rnnve.Model):
     with tf.variable_scope(self.name_scope):
       outputs = out_ops[rnn.OutKey.OUTPUT]
       mask = in_ops[self.InKey.CAPTION_MASK]
-      row_idxs = tf.range(batch_size)
-      col_idxs = tf.to_int32(tf.reduce_sum(mask, 1))-1
-      idx = tf.stack([row_idxs, col_idxs], axis=1) # (None, 2)
 
-      output = tf.gather_nd(outputs, idx) # (None, dim_hidden)
-      caption_embed = tf.nn.xw_plus_b(output, self.caption_pca_W, self.caption_pca_B)
-      caption_embed = tf.nn.tanh(caption_embed)
+      if self._config.pool == 'final':
+        row_idxs = tf.range(batch_size)
+        col_idxs = tf.to_int32(tf.reduce_sum(mask, 1))-1
+        idx = tf.stack([row_idxs, col_idxs], axis=1) # (None, 2)
+
+        output = tf.gather_nd(outputs, idx) # (None, dim_hidden)
+        caption_embed = tf.nn.xw_plus_b(output, self.caption_pca_W, self.caption_pca_B)
+        caption_embed = tf.nn.tanh(caption_embed)
+      elif self._config.pool == 'max':
+        mask = tf.expand_dims(tf.to_float(mask), 2)
+        caption_embed = tf.nn.conv1d(outputs, tf.expand_dims(self.caption_pca_W, 0), 1, 'VALID')
+        caption_embed = tf.nn.tanh(caption_embed)
+        caption_embed += 1.
+        caption_embed = tf.reduce_max(caption_embed * mask, 1)
+        caption_embed -= 1.
+
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
 
