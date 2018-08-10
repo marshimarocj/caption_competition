@@ -162,9 +162,9 @@ def prepare_ceve_score():
 
 
 def prepare_rnnve():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  # root_dir = '/home/jiac/data/trecvid2018' # gpu9
+  root_dir = '/home/jiac/data/trecvid2018' # gpu9
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -208,17 +208,22 @@ def prepare_rnnve():
     # 'cell_dim_hidden': 500,
 
     # 'margin': .3,
-    'margin': .5,
+    # 'margin': .5,
+    'margin': .1,
 
     'lr_mult': .1,
   }
 
   # outprefix = '%s.%d.%d.%s.%s.%.1f.sbu'%(
-  # outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m.l2norm_input'%(
-  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.%.1f.flickr30m'%(
+  outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.flickr30m'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
-    params['pool'], params['alpha'], params['lr_mult'], params['loss'], params['margin'])
+    params['pool'], params['alpha'], params['lr_mult'])
+  # outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.flickr30m.l2norm_input'%(
+  # outprefix = '%s.%d.%d.%s.%s.%.1f.%.1f.%s.%.1f.flickr30m'%(
+    # os.path.join(out_dir, '_'.join(ft_names)), 
+    # params['dim_joint_embed'], params['cell_dim_hidden'], params['cell'],
+    # params['pool'], params['alpha'], params['lr_mult'], params['loss'], params['margin'])
 
   model_cfg = rank_model.rnnve.gen_cfg(**params)
 
@@ -1415,8 +1420,8 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  # prepare_rnnve()
-  prepare_rnnve_pretrn()
+  prepare_rnnve()
+  # prepare_rnnve_pretrn()
   # prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
