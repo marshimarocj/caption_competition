@@ -25,7 +25,7 @@ import rank_model.aca
 import rank_model.aca_rnn
 import rank_model.aca_track
 import rank_model.aca_freeze
-import rank_model.align
+# import rank_model.align
 
 
 '''func
