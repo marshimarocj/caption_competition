@@ -156,6 +156,27 @@ def merge_tgif_trecvid16_rank_trn():
   #   cPickle.dump(vid2captions, fout)
 
 
+def mscoco_rank_pretrain():
+  mscoco_dir = '/data1/jiac/mscoco' # mercurial
+  out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
+
+  ##########ft#########
+  mscoco_ft_files = [
+    'trn_ft.npy',
+    'val_ft.npy',
+    'tst_ft.npy',
+  ]
+  ft_name = 'resnet200'
+  fts = []
+  for mscoco_ft_file in mscoco_ft_files:
+    file = os.path.join(mscoco_dir, 'mp_feature', ft_name, mscoco_ft_file)
+    ft = np.load(file)
+    fts.append(ft)
+  fts = np.concatenate(fts, 0)
+  out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'pretrn_ft.npy')
+  np.save(out_file, fts)
+
+
 def prepare_trecvid17_rank_val():
   root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
@@ -652,7 +673,8 @@ if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
-  prepare_trecvid18_rank_tst()
+  # prepare_trecvid18_rank_tst()
+  mscoco_rank_pretrain()
 
   # merge_tgif_trecvid17_gen_trn()
   # prepare_trecvid16_gen_val()
