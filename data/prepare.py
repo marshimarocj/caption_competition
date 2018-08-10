@@ -158,47 +158,47 @@ def merge_tgif_trecvid16_rank_trn():
 
 def mscoco_rank_pretrain():
   mscoco_dir = '/data1/jiac/mscoco' # mercurial
-  out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
+  out_root_dir = '/data1/jiac/trecvid2018/rank'
 
   ##########ft#########
-  # mscoco_ft_files = [
-  #   'trn_ft.npy',
-  #   'val_ft.npy',
-  #   'tst_ft.npy',
-  # ]
-  # ft_name = 'resnet200'
-  # fts = []
-  # for mscoco_ft_file in mscoco_ft_files:
-  #   file = os.path.join(mscoco_dir, 'mp_feature', ft_name, mscoco_ft_file)
-  #   ft = np.load(file)
-  #   fts.append(ft)
-  # fts = np.concatenate(fts, 0)
-  # out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'pretrn_ft.npy')
-  # np.save(out_file, fts)
+  mscoco_ft_files = [
+    'trn_ft.npy',
+    'val_ft.npy',
+    'tst_ft.npy',
+  ]
+  ft_name = 'resnet200'
+  fts = []
+  for mscoco_ft_file in mscoco_ft_files:
+    file = os.path.join(mscoco_dir, 'mp_feature', ft_name, mscoco_ft_file)
+    ft = np.load(file)
+    fts.append(ft)
+  fts = np.concatenate(fts, 0)
+  out_file = os.path.join(out_root_dir, 'mp_feature', ft_name, 'pretrn_ft.npy')
+  np.save(out_file, fts)
 
   #########caption mask ##########
-  mscoco_caption_mask_files = [
-    os.path.join(mscoco_dir, 'split', 'trn_id_caption_mask.pkl'),
-    os.path.join(mscoco_dir, 'split', 'val_id_caption_mask.pkl'),
-    os.path.join(mscoco_dir, 'split', 'tst_id_caption_mask.pkl'),
-  ]
-  idxs = []
-  caption_ids = []
-  caption_masks = []
-  base = 0
-  for file in mscoco_caption_mask_files:
-    with open(file) as f:
-      data = cPickle.load(f)
-    idxs.append(data[0] + base)
-    caption_ids.append(data[1])
-    caption_masks.append(data[2])
-    base = np.max(data[0] + base) + 1
-  idxs = np.concatenate(idxs, 0)
-  caption_ids = np.concatenate(caption_ids, 0)
-  caption_masks = np.concatenate(caption_masks, 0)
-  out_file = os.path.join(out_root_dir, 'split', 'pretrn_id_caption_mask.pkl')
-  with open(out_file, 'w') as fout:
-    cPickle.dump([idxs, caption_ids, caption_masks], fout)
+  # mscoco_caption_mask_files = [
+  #   os.path.join(mscoco_dir, 'split', 'trn_id_caption_mask.pkl'),
+  #   os.path.join(mscoco_dir, 'split', 'val_id_caption_mask.pkl'),
+  #   os.path.join(mscoco_dir, 'split', 'tst_id_caption_mask.pkl'),
+  # ]
+  # idxs = []
+  # caption_ids = []
+  # caption_masks = []
+  # base = 0
+  # for file in mscoco_caption_mask_files:
+  #   with open(file) as f:
+  #     data = cPickle.load(f)
+  #   idxs.append(data[0] + base)
+  #   caption_ids.append(data[1])
+  #   caption_masks.append(data[2])
+  #   base = np.max(data[0] + base) + 1
+  # idxs = np.concatenate(idxs, 0)
+  # caption_ids = np.concatenate(caption_ids, 0)
+  # caption_masks = np.concatenate(caption_masks, 0)
+  # out_file = os.path.join(out_root_dir, 'split', 'pretrn_id_caption_mask.pkl')
+  # with open(out_file, 'w') as fout:
+  #   cPickle.dump([idxs, caption_ids, caption_masks], fout)
 
 
 def prepare_trecvid17_rank_val():
