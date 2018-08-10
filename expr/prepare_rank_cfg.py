@@ -248,7 +248,8 @@ def prepare_rnnve():
 
 
 def prepare_srnnve():
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
@@ -271,7 +272,8 @@ def prepare_srnnve():
     'dim_joint_embed': 512,
 
     'max_words_in_caption': 30,
-    'pool': 'max',
+    # 'pool': 'max',
+    'pool': 'mix',
 
     'cell': 'gru',
     'cell_dim_hidden': 512,
@@ -1346,8 +1348,8 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  prepare_rnnve()
-  # prepare_srnnve()
+  # prepare_rnnve()
+  prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
 

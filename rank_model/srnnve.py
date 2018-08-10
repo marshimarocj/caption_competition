@@ -93,9 +93,14 @@ class Model(rnnve.Model):
   def _build_parameter_graph(self):
     with tf.variable_scope(self.name_scope):
       dim_hidden = self._config.subcfgs[RNN].subcfgs[CELL].dim_hidden
-      self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
-        shape=(dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
-        initializer=tf.contrib.layers.xavier_initializer())
+      if self._config.pool == 'mix':
+        self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
+          shape=(dim_hidden*2, self._config.dim_joint_embed), dtype=tf.float32,
+          initializer=tf.contrib.layers.xavier_initializer())
+      else:
+        self.caption_pca_W = tf.contrib.framework.model_variable('caption_pca_W',
+          shape=(dim_hidden, self._config.dim_joint_embed), dtype=tf.float32,
+          initializer=tf.contrib.layers.xavier_initializer())
       self.caption_pca_B = tf.contrib.framework.model_variable('caption_pca_B',
         shape=(self._config.dim_joint_embed,), dtype=tf.float32,
         initializer=tf.random_uniform_initializer(-0.1, 0.1))
@@ -149,6 +154,20 @@ class Model(rnnve.Model):
         caption_embed += 1.
         caption_embed = tf.reduce_max(caption_embed * mask, 1)
         caption_embed -= 1.
+      elif self._config.pool == 'mix':
+        row_idxs = tf.range(batch_size)
+        col_idxs = tf.to_int32(tf.reduce_sum(mask, 1))-1
+        idx = tf.stack([row_idxs, col_idxs], axis=1) # (None, 2)
+
+        output = tf.gather_nd(outputs, idx) # (None, dim_hidden)
+        mask = tf.expand_dims(tf.to_float(mask), 2)
+        base = tf.reduce_min(outputs, 1)
+        max_pool -= tf.expand_dims(base, 1)
+        max_pool = tf.reduce_max(max_pool * mask, 1)
+        max_pool += base
+        mix = tf.concat([output, max_pool], 1)
+        mix = tf.nn.xw_plus_b(mix, self.caption_pca_W, self.caption_pca_B)
+        caption_embed = tf.nn.tanh(mix)
 
       if self._config.l2norm:
         caption_embed = tf.nn.l2_normalize(caption_embed, 1)
