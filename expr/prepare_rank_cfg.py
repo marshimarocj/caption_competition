@@ -778,6 +778,7 @@ def prepare_rnnve_orth():
   
   ft_names = [
     'i3d',
+    'i3d_flow',
     'resnet200',
   ]
 
@@ -801,8 +802,8 @@ def prepare_rnnve_orth():
     'loss': 'lifted',
   }
 
-  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
+  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
     params['cell_dim_hidden'], params['cell'],
@@ -1420,7 +1421,7 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  prepare_rnnve()
+  # prepare_rnnve()
   # prepare_rnnve_pretrn()
   # prepare_srnnve()
   # prepare_ceve_score()
@@ -1432,7 +1433,7 @@ if __name__ == '__main__':
   # prepare_aca_freeze()
 
   # prepare_rnnve_feedforward()
-  # prepare_rnnve_orth()
+  prepare_rnnve_orth()
   # prepare_rnnve_orth_freeze()
   # prepare_rnnve_mm_freeze()
   # prepare_rnnve_boost()
