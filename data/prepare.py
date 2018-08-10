@@ -159,6 +159,8 @@ def merge_tgif_trecvid16_rank_trn():
 def mscoco_rank_pretrain():
   mscoco_dir = '/data1/jiac/mscoco' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
+  mscoco_word_file = os.path.join(mscoco_dir, 'aux', 'int2word.pkl')
+  word_file = os.path.join(out_root_dir, 'annotation', 'int2word.pkl')
 
   ##########ft#########
   # mscoco_ft_files = [
@@ -182,6 +184,16 @@ def mscoco_rank_pretrain():
     os.path.join(mscoco_dir, 'split', 'val_id_caption_mask.pkl'),
     os.path.join(mscoco_dir, 'split', 'tst_id_caption_mask.pkl'),
   ]
+
+  with open(mscoco_word_file) as f:
+    mscoco_words = cPickle.load(f)
+
+  with open(word_file) as f:
+    words = cPickle.load(f)
+  word2wid = {}
+  for i, word in enumerate(words):
+    word2wid[word] = i
+
   idxs = []
   caption_ids = []
   caption_masks = []
@@ -191,12 +203,23 @@ def mscoco_rank_pretrain():
       data = cPickle.load(f)
     idxs.append(data[0] + base)
     captionid = np.concatenate([data[1], np.ones((data[1].shape[0], 10), dtype=np.int32)], 1)
-    caption_ids.append(captionid)
+    # caption_ids.append(captionid)
+    for wids in data[1]:
+      for i in range(30):
+        wid = wids[i]
+        word = mscoco_words[wid]
+        if word in word2wid:
+          wid = word2wid[word]
+        else:
+          wid = 2
+        wids[i] = wid
+      caption_ids.append(wids)
+
     caption_mask = np.concatenate([data[2], np.zeros((data[2].shape[0], 10), dtype=np.bool_)], 1)
     caption_masks.append(caption_mask)
     base = np.max(data[0] + base) + 1
   idxs = np.concatenate(idxs, 0)
-  caption_ids = np.concatenate(caption_ids, 0)
+  caption_ids = np.array(caption_ids, 0)
   caption_masks = np.concatenate(caption_masks, 0)
   out_file = os.path.join(out_root_dir, 'split', 'pretrn_id_caption_mask.pkl')
   with open(out_file, 'w') as fout:
