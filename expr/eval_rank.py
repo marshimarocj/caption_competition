@@ -26,6 +26,26 @@ def select_best_epoch(log_dir, start=0, end=1000):
   return best_epoch, best_mir
 
 
+def select_best_epoch_on_B(log_dir, start=0, end=1000):
+  names = os.listdir(log_dir)
+  best_mir = 0.
+  best_epoch = -1
+  for name in names:
+    if 'val_metrics.B' in name:
+      data = name.split('.')
+      epoch = int(data[-2])
+      file = os.path.join(log_dir, name)
+      with open(file) as f:
+        data = json.load(f)
+      if epoch < start or epoch >= end:
+        continue
+      mir = data['mir']
+      if mir > best_mir:
+        best_mir = mir
+        best_epoch = epoch
+  return best_epoch, best_mir
+
+
 def gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid, **kwargs):
   cmd = [
     'python', python_file,
@@ -55,8 +75,8 @@ def calc_mir(predicts, vid2gt):
 '''expr
 '''
 def report_best_epoch():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
@@ -80,12 +100,12 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.softmax.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.lifted.flickr30m.l2norm_input', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.5.flickr30m', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.5.flickr30m', 'log')
 
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze', 'log')
-  # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
+  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.boost', 'log')
@@ -126,7 +146,8 @@ def report_best_epoch():
 
   # log_dir = os.path.join(root_dir, 'align_expr', 'i3d_resnet200.500.0.5.0.1.flickr30m', 'log')
 
-  best_epoch, best_mir = select_best_epoch(log_dir, start=5)
+  # best_epoch, best_mir = select_best_epoch(log_dir, start=5)
+  best_epoch, best_mir = select_best_epoch_on_B(log_dir, start=10)
   print best_epoch, best_mir
 
 
@@ -500,9 +521,9 @@ def predict_eval_trecvid17_B_log():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
+  report_best_epoch()
   # predict_eval_trecvid17_B()
-  predict_eval_trecvid17_B_log()
+  # predict_eval_trecvid17_B_log()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
