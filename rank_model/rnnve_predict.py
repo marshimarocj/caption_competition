@@ -25,7 +25,7 @@ RCELL = encoder.birnn.RCELL
 ModelConfig = rnnve.ModelConfig
 gen_cfg = rnnve.gen_cfg
 Model = rnnve.Model
-
+PathCfg = rnnve.PathCfg
 
 class TrnTst(framework.model.trntst.TrnTst):
   def predict_in_tst(self, sess, tst_reader, predict_file):
