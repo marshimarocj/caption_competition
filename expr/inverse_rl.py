@@ -171,6 +171,7 @@ def gen_pair_file():
   base_ft_idx = 0
   vid_idx2caption_idx = {}
   vid2ft_idx = {}
+  ft_idx2vid = {}
   for split_file, vid_file in zip(split_files, vid_files):
     vids = np.load(vid_file)
     with open(split_file) as f:
@@ -186,6 +187,7 @@ def gen_pair_file():
         idx = 0
       vid_idx2caption_idx['%d_%d'%(vid, idx)] = i + base_caption_idx
       vid2ft_idx[vid] = ft_idx + base_ft_idx
+      ft_idx2vid[ft_idx + base_ft_idx] = vid
       prev_vid = vid
 
     base_caption_idx += ft_idxs.shape[0]
@@ -205,7 +207,7 @@ def gen_pair_file():
 
     if ft_idx not in ft_idx2caption_idxs:
       ft_idx2caption_idxs[ft_idx] = []
-    ft_idx2caption_idxs[ft_idx].append(caption_idx)
+    ft_idx2caption_idxs[ft_idx].append((caption_idx, vid_idx))
 
   out = []
   for ft_idx in ft_idx2caption_idxs:
@@ -213,6 +215,7 @@ def gen_pair_file():
     out.append({
       'ft_idx': ft_idx,
       'caption_idxs': caption_idxs,
+      'vid': ft_idx2vid[vid],
     })
 
   with open(out_file, 'w') as fout:
