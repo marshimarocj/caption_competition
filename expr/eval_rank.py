@@ -452,10 +452,50 @@ def predict_score_for_irl():
   p.wait()
 
 
+def predict_eval_trecvid17_B_log():
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  ft_names = ['i3d', 'resnet200']
+  ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
+  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
+  label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/rnnve.py'
+  gpuid = 2
+
+  for epoch in range(10, 100):
+    out_name = 'epoch-%d.B'%epoch
+
+    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+      ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
+    p.wait()
+
+    vid2gt = {}
+    with open(label_file) as f:
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        vid = int(data[0])
+        gid = int(data[2])
+        vid2gt[vid] = gid
+
+    predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
+    predicts = np.load(predict_file)
+    mir_B = calc_mir(predicts, vid2gt)
+
+    out_file = os.path.join(log_dir, 'val_metrics.B.%d.json'%epoch)
+    with open(out_file, 'w') as fout:
+      json.dump({'mir': mir_B}, fout)
+
+
 if __name__ == '__main__':
   # report_best_epoch()
   # predict_eval_trecvid17_B()
+  predict_eval_trecvid17_B_log()
   # predict_eval_vevd()
-  get_embeds()
+  # get_embeds()
   # get_rnn_output()
   # predict_score_for_irl()
