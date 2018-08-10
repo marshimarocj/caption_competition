@@ -77,7 +77,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.softmax.flickr30m', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.lifted.flickr30m.l2norm_input', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.lifted.flickr30m.l2norm_input', 'log')
 
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m', 'log')
@@ -92,6 +92,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.0.flickr30m.freeze', 'log')
 
   # log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m', 'log')
+  log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m', 'log')
 
   # log_dir = os.path.join(root_dir, 'rnnve_mm_expr', 'i3d_i3d_flow_resnet200.512_512.max.0.5.flickr30m.freeze', 'log')
 
@@ -442,8 +443,8 @@ def predict_score_for_irl():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
-  predict_eval_trecvid17_B()
+  report_best_epoch()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
