@@ -294,7 +294,7 @@ def prepare_rnnve_pretrn():
 
   output_dir = outprefix
   path_cfg = {
-    'trn_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'trn_ft.npy') for ft_name in ft_names],
+    'trn_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'pretrn_ft.npy') for ft_name in ft_names],
     'val_ftfiles': [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names],
     'tst_ftfiles': [],
     'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
