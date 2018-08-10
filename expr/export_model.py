@@ -35,21 +35,26 @@ def export_rank_video_embed():
 
 def init_orth_model():
   # root_dir = '/data1/jiac/trecvid2018' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
-  root_dir = '/home/jiac/data/trecvid2018' # gpu8
-  model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'model', 'epoch-41')
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  # root_dir = '/home/jiac/data/trecvid2018' # gpu8
+
+  # model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'model', 'epoch-41')
   # expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
   # expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_resnet200.256_512_768.250.gru.max.0.5.0.1.flickr30m.freeze.boost')
-  expr_name = os.path.join(root_dir, 'rank', 'rnn_attwv_expr', 'i3d_resnet200.512.250.gru.max.0.5.0.1.flickr30m')
+  # expr_name = os.path.join(root_dir, 'rank', 'rnn_attwv_expr', 'i3d_resnet200.512.250.gru.max.0.5.0.1.flickr30m')
+
+  model_file = os.path.join(root_dir, 'rank', 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'model', 'epoch-41')
+  expr_name = os.path.join(root_dir, 'rank', 'rnnve_orth_expr', 'i3d_i3d_flow_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
+
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
   out_file = os.path.join(expr_name, 'model', 'pretrain')
 
-  # path_cfg = rank_driver.rnnve_orth.gen_dir_struct_info(path_cfg_file)
-  path_cfg = rank_driver.rnn_attwv.gen_dir_struct_info(path_cfg_file)
+  path_cfg = rank_driver.rnnve_orth.gen_dir_struct_info(path_cfg_file)
+  # path_cfg = rank_driver.rnn_attwv.gen_dir_struct_info(path_cfg_file)
   path_cfg.model_file = ''
-  # model_cfg = rank_driver.rnnve_orth.load_and_fill_model_cfg(model_cfg_file, path_cfg)
-  model_cfg = rank_driver.rnn_attwv.load_and_fill_model_cfg(model_cfg_file, path_cfg)
+  model_cfg = rank_driver.rnnve_orth.load_and_fill_model_cfg(model_cfg_file, path_cfg)
+  # model_cfg = rank_driver.rnn_attwv.load_and_fill_model_cfg(model_cfg_file, path_cfg)
 
   key_map = {
     'rnn.GRUCell/candidate_b': 'rnn.GRUCell/candidate_b',
@@ -63,8 +68,8 @@ def init_orth_model():
     'word.Encoder/word_embedding_W': 'word.Encoder/word_embedding_W',
   }
 
-  # m = rank_model.rnnve_orth.Model(model_cfg)
-  m = rank_model.rnn_attwv.Model(model_cfg)
+  m = rank_model.rnnve_orth.Model(model_cfg)
+  # m = rank_model.rnn_attwv.Model(model_cfg)
   trn_tst_graph = m.build_trn_tst_graph(decay_boundarys=[])
   with trn_tst_graph.as_default():
     var_names = [(v.op.name, v.get_shape()) for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
