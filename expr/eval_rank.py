@@ -374,8 +374,8 @@ def predict_eval_vevd():
 
 
 def get_embeds():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   ft_names = ['i3d', 'resnet200']
 
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
@@ -383,7 +383,8 @@ def get_embeds():
   out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
 
   # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
-  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m')
+  # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m')
+  expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
@@ -453,8 +454,8 @@ def predict_score_for_irl():
 
 if __name__ == '__main__':
   # report_best_epoch()
-  predict_eval_trecvid17_B()
+  # predict_eval_trecvid17_B()
   # predict_eval_vevd()
-  # get_embeds()
+  get_embeds()
   # get_rnn_output()
   # predict_score_for_irl()
