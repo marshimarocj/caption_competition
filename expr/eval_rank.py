@@ -75,8 +75,8 @@ def calc_mir(predicts, vid2gt):
 '''expr
 '''
 def report_best_epoch():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
@@ -92,7 +92,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.300.150.lstm.max.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512.256.gru.max.0.5.sbu', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.flickr30m', 'log')
-  # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'log')
+  log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.1.0.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.512.512.gru.max.0.5.1.0.flickr30m.feedforward', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'log')
@@ -105,7 +105,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.boost', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.boost', 'log')
