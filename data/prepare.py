@@ -219,7 +219,7 @@ def mscoco_rank_pretrain():
     caption_masks.append(caption_mask)
     base = np.max(data[0] + base) + 1
   idxs = np.concatenate(idxs, 0)
-  caption_ids = np.array(caption_ids, 0)
+  caption_ids = np.array(caption_ids, dtype=np.int32)
   caption_masks = np.concatenate(caption_masks, 0)
   out_file = os.path.join(out_root_dir, 'split', 'pretrn_id_caption_mask.pkl')
   with open(out_file, 'w') as fout:
