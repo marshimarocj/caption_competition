@@ -158,12 +158,12 @@ class Model(rnnve.Model):
         row_idxs = tf.range(batch_size)
         col_idxs = tf.to_int32(tf.reduce_sum(mask, 1))-1
         idx = tf.stack([row_idxs, col_idxs], axis=1) # (None, 2)
-
         output = tf.gather_nd(outputs, idx) # (None, dim_hidden)
+
         mask = tf.expand_dims(tf.to_float(mask), 2)
         base = tf.reduce_min(outputs, 1)
-        max_pool -= tf.expand_dims(base, 1)
-        max_pool = tf.reduce_max(max_pool * mask, 1)
+        outputs -= tf.expand_dims(base, 1)
+        max_pool = tf.reduce_max(outputs * mask, 1)
         max_pool += base
         mix = tf.concat([output, max_pool], 1)
         mix = tf.nn.xw_plus_b(mix, self.caption_pca_W, self.caption_pca_B)
