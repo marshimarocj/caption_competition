@@ -778,7 +778,7 @@ def prepare_rnnve_orth():
   
   ft_names = [
     'i3d',
-    'i3d_flow',
+    # 'i3d_flow',
     'resnet200',
   ]
 
@@ -789,7 +789,7 @@ def prepare_rnnve_orth():
     'beta': 0.,
     'num_neg': 32,
     'l2norm': True,
-    'dim_ft': 1024 + 1024 + 2048,
+    'dim_ft': 1024 + 2048,
     # 'dim_joint_embeds': [133, 133, 134],
     'dim_joint_embeds': [512, 512, 512],
 
