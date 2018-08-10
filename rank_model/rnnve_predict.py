@@ -32,7 +32,7 @@ class TrnTst(framework.model.trntst.TrnTst):
     batch_size = self.model_cfg.tst_batch_size
     op_dict = self.model.op_in_tst()
     outs = []
-    for data in tst_reader.yield_val_batch(batch_size):
+    for data in tst_reader.yield_tst_batch(batch_size):
       feed_dict = {
         self.model.inputs[self.model.InKey.FT]: data['fts'],
         self.model.inputs[self.model.InKey.CAPTIONID]: data['captionids'],
