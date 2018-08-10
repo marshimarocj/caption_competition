@@ -152,5 +152,73 @@ def calc_metric_fts():
     json.dump(outs, fout, indent=2)
 
 
+def gen_pair_file():
+  root_dir = '/home/jiac/data2/tgif' # gpu9
+  pair_file = os.path.join(root_dir, 'inverse_rl', 'metrics.json')
+  split_files = [
+    os.path.join(root_dir, 'split', 'trn_id_caption_mask.pkl'),
+    os.path.join(root_dir, 'split', 'val_id_caption_mask.pkl'),
+    os.path.join(root_dir, 'split', 'tst_id_caption_mask.pkl'),
+  ]
+  vid_files = [
+    os.path.join(root_dir, 'split', 'trn_videoids.npy'),
+    os.path.join(root_dir, 'split', 'val_videoids.npy'),
+    os.path.join(root_dir, 'split', 'tst_videoids.npy'),
+  ]
+  out_file = os.path.join(root_dir, 'inverse_rl', 'pair.json')
+
+  base_caption_idx = 0
+  base_ft_idx = 0
+  vid_idx2caption_idx = {}
+  vid2ft_idx = {}
+  for split_file, vid_file in zip(split_files, vid_files):
+    vids = np.load(vid_file)
+    with open(split_file) as f:
+      data = cPickle.load(f)
+    ft_idxs = data[0]
+    prev_vid = -1
+    idx = 0
+    for i, ft_idx in enumerate(ft_idxs):
+      vid = vids[ft_idx]
+      if vid == pre_vid:
+        idx += 1
+      else:
+        idx = 0
+      vid_idx2caption_idx['%d_%d'%(vid, idx)] = i + base_caption_idx
+      vid2ft_idx[vid] = ft_idx + base_ft_idx
+      pre_vid = vid
+
+    base_caption_idx += ft_idxs.shape[0]
+    base_ft_idx += np.max(ft_idxs)
+
+  with open(pair_file) as f:
+    data = json.load(f)
+  ft_idx2caption_idxs = {}
+  for d in data:
+    gt_id = d['gt_id']
+    vid = gt_id[0]
+    ft_idx = vid2ft_idx[vid]
+
+    pred_id = d['pred_id']
+    vid_idx = '%d_%d'%(pred_id[0], pred_id[1])
+    caption_idx = vid_idx2caption_idx[vid_idx]
+
+    if ft_idx not in ft_idx2caption_idxs:
+      ft_idx2caption_idxs[ft_idx] = []
+    ft_idx2caption_idxs[ft_idx].append(caption_idx)
+
+  out = []
+  for ft_idx in ft_idx2caption_idxs:
+    caption_idxs = ft_idx2caption_idxs[ft_idx]
+    out.append({
+      'ft_idx': ft_idx,
+      'caption_idxs': caption_idxs,
+    })
+
+  with open(out_file, 'w') as fout:
+    json.dump(out, fout, indent=2)
+
+
 if __name__ == '__main__':
-  calc_metric_fts()
+  # calc_metric_fts()
+  gen_pair_file()
