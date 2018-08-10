@@ -164,7 +164,7 @@ def prepare_ceve_score():
 def prepare_rnnve():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
   # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/home/jiac/data/trecvid2018' # gpu9
+  root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   split_dir = os.path.join(root_dir, 'split')
   label_dir = os.path.join(root_dir, 'label')
   word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
