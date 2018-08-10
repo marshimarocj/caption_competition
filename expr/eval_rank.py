@@ -130,7 +130,8 @@ def report_best_epoch():
 
 def predict_eval_trecvid17_B():
   # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
   ft_names = ['i3d', 'resnet200']
@@ -201,7 +202,8 @@ def predict_eval_trecvid17_B():
   # gpuid = 0
 
   # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m')
-  expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m')
+  # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m')
+  expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.mix.flickr30m')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name
@@ -446,8 +448,8 @@ def predict_score_for_irl():
 
 
 if __name__ == '__main__':
-  report_best_epoch()
-  # predict_eval_trecvid17_B()
+  # report_best_epoch()
+  predict_eval_trecvid17_B()
   # predict_eval_vevd()
   # get_embeds()
   # get_rnn_output()
