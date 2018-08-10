@@ -190,8 +190,10 @@ def mscoco_rank_pretrain():
     with open(file) as f:
       data = cPickle.load(f)
     idxs.append(data[0] + base)
-    caption_ids.append(data[1])
-    caption_masks.append(data[2])
+    captionid = np.concatenate([data[1], np.ones((data[1].shape[0], 10), dtype=np.int32)], 1)
+    caption_ids.append(captionid)
+    caption_mask = np.concatenate([data[2], np.zeros((data[2].shape[0], 10), dtype=np.bool_)], 1)
+    caption_masks.append(caption_mask)
     base = np.max(data[0] + base) + 1
   idxs = np.concatenate(idxs, 0)
   caption_ids = np.concatenate(caption_ids, 0)
