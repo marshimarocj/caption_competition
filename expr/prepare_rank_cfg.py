@@ -1415,7 +1415,8 @@ def prepare_rnnve_lorentz_cfg():
 
 if __name__ == '__main__':
   # prepare_ceve()
-  prepare_rnnve()
+  # prepare_rnnve()
+  prepare_rnnve_pretrn()
   # prepare_srnnve()
   # prepare_ceve_score()
   # prepare_vevd_score()
