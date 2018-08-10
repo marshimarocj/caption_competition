@@ -786,6 +786,7 @@ def prepare_rnnve_orth():
     'num_epoch': 100,
 
     'alpha': 0.5,
+    'beta': 0.,
     'num_neg': 32,
     'l2norm': True,
     'dim_ft': 1024 + 2048,
