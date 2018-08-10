@@ -13,8 +13,9 @@ import sklearn.preprocessing
 import framework.model.module
 import framework.model.trntst
 import framework.model.data
-import trntst_util
+import encoder.birnn
 import rnnve
+import trntst_util
 
 WE = 'word'
 RNN = 'rnn'
