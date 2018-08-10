@@ -469,7 +469,7 @@ def predict_eval_trecvid17_B_log():
   for epoch in range(10, 100):
     out_name = 'epoch-%d.B'%epoch
 
-    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid,
+    p = gen_script_and_run(python_file, model_cfg_file, path_cfg_file, epoch, gpuid,
       ft_files=','.join(ft_files), annotation_file=annotation_file, out_name=out_name)
     p.wait()
 
