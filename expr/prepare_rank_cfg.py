@@ -803,7 +803,8 @@ def prepare_rnnve_orth():
     'loss': 'lifted',
   }
 
-  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
+  # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.freeze.direct'%(
+  outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.finetune.direct'%(
   # outprefix = '%s.%s.%d.%s.%s.%.1f.%.1f.flickr30m.direct'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     '_'.join([str(d) for d in params['dim_joint_embeds']]),
