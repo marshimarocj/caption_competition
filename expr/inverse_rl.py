@@ -180,13 +180,13 @@ def gen_pair_file():
     idx = 0
     for i, ft_idx in enumerate(ft_idxs):
       vid = vids[ft_idx]
-      if vid == pre_vid:
+      if vid == prev_vid:
         idx += 1
       else:
         idx = 0
       vid_idx2caption_idx['%d_%d'%(vid, idx)] = i + base_caption_idx
       vid2ft_idx[vid] = ft_idx + base_ft_idx
-      pre_vid = vid
+      prev_vid = vid
 
     base_caption_idx += ft_idxs.shape[0]
     base_ft_idx += np.max(ft_idxs)
