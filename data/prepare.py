@@ -204,7 +204,7 @@ def mscoco_rank_pretrain():
     idxs.append(data[0] + base)
     captionid = np.concatenate([data[1], np.ones((data[1].shape[0], 10), dtype=np.int32)], 1)
     # caption_ids.append(captionid)
-    for wids in data[1]:
+    for wids in captionid:
       for i in range(30):
         wid = wids[i]
         word = mscoco_words[wid]
