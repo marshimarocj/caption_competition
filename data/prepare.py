@@ -184,8 +184,10 @@ def merge_tgif_trecvid16_rank_temporal_trn():
     os.path.join(tgif_root_dir, 'public_split', 'val_names.npy'),
     os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
   ]
-  ft_names = ['i3d.rgb', 'resnet200']
-  dim_fts = [1024, 2048]
+  # ft_names = ['i3d.rgb', 'resnet200']
+  # dim_fts = [1024, 2048]
+  ft_names = ['i3d.flow']
+  dim_fts = [1024]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
