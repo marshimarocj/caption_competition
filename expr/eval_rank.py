@@ -75,8 +75,8 @@ def calc_mir(predicts, vid2gt):
 '''expr
 '''
 def report_best_epoch():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
@@ -114,7 +114,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.0.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.finetune.direct', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_i3d_flow_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_i3d_flow_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
 
   # log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m', 'log')
@@ -143,6 +143,7 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'aca_track_expr', 'i3d_resnet200.300.0.5', 'log')
   # log_dir = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'log')
   # log_dir = os.path.join(root_dir, 'aca_freeze_expr', 'i3d_resnet200.500.0.5', 'log')
+  log_dir = os.path.join(root_dir, 'aca_parallel_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m', 'log')
 
   # log_dir = os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5', 'log')
 
@@ -525,8 +526,8 @@ def predict_eval_trecvid17_B_log():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
-  predict_eval_trecvid17_B()
+  report_best_epoch()
+  # predict_eval_trecvid17_B()
   # predict_eval_trecvid17_B_log()
   # predict_eval_vevd()
   # get_embeds()
