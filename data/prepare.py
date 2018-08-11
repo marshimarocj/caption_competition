@@ -345,6 +345,39 @@ def prepare_trecvid17_rank_val():
       fout.write('%d %d %d\n'%(idx, int(data[1])-1, int(data[2])-1))
 
 
+def prepare_trecvid17_rank_temporal_val():
+  trecvid_root_dir = '/mnt/data1/csz/trecvid17' # venus
+  out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
+  lst_file = '/mnt/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.url.list'
+
+  num_step = 20
+
+  vids = []
+  with open(lst_file) as f:
+    for line in f:
+      line = line.strip()
+      data = line.split(' ')
+      vid = int(data[0])
+      vids.append(vid)
+
+  ft_names = ['i3d.rgb', 'resnet200']
+  dim_fts = [1024, 2048]
+  num_step = 20
+  for ft_name, dim_ft in zip(ft_names, dim_fts):
+    print ft_name
+    fts = []
+    masks = []
+
+    for vid in vids:
+      ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
+      ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
+      fts.append(ft)
+      masks.append(mask)
+
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.npz')
+    np.savez_compressed(out_file, fts=fts, masks=masks)
+
+
 def prepare_trecvid17_rank_gen_val():
   trecvid_root_dir = '/data1/jiac/trecvid2017' # mercurial
   out_root_dir = '/data1/jiac/trecvid2018/rank'
@@ -779,7 +812,8 @@ def prepare_trecvid18_rank_tst():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  merge_tgif_trecvid16_rank_temporal_trn()
+  # merge_tgif_trecvid16_rank_temporal_trn()
+  prepare_trecvid17_rank_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
