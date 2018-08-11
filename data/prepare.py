@@ -48,6 +48,18 @@ def process_sent(sentence, allow_digits=True):
   return output
 
 
+def prepare_sa_feature(ft_file, num_step):
+  ft = np.load(ft_file)
+  mask = np.zeros((num_step,), dtype=np.float32)
+  num_ft, dim_ft = ft.shape
+  mask[:min(num_ft, num_step)] = 1.
+  if num_ft > num_step:
+    ft = ft[:num_ft]
+  elif num_ft < num_step:
+    ft = np.concatenate([ft, np.zeros((num_step-num_ft, dim_ft), dtype=np.float32)], 0)
+  return ft, mask
+
+
 '''expr
 '''
 def merge_tgif_trecvid16_rank_trn():
@@ -154,6 +166,44 @@ def merge_tgif_trecvid16_rank_trn():
   # out_file = os.path.join(out_root_dir, 'annotation', 'human_caption_dict.pkl')
   # with open(out_file, 'w') as fout:
   #   cPickle.dump(vid2captions, fout)
+
+
+def merge_tgif_trecvid16_rank_temporal_trn():
+  trecvid_root_dir = '/mnt/data1/csz/trecvid16' # venus
+  tgif_root_dir = '/mnt/data1/csz/TGIF'
+  out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
+
+  num_step = 20
+
+  tgif_lst_files = [
+    os.path.join(tgif_root_dir, 'public_split', 'trn_names.npy'),
+    os.path.join(tgif_root_dir, 'public_split', 'val_names.npy'),
+    os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
+  ]
+  for ft_name in ['i3d.rgb', 'resnet200']:
+    print ft_name
+    fts = []
+    masks = []
+
+    splits = ['trn', 'val', 'tst']
+    for s in range(3):
+      lst_file = tgif_lst_files[s]
+      split = splits[s]
+      names = np.load(lst_file)
+      for name in names:
+        ft_file = os.path.join(tgif_root_dir, 'ordered_feature', 'raw', ft_name, split, '%s.npy'%name)
+        ft, mask = prepare_sa_feature(ft_file, num_step)
+        fts.append(ft)
+        masks.append(mask)
+
+    for vid in range(1, 1916):
+      ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
+      ft, mask = prepare_sa_feature(ft_file, num_step)
+      fts.append(ft)
+      masks.append(mask)
+
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'trn.npz')
+    np.savez_compressed(out_file, fts=fts, masks=masks)
 
 
 def mscoco_rank_pretrain():
@@ -720,10 +770,11 @@ def prepare_trecvid18_rank_tst():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
+  merge_tgif_trecvid16_rank_temporal_trn()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
-  mscoco_rank_pretrain()
+  # mscoco_rank_pretrain()
 
   # merge_tgif_trecvid17_gen_trn()
   # prepare_trecvid16_gen_val()
