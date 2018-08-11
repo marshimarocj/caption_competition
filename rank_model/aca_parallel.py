@@ -14,6 +14,7 @@ import framework.model.trntst
 import framework.model.data
 import encoder.word
 import trntst_util
+import aca
 
 WE = 'word'
 
@@ -49,60 +50,18 @@ def gen_cfg(**kwargs):
   cfg.num_neg = kwargs['num_neg']
   cfg.dim_ft = kwargs['dim_ft']
   cfg.dim_joint_embed = kwargs['dim_joint_embed']
-  # cfg.tanh_scale = kwargs['tanh_scale']
   cfg.att = kwargs['att']
   cfg.architecture = kwargs['architecture']
 
   cfg.max_words_in_caption = kwargs['max_words_in_caption']
 
   we_cfg = cfg.subcfgs[WE]
-  # we_cfg.lr_mult = 1e-2
   we_cfg.lr_mult = kwargs['lr_mult']
 
   return cfg
 
 
-class Model(framework.model.module.AbstractModel):
-  """
-  A Decomposable Attention Model for Natural Language Inference
-  https://aclweb.org/anthology/D16-1244
-  """
-  name_scope = 'aca.Model'
-
-  class InKey(enum.Enum):
-    FT = 'ft'
-    CAPTIONID = 'captionid'
-    CAPTION_MASK = 'caption_mask'
-    IS_TRN = 'is_trn'
-
-  class OutKey(enum.Enum):
-    SIM = 'sim'
-    P_SIM = 'pos_sim'
-    NF_SIM = 'neg_ft_sim'
-    NC_SIM = 'neg_caption_sim'
-
-  def _set_submods(self):
-    return {
-      WE: encoder.word.Encoder(self._config.subcfgs[WE]),
-    }
-
-  def _add_input_in_mode(self, mode):
-    with tf.variable_scope(self.name_scope):
-      fts = tf.placeholder(
-        tf.float32, shape=(None, self._config.dim_ft), name='fts')
-      captionids = tf.placeholder(
-        tf.int32, shape=(None, self._config.max_words_in_caption), name='captionids')
-      caption_masks = tf.placeholder(
-        tf.int32, shape=(None, self._config.max_words_in_caption), name='caption_masks')
-      is_trn = tf.placeholder(tf.bool, shape=(), name='is_trn')
-
-    return {
-      self.InKey.FT: fts,
-      self.InKey.CAPTIONID: captionids,
-      self.InKey.CAPTION_MASK: caption_masks,
-      self.InKey.IS_TRN: is_trn,
-    }
-
+class Model(aca.Model):
   def _build_parameter_graph(self):
     with tf.variable_scope(self.name_scope):
       self.ft_pca_Ws = []
@@ -138,8 +97,9 @@ class Model(framework.model.module.AbstractModel):
       self.word_att_Ws = []
       self.word_att_Bs = []
       for l in range(2):
+        dim_input = self._config.subcfgs[WE].dim_embed if l == 0 else self._config.dim_joint_embed
         word_att_W = tf.contrib.framework.model_variable('word_att_W_%d'%l,
-          shape=(self._config.dim_joint_embed, self._config.dim_joint_embed), dtype=tf.float32,
+          shape=(dim_input, self._config.dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         word_att_B = tf.contrib.framework.model_variable('word_att_B_%d'%l,
           shape=(self._config.dim_joint_embed,), dtype=tf.float32,
@@ -152,8 +112,9 @@ class Model(framework.model.module.AbstractModel):
       self.ft_att_Ws = []
       self.ft_att_Bs = []
       for l in range(2):
+        dim_input = self._config.dim_ft if l == 0 else self._config.dim_joint_embed
         ft_att_W = tf.contrib.framework.model_variable('ft_att_W_%d'%l,
-          shape=(self._config.dim_joint_embed, self._config.dim_joint_embed), dtype=tf.float32,
+          shape=(dim_input, self._config.dim_joint_embed), dtype=tf.float32,
           initializer=tf.contrib.layers.xavier_initializer())
         ft_att_B = tf.contrib.framework.model_variable('ft_att_B_%d'%l,
           shape=(self._config.dim_joint_embed,), dtype=tf.float32,
@@ -184,27 +145,27 @@ class Model(framework.model.module.AbstractModel):
         dim_embed = self._config.dim_joint_embed
 
         # embed
-        fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
-        fts = tf.nn.relu(fts)
-        fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
-        fts = tf.nn.l2_normalize(fts, -1)
-        pos_fts = fts[:num_pos]
-        neg_fts = fts[num_pos:]
+        ft_embeds = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
+        ft_embeds = tf.nn.relu(ft_embeds)
+        ft_embeds = tf.nn.xw_plus_b(ft_embeds, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
+        ft_embeds = tf.nn.l2_normalize(ft_embeds, -1)
+        pos_ft_embeds = ft_embeds[:num_pos]
+        neg_ft_embeds = ft_embeds[num_pos:]
 
-        wvecs = tf.reshape(wvecs, (-1, dim_word))
-        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
-        wvecs = tf.nn.relu(wvecs)
-        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
-        wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
-        wvecs = tf.nn.l2_normalize(wvecs, -1)
-        pos_wvecs = wvecs[:num_pos]
-        neg_wvecs = wvecs[num_pos:]
+        wvec_embeds = tf.reshape(wvecs, (-1, dim_word))
+        wvec_embeds = tf.nn.xw_plus_b(wvec_embeds, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
+        wvec_embeds = tf.nn.relu(wvec_embeds)
+        wvec_embeds = tf.nn.xw_plus_b(wvec_embeds, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
+        wvec_embeds = tf.reshape(wvec_embeds, (-1, num_word, dim_embed))
+        wvec_embeds = tf.nn.l2_normalize(wvec_embeds, -1)
+        pos_wvec_embeds = wvec_embeds[:num_pos]
+        neg_wvec_embeds = wvec_embeds[num_pos:]
 
         mask = tf.to_float(mask)
         pos_mask = mask[:num_pos]
         neg_mask = mask[num_pos:]
 
-        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_Ws[0], self.word_att_Bs[0])
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_Ws[0], self.word_att_Bs[0])
         alpha = tf.nn.relu(alpha) # (None, num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(alpha, self.word_att_Ws[1], self.word_att_Bs[1])
         alpha = tf.reshape(alpha, (-1, num_word, dim_embed))
@@ -308,9 +269,9 @@ class Model(framework.model.module.AbstractModel):
 
           return neg_sim
 
-        pos_sim = calc_pos_sim(pos_fts, pos_wvecs, pos_alpha, pos_beta, pos_mask)
-        neg_word_sim = calc_neg_word_sim(pos_fts, neg_wvecs, neg_alpha, pos_beta, neg_mask)
-        neg_ft_sim = calc_neg_ft_sim(neg_fts, pos_wvecs, pos_alpha, neg_beta, pos_mask)
+        pos_sim = calc_pos_sim(pos_ft_embeds, pos_wvec_embeds, pos_alpha, pos_beta, pos_mask)
+        neg_word_sim = calc_neg_word_sim(pos_ft_embeds, neg_wvec_embeds, neg_alpha, pos_beta, neg_mask)
+        neg_ft_sim = calc_neg_ft_sim(neg_ft_embeds, pos_wvec_embeds, pos_alpha, neg_beta, pos_mask)
         neg_word_sim = tf.reduce_logsumexp(100.*neg_word_sim, 0) / 100. # (num_pos,)
         neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 0) / 100.
 
@@ -327,20 +288,20 @@ class Model(framework.model.module.AbstractModel):
         mask = tf.to_float(mask)
 
         # embed
-        fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
-        fts = tf.nn.relu(fts)
-        fts = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
-        fts = tf.nn.l2_normalize(fts, -1)
+        ft_embeds = tf.nn.xw_plus_b(fts, self.ft_pca_Ws[0], self.ft_pca_Bs[0])
+        ft_embeds = tf.nn.relu(ft_embeds)
+        ft_embeds = tf.nn.xw_plus_b(ft_embeds, self.ft_pca_Ws[1], self.ft_pca_Bs[1])
+        ft_embeds = tf.nn.l2_normalize(ft_embeds, -1)
 
-        wvecs = tf.reshape(wvecs, (-1, dim_word))
-        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
-        wvecs = tf.nn.relu(wvecs)
-        wvecs = tf.nn.xw_plus_b(wvecs, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
-        wvecs = tf.reshape(wvecs, (-1, num_word, dim_embed))
-        wvecs = tf.nn.l2_normalize(wvecs, -1)
+        wvec_embeds = tf.reshape(wvecs, (-1, dim_word))
+        wvec_embeds = tf.nn.xw_plus_b(wvec_embeds, self.caption_pca_Ws[0], self.caption_pca_Bs[0])
+        wvec_embeds = tf.nn.relu(wvec_embeds)
+        wvec_embeds = tf.nn.xw_plus_b(wvec_embeds, self.caption_pca_Ws[1], self.caption_pca_Bs[1])
+        wvec_embeds = tf.reshape(wvec_embeds, (-1, num_word, dim_embed))
+        wvec_embeds = tf.nn.l2_normalize(wvec_embeds, -1)
 
         # attend
-        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_embed)), self.word_att_Ws[0], self.word_att_Bs[0])
+        alpha = tf.nn.xw_plus_b(tf.reshape(wvecs, (-1, dim_word)), self.word_att_Ws[0], self.word_att_Bs[0])
         alpha = tf.nn.relu(alpha) # (num_caption*num_word, dim_embed)
         alpha = tf.nn.xw_plus_b(alpha, self.word_att_Ws[1], self.word_att_Bs[1])
         beta = tf.nn.xw_plus_b(fts, self.ft_att_Ws[0], self.ft_att_Bs[0])
@@ -353,19 +314,19 @@ class Model(framework.model.module.AbstractModel):
         att *= tf.expand_dims(mask, 0)
         att /= tf.reduce_sum(att, 2, True)
         wvecs_bar = tf.reduce_sum(
-          tf.expand_dims(wvecs, 0) * tf.expand_dims(att, 3), 2) # (num_ft, num_caption, dim_embed)
+          tf.expand_dims(wvec_embeds, 0) * tf.expand_dims(att, 3), 2) # (num_ft, num_caption, dim_embed)
         wvecs_bar = tf.nn.l2_normalize(wvecs_bar, -1)
 
         # compare
         expanded_fts = tf.tile(
-          tf.reshape(fts, (-1, 1, 1, dim_embed)),
+          tf.reshape(ft_embeds, (-1, 1, 1, dim_embed)),
           [1, num_caption, num_word, 1]) # (num_ft, num_caption, num_word, dim_embed)
         expanded_wvecs = tf.tile(
-          tf.expand_dims(wvecs, 0), [num_ft, 1, 1, 1]) # (num_ft, num_caption, num_word, dim_embed)
+          tf.expand_dims(wvec_embeds, 0), [num_ft, 1, 1, 1]) # (num_ft, num_caption, num_word, dim_embed)
         wvec_compare = tf.reduce_sum(expanded_fts * expanded_wvecs, -1) # (num_ft, num_caption, num_word)
 
         expanded_fts = tf.tile(
-          tf.reshape(fts, (-1, 1, dim_embed)),
+          tf.reshape(ft_embeds, (-1, 1, dim_embed)),
           [1, num_caption, 1]) # (num_ft, num_caption, dim_embed)
         ft_compare = tf.reduce_sum(expanded_fts * wvecs_bar, -1) # (num_ft, num_caption)
 
@@ -404,11 +365,9 @@ class Model(framework.model.module.AbstractModel):
 
       contrast_caption_loss = neg_caption_sim + self._config.margin - pos_sim
       contrast_caption_loss = tf.maximum(contrast_caption_loss, tf.zeros_like(contrast_caption_loss))
-      # self.op2monitor['contrast_caption_loss'] = tf.reduce_sum(contrast_caption_loss)
 
       contrast_ft_loss = neg_ft_sim + self._config.margin - pos_sim
       contrast_ft_loss = tf.maximum(contrast_ft_loss, tf.zeros_like(contrast_ft_loss))
-      # self.op2monitor['contrast_ft_loss'] = tf.reduce_sum(contrast_ft_loss)
 
       loss = self._config.alpha * contrast_caption_loss + (1.0 - self._config.alpha) * contrast_ft_loss
       loss = tf.reduce_sum(loss)
