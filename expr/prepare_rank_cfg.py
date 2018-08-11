@@ -811,8 +811,8 @@ def prepare_rnn_rnn():
 
   output_dir = outprefix
   path_cfg = {
-    'trn_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'trn_ft.npz') for ft_name in ft_names],
-    'val_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'val_ft.2.npz') for ft_name in ft_names],
+    'trn_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'trn.npz') for ft_name in ft_names],
+    'val_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'val.2.npz') for ft_name in ft_names],
     'tst_ftfiles': [],
     'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
     'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
