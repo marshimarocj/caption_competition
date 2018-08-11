@@ -462,6 +462,7 @@ def prepare_aca():
 
   ft_names = [
     'i3d',
+    'i3d_flow',
     'resnet200',
   ]
 
@@ -482,9 +483,9 @@ def prepare_aca():
   }
 
   # outprefix = '%s.%d.%.1f.att.sbu'%(
-  # outprefix = '%s.%d.%.1f.att.feedforward'%(
-  # outprefix = '%s.%d.%.1f.att.flickr30m.feedforward'%(
   outprefix = '%s.%d.%.1f.%.1f.att.flickr30m.feedforward'%(
+  # outprefix = '%s.%d.%.1f.att.flickr30m.feedforward'%(
+  # outprefix = '%s.%d.%.1f.%.1f.att.flickr30m.feedforward'%(
     os.path.join(out_dir, '_'.join(ft_names)), 
     params['dim_joint_embed'], 
     params['alpha'], params['lr_mult'])
@@ -1490,11 +1491,11 @@ if __name__ == '__main__':
   # prepare_ceve_score()
   # prepare_vevd_score()
 
-  # prepare_aca()
+  prepare_aca()
   # prepare_aca_rnn()
   # prepare_aca_track()
   # prepare_aca_freeze()
-  prepare_aca_parallel()
+  # prepare_aca_parallel()
 
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
