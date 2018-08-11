@@ -113,7 +113,8 @@ def report_best_epoch():
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.1.flickr30m.freeze', 'log')
   # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.0.flickr30m.freeze', 'log')
-  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.finetune.direct', 'log')
+  # log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.finetune.direct', 'log')
+  log_dir = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_i3d_flow_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'log')
 
   # log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m', 'log')
   # log_dir = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m', 'log')
@@ -523,8 +524,8 @@ def predict_eval_trecvid17_B_log():
 
 
 if __name__ == '__main__':
-  # report_best_epoch()
-  predict_eval_trecvid17_B()
+  report_best_epoch()
+  # predict_eval_trecvid17_B()
   # predict_eval_trecvid17_B_log()
   # predict_eval_vevd()
   # get_embeds()
