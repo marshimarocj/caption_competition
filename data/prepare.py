@@ -357,8 +357,8 @@ def prepare_trecvid17_rank_val():
 def prepare_trecvid17_temporal_val():
   trecvid_root_dir = '/mnt/data1/csz/trecvid17' # venus
   out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
-  # lst_file = '/mnt/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.url.list'
-  lst_file = '/mnt/data1/jiac/trecvid2017/VTT/description.generation.subtask/testing.URLs.video.description.subtask'
+  lst_file = '/mnt/data1/jiac/trecvid2017/VTT/matching.ranking.subtask/testing.2.subsets/tv17.vtt.url.list'
+  # lst_file = '/mnt/data1/jiac/trecvid2017/VTT/description.generation.subtask/testing.URLs.video.description.subtask'
 
   num_step = 20
 
@@ -370,10 +370,8 @@ def prepare_trecvid17_temporal_val():
       vid = int(data[0])
       vids.append(vid)
 
-  # ft_names = ['i3d.rgb', 'resnet200']
-  # dim_fts = [1024, 2048]
-  ft_names = ['i3d.flow']
-  dim_fts = [1024]
+  ft_names = ['i3d.rgb', 'i3d.flow', 'resnet200']
+  dim_fts = [1024, 1024, 2048]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
@@ -385,8 +383,8 @@ def prepare_trecvid17_temporal_val():
       fts.append(ft)
       masks.append(mask)
 
-    # out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.2.npz')
-    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.npz')
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.2.npz')
+    # out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.npz')
     np.savez_compressed(out_file, fts=fts, masks=masks)
 
 
@@ -866,7 +864,7 @@ def prepare_trecvid18_ft_tst():
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # merge_tgif_trecvid16_rank_temporal_trn()
-  # prepare_trecvid17_temporal_val()
+  prepare_trecvid17_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
@@ -882,4 +880,4 @@ if __name__ == '__main__':
   # prepare_trecvid16_flow_ft()
   # prepare_trecvid17_flow_ft()
 
-  prepare_trecvid18_ft_tst()
+  # prepare_trecvid18_ft_tst()
