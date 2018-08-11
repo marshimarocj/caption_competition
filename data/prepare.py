@@ -191,9 +191,9 @@ def merge_tgif_trecvid16_rank_temporal_trn():
     fts = []
     masks = []
 
-    # splits = ['trn', 'val', 'tst']
-    splits = ['val',]
-    for s in range(1):
+    splits = ['trn', 'val', 'tst']
+    # splits = ['val',]
+    for s in range(3):
       lst_file = tgif_lst_files[s]
       split = splits[s]
       names = np.load(lst_file)
