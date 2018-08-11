@@ -131,7 +131,7 @@ class Model(framework.model.module.AbstractModel):
         self._weights.append(ft_pca_W)
         self._weights.append(ft_pca_B)
         self.ft_pca_Ws.append(ft_pca_W)
-        self.fc_pca_Bs.append(ft_pca_B)
+        self.ft_pca_Bs.append(ft_pca_B)
 
       self.caption_pca_Ws = []
       self.caption_pca_Bs = []
