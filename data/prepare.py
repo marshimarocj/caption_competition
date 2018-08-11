@@ -360,9 +360,10 @@ def prepare_trecvid17_rank_temporal_val():
       vid = int(data[0])
       vids.append(vid)
 
-  ft_names = ['i3d.rgb', 'resnet200']
-  dim_fts = [1024, 2048]
-  num_step = 20
+  # ft_names = ['i3d.rgb', 'resnet200']
+  # dim_fts = [1024, 2048]
+  ft_names = ['i3d.flow']
+  dim_fts = [1024]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
@@ -812,8 +813,8 @@ def prepare_trecvid18_rank_tst():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  merge_tgif_trecvid16_rank_temporal_trn()
-  # prepare_trecvid17_rank_temporal_val()
+  # merge_tgif_trecvid16_rank_temporal_trn()
+  prepare_trecvid17_rank_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
