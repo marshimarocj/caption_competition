@@ -58,7 +58,7 @@ def prepare_sa_feature(ft_file, dim_ft, num_step):
     num_ft, dim_ft = ft.shape
     mask[:min(num_ft, num_step)] = 1.
     if num_ft > num_step:
-      ft = ft[:num_ft]
+      ft = ft[:num_step]
     elif num_ft < num_step:
       ft = np.concatenate([ft, np.zeros((num_step-num_ft, dim_ft), dtype=np.float32)], 0)
   return ft, mask
