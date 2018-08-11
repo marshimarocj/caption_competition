@@ -827,10 +827,10 @@ def prepare_trecvid18_ft_tst():
   out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
 
   ######temporal feature#####
-  # ft_names = ['i3d.rgb', 'resnet200']
-  # dim_fts = [1024, 2048]
-  ft_names = ['i3d.flow']
-  dim_fts = [1024]
+  ft_names = ['i3d.rgb', 'resnet200']
+  dim_fts = [1024, 2048]
+  # ft_names = ['i3d.flow']
+  # dim_fts = [1024]
   num_step = 20
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
