@@ -176,9 +176,9 @@ def merge_tgif_trecvid16_rank_temporal_trn():
   num_step = 20
 
   tgif_lst_files = [
-    os.path.join(tgif_root_dir, 'public_split', 'trn_names.npy'),
+    # os.path.join(tgif_root_dir, 'public_split', 'trn_names.npy'),
     os.path.join(tgif_root_dir, 'public_split', 'val_names.npy'),
-    os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
+    # os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
   ]
   for ft_name in ['i3d.rgb', 'resnet200']:
     print ft_name
