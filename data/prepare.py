@@ -827,40 +827,40 @@ def prepare_trecvid18_ft_tst():
   out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
 
   ######temporal feature#####
-  # # ft_names = ['i3d.rgb', 'resnet200']
-  # # dim_fts = [1024, 2048]
-  # ft_names = ['i3d.flow']
-  # dim_fts = [1024]
-  # num_step = 20
-  # for ft_name, dim_ft in zip(ft_names, dim_fts):
-  #   print ft_name
-  #   fts = []
-  #   masks = []
-
-  #   for vid in range(1, 1921):
-  #     ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
-  #     ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
-  #     fts.append(ft)
-  #     masks.append(mask)
-
-  #   out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'tst.npz')
-  #   np.savez_compressed(out_file, fts=fts, masks=masks)
-
-  ######mp feature######
   # ft_names = ['i3d.rgb', 'resnet200']
   # dim_fts = [1024, 2048]
   ft_names = ['i3d.flow']
   dim_fts = [1024]
+  num_step = 20
   for ft_name, dim_ft in zip(ft_names, dim_fts):
+    print ft_name
     fts = []
+    masks = []
 
     for vid in range(1, 1921):
       ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
-      ft = prepare_mp_feature(ft_file, dim_ft)
+      ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
       fts.append(ft)
+      masks.append(mask)
 
-    out_file = os.path.join(out_root_dir, 'mp_ft', ft_name, 'tst.npy')
-    np.save(out_file, fts)
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'tst.npz')
+    np.savez_compressed(out_file, fts=fts, masks=masks)
+
+  ######mp feature######
+  # # ft_names = ['i3d.rgb', 'resnet200']
+  # # dim_fts = [1024, 2048]
+  # ft_names = ['i3d.flow']
+  # dim_fts = [1024]
+  # for ft_name, dim_ft in zip(ft_names, dim_fts):
+  #   fts = []
+
+  #   for vid in range(1, 1921):
+  #     ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
+  #     ft = prepare_mp_feature(ft_file, dim_ft)
+  #     fts.append(ft)
+
+  #   out_file = os.path.join(out_root_dir, 'mp_ft', ft_name, 'tst.npy')
+  #   np.save(out_file, fts)
 
 
 if __name__ == '__main__':
