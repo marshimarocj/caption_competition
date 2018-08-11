@@ -374,7 +374,7 @@ def prepare_trecvid17_rank_temporal_val():
       fts.append(ft)
       masks.append(mask)
 
-    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.npz')
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'val.2.npz')
     np.savez_compressed(out_file, fts=fts, masks=masks)
 
 
