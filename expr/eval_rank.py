@@ -156,8 +156,8 @@ def report_best_epoch():
 
 
 def predict_eval_trecvid17_B():
-  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
