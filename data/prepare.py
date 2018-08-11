@@ -199,13 +199,13 @@ def merge_tgif_trecvid16_rank_temporal_trn():
       names = np.load(lst_file)
       for name in names:
         ft_file = os.path.join(tgif_root_dir, 'ordered_feature', 'raw', ft_name, split, '%s.npy'%name)
-        ft, mask = prepare_sa_feature(ft_file, num_step)
+        ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
         fts.append(ft)
         masks.append(mask)
 
     for vid in range(1, 1916):
       ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
-      ft, mask = prepare_sa_feature(ft_file, num_step)
+      ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
       fts.append(ft)
       masks.append(mask)
 
