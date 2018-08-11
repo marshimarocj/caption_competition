@@ -812,8 +812,8 @@ def prepare_trecvid18_rank_tst():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  # merge_tgif_trecvid16_rank_temporal_trn()
-  prepare_trecvid17_rank_temporal_val()
+  merge_tgif_trecvid16_rank_temporal_trn()
+  # prepare_trecvid17_rank_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
