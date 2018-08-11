@@ -813,10 +813,32 @@ def prepare_trecvid18_rank_tst():
       cPickle.dump([idxs, captionids, caption_masks], fout)
 
 
+def prepare_trecvid18_ft_tst():
+  trecvid_root_dir = '/mnt/data1/csz/trecvid18' # venus
+  out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
+
+  # temporal feature
+  ft_names = ['i3d.rgb', 'resnet200']
+  dim_fts = [1024, 2048]
+  for ft_name, dim_ft in zip(ft_names, dim_fts):
+    print ft_name
+    fts = []
+    masks = []
+
+    for vid in range(1, 1921):
+      ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
+      ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
+      fts.append(ft)
+      masks.append(mask)
+
+    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'tst.npz')
+    np.savez_compressed(out_file, fts=fts, masks=masks)
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   # merge_tgif_trecvid16_rank_temporal_trn()
-  prepare_trecvid17_temporal_val()
+  # prepare_trecvid17_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
@@ -831,3 +853,5 @@ if __name__ == '__main__':
   # prepare_tgif_flow_ft()
   # prepare_trecvid16_flow_ft()
   # prepare_trecvid17_flow_ft()
+
+  prepare_trecvid18_ft_tst()
