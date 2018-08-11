@@ -472,7 +472,7 @@ def prepare_aca():
     'margin': 0.1,
     'alpha': 0.5,
     'num_neg': 32,
-    'dim_ft': 1024 + 2048,
+    'dim_ft': 1024 + 1024 + 2048,
     # 'dim_joint_embed': 300,
     # 'dim_joint_embed': 512,
     'dim_joint_embed': 500,
