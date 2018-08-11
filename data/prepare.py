@@ -361,10 +361,10 @@ def prepare_trecvid17_temporal_val():
       vid = int(data[0])
       vids.append(vid)
 
-  ft_names = ['i3d.rgb', 'resnet200']
-  dim_fts = [1024, 2048]
-  # ft_names = ['i3d.flow']
-  # dim_fts = [1024]
+  # ft_names = ['i3d.rgb', 'resnet200']
+  # dim_fts = [1024, 2048]
+  ft_names = ['i3d.flow']
+  dim_fts = [1024]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
