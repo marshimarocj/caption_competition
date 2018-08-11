@@ -820,6 +820,7 @@ def prepare_trecvid18_ft_tst():
   # temporal feature
   ft_names = ['i3d.rgb', 'resnet200']
   dim_fts = [1024, 2048]
+  num_step = 20
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
