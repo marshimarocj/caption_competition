@@ -193,17 +193,14 @@ def merge_tgif_trecvid16_rank_temporal_trn():
     os.path.join(tgif_root_dir, 'public_split', 'val_names.npy'),
     os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
   ]
-  # ft_names = ['i3d.rgb', 'resnet200']
-  # dim_fts = [1024, 2048]
-  ft_names = ['i3d.flow']
-  dim_fts = [1024]
+  ft_names = ['i3d.rgb', 'i3d.flow', 'resnet200']
+  dim_fts = [1024, 1024, 2048]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
     print ft_name
     fts = []
     masks = []
 
     splits = ['trn', 'val', 'tst']
-    # splits = ['val',]
     for s in range(3):
       lst_file = tgif_lst_files[s]
       split = splits[s]
@@ -863,8 +860,8 @@ def prepare_trecvid18_ft_tst():
 
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
-  # merge_tgif_trecvid16_rank_temporal_trn()
-  prepare_trecvid17_temporal_val()
+  merge_tgif_trecvid16_rank_temporal_trn()
+  # prepare_trecvid17_temporal_val()
   # prepare_trecvid17_rank_val()
   # prepare_trecvid17_rank_gen_val()
   # prepare_trecvid18_rank_tst()
