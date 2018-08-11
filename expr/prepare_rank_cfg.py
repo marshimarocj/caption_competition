@@ -791,8 +791,8 @@ def prepare_rnn_rnn():
     'pool_ft': 'max',
 
     'lr_mult': .1,
-
     'caption_cell_dim_hidden': 250,
+    'cell': 'gru',
 
     'dim_pca_ft': 512,
     'ft_cell_dim_hidden': 512,
