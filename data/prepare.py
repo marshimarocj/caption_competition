@@ -48,15 +48,19 @@ def process_sent(sentence, allow_digits=True):
   return output
 
 
-def prepare_sa_feature(ft_file, num_step):
-  ft = np.load(ft_file)
-  mask = np.zeros((num_step,), dtype=np.float32)
-  num_ft, dim_ft = ft.shape
-  mask[:min(num_ft, num_step)] = 1.
-  if num_ft > num_step:
-    ft = ft[:num_ft]
-  elif num_ft < num_step:
-    ft = np.concatenate([ft, np.zeros((num_step-num_ft, dim_ft), dtype=np.float32)], 0)
+def prepare_sa_feature(ft_file, dim_ft, num_step):
+  if not os.path.exists(ft_file):
+    ft = np.zeros((num_step, dim_ft), dtype=np.float32)
+    mask = np.zeros((num_step,), dtype=np.float32)
+  else:
+    ft = np.load(ft_file)
+    mask = np.zeros((num_step,), dtype=np.float32)
+    num_ft, dim_ft = ft.shape
+    mask[:min(num_ft, num_step)] = 1.
+    if num_ft > num_step:
+      ft = ft[:num_ft]
+    elif num_ft < num_step:
+      ft = np.concatenate([ft, np.zeros((num_step-num_ft, dim_ft), dtype=np.float32)], 0)
   return ft, mask
 
 
