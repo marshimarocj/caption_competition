@@ -556,6 +556,37 @@ class TrnAttReader(framework.model.data.Reader):
       }
 
 
+class TrnTemporalReader(TrnAttReader):
+  def __init__(self, num_neg, ft_files, annotation_file):
+    self.num_neg = num_neg
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.idxs = []
+    self.num_caption = 0
+
+    fts = []
+    for ft_file in ft_files:
+      data = np.load(ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=2)
+    for ft_mask in self.ft_masks:
+      if np.sum(ft_mask) == 0:
+        ft_mask[0] = 1.
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
+
+    self.num_caption = self.captionids.shape[0]
+    self.idxs = range(self.num_caption)
+
+
 class ValAttReader(framework.model.data.Reader):
   def __init__(self, ft_files, att_ft_files, annotation_file, label_file):
     self.fts = np.empty(0)
@@ -613,6 +644,43 @@ class ValAttReader(framework.model.data.Reader):
       }
 
 
+class ValTemporalReader(ValAttReader):
+  def __init__(self, ft_files, annotation_file, label_file):
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+    self.gts = []
+
+    fts = []
+    for ft_file in ft_files:
+      data = np.load(att_ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=2)
+    for ft_mask in self.ft_masks:
+      if np.sum(ft_mask) == 0:
+        ft_mask[0] = 1.
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
+
+    with open(label_file) as f:
+      vid2gid = {}
+      for line in f:
+        line = line.strip()
+        data = line.split(' ')
+        vid = int(data[0])
+        gid = int(data[1])
+        vid2gid[vid] = gid
+    for vid in range(len(vid2gid)):
+      self.gts.append(vid2gid[vid])
+
+
 class TstAttReader(framework.model.data.Reader):
   def __init__(self, ft_files, att_ft_files, annotation_file):
     self.fts = np.empty(0)
@@ -654,6 +722,31 @@ class TstAttReader(framework.model.data.Reader):
         'captionids': self.captionids,
         'caption_masks': self.caption_masks,
       }
+
+
+class TstTemporalReader(TstAttReader):
+  def __init__(self, ft_files, annotation_file):
+    self.fts = np.empty(0)
+    self.ft_masks = np.empty(0)
+    self.ft_idxs = np.empty(0)
+    self.captionids = np.empty(0)
+    self.caption_masks = np.empty(0)
+
+    fts = []
+    for ft_file in ft_files:
+      data = np.load(ft_file)
+      ft = data['fts']
+      self.ft_masks = data['masks']
+      fts.append(ft)
+    self.fts = np.concatenate(fts, axis=2)
+    for ft_mask in self.ft_masks:
+      if np.sum(ft_mask) == 0:
+        ft_mask[0] = 1.
+
+    data = cPickle.load(file(annotation_file))
+    self.ft_idxs = data[0]
+    self.captionids = data[1]
+    self.caption_masks = data[2]
 
 
 class FreezeTrnReader(TrnReader):

@@ -28,6 +28,8 @@ import rank_model.aca_track
 import rank_model.aca_freeze
 # import rank_model.align
 
+import rank_model.rnn_rnn
+
 
 '''func
 '''
@@ -743,6 +745,75 @@ def prepare_aca_track():
     'trn_att_ftfiles': [os.path.join(root_dir, 'sa_feature', ft_name, 'trn_ft.npz') for ft_name in ft_names],
     'val_att_ftfiles': [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names],
     'tst_att_ftfiles': [],
+    'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
+    'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
+    'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
+    'tst_annotation_file': '',
+    'word_file': word_file,
+    'embed_file': embed_file,
+    'output_dir': output_dir,
+  }
+  path_cfg_file = '%s.path.json'%outprefix
+
+  if not os.path.exists(path_cfg['output_dir']):
+    os.mkdir(path_cfg['output_dir'])
+
+  with open(path_cfg_file, 'w') as fout:
+    json.dump(path_cfg, open(path_cfg_file, 'w'), indent=2)
+
+
+def prepare_rnn_rnn():
+  root_dir = '/home/jiac/hdd/trecvid2018/rank' # aws1
+  split_dir = os.path.join(root_dir, 'split')
+  label_dir = os.path.join(root_dir, 'label')
+  word_file = os.path.join(root_dir, 'annotation', 'int2word.pkl')
+  embed_file = os.path.join(root_dir, 'annotation', 'E.word2vec.npy') 
+  out_dir = os.path.join(root_dir, 'rnn_rnn_expr')
+  splits = ['trn', 'val', 'tst']
+
+  ft_names = [
+    'i3d',
+    'resnet200',
+  ]
+
+  params = {
+    'num_epoch': 100,
+
+    'margin': 0.1,
+    'alpha': 0.5,
+    'num_neg': 32,
+    'dim_ft': 1024 + 2048,
+    'dim_joint_embed': 512,
+    'l2norm': True,
+
+    'max_words_in_caption': 30,
+    'max_num_ft': 20,
+    'pool_ft': 'max',
+
+    'lr_mult': .1,
+
+    'caption_cell_dim_hidden': 250,
+
+    'dim_pca_ft': 512,
+    'ft_cell_dim_hidden': 512,
+  }
+
+  outprefix = '%s.%d.%d.%d.%d.%.1f'%(
+    os.path.join(out_dir, '_'.join(ft_names)), 
+    params['dim_joint_embed'],
+    params['caption_cell_dim_hidden'], params['ft_cell_dim_hidden'],
+    params['dim_pca_ft'], params['alpha'])
+
+  model_cfg = rank_model.rnn_rnn.gen_cfg(**params)
+
+  model_cfg_file = '%s.model.json'%outprefix
+  model_cfg.save(model_cfg_file)
+
+  output_dir = outprefix
+  path_cfg = {
+    'trn_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'trn_ft.npz') for ft_name in ft_names],
+    'val_ftfiles': [os.path.join(root_dir, 'temporal_ft', ft_name, 'val_ft.2.npz') for ft_name in ft_names],
+    'tst_ftfiles': [],
     'val_label_file': os.path.join(label_dir, '17.set.2.gt'),
     'trn_annotation_file': os.path.join(split_dir, 'trn_id_caption_mask.pkl'),
     'val_annotation_file': os.path.join(split_dir, 'val_id_caption_mask.A.pkl'),
@@ -1494,10 +1565,12 @@ if __name__ == '__main__':
   # prepare_vevd_score()
 
   # prepare_aca()
-  prepare_aca_rnn()
+  # prepare_aca_rnn()
   # prepare_aca_track()
   # prepare_aca_freeze()
   # prepare_aca_parallel()
+
+  prepare_rnn_rnn()
 
   # prepare_rnnve_feedforward()
   # prepare_rnnve_orth()
