@@ -589,6 +589,7 @@ def prepare_aca_rnn():
 
   ft_names = [
     'i3d',
+    'i3d_flow',
     'resnet200',
   ]
 
@@ -598,7 +599,7 @@ def prepare_aca_rnn():
     'margin': 0.1,
     'alpha': 0.5,
     'num_neg': 32,
-    'dim_ft': 1024 + 2048,
+    'dim_ft': 1024 + 1024 + 2048,
     'dim_joint_embed': 300,
 
     'max_words_in_caption': 30,
