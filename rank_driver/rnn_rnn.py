@@ -65,11 +65,9 @@ if __name__ == '__main__':
     trntst = rank_model.rnn_rnn.TrnTst(model_cfg, path_cfg, m)
 
     trn_reader = rank_model.rnn_rnn.TrnReader(
-      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file,
-      l2norm=model_cfg.l2norm_input)
+      model_cfg.num_neg, path_cfg.trn_ftfiles, path_cfg.trn_annotation_file)
     val_reader = rank_model.rnn_rnn.ValReader(
-      path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file,
-      l2norm=model_cfg.l2norm_input)
+      path_cfg.val_ftfiles, path_cfg.val_annotation_file, path_cfg.val_label_file)
     if path_cfg.model_file != '':
       trntst.train(trn_reader, val_reader, memory_fraction=opts.memory_fraction, resume=True)
     else:
@@ -81,6 +79,5 @@ if __name__ == '__main__':
 
     trntst = rank_model.rnn_rnn.TrnTst(model_cfg, path_cfg, m)
 
-    tst_reader = rank_model.rnn_rnn.TstReader(opts.ft_files.split(','), opts.annotation_file,
-      l2norm=model_cfg.l2norm_input)
+    tst_reader = rank_model.rnn_rnn.TstReader(opts.ft_files.split(','), opts.annotation_file)
     trntst.test(tst_reader, memory_fraction=opts.memory_fraction)
