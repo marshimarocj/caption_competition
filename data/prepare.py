@@ -64,6 +64,15 @@ def prepare_sa_feature(ft_file, dim_ft, num_step):
   return ft, mask
 
 
+def prepare_mp_feature(ft_file, dim_ft):
+  if not os.path.exists(ft_file):
+    ft = np.zeros((dim_ft), dtype=np.float32)
+  else:
+    ft = np.load(ft_file)
+    ft = np.mean(ft, 0)
+  return ft
+
+
 '''expr
 '''
 def merge_tgif_trecvid16_rank_trn():
@@ -817,25 +826,39 @@ def prepare_trecvid18_ft_tst():
   trecvid_root_dir = '/mnt/data1/csz/trecvid18' # venus
   out_root_dir = '/mnt/data1/jiac/trecvid2018/rank'
 
-  # temporal feature
-  # ft_names = ['i3d.rgb', 'resnet200']
-  # dim_fts = [1024, 2048]
-  ft_names = ['i3d.flow']
-  dim_fts = [1024]
-  num_step = 20
+  ######temporal feature#####
+  # # ft_names = ['i3d.rgb', 'resnet200']
+  # # dim_fts = [1024, 2048]
+  # ft_names = ['i3d.flow']
+  # dim_fts = [1024]
+  # num_step = 20
+  # for ft_name, dim_ft in zip(ft_names, dim_fts):
+  #   print ft_name
+  #   fts = []
+  #   masks = []
+
+  #   for vid in range(1, 1921):
+  #     ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
+  #     ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
+  #     fts.append(ft)
+  #     masks.append(mask)
+
+  #   out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'tst.npz')
+  #   np.savez_compressed(out_file, fts=fts, masks=masks)
+
+  ######mp feature######
+  ft_names = ['i3d.rgb', 'resnet200']
+  dim_fts = [1024, 2048]
   for ft_name, dim_ft in zip(ft_names, dim_fts):
-    print ft_name
     fts = []
-    masks = []
 
     for vid in range(1, 1921):
       ft_file = os.path.join(trecvid_root_dir, 'ordered_feature', 'raw', ft_name, '%d.mp4.npy'%vid)
-      ft, mask = prepare_sa_feature(ft_file, dim_ft, num_step)
+      ft = prepare_mp_feature(ft_file, dim_ft)
       fts.append(ft)
-      masks.append(mask)
 
-    out_file = os.path.join(out_root_dir, 'temporal_ft', ft_name, 'tst.npz')
-    np.savez_compressed(out_file, fts=fts, masks=masks)
+    out_file = os.path.join(out_root_dir, 'mp_ft', ft_name, 'tst.npy')
+    np.save(out_file, fts)
 
 
 if __name__ == '__main__':
