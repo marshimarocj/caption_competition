@@ -180,9 +180,9 @@ def merge_tgif_trecvid16_rank_temporal_trn():
   num_step = 20
 
   tgif_lst_files = [
-    # os.path.join(tgif_root_dir, 'public_split', 'trn_names.npy'),
+    os.path.join(tgif_root_dir, 'public_split', 'trn_names.npy'),
     os.path.join(tgif_root_dir, 'public_split', 'val_names.npy'),
-    # os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
+    os.path.join(tgif_root_dir, 'public_split', 'tst_names.npy'),
   ]
   ft_names = ['i3d.rgb', 'resnet200']
   dim_fts = [1024, 2048]
