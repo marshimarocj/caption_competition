@@ -94,6 +94,65 @@ def format_caption():
     json.dump(out, fout, indent=2)
 
 
+def gen_captionid_mask_ensemble():
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')
+  word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
+  out_file = os.path.join(pred_dir, 'generation', 'trecvid17.pkl')
+
+  pred_files = [
+    os.path.join(root_dir, 'generation', 'output', 'margin', 'val17', 'epoch.200.json'),
+    os.path.join(root_dir, 'generation', 'output', 'diversity', 'val17', 'epoch.89.json'),
+    os.path.join(root_dir, 'generation', 'output', 'vevd_ensemble', 'val17', 'epoch.200.json'),
+    os.path.join(root_dir, 'generation', 'output', 'vevd', 'val17', 'epoch.136.json'),
+    os.path.join(root_dir, 'generation', 'output', 'attn', 'val17', 'epoch.35.json'),
+    os.path.join(root_dir, 'generation', 'output', 'attn.sc.cider', 'val17', 'epoch.97.json'),
+    os.path.join(root_dir, 'generation', 'output', 'audio+', 'val17', 'epoch.36.json'),
+    os.path.join(root_dir, 'generation', 'output', 'audio+sc.cider', 'val17', 'epoch.43.json'),
+    os.path.join(root_dir, 'generation', 'output', 'ensemble', 'val17', 'ensemble.f0.json'),
+    os.path.join(root_dir, 'generation', 'output', 'attn+trecvid16.sc.cider', 'val17', 'epoch.5.json'),
+  ]
+
+  max_num_words_in_caption = 30
+
+  vids = np.load(vid_file)
+  vid2idx = {}
+  for i, vid in enumerate(vids):
+    vid2idx[vid] = i
+
+  word2id = {}
+  with open(word_file) as f:
+    data = cPickle.load(f)
+    for i, d in enumerate(data):
+      word2id[d] = i
+
+  ft_idxs = []
+  captionids = []
+  caption_masks = []
+  for pred_file in pred_files:
+    with open(pred_file) as f:
+      data = json.load(f)
+    for key in data:
+      name, _ = os.path.splitext(key)
+      pos = name.find('_')
+      vid = int(name[pos+1:])
+      idx = vid2idx[vid]
+      caption = data[key]
+
+      captionid, caption_mask = caption2id_mask(caption, max_num_words_in_caption, word2id)
+
+      ft_idxs.append(idx)
+      captionids.append(captionid)
+      caption_masks.append(caption_mask)
+
+  ft_idxs = np.array(ft_idxs, dtype=np.int32)
+  captionids = np.array(captionids, dtype=np.int32)
+  caption_masks = np.array(caption_masks, dtype=np.int32)
+  with open(out_file, 'w') as fout:
+    cPickle.dump([ft_idxs, captionids, caption_masks], fout)
+
+
 if __name__ == '__main__':
   # gen_captionid_mask()
-  format_caption()
+  # format_caption()
+  gen_captionid_mask_ensemble()
