@@ -254,8 +254,8 @@ def eval_rerank_caption():
   # annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.pkl')
   # pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.npy')
 
-  annotation_file = os.path.join(root_dir, 'output', 'trecvid17.pkl')
-  pred_file = os.path.join(root_dir, 'output', 'trecvid17.npy')
+  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  pred_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
 
   vids = np.load(vid_file)
 
