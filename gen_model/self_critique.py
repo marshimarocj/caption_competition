@@ -14,7 +14,7 @@ from framework.model.module import Mode
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
-import framework.impl.encoder.dnn
+import framework.impl.encoder.pca
 
 import decoder.rnn
 import trntst_util
@@ -29,7 +29,7 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     framework.model.module.ModelConfig.__init__(self)
 
-    self.subcfgs[VE] = framework.impl.encoder.dnn.Config()
+    self.subcfgs[VE] = framework.impl.encoder.pca.Config()
     self.subcfgs[VD] = decoder.rnn.Config()
 
     self.alpha = 0.
@@ -55,7 +55,7 @@ def gen_cfg(**kwargs):
   cfg.alpha = kwargs['alpha']
 
   enc = cfg.subcfgs[VE]
-  enc.dim_fts = kwargs['dim_fts']
+  enc.dim_ft = kwargs['dim_ft']
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
