@@ -82,7 +82,7 @@ def export_avg_model_weights():
     m.saver.save(sess, out_file)
 
 
-def export_avg_model_weights():
+def export_avg_cross_model_weights():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   model_files = [
     os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'model', 'epoch-200'),
@@ -90,7 +90,41 @@ def export_avg_model_weights():
     os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'model', 'epoch-89'),
     os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'model', 'epoch-200'),
   ]
+  expr_name = os.path.join(root_dir, 'generation', 'vevd_ensemble_expr', 'i3d_resnet200.512.512.lstm')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  out_file = os.path.join(expr_name, 'model', 'epoch-200')
+
+  key2vals = {}
+  for model_file in model_files:
+    name2var = framework.util.graph_ckpt.load_variable_in_ckpt(model_file)
+    for name in name2var:
+      if name not in key2vals:
+        key2vals[name] = []
+      key2vals[name].append(name2var[name])
+
+  key2val = {}
+  for key in key2vals:
+    vals = key2vals[key]
+    vals = np.array(vals)
+    val = np.mean(vals, 0)
+    key2val[key] = val
+
+  path_cfg = gen_driver.vevd.gen_dir_struct_info(path_cfg_file)
+  model_cfg = gen_driver.vevd.load_and_fill_model_cfg(model_cfg_file, path_cfg)
+  m = gen_model.vevd.Model(model_cfg)
+  trn_tst_graph = m.build_trn_tst_graph()
+  with trn_tst_graph.as_default():
+    var_names = [(v.op.name, v.get_shape()) for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
+    print var_names
+    assign_op, feed_dict = tf.contrib.framework.assign_from_values(key2val)
+
+  with tf.Session(graph=trn_tst_graph) as sess:
+    sess.run(m.init_op)
+    sess.run(assign_op, feed_dict=feed_dict)
+    m.saver.save(sess, out_file)
 
 
 if __name__ == '__main__':
-  export_avg_model_weights()
+  # export_avg_model_weights()
+  export_avg_cross_model_weights()
