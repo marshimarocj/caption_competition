@@ -217,6 +217,28 @@ def rerank_sample():
   p.wait()
 
 
+def rerank_ensemble():
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  model_name = 'rnnve_orth_expr/i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct'
+  model_cfg_file = os.path.join(root_dir, 'rank', model_name + '.model.json')
+  path_cfg_file = os.path.join(root_dir, 'rank', model_name + '.path.json')
+  ft_names = ['i3d', 'resnet200']
+  ft_files = [os.path.join(root_dir, 'generation', 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
+
+  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
+
+  best_epoch = 51
+  num_candidate = 10
+  gpuid = 0
+
+  python_file = '../rank_driver/rnnve_gen.py'
+  p = gen_script_and_run(
+    python_file, model_cfg_file, path_cfg_file, best_epoch, gpuid, 
+    annotation_file=annotation_file, ft_files=','.join(ft_files), out_file=out_file, num_candidate=num_candidate)
+  p.wait()
+
+
 def eval_rerank_caption():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')

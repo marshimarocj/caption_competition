@@ -98,7 +98,7 @@ def gen_captionid_mask_ensemble():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')
   word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
-  out_file = os.path.join(root_dir, 'generation', 'trecvid17.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
 
   pred_files = [
     os.path.join(root_dir, 'generation', 'output', 'margin', 'val17', 'epoch.200.json'),
@@ -139,10 +139,14 @@ def gen_captionid_mask_ensemble():
       ft_idxs.append(idx)
       captionids.append(captionid)
       caption_masks.append(caption_mask)
+    num_video = len(data)
 
   ft_idxs = np.array(ft_idxs, dtype=np.int32)
   captionids = np.array(captionids, dtype=np.int32)
   caption_masks = np.array(caption_masks, dtype=np.int32)
+  ft_idxs = ft_idxs.reshape((-1, num_video)).T.reshape((-1,))
+  caption_ids = np.moveaxis(caption_ids.reshape((-1, num_video, 30)), (0, 1, 2), (1, 0, 2)).reshape((-1, 30))
+  caption_masks = np.moveaxis(caption_masks.reshape((-1, num_video, 30)), (0, 1, 2), (1, 0, 2)).reshape((-1, 30))
   with open(out_file, 'w') as fout:
     cPickle.dump([ft_idxs, captionids, caption_masks], fout)
 
