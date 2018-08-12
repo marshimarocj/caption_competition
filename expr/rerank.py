@@ -14,8 +14,8 @@ import eval_rank
 '''expr
 '''
 def graph_match_rerank():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   pred_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.B.npy'),
@@ -47,6 +47,11 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.A.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.B.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.C.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.D.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.E.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.A.npy'),
@@ -55,8 +60,8 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'pred', 'val.B.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m', 'pred', 'val.A.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m', 'pred', 'val.B.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.A.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.A.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.npy'),
   ]
   out_files = [
     # os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.max.1.0', 'pred', 'val.A.rerank.20.npy'),
@@ -89,6 +94,11 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'val.B.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.A.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.B.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.C.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.D.rerank.20.npy'),
+    os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.E.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m', 'pred', 'val.A.rerank.20.npy'),
@@ -97,8 +107,8 @@ def graph_match_rerank():
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_i3d_flow_resnet200.500.250.gru.max.0.5.0.1.flickr30m', 'pred', 'val.B.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m', 'pred', 'val.A.rerank.20.npy'),
     # os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.lifted.0.3.flickr30m', 'pred', 'val.B.rerank.20.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.A.rerank.20.npy'),
-    os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.A.rerank.20.npy'),
+    # os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward', 'pred', 'val.B.rerank.20.npy'),
   ]
 
   topk = 20
@@ -347,8 +357,8 @@ def corr():
 
 
 if __name__ == '__main__':
-  # graph_match_rerank()
-  eval_rerank()
+  graph_match_rerank()
+  # eval_rerank()
   # gen_caption_sim_mat()
   # rwr()
   # corr()
