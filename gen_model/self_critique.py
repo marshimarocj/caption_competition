@@ -159,7 +159,6 @@ class Model(framework.model.module.AbstractPGModel):
 
     out_ops = encoder.get_out_ops_in_mode({
       encoder.InKey.FT: in_ops[self.InKey.FT],
-      encoder.InKey.IS_TRN: in_ops[self.InKey.IS_TRN],
     }, mode)
     ft_embed = out_ops[encoder.OutKey.EMBED] # (None, dim_output)
 
