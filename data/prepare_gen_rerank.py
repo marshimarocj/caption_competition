@@ -98,19 +98,20 @@ def gen_captionid_mask_ensemble():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')
   word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
-  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  # out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.pkl')
 
   pred_files = [
     os.path.join(root_dir, 'generation', 'output', 'margin', 'val17', 'epoch.200.json'),
     os.path.join(root_dir, 'generation', 'output', 'diversity', 'val17', 'epoch.89.json'),
     os.path.join(root_dir, 'generation', 'output', 'vevd_ensemble', 'val17', 'epoch.200.json'),
     os.path.join(root_dir, 'generation', 'output', 'vevd', 'val17', 'epoch.136.json'),
-    os.path.join(root_dir, 'generation', 'output', 'attn', 'val17', 'epoch.35.json'),
+    # os.path.join(root_dir, 'generation', 'output', 'attn', 'val17', 'epoch.35.json'),
     os.path.join(root_dir, 'generation', 'output', 'attn.sc.cider', 'val17', 'epoch.97.json'),
-    os.path.join(root_dir, 'generation', 'output', 'audio+', 'val17', 'epoch.36.json'),
-    os.path.join(root_dir, 'generation', 'output', 'audio+sc.cider', 'val17', 'epoch.43.json'),
+    # os.path.join(root_dir, 'generation', 'output', 'audio+', 'val17', 'epoch.36.json'),
+    # os.path.join(root_dir, 'generation', 'output', 'audio+sc.cider', 'val17', 'epoch.43.json'),
     os.path.join(root_dir, 'generation', 'output', 'ensemble', 'val17', 'ensemble.f0.json'),
-    os.path.join(root_dir, 'generation', 'output', 'attn+trecvid16.sc.cider', 'val17', 'epoch.5.json'),
+    # os.path.join(root_dir, 'generation', 'output', 'attn+trecvid16.sc.cider', 'val17', 'epoch.5.json'),
   ]
 
   max_num_words_in_caption = 30
