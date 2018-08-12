@@ -103,19 +103,20 @@ def predict_eval():
   # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
-  # # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
+  # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
   # model_name = 'vevd_expr/i3d_i3d_flow.512.512.lstm'
-  # python_file = '../gen_driver/vevd.py'
-  # gpuid = 0
+  model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  python_file = '../gen_driver/vevd.py'
+  gpuid = 0
 
   # model_name = 'devd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
   # python_file = '../gen_driver/devd.py'
   # gpuid = 0
 
-  # model_name = 'vead_expr/i3d_resnet200.512.512'
-  model_name = 'vead_expr/i3d_resnet200.512.512.context_in_output'
-  python_file = '../gen_driver/vead.py'
-  gpuid = 2
+  # # model_name = 'vead_expr/i3d_resnet200.512.512'
+  # model_name = 'vead_expr/i3d_resnet200.512.512.context_in_output'
+  # python_file = '../gen_driver/vead.py'
+  # gpuid = 2
 
   # model_name = 'vead_expr/i3d_resnet200.512.512'
   # python_file = '../gen_driver/vead.py'
