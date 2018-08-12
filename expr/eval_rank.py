@@ -174,8 +174,8 @@ def predict_eval_trecvid17_B():
   # out_name = 'val.A'
   # label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
-  annotation_file = os.path.join(root_dir, 'split', 'tst_id_caption_mask.C.pkl')
-  out_name = 'tst.C'
+  annotation_file = os.path.join(root_dir, 'split', 'tst_id_caption_mask.D.pkl')
+  out_name = 'tst.D'
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
@@ -236,7 +236,7 @@ def predict_eval_trecvid17_B():
   path_cfg_file = '%s.path.json'%expr_name
   python_file = '../rank_driver/rnnve_orth.py'
   # python_file = '../rank_driver/rnnve_orth_freeze.py'
-  gpuid = 0
+  gpuid = 1
 
   # # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m')
   # # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m')
