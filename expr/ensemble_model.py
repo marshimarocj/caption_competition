@@ -69,7 +69,8 @@ def export_avg_model_weights():
   with trn_tst_graph.as_default():
     var_names = [(v.op.name, v.get_shape()) for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
     print var_names
-    assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
+    # assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key2val)
+    assign_op, feed_dict = tf.contrib.framework.assign_from_values(key2val)
 
   with tf.Session(graph=trn_tst_graph) as sess:
     sess.run(m.init_op)
