@@ -150,7 +150,7 @@ def predict_eval():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
-    gpuid=gpuid, val=False)
+    gpuid=gpuid, val=0)
   p.wait()
 
   predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
