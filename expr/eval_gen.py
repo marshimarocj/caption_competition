@@ -256,6 +256,7 @@ def eval_rerank_caption():
 
   annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
   pred_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.json')
 
   vids = np.load(vid_file)
 
@@ -273,9 +274,15 @@ def eval_rerank_caption():
   captionids = np.reshape(captionids, scores.shape + (-1,))
   idxs = np.argmax(scores, 1)
   pred = {}
+  out = []
+  cnt = 0
   for idx, captionid, vid in zip(idxs, captionids, vids):
     pred[vid] = [gen_caption(captionid[idx], words)]
     # print vid, gen_caption(captionid[idx], words)
+    out.append({'vid': cnt+1, 'caption': pred[vid][0]})
+
+  with open(out_file, 'w') as fout:
+    json.dump(out, fout, indent=2)
 
   bleu_scorer = Bleu(4)
   meteor_scorer = Meteor()
