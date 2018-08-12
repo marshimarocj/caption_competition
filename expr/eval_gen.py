@@ -132,8 +132,12 @@ def predict_eval():
   # python_file = '../gen_driver/diversity.py'
   # gpuid = 0
 
-  model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
-  python_file = '../gen_driver/margin.py'
+  # model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
+  # python_file = '../gen_driver/margin.py'
+  # gpuid = 0
+
+  model_name = 'vevd_ensemble_expr/i3d_resnet200.512.512.lstm'
+  python_file = '../gen_driver/vevd.py'
   gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
