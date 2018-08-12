@@ -41,6 +41,7 @@ def export_avg_model_weights():
 
   for epoch in epochs:
     model_file = os.path.join(expr_name, 'model', 'epoch-%d'%epoch)
+    print model_file
     if not os.path.exists(model_file):
       continue
     name2var = framework.util.graph_ckpt.load_variable_in_ckpt(model_file)
