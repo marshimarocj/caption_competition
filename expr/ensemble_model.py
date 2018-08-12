@@ -36,7 +36,8 @@ def export_avg_model_weights():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   # expr_name = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200_i3d_flow.512.512.lstm')
   # expr_name = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm')
-  expr_name = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr')
+  # expr_name = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr')
+  expr_name = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr')
   log_dir = os.path.join(expr_name, 'log')
   model_cfg_file = '%s.model.json'%expr_name
   path_cfg_file = '%s.path.json'%expr_name

@@ -15,7 +15,7 @@ import framework.model.data
 import framework.util.caption.utility
 from framework.model.module import Mode
 
-import framework.impl.encoder.dnn
+import framework.impl.encoder.pca
 import decoder.rnn
 from decoder.rnn import CELL
 import service.fast_cider
@@ -31,7 +31,7 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     framework.model.module.ModelConfig.__init__(self)
 
-    self.subcfgs[VE] = framework.impl.encoder.dnn.Config()
+    self.subcfgs[VE] = framework.impl.encoder.pca.Config()
     self.subcfgs[VD] = decoder.rnn.Config()
 
     self.reward_alpha = .5
@@ -65,7 +65,7 @@ def gen_cfg(**kwargs):
   cfg.max_ngram_in_diversity = kwargs['max_ngram_in_diversity']
 
   enc = cfg.subcfgs[VE]
-  enc.dim_fts = kwargs['dim_fts']
+  enc.dim_ft = kwargs['dim_ft']
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
@@ -108,18 +108,18 @@ class Model(framework.model.module.AbstractPGModel):
 
   def _set_submods(self):
     return {
-      VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
+      VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
       VD: decoder.rnn.Decoder(self._config.subcfgs[VD]),
     }
 
   def _add_input_in_mode(self, mode):
-    dim_fts = self._config.subcfgs[VE].dim_fts
+    dim_ft = self._config.subcfgs[VE].dim_ft
     num_step = self._config.subcfgs[VD].num_step
 
     if mode == framework.model.module.Mode.TRN_VAL:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, sum(dim_fts)), name=self.InKey.FT.value)
+          tf.float32, shape=(None, dim_ft), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
         # trn only
@@ -140,7 +140,7 @@ class Model(framework.model.module.AbstractPGModel):
     else:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, sum(dim_fts)), name='fts')
+          tf.float32, shape=(None, dim_ft), name='fts')
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
 
