@@ -73,6 +73,7 @@ def format_caption():
   # pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'viz.json')
   # out_dir = os.path.join(out_root_dir, 'diversity', 'val17')
   pred_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'viz.json')
+  out_dir = os.path.join(out_root_dir, 'margin', 'val17')
   if not os.path.exists(out_dir):
     os.makedirs(out_dir)
 
@@ -87,7 +88,8 @@ def format_caption():
 
   # out_file = os.path.join(out_dir, 'epoch.200.json')
   # out_file = os.path.join(out_dir, 'epoch.88.json')
-  out_file = os.path.join(out_dir, 'epoch.89.json')
+  # out_file = os.path.join(out_dir, 'epoch.89.json')
+  out_file = os.path.join(out_dir, 'epoch.200.json')
   with open(out_file, 'w') as fout:
     json.dump(out, fout, indent=2)
 
