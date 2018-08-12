@@ -103,13 +103,13 @@ class Model(framework.model.module.AbstractPGModel):
     }
 
   def _add_input_in_mode(self, mode):
-    dim_fts = self._config.subcfgs[VE].dim_fts
+    dim_ft = self._config.subcfgs[VE].dim_ft
     num_step = self._config.subcfgs[VD].num_step
 
     if mode == Mode.TRN_VAL:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, sum(dim_fts)), name=self.InKey.FT.value)
+          tf.float32, shape=(None, dim_ft), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
         # trn only
@@ -136,7 +136,7 @@ class Model(framework.model.module.AbstractPGModel):
     else:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, sum(dim_fts)), name='fts')
+          tf.float32, shape=(None, dim_ft), name='fts')
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
 
