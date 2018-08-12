@@ -84,6 +84,8 @@ if __name__ == '__main__':
       path_cfg.tst_ftfiles = path_cfg.val_ftfiles
       path_cfg.tst_videoid_file = path_cfg.val_videoid_file
       out_name = 'val'
+    else:
+      out_name = 'tst'
     if opts.tst_strategy == 'beam':
       path_cfg.predict_file = os.path.join(path_cfg.output_dir, 'pred',
         '%s-%d.%d.%d.%s.json'%(out_name,

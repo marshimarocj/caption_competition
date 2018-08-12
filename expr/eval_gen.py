@@ -122,10 +122,10 @@ def predict_eval():
   # python_file = '../gen_driver/vead.py'
   # gpuid = 1
 
-  # # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
-  # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
-  # python_file = '../gen_driver/self_critique.py'
-  # gpuid = 0
+  # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
+  model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
+  python_file = '../gen_driver/self_critique.py'
+  gpuid = 0
 
   # # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
   # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
@@ -136,9 +136,9 @@ def predict_eval():
   # python_file = '../gen_driver/margin.py'
   # gpuid = 0
 
-  model_name = 'vevd_ensemble_expr/i3d_resnet200.512.512.lstm'
-  python_file = '../gen_driver/vevd.py'
-  gpuid = 0
+  # model_name = 'vevd_ensemble_expr/i3d_resnet200.512.512.lstm'
+  # python_file = '../gen_driver/vevd.py'
+  # gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
@@ -150,17 +150,17 @@ def predict_eval():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
-    gpuid=gpuid)
+    gpuid=gpuid, val=0)
   p.wait()
 
-  predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
-  out = eval(predict_file, gt_file)
-  with open('eval.%d.txt'%gpuid, 'w') as fout:
-    content = '%.2f\t%.2f\t%.2f'%(
-      out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
-    print epoch
-    print content
-    fout.write(str(epoch) + '\t' + content + '\n')
+  # predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
+  # out = eval(predict_file, gt_file)
+  # with open('eval.%d.txt'%gpuid, 'w') as fout:
+  #   content = '%.2f\t%.2f\t%.2f'%(
+  #     out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
+  #   print epoch
+  #   print content
+  #   fout.write(str(epoch) + '\t' + content + '\n')
 
 
 def predict_sample():
@@ -307,8 +307,8 @@ def eval_rerank_caption():
 
 
 if __name__ == '__main__':
-  # predict_eval()
+  predict_eval()
   # predict_sample()
   # rerank_sample()
   # rerank_ensemble()
-  eval_rerank_caption()
+  # eval_rerank_caption()
