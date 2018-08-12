@@ -145,7 +145,7 @@ def gen_captionid_mask_ensemble():
   captionids = np.array(captionids, dtype=np.int32)
   caption_masks = np.array(caption_masks, dtype=np.int32)
   ft_idxs = ft_idxs.reshape((-1, num_video)).T.reshape((-1,))
-  caption_ids = np.moveaxis(caption_ids.reshape((-1, num_video, 30)), (0, 1, 2), (1, 0, 2)).reshape((-1, 30))
+  captionids = np.moveaxis(captionids.reshape((-1, num_video, 30)), (0, 1, 2), (1, 0, 2)).reshape((-1, 30))
   caption_masks = np.moveaxis(caption_masks.reshape((-1, num_video, 30)), (0, 1, 2), (1, 0, 2)).reshape((-1, 30))
   with open(out_file, 'w') as fout:
     cPickle.dump([ft_idxs, captionids, caption_masks], fout)
