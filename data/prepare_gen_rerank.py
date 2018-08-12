@@ -60,5 +60,29 @@ def gen_captionid_mask():
     cPickle.dump([ft_idxs, captionids, caption_masks], fout)
 
 
+def format_caption():
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  out_root_dir = os.path.join(root_dir, 'generation', 'output')
+
+  pred_file = os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'viz.json')
+  out_dir = os.path.join(out_root_dir, 'vevd', 'val17')
+  if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
+
+  out = {}
+  with open(pred_file) as f:
+    data = json.load(f)
+    for d in data:
+      vid = d['vid']
+      caption = d['caption']
+      name = 'trecvid17_%d.mp4'%vid
+      out[name] = [caption]
+
+  out_file = os.path.join(out_dir, 'epoch.136.json')
+  with open(out_file, 'w') as fout:
+    json.dump(out, fout, indent=2)
+
+
 if __name__ == '__main__':
-  gen_captionid_mask()
+  # gen_captionid_mask()
+  format_caption()
