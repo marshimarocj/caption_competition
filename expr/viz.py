@@ -23,8 +23,8 @@ def viz_generation():
   # out_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'viz.json')
 
   # predict_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'val-75.1.5.beam.json')
-  predict_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'val-200.1.5.beam.json')
-  out_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'viz.json')
+  predict_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'tst-200.1.5.beam.json')
+  out_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'tst.json')
 
   # predict_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'val-88.1.5.beam.json')
   # out_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'viz.json')
