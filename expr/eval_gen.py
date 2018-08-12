@@ -231,7 +231,8 @@ def rerank_ensemble():
   out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.npy')
 
   best_epoch = 51
-  num_candidate = 10
+  # num_candidate = 10
+  num_candidate = 6
   gpuid = 0
 
   python_file = '../rank_driver/rnnve_gen.py'
