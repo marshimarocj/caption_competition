@@ -275,7 +275,7 @@ def eval_rerank_caption():
   pred = {}
   for idx, captionid, vid in zip(idxs, captionids, vids):
     pred[vid] = [gen_caption(captionid[idx], words)]
-    print vid, gen_caption(captionid[idx], words)
+    # print vid, gen_caption(captionid[idx], words)
 
   bleu_scorer = Bleu(4)
   meteor_scorer = Meteor()
