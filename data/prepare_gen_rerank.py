@@ -127,10 +127,10 @@ def gen_captionid_mask_ensemble():
   for pred_file in pred_files:
     with open(pred_file) as f:
       data = json.load(f)
-    for key in data:
+    for vid in range(1, 1881):
+      key = 'trecvid17_%d.mp4'%vid
       name, _ = os.path.splitext(key)
       pos = name.find('_')
-      vid = int(name[pos+1:])
       idx = vid-1
       caption = data[key][0]
 
