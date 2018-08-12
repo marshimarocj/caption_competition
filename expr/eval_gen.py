@@ -141,7 +141,8 @@ def predict_eval():
   model_cfg_file = os.path.join(root_dir, model_name + '.model.json')
   path_cfg_file = os.path.join(root_dir, model_name + '.path.json')
 
-  epoch, cider = select_best_epoch(log_dir)
+  # epoch, cider = select_best_epoch(log_dir)
+  epoch = 200
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
