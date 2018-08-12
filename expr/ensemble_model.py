@@ -8,6 +8,7 @@ import tensorflow as tf
 
 import framework.util.graph_ckpt
 import gen_model.vevd
+import gen_driver.vevd
 
 
 '''func
@@ -35,17 +36,45 @@ def export_avg_model_weights():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   expr_name = os.path.join(root_dir, 'generation', 'vevd_expr', 'i3d_resnet200_i3d_flow.512.512.lstm')
   log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  out_file = os.path.join(expr_name, 'model', 'ensemble')
 
   best_epoch, cider = select_best_epoch(log_dir)
   epochs = [best_epoch-10, best_epoch, best_epoch + 10]
 
+  key2vals = {}
   for epoch in epochs:
     model_file = os.path.join(expr_name, 'model', 'epoch-%d'%epoch)
     if not os.path.exists(model_file + '.meta'):
       continue
     name2var = framework.util.graph_ckpt.load_variable_in_ckpt(model_file)
-    print name2var.keys()
-    break
+    # print name2var.keys()
+    for name in name2var:
+      if name not in key2vals:
+        key2vals[name] = []
+      key2vals[name].append(name2var[name])
+
+  key2val = {}
+  for key in key2vals:
+    vals = key2vals[key]
+    vals = np.array(vals)
+    val = np.mean(vals, 0)
+    key2val[key] = val
+
+  path_cfg = gen_driver.gen_dir_struct_info(path_cfg_file)
+  model_cfg = gen_driver.vevd.load_and_fill_model_cfg(model_cfg_file, path_cfg)
+  m = gen_model.vevd.Model(model_cfg)
+  trn_tst_graph = m.build_trn_tst_graph()
+  with trn_tst_graph.as_default():
+    var_names = [(v.op.name, v.get_shape()) for v in tf.get_collection(tf.GraphKeys.MODEL_VARIABLES)]
+    print var_names
+    assign_op, feed_dict = framework.util.graph_ckpt.init_weight_from_singlemodel(model_file, key_map)
+
+  with tf.Session(graph=trn_tst_graph) as sess:
+    sess.run(m.init_op)
+    sess.run(assign_op, feed_dict=feed_dict)
+    m.saver.save(sess, out_file)
 
 
 if __name__ == '__main__':
