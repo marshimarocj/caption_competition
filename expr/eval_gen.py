@@ -302,5 +302,5 @@ if __name__ == '__main__':
   # predict_eval()
   # predict_sample()
   # rerank_sample()
-  # rerank_ensemble()
-  eval_rerank_caption()
+  rerank_ensemble()
+  # eval_rerank_caption()
