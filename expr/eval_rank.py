@@ -173,8 +173,8 @@ def predict_eval_trecvid17_B():
   # out_name = 'val.A'
   # label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
 
-  annotation_file = os.path.join(root_dir, 'split', 'tst_id_caption_mask.A.pkl')
-  out_name = 'tst.A'
+  annotation_file = os.path.join(root_dir, 'split', 'tst_id_caption_mask.B.pkl')
+  out_name = 'tst.B'
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
