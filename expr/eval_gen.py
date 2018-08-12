@@ -103,11 +103,11 @@ def predict_eval():
   # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
-  model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
-  # model_name = 'vevd_expr/i3d_i3d_flow.512.512.lstm'
-  # model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
-  python_file = '../gen_driver/vevd.py'
-  gpuid = 0
+  # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
+  # # model_name = 'vevd_expr/i3d_i3d_flow.512.512.lstm'
+  # # model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  # python_file = '../gen_driver/vevd.py'
+  # gpuid = 0
 
   # model_name = 'devd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
   # python_file = '../gen_driver/devd.py'
@@ -122,10 +122,10 @@ def predict_eval():
   # python_file = '../gen_driver/vead.py'
   # gpuid = 1
 
-  # # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
-  # model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
-  # python_file = '../gen_driver/self_critique.py'
-  # gpuid = 0
+  # model_name = 'self_critique_expr/i3d_resnet200.512.512.cider'
+  model_name = 'self_critique_expr/i3d_resnet200.512.512.bcmr'
+  python_file = '../gen_driver/self_critique.py'
+  gpuid = 0
 
   # # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.cider'
   # model_name = 'diversity_expr/i3d_resnet200.512.512.0.2.5.2_4.bcmr'
