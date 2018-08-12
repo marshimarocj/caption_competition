@@ -218,6 +218,7 @@ class Model(framework.model.module.AbstractModel):
       mask = in_ops[self.InKey.CAPTION_MASK]
       mask = tf.expand_dims(tf.to_float(mask), 2)
       caption_embed = tf.nn.conv1d(caption_embed, tf.expand_dims(self.caption_pca_W, 0), 1, 'VALID')
+      caption_embed = tf.nn.bias_add(caption_embed, self.caption_pca_B)
       caption_embed = tf.nn.tanh(caption_embed)
       caption_embed += 1.
       caption_embed = tf.reduce_max(caption_embed * mask, 1)
@@ -228,6 +229,7 @@ class Model(framework.model.module.AbstractModel):
       mask = in_ops[self.InKey.FT_MASK]
       mask = tf.expand_dims(mask, 2)
       ft_embed = tf.nn.conv1d(ft_embed, tf.expand_dims(self.ft_pca_W, 0), 1, 'VALID')
+      ft_embed = tf.nn.bias_add(ft_embed, self.ft_pca_B)
       ft_embed = tf.nn.tanh(ft_embed)
       if self._config.pool_ft == 'mean':
         ft_embed = tf.reduce_sum(ft_embed * mask, 1) / tf.reduce_sum(mask, 1)
