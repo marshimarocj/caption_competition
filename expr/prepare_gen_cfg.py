@@ -55,13 +55,13 @@ def prepare_vevd():
   annotation_dir = os.path.join(root_dir, 'annotation')
   split_dir = os.path.join(root_dir, 'split')
   splits = ['trn', 'val', 'tst']
-  out_dir = os.path.join(root_dir, 'vevd_expr')
+  out_dir = os.path.join(root_dir, 'vevd_ensemble_expr')
   model_spec = 'lstm'
 
   ft_names = [
     'i3d',
-    # 'resnet200',
-    'i3d_flow',
+    'resnet200',
+    # 'i3d_flow',
     # 'i3d_flow_max',
   ]
 
@@ -396,9 +396,9 @@ def prepare_vead():
 
 
 if __name__ == '__main__':
-  # prepare_vevd()
+  prepare_vevd()
   # prepare_devd()
   # prepare_self_critique()
   # prepare_diversity()
   # prepare_margin()
-  prepare_vead()
+  # prepare_vead()

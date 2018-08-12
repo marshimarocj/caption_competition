@@ -82,5 +82,15 @@ def export_avg_model_weights():
     m.saver.save(sess, out_file)
 
 
+def export_avg_model_weights():
+  root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
+  model_files = [
+    os.path.join(root_dir, 'rank', 'vevd_expr', 'i3d_resnet200.512.512.lstm', 'model', 'epoch-200'),
+    os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'model', 'epoch-200'),
+    os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'model', 'epoch-89'),
+    os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'model', 'epoch-200'),
+  ]
+
+
 if __name__ == '__main__':
   export_avg_model_weights()
