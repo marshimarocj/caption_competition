@@ -202,7 +202,7 @@ class Model(framework.model.module.AbstractModel):
 
     ft_pca = self.submods[FT_PCA]
     out_ops = ft_pca.get_out_ops_in_mode({
-      ft_pca.InKey.FT: in_ops[self.Inkey.FT],
+      ft_pca.InKey.FT: in_ops[self.InKey.FT],
       }, mode)
     fts = out_ops[ft_pca.OutKey.EMBED] # (None, max_num_ft, dim_pca_ft)
 
