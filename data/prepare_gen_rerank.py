@@ -132,7 +132,7 @@ def gen_captionid_mask_ensemble():
       pos = name.find('_')
       vid = int(name[pos+1:])
       idx = vid-1
-      caption = data[key]
+      caption = data[key][0]
 
       captionid, caption_mask = caption2id_mask(caption, max_num_words_in_caption, word2id)
 
