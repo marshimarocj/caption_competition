@@ -655,7 +655,7 @@ class ValTemporalReader(ValAttReader):
 
     fts = []
     for ft_file in ft_files:
-      data = np.load(att_ft_file)
+      data = np.load(ft_file)
       ft = data['fts']
       self.ft_masks = data['masks']
       fts.append(ft)
