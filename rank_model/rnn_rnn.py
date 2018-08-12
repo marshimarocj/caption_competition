@@ -257,17 +257,8 @@ class Model(framework.model.module.AbstractModel):
         neg_caption_sim = tf.matmul(pos_ft_embed, neg_caption_embed, transpose_b=True) # (trn_batch_size, neg)
         neg_ft_sim = tf.matmul(pos_caption_embed, neg_ft_embed, transpose_b=True) # (trn_batch_size, neg)
 
-        if self._config.loss == 'lifted':
-          neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100. # (trn_batch_size,)
-          neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100. # (trn_batch_size,)
-        else:
-          pos_sim *= 10.
-          neg_caption_sim *= 10.
-          neg_ft_sim *= 10.
-          neg_caption_sim = tf.concat([neg_caption_sim, tf.expand_dims(pos_sim, 1)], 1)
-          neg_caption_sim = tf.reduce_logsumexp(neg_caption_sim, 1)
-          neg_ft_sim = tf.concat([neg_ft_sim, tf.expand_dims(pos_sim, 1)], 1)
-          neg_ft_sim = tf.reduce_logsumexp(neg_ft_sim, 1)
+        neg_caption_sim = tf.reduce_logsumexp(100.*neg_caption_sim, 1) / 100. # (trn_batch_size,)
+        neg_ft_sim = tf.reduce_logsumexp(100.*neg_ft_sim, 1) / 100. # (trn_batch_size,)
 
       return pos_sim, neg_caption_sim, neg_ft_sim
 
