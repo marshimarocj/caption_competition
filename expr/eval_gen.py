@@ -225,8 +225,10 @@ def rerank_ensemble():
   ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'generation', 'mp_feature', ft_name, 'val_ft.npy') for ft_name in ft_names]
 
-  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
-  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
+  # annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  # out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
+  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.npy')
 
   best_epoch = 51
   num_candidate = 10
@@ -307,8 +309,8 @@ def eval_rerank_caption():
 
 
 if __name__ == '__main__':
-  predict_eval()
+  # predict_eval()
   # predict_sample()
   # rerank_sample()
-  # rerank_ensemble()
+  rerank_ensemble()
   # eval_rerank_caption()
