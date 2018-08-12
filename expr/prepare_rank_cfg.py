@@ -794,8 +794,10 @@ def prepare_rnn_rnn():
     'caption_cell_dim_hidden': 250,
     'cell': 'gru',
 
+    # 'dim_pca_ft': 512,
+    # 'ft_cell_dim_hidden': 512,
     'dim_pca_ft': 512,
-    'ft_cell_dim_hidden': 512,
+    'ft_cell_dim_hidden': 256,
   }
 
   outprefix = '%s.%d.%d.%d.%d.%.1f'%(
