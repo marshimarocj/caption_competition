@@ -115,11 +115,6 @@ def gen_captionid_mask_ensemble():
 
   max_num_words_in_caption = 30
 
-  vids = np.load(vid_file)
-  vid2idx = {}
-  for i, vid in enumerate(vids):
-    vid2idx[vid] = i
-
   word2id = {}
   with open(word_file) as f:
     data = cPickle.load(f)
@@ -136,7 +131,7 @@ def gen_captionid_mask_ensemble():
       name, _ = os.path.splitext(key)
       pos = name.find('_')
       vid = int(name[pos+1:])
-      idx = vid2idx[vid]
+      idx = vid-1
       caption = data[key]
 
       captionid, caption_mask = caption2id_mask(caption, max_num_words_in_caption, word2id)
