@@ -81,6 +81,8 @@ if __name__ == '__main__':
       path_cfg.tst_ftfiles = path_cfg.val_ftfiles
       path_cfg.tst_videoid_file = path_cfg.val_videoid_file
       out_name = 'val'
+    else:
+      out_name = 'tst'
 
     m = gen_model.self_critique.Model(model_cfg)
 
