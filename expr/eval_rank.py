@@ -156,20 +156,25 @@ def report_best_epoch():
 
 
 def predict_eval_trecvid17_B():
-  root_dir = '/data1/jiac/trecvid2018/rank' # uranus
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/data1/jiac/trecvid2018/rank' # uranus
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
   # root_dir = '/data1/jiac/trecvid2018/rank' # mercurial
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu8
   # root_dir = '/home/jiac/data/trecvid2018/rank' # gpu9
-  ft_names = ['i3d', 'i3d_flow', 'resnet200']
+  # ft_names = ['i3d', 'i3d_flow', 'resnet200']
+  ft_names = ['i3d', 'resnet200']
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'val_ft.2.npy') for ft_name in ft_names]
   track_ft_files = [os.path.join(root_dir, 'sa_feature', ft_name, 'val_ft.2.npz') for ft_name in ft_names]
+
   # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.pkl')
   # # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.B.npz')
   # out_name = 'val.B'
-  annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
-  out_name = 'val.A'
-  label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+  # annotation_file = os.path.join(root_dir, 'split', 'val_id_caption_mask.A.pkl')
+  # out_name = 'val.A'
+  # label_file = os.path.join(root_dir, 'label', '17.set.2.gt')
+
+  annotation_file = os.path.join(root_dir, 'split', 'tst_id_caption_mask.A.pkl')
+  out_name = 'tst.A'
 
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.1.0')
   # # expr_name = os.path.join(root_dir, 'ceve_expr', 'i3d_resnet200.300.1_2_3.mean.0.5')
@@ -216,21 +221,21 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/rnnve_feedforward.py'
   # gpuid = 0
 
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.0.1.flickr30m.freeze')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.1.flickr30m.freeze')
-  # # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.finetune.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.133_133_134.250.gru.max.0.5.0.1.flickr30m')
+  expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.max.0.5.0.1.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512_512_512_512_512_512_512_512.max.0.5.0.1.flickr30m.freeze')
+  # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.finetune.direct')
   # expr_name = os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_i3d_flow_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct')
-  # log_dir = os.path.join(expr_name, 'log')
-  # model_cfg_file = '%s.model.json'%expr_name
-  # path_cfg_file = '%s.path.json'%expr_name
-  # python_file = '../rank_driver/rnnve_orth.py'
-  # # python_file = '../rank_driver/rnnve_orth_freeze.py'
-  # gpuid = 0
+  log_dir = os.path.join(expr_name, 'log')
+  model_cfg_file = '%s.model.json'%expr_name
+  path_cfg_file = '%s.path.json'%expr_name
+  python_file = '../rank_driver/rnnve_orth.py'
+  # python_file = '../rank_driver/rnnve_orth_freeze.py'
+  gpuid = 0
 
   # # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.flickr30m')
   # # expr_name = os.path.join(root_dir, 'srnnve_expr', 'i3d_resnet200.512.512.gru.0.5.0.1.max.flickr30m')
@@ -294,18 +299,18 @@ def predict_eval_trecvid17_B():
   # python_file = '../rank_driver/vevd_score.py'
   # gpuid = 1
 
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5')
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att')
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.512.0.5.att.sbu')
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward')
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward')
-  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward')
-  expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward')
-  log_dir = os.path.join(expr_name, 'log')
-  model_cfg_file = '%s.model.json'%expr_name
-  path_cfg_file = '%s.path.json'%expr_name
-  python_file = '../rank_driver/aca.py'
-  gpuid = 0
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5')
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att')
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.512.0.5.att.sbu')
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.300.0.5.att.feedforward')
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.att.flickr30m.feedforward')
+  # # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_resnet200.500.0.5.0.1.att.flickr30m.feedforward')
+  # expr_name = os.path.join(root_dir, 'aca_expr', 'i3d_i3d_flow_resnet200.500.0.5.0.1.att.flickr30m.feedforward')
+  # log_dir = os.path.join(expr_name, 'log')
+  # model_cfg_file = '%s.model.json'%expr_name
+  # path_cfg_file = '%s.path.json'%expr_name
+  # python_file = '../rank_driver/aca.py'
+  # gpuid = 0
 
   # expr_name = os.path.join(root_dir, 'aca_rnn_expr', 'i3d_resnet200.300.0.5')
   # log_dir = os.path.join(expr_name, 'log')
@@ -342,20 +347,20 @@ def predict_eval_trecvid17_B():
     # ft_files=','.join(ft_files), att_ft_files=','.join(track_ft_files), annotation_file=annotation_file, out_name=out_name)
   p.wait()
 
-  vid2gt = {}
-  with open(label_file) as f:
-    for line in f:
-      line = line.strip()
-      data = line.split(' ')
-      vid = int(data[0])
-      gid = int(data[2])
-      vid2gt[vid] = gid
+  # vid2gt = {}
+  # with open(label_file) as f:
+  #   for line in f:
+  #     line = line.strip()
+  #     data = line.split(' ')
+  #     vid = int(data[0])
+  #     gid = int(data[2])
+  #     vid2gt[vid] = gid
 
-  predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
-  predicts = np.load(predict_file)
-  mir_B = calc_mir(predicts, vid2gt)
+  # predict_file = '%s/pred/%s.npy'%(expr_name, out_name)
+  # predicts = np.load(predict_file)
+  # mir_B = calc_mir(predicts, vid2gt)
 
-  print best_epoch, mir_A, mir_B
+  # print best_epoch, mir_A, mir_B
 
 
 def predict_eval_vevd():
