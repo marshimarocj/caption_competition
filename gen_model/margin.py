@@ -14,7 +14,7 @@ from framework.model.module import Mode
 import framework.model.trntst
 import framework.model.data
 import framework.util.caption.utility
-import framework.impl.encoder.dnn
+import framework.impl.encoder.pca
 
 import decoder.rnn
 import trntst_util
@@ -29,7 +29,7 @@ class ModelConfig(framework.model.module.ModelConfig):
   def __init__(self):
     framework.model.module.ModelConfig.__init__(self)
 
-    self.subcfgs[VE] = framework.impl.encoder.dnn.Config()
+    self.subcfgs[VE] = framework.impl.encoder.pca.Config()
     self.subcfgs[VD] = decoder.rnn.Config()
     self.reward_alpha = .5
     self.margin = .1
@@ -60,7 +60,7 @@ def gen_cfg(**kwargs):
   cfg.metric = kwargs['metric']
 
   enc = cfg.subcfgs[VE]
-  enc.dim_fts = kwargs['dim_fts']
+  enc.dim_ft = kwargs['dim_ft']
   enc.dim_output = kwargs['dim_hidden']
   enc.keepin_prob = kwargs['content_keepin_prob']
 
@@ -100,15 +100,13 @@ class Model(framework.model.module.AbstractPGModel):
 
   def _set_submods(self):
     return {
-      VE: framework.impl.encoder.dnn.Encoder(self._config.subcfgs[VE]),
+      VE: framework.impl.encoder.pca.Encoder(self._config.subcfgs[VE]),
       VD: decoder.rnn.Decoder(self._config.subcfgs[VD]),
     }
 
   def _add_input_in_mode(self, mode):
     if mode == framework.model.module.Mode.TRN_VAL:
       with tf.variable_scope(self.name_scope):
-        fts = tf.placeholder(
-          tf.float32, shape=(None, sum(self._config.subcfgs[VE].dim_fts)), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
         # trn only
@@ -135,7 +133,7 @@ class Model(framework.model.module.AbstractPGModel):
     else:
       with tf.variable_scope(self.name_scope):
         fts = tf.placeholder(
-          tf.float32, shape=(None, sum(self._config.subcfgs[VE].dim_fts)), name=self.InKey.FT.value)
+          tf.float32, shape=(None, self._config.subcfgs[VE].dim_ft), name=self.InKey.FT.value)
         is_training = tf.placeholder(
           tf.bool, shape=(), name=self.InKey.IS_TRN.value)
 
