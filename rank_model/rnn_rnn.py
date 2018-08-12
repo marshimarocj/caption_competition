@@ -124,8 +124,12 @@ class Model(framework.model.module.AbstractModel):
   def _set_submods(self):
     caption_rnn = encoder.birnn.Encoder(self._config.subcfgs[CAPTION_RNN])
     caption_rnn.name_scope += '.caption'
+    caption_rnn.submods[CELL].name_scope += '.caption'
+    caption_rnn.submods[RCELL].name_scope += '.caption'
     ft_rnn = encoder.birnn.Encoder(self._config.subcfgs[FT_RNN])
     ft_rnn.name_scope += '.ft'
+    ft_rnn.submods[CELL].name_scope += '.ft'
+    ft_rnn.submods[RCELL].name_scope += '.ft'
     return {
       WE: encoder.word.Encoder(self._config.subcfgs[WE]),
       CAPTION_RNN: caption_rnn,
