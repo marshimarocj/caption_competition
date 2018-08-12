@@ -257,9 +257,12 @@ def eval_rerank_caption():
   # annotation_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.pkl')
   # pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'sample.100.npy')
 
-  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
-  pred_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
-  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.json')
+  # annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.pkl')
+  # pred_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.npy')
+  # out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17.json')
+  annotation_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.pkl')
+  pred_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.npy')
+  out_file = os.path.join(root_dir, 'generation', 'output', 'trecvid17_good.json')
 
   vids = np.load(vid_file)
 
@@ -313,5 +316,5 @@ if __name__ == '__main__':
   # predict_eval()
   # predict_sample()
   # rerank_sample()
-  rerank_ensemble()
-  # eval_rerank_caption()
+  # rerank_ensemble()
+  eval_rerank_caption()
