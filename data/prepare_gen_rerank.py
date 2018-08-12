@@ -98,7 +98,7 @@ def gen_captionid_mask_ensemble():
   root_dir = '/mnt/data1/jiac/trecvid2018' # neptune
   vid_file = os.path.join(root_dir, 'generation', 'split', 'val_videoids.npy')
   word_file = os.path.join(root_dir, 'generation', 'annotation', 'int2word.pkl')
-  out_file = os.path.join(pred_dir, 'generation', 'trecvid17.pkl')
+  out_file = os.path.join(root_dir, 'generation', 'trecvid17.pkl')
 
   pred_files = [
     os.path.join(root_dir, 'generation', 'output', 'margin', 'val17', 'epoch.200.json'),
