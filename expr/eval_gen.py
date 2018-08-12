@@ -97,15 +97,15 @@ def gen_caption(captionid, words):
 '''expr
 '''
 def predict_eval():
-  # root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
-  root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
+  root_dir = '/mnt/data1/jiac/trecvid2018/rank' # neptune
+  # root_dir = '/mnt/data1/jiac/trecvid2018/generation' # neptune
   # root_dir = '/data1/jiac/trecvid2018/generation' # mercurial
   # root_dir = '/data1/jiac/trecvid2018/generation' # uranus
   gt_file = os.path.join(root_dir, 'annotation', 'human_caption_dict.pkl')
 
-  # model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
+  model_name = 'vevd_expr/i3d_resnet200.512.512.lstm'
   # model_name = 'vevd_expr/i3d_i3d_flow.512.512.lstm'
-  model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
+  # model_name = 'vevd_expr/i3d_resnet200_i3d_flow.512.512.lstm'
   python_file = '../gen_driver/vevd.py'
   gpuid = 0
 
