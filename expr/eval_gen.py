@@ -150,7 +150,7 @@ def predict_eval():
 
   p = gen_script_and_run(
     python_file, model_cfg_file, path_cfg_file, epoch, 
-    gpuid=gpuid)
+    gpuid=gpuid, val=False)
   p.wait()
 
   predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
@@ -307,8 +307,8 @@ def eval_rerank_caption():
 
 
 if __name__ == '__main__':
-  # predict_eval()
+  predict_eval()
   # predict_sample()
   # rerank_sample()
   # rerank_ensemble()
-  eval_rerank_caption()
+  # eval_rerank_caption()
