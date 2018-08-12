@@ -70,8 +70,9 @@ def format_caption():
   # out_dir = os.path.join(out_root_dir, 'vevd_ensemble', 'val17')
   # pred_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'viz.json')
   # out_dir = os.path.join(out_root_dir, 'self_critique', 'val17')
-  pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'viz.json')
-  out_dir = os.path.join(out_root_dir, 'diversity', 'val17')
+  # pred_file = os.path.join(root_dir, 'generation', 'diversity_expr', 'i3d_resnet200.512.512.0.2.5.2_4.bcmr', 'pred', 'viz.json')
+  # out_dir = os.path.join(out_root_dir, 'diversity', 'val17')
+  pred_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'viz.json')
   if not os.path.exists(out_dir):
     os.makedirs(out_dir)
 
