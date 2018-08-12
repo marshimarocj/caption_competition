@@ -280,6 +280,7 @@ def eval_rerank_caption():
     pred[vid] = [gen_caption(captionid[idx], words)]
     # print vid, gen_caption(captionid[idx], words)
     out.append({'vid': cnt+1, 'caption': pred[vid][0]})
+    cnt += 1
 
   with open(out_file, 'w') as fout:
     json.dump(out, fout, indent=2)
