@@ -26,14 +26,14 @@ def viz_generation():
   # predict_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'tst-200.1.5.beam.json')
   # out_file = os.path.join(root_dir, 'generation', 'margin_expr', 'i3d_resnet200.512.512.0.5.16.5.0.1.cider', 'pred', 'tst.json')
 
-  predict_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'tst-200.1.5.beam.json')
-  out_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'tst.json')
+  # predict_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'tst-200.1.5.beam.json')
+  # out_file = os.path.join(root_dir, 'generation', 'self_critique_expr', 'i3d_resnet200.512.512.bcmr', 'pred', 'tst.json')
 
   # predict_file = os.path.join(root_dir, 'generation', 'vead_expr', 'i3d_resnet200.512.512.context_in_output', 'pred', 'val-28.1.5.beam.json')
   # out_file = os.path.join(root_dir, 'generation', 'vead_expr', 'i3d_resnet200.512.512.context_in_output', 'pred', 'viz.json')
 
-  # predict_file = os.path.join(root_dir, 'generation', 'vevd_ensemble_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'val-200.1.5.beam.json')
-  # out_file = os.path.join(root_dir, 'generation', 'vevd_ensemble_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'viz.json')
+  predict_file = os.path.join(root_dir, 'generation', 'vevd_ensemble_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'tst-200.1.5.beam.json')
+  out_file = os.path.join(root_dir, 'generation', 'vevd_ensemble_expr', 'i3d_resnet200.512.512.lstm', 'pred', 'tst.json')
 
   with open(predict_file) as f:
     data = json.load(f)
