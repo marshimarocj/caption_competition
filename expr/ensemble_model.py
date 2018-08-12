@@ -62,7 +62,7 @@ def export_avg_model_weights():
     val = np.mean(vals, 0)
     key2val[key] = val
 
-  path_cfg = gen_driver.gen_dir_struct_info(path_cfg_file)
+  path_cfg = gen_driver.vevd.gen_dir_struct_info(path_cfg_file)
   model_cfg = gen_driver.vevd.load_and_fill_model_cfg(model_cfg_file, path_cfg)
   m = gen_model.vevd.Model(model_cfg)
   trn_tst_graph = m.build_trn_tst_graph()
