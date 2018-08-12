@@ -858,6 +858,10 @@ def prepare_trecvid18_ft_tst():
   #   np.save(out_file, fts)
 
 
+def prepare_trecvid18_vid_tst():
+  trecvid_root_dir = '/data1/jiac/trecvid2018' # neptune
+
+
 if __name__ == '__main__':
   # merge_tgif_trecvid16_rank_trn()
   merge_tgif_trecvid16_rank_temporal_trn()

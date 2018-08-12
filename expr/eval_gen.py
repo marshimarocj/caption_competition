@@ -132,13 +132,13 @@ def predict_eval():
   # python_file = '../gen_driver/diversity.py'
   # gpuid = 0
 
-  # model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
-  # python_file = '../gen_driver/margin.py'
-  # gpuid = 0
-
-  model_name = 'vevd_ensemble_expr/i3d_resnet200.512.512.lstm'
-  python_file = '../gen_driver/vevd.py'
+  model_name = 'margin_expr/i3d_resnet200.512.512.0.5.16.5.0.1.cider'
+  python_file = '../gen_driver/margin.py'
   gpuid = 0
+
+  # model_name = 'vevd_ensemble_expr/i3d_resnet200.512.512.lstm'
+  # python_file = '../gen_driver/vevd.py'
+  # gpuid = 0
 
   log_dir = os.path.join(root_dir, model_name, 'log')
   pred_dir = os.path.join(root_dir, model_name, 'pred')
@@ -153,14 +153,14 @@ def predict_eval():
     gpuid=gpuid, val=0)
   p.wait()
 
-  predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
-  out = eval(predict_file, gt_file)
-  with open('eval.%d.txt'%gpuid, 'w') as fout:
-    content = '%.2f\t%.2f\t%.2f'%(
-      out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
-    print epoch
-    print content
-    fout.write(str(epoch) + '\t' + content + '\n')
+  # predict_file = os.path.join(pred_dir, 'val-%d.1.5.beam.json'%epoch)
+  # out = eval(predict_file, gt_file)
+  # with open('eval.%d.txt'%gpuid, 'w') as fout:
+  #   content = '%.2f\t%.2f\t%.2f'%(
+  #     out['bleu'][3]*100, out['meteor']*100, out['cider']*100)
+  #   print epoch
+  #   print content
+  #   fout.write(str(epoch) + '\t' + content + '\n')
 
 
 def predict_sample():
