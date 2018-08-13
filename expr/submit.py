@@ -33,7 +33,7 @@ def submit_rerank():
     os.path.join(root_dir, 'rank', 'submit', 'group.align.E'),
   ]
 
-  for pred_file, rank_file, out_file in zip(pred_files, rank_files, out_files):
+  for pred_file, rerank_file, out_file in zip(pred_files, rerank_files, out_files):
     predicts = np.load(pred_file)
     rerank_predicts = np.load(rerank_file)
     combined_predicts = .5 * predicts + .5 * rerank_predicts
