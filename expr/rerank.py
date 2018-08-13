@@ -357,8 +357,8 @@ def corr():
 
 
 if __name__ == '__main__':
-  graph_match_rerank()
+  # graph_match_rerank()
   # eval_rerank()
-  # gen_caption_sim_mat()
+  gen_caption_sim_mat()
   # rwr()
   # corr()
