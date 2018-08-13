@@ -417,7 +417,7 @@ def get_embeds():
   # out_names = ['val.%s'%alpha for alpha in ['A', 'B']]
   ft_files = [os.path.join(root_dir, 'mp_feature', ft_name, 'tst_ft.npy') for ft_name in ft_names]
   annotation_files = [os.path.join(root_dir, 'split', 'tst_id_caption_mask.%s.pkl'%alpha) for alpha in ['A', 'B', 'C', 'D', 'E']]
-  out_names = ['val.%s'%alpha for alpha in ['A', 'B', 'C', 'D', 'E']]
+  out_names = ['tst.%s'%alpha for alpha in ['A', 'B', 'C', 'D', 'E']]
 
   # # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.500.250.gru.max.0.5.0.1.flickr30m')
   # # expr_name = os.path.join(root_dir, 'rnnve_expr', 'i3d_resnet200.1000.500.gru.max.0.5.0.1.flickr30m')
