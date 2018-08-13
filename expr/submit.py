@@ -1,4 +1,5 @@
 import os
+import json
 
 import numpy as np
 
@@ -49,5 +50,26 @@ def submit_rerank():
         fout.write('%d 1921 %d\n'%(j+1, j+1))
 
 
+def submit_generation():
+  root_dir = '/home/jiac/data/trecvid18/vtt' # earth
+  files = [
+    os.path.join(root_dir, 'description', 'tst', 'generation', 'cj_ensemble.json'),
+    os.path.join(root_dir, 'description', 'tst', 'generation', 'diversity.json'),
+  ]
+  out_files = [
+    os.path.join(root_dir, 'submit', 'generation', 'vevd_ensemble'),
+    os.path.join(root_dir, 'submit', 'generation', 'diversity'),
+  ]
+
+  for file, out_file in zip(files, out_files):
+    with open(file) as f:
+      data = json.load(f)
+    with open(out_file, 'w') as fout:
+      fout.write('runType=V\n')
+      for d in data:
+        fout.write('%d %s\n'%(d['vid'], d['caption']))
+
+
 if __name__ == '__main__':
-  submit_rerank()
+  # submit_rerank()
+  submit_generation()
