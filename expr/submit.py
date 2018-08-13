@@ -26,11 +26,11 @@ def submit_rerank():
     os.path.join(root_dir, 'rnnve_orth_expr', 'i3d_resnet200.512_512_512.250.gru.max.0.5.0.1.flickr30m.freeze.direct', 'pred', 'tst.E.rerank.20.npy'),
   ]
   out_files = [
-    os.path.join(root_dir, 'rank', 'submit', 'group.align.A'),
-    os.path.join(root_dir, 'rank', 'submit', 'group.align.B'),
-    os.path.join(root_dir, 'rank', 'submit', 'group.align.C'),
-    os.path.join(root_dir, 'rank', 'submit', 'group.align.D'),
-    os.path.join(root_dir, 'rank', 'submit', 'group.align.E'),
+    os.path.join(root_dir, 'submit', 'group.align.A'),
+    os.path.join(root_dir, 'submit', 'group.align.B'),
+    os.path.join(root_dir, 'submit', 'group.align.C'),
+    os.path.join(root_dir, 'submit', 'group.align.D'),
+    os.path.join(root_dir, 'submit', 'group.align.E'),
   ]
 
   for pred_file, rerank_file, out_file in zip(pred_files, rerank_files, out_files):
