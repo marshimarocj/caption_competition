@@ -6,6 +6,8 @@ source code of CMU-RUC entrances at various caption competitions
 * best performer at [MSR vision to language challenge 2017](http://ms-multimedia-challenge.com/2017/challenge)
 * best performer at [MSR vision to language challenge 2016](http://ms-multimedia-challenge.com/2016/challenge)
 
+depends on my personal [tensorflow experiment framework](https://github.com/marshimarocj/tf_expr_framework)
+
 ## gen_model
 caption generation models
 * vevd.py: vanilla encoder (one full connect layer) and LSTM-cell rnn decoder, trained with cross-entropy loss
