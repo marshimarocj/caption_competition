@@ -1,10 +1,10 @@
 # caption_competition
 source code of CMU-RUC entrances at various caption competitions
 
-* best performer at video to text task in TRECVID2018
-* best performer at video to text task in TRECVID2017
-* best performer at MSR vision to language challenge 2017
-* best performer at MSR vision to language challenge 2016
+* best performer at video to text task in [TRECVID2018](https://www-nlpir.nist.gov/projects/tv2018/Tasks/vtt/)
+* best performer at video to text task in [TRECVID2017](https://www-nlpir.nist.gov/projects/tv2017/Tasks/vtt/)
+* best performer at [MSR vision to language challenge 2017](http://ms-multimedia-challenge.com/2017/challenge)
+* best performer at [MSR vision to language challenge 2016](http://ms-multimedia-challenge.com/2016/challenge)
 
 ## gen_model
 caption generation models
