@@ -6,7 +6,7 @@ source code of CMU-RUC entrances at various caption competitions
 * best performer at [MSR vision to language challenge 2017](http://ms-multimedia-challenge.com/2017/challenge)
 * best performer at [MSR vision to language challenge 2016](http://ms-multimedia-challenge.com/2016/challenge)
 
-depends on my personal [tensorflow experiment framework](https://github.com/marshimarocj/tf_expr_framework)
+depends on my personal [tensorflow experiment framework](https://github.com/marshimarocj/tf_expr_framework) and [python toolkit](https://github.com/marshimarocj/toolkit)
 
 ## gen_model
 caption generation models
